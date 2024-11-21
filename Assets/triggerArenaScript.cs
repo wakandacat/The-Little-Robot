@@ -30,11 +30,13 @@ public class triggerArenaScript : MonoBehaviour
     {
         Debug.Log("entered arena");
         bossCam.Priority = platformCam.Priority + 1;
+
     }
 
     public void OnTriggerExit(Collider other)
     {
         Debug.Log("exited arena");
         platformCam.Priority = bossCam.Priority + 1;
+
     }
 }
