@@ -19,7 +19,6 @@ public class loadSceneScript : MonoBehaviour
     {
         if (collision.gameObject.name == "tempPlayer" && !SceneManager.GetSceneByName(sceneName).isLoaded)
         {
-          //  mainGameScript.currSceneName++;
             //load the new scene
             SceneManager.LoadScene(mainGameScript.nextScene, LoadSceneMode.Additive);
 

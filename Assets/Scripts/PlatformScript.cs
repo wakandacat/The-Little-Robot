@@ -25,14 +25,14 @@ public class PlatformScript : MonoBehaviour
 
     IEnumerator spawnItems()
     {
-        Debug.Log("mainGameScript.currentScene" + mainGameScript.currentScene);
-        Debug.Log("SceneManager.GetActiveScene().name" + SceneManager.GetActiveScene().name);
+       // Debug.Log("mainGameScript.currentScene" + mainGameScript.currentScene);
+      //  Debug.Log("SceneManager.GetActiveScene().name" + SceneManager.GetActiveScene().name);
 
         while (true)
         {
             if (mainGameScript.currentScene == SceneManager.GetActiveScene().name)
             {
-                Debug.Log("yooo");
+               // Debug.Log("yooo");
                 Instantiate(box, this.transform.position, Quaternion.identity);
 
             }
