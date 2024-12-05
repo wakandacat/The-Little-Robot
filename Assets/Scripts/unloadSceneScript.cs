@@ -13,7 +13,7 @@ public class unloadSceneScript : MonoBehaviour
     {
 
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
-        sceneToUnload = mainGameScript.lastScene;
+        //Debug.Log("current" + mainGameScript.currentScene);
     }
 
     // Update is called once per frame
@@ -22,9 +22,9 @@ public class unloadSceneScript : MonoBehaviour
 
         if (collision.gameObject.name == "tempPlayer" && SceneManager.GetSceneByName(mainGameScript.currentScene).isLoaded)
         {
-            mainGameScript.currSceneName++;
 
-            SceneManager.UnloadSceneAsync(sceneToUnload);
+            SceneManager.UnloadSceneAsync(mainGameScript.currentScene);
+            mainGameScript.currSceneName++;
         }
     }
 }

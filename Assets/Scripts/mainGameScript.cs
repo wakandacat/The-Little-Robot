@@ -10,8 +10,8 @@ public class mainGameScript : MonoBehaviour
     public bool playerCanMove = false; //toggle for when menus open or cutscenes
     public int currLevelCount = 1;
     public int maxLevelCount = 3;
+    public string nextScene = "Platform1";
     public string currentScene = "Tutorial";
-    public string lastScene = "Tutorial";
 
     //get the 2 virtual cameras
     public CinemachineVirtualCamera platformCam;
@@ -21,6 +21,15 @@ public class mainGameScript : MonoBehaviour
     public string[] scenes = new[] { "Tutorial", "Platform1", "Combat1", "Platform2", "Combat2", "Platform3", "Combat3", "EndScene" };
     public int currSceneName = 0;
 
+    void Update()
+    {
+        //the current scene
+        currentScene = scenes[currSceneName];
+
+        //the next scene
+        nextScene = scenes[currSceneName+1];
+
+    }
 
 
     public void switchCams()
