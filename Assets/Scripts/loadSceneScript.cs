@@ -9,40 +9,27 @@ public class loadSceneScript : MonoBehaviour
     public string sceneName;
     private mainGameScript mainGameScript;
 
-
     void Awake()
     {
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
+    }
 
-        //if you are currently platforming, next you will be combat
-        if (mainGameScript.isCombat == true)
-        {
-            sceneName = "Platform" + mainGameScript.currLevelCount;
-            mainGameScript.isPlatforming = true;
-            mainGameScript.isCombat = false;
-        } 
-        else if (mainGameScript.isPlatforming == true) //currently combat
-        {
-            sceneName = "Combat" + mainGameScript.currLevelCount;
-            mainGameScript.isPlatforming = false;
-            mainGameScript.isCombat = true;
-        }
-        else //currently in tutorial
-        {
-            sceneName = "Platform" + mainGameScript.currLevelCount;
-            mainGameScript.isTutorial = false;
-            mainGameScript.isPlatforming = true;
-        }
-        mainGameScript.lastScene = mainGameScript.currentScene;
+    void Update()
+    {
+
+        //the current scene to load
+        sceneName = mainGameScript.scenes[mainGameScript.currSceneName + 1];
+        mainGameScript.currentScene = sceneName;
+        //the current scene to unload
+        mainGameScript.lastScene = mainGameScript.scenes[mainGameScript.currSceneName];
 
     }
 
     public void OnTriggerEnter(Collider collision)
     {
-
         if (collision.gameObject.name == "tempPlayer" && !SceneManager.GetSceneByName(sceneName).isLoaded)
         {
-                
+   
             //load the new scene
             SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
 

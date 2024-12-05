@@ -22,6 +22,8 @@ public class unloadSceneScript : MonoBehaviour
 
         if (collision.gameObject.name == "tempPlayer" && SceneManager.GetSceneByName(mainGameScript.currentScene).isLoaded)
         {
+            mainGameScript.currSceneName++;
+
             SceneManager.UnloadSceneAsync(sceneToUnload);
         }
     }

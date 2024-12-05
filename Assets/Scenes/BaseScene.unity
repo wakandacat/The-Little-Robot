@@ -561,13 +561,20 @@ MonoBehaviour:
   playerCanMove: 0
   currLevelCount: 1
   maxLevelCount: 3
-  isPlatforming: 0
-  isCombat: 0
-  isTutorial: 1
   currentScene: Tutorial
   lastScene: Tutorial
   platformCam: {fileID: 1576175781}
   bossCam: {fileID: 1109893562}
+  scenes:
+  - Tutorial
+  - Platform1
+  - Combat1
+  - Platform2
+  - Combat2
+  - Platform3
+  - Combat3
+  - EndScene
+  currSceneName: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
