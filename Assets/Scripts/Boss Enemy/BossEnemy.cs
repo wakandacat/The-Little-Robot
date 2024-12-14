@@ -14,7 +14,7 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Object References ----------------------------------------------------------------------------------------------------------
     private Animator bossAnimator;
-    GameObject player = GameObject.FindGameObjectWithTag("Player");
+    GameObject playerGameObject;
 
     // State Machine Attributes ---------------------------------------------------------------------------------------------------
     private BossStateMachine stateMachine;
@@ -27,8 +27,10 @@ public class BossEnemy : MonoBehaviour
     {
         // Set Object References
         bossAnimator = GetComponent<Animator>(); // assign the Animator component of the BossEnemy to bossAnimator
+        playerGameObject = GameObject.FindGameObjectWithTag("Player");
 
         // Initialize Attributes
+        stateMachine = new BossStateMachine();
 
         // Set To SleepingState
         TransitionToSleepingState();
@@ -40,7 +42,8 @@ public class BossEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Execute Update instructions for StateMachine
+        stateMachine.Update();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -49,7 +52,8 @@ public class BossEnemy : MonoBehaviour
     // FixedUpdate is called at set intervals
     void FixedUpdate()
     {
-        
+        // Execute FixedUpdate instructions for StateMachine
+        stateMachine.FixedUpdate();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -57,8 +61,8 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void TransitionToSleepingState()
     {
-        BossState.SleepingState sleepingState = new BossState.SleepingState();
-        sleepingState.Initialize(bossAnimator);
+        SleepingState sleepingState = new SleepingState();
+        //sleepingState.Initialize(bossAnimator);
         stateMachine.SetState(sleepingState);
     }
 }

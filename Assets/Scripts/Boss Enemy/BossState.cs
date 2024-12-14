@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BossState : MonoBehaviour
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// *               Abstract Class BossState                                                                                                                                                                     * 
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+public abstract class BossState
 {
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Public Fields                                                                                                                                                                                * 
@@ -39,285 +42,288 @@ public abstract class BossState : MonoBehaviour
     // Exit is called when the state machine transitions to another state
     public abstract void Exit();
 
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               Boss States                                                                                                                                                                                  * 
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public class SleepingState:BossState
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// *               Boss States                                                                                                                                                                                  * 
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+public class SleepingState : BossState
+{
+    // Called when the state machine transitions to this state
+    public override void Enter()
     {
-        // Called when the state machine transitions to this state
-        public override void Enter()
-        {
-            // Programming Logic
+        // Programming Logic
+        //Debug.Log("ENTERING SLEEPING STATE :3");
 
-            // Animation Logic
+        // Animation Logic
 
-        }
-
-        // Called once per frame
-        public override void Update()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called at fixed intervals (used for physics updates)
-        public override void FixedUpdate()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called when the state machine transitions out of this state
-        public override void Exit()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
     }
 
-    public class WakingUpState : BossState
+    // Called once per frame
+    public override void Update()
     {
-        // Called when the state machine transitions to this state
-        public override void Enter()
-        {
-            // Programming Logic
+        // Programming Logic
+        //Debug.Log("debug text hehe :3");
 
-            // Animation Logic
+        // Animation Logic
 
-        }
-
-        // Called once per frame
-        public override void Update()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called at fixed intervals (used for physics updates)
-        public override void FixedUpdate()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called when the state machine transitions out of this state
-        public override void Exit()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
     }
 
-    public class SelfCheckState : BossState
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
     {
-        // Called when the state machine transitions to this state
-        public override void Enter()
-        {
-            // Programming Logic
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
-
-        // Called once per frame
-        public override void Update()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called at fixed intervals (used for physics updates)
-        public override void FixedUpdate()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called when the state machine transitions out of this state
-        public override void Exit()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
     }
 
-    public class AwakeState : BossState
+    // Called when the state machine transitions out of this state
+    public override void Exit()
     {
-        // Called when the state machine transitions to this state
-        public override void Enter()
-        {
-            // Programming Logic
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
+    }
+}
 
-        // Called once per frame
-        public override void Update()
-        {
-            // Programming Logic
+public class WakingUpState : BossState
+{
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
-
-        // Called at fixed intervals (used for physics updates)
-        public override void FixedUpdate()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called when the state machine transitions out of this state
-        public override void Exit()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
     }
 
-    public class LowEnergyState : BossState
+    // Called once per frame
+    public override void Update()
     {
-        // Called when the state machine transitions to this state
-        public override void Enter()
-        {
-            // Programming Logic
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
-
-        // Called once per frame
-        public override void Update()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called at fixed intervals (used for physics updates)
-        public override void FixedUpdate()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called when the state machine transitions out of this state
-        public override void Exit()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
     }
 
-    public class DeathState : BossState
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
     {
-        // Called when the state machine transitions to this state
-        public override void Enter()
-        {
-            // Programming Logic
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
-
-        // Called once per frame
-        public override void Update()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called at fixed intervals (used for physics updates)
-        public override void FixedUpdate()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
-
-        // Called when the state machine transitions out of this state
-        public override void Exit()
-        {
-            // Programming Logic
-
-            // Animation Logic
-
-        }
     }
 
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               Attack Instruction States                                                                                                                                                                    * 
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public class MeleeSwingState : BossState
+    // Called when the state machine transitions out of this state
+    public override void Exit()
     {
-        // When to call this Attack Instruction State
-        // -- insert here --
-        
-        // Called when the state machine transitions to this state
-        public override void Enter()
-        {
-            // Programming Logic
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
+    }
+}
 
-        // Called once per frame
-        public override void Update()
-        {
-            // Programming Logic
+public class SelfCheckState : BossState
+{
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
+    }
 
-        // Called at fixed intervals (used for physics updates)
-        public override void FixedUpdate()
-        {
-            // Programming Logic
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
+    }
 
-        // Called when the state machine transitions out of this state
-        public override void Exit()
-        {
-            // Programming Logic
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
 
-            // Animation Logic
+        // Animation Logic
 
-        }
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+}
+
+public class AwakeState : BossState
+{
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+}
+
+public class LowEnergyState : BossState
+{
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+}
+
+public class DeathState : BossState
+{
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// *               Attack Instruction States                                                                                                                                                                    * 
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+public class MeleeSwingState : BossState
+{
+    // When to call this Attack Instruction State
+    // -- insert here --
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
     }
 }

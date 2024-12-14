@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossStateMachine : MonoBehaviour
+public class BossStateMachine
 {
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Public Fields                                                                                                                                                                                * 
@@ -38,7 +38,7 @@ public class BossStateMachine : MonoBehaviour
     // *               Update Function                                                                                                                                                                              * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         // Execute Update instructions for currentState
         currentState.Update();
@@ -48,7 +48,7 @@ public class BossStateMachine : MonoBehaviour
     // *               Fixed Update Function                                                                                                                                                                        * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // FixedUpdate is called at set intervals
-    void FixedUpdate()
+    public void FixedUpdate()
     {
         // Execute FixedUpdate instructions for currentState
         currentState.FixedUpdate();
