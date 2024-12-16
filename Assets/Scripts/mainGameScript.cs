@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 public class mainGameScript : MonoBehaviour
 {
@@ -21,6 +22,11 @@ public class mainGameScript : MonoBehaviour
     public string[] scenes = new[] { "Tutorial", "Platform1", "Combat1", "Platform2", "Combat2", "Platform3", "Combat3", "EndScene" };
     public int currSceneName = 0;
 
+    void Awake()
+    {
+        //load the first scene in additiona to the base scene
+        SceneManager.LoadScene("Tutorial", LoadSceneMode.Additive);
+    }
     void Update()
     {
         //the current scene
