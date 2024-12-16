@@ -39,7 +39,7 @@ public class tempPlayerMovement : MonoBehaviour
         Vector3 movementDirection = cameraRight * xInput + cameraForward * yInput;
 
         // Move the player
-        transform.Translate(movementDirection * 0.01f, Space.World);
+        transform.Translate(movementDirection * 0.07f, Space.World);
 
     }
 }
