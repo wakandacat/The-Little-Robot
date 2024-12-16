@@ -27,4 +27,15 @@ public class unloadSceneScript : MonoBehaviour
             mainGameScript.currSceneName++;
         }
     }
+
+
+    public void OnTriggerExit(Collider collision)
+    {
+        if (collision.gameObject.name == "tempPlayer")
+        {
+            //get rid of the trigger area so it can't be triggered again
+            this.gameObject.SetActive(false);
+
+        }
+    }
 }
