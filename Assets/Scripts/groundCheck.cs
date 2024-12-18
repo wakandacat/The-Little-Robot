@@ -6,16 +6,18 @@ public class groundCheck : MonoBehaviour
 {
     public GameObject player;
     public bool onGround = false;
+    public bool jumpState = false;
+    PlayerController jumping;
     // Start is called before the first frame update
     void Start()
     {
-        
+        jumping = player.GetComponent<PlayerController>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Ground = " + onGround);
 
     }
 
@@ -25,14 +27,21 @@ public class groundCheck : MonoBehaviour
         if (collision.gameObject.tag == "ground")
         {
             onGround = true;
-            Debug.Log("Ground = " + onGround);
+            jumpState = false;
+
         }
        
+    }
+    public void OnCollisionEnter(Collision collision)
+    {
+        jumping.handleJump();
     }
 
     public void OnCollisionExit(Collision collision)
     {
         onGround = false;
-        Debug.Log("Ground = " + onGround);
+        
     }
+
+
 }

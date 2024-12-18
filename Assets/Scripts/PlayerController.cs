@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 //ToDo
 //Fix the floatiness of the jump look at these resources --> https://www.youtube.com/watch?v=hG9SzQxaCm8, https://www.youtube.com/watch?app=desktop&v=h2r3_KjChf4&t=233s
 //Fix the walk so you cannot walk while in any other state
-//Fix the quick drop so you can actually quick drop
-//Fix the quick drop state breaking the singular jump state
+//Dash starts vibrating after ur done idk why?
 //Implement Deflect
 //Implement Roll
 //Implement Attack
@@ -18,14 +17,13 @@ public class PlayerController : MonoBehaviour
     public GameObject player;
 
     PlayerControls pc;
-    public float jumpForce = 3f;
-    public float speed = 5f;
-    public float fallMultiplier = 2.5f;
+    private float jumpForce = 10f;
+    private float speed = 5f;
+    private float fallMultiplier = 1000f;
     groundCheck ground;
-    public bool isJumping = false;
-    public bool isQuickDropping = false;
+    private bool isJumping = false;
+    private bool isQuickDropping = false;
     private int jumpCounter = 0;
-    public bool jumpState = false;
 
     //Dash Booleans
     private bool canDash = true;
@@ -56,12 +54,22 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Move might have to be on performed cause u can move while jumping and dashing and i do not think that is the intended effect
+        if(isJumping == false)
+        {
+            moveCharacter();
 
-        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
-       
-        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        player.transform.Translate(speed * translation *Time.deltaTime);
+        }
+
     }
+    //-----------------------------------------------Move-----------------------------------------------//
+    public void moveCharacter()
+    {
+        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
+
+        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
+        player.transform.Translate(speed * translation * Time.deltaTime);
+    }
+
     //-----------------------------------------------Jump-----------------------------------------------//
     //https://www.youtube.com/watch?v=7KiK0Aqtmzc&t=474s
     public void Jump()
@@ -91,11 +99,10 @@ public class PlayerController : MonoBehaviour
     }
     public void handleJump()
     {
-        if (ground.onGround == true && jumpState == true)
-        {
-            jumpState = false;
+        Debug.Log("we are handling jump");
+       
             isJumping = false;
-        }
+            jumpCounter = 0;
     }
     public void OnJump(InputAction.CallbackContext context)
     {
@@ -106,16 +113,15 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
             jumpCounter++;
-            jumpState = true;
+            ground.jumpState = true;
         }
         if (ground.onGround == false && jumpCounter == 1 && isJumping)
         {
             doubleJump();
             jumpCounter = 0;
-            jumpState = true;
+            ground.jumpState = true;
         }
 
-        handleJump();
         Debug.Log("help me");
     }
 
@@ -124,20 +130,22 @@ public class PlayerController : MonoBehaviour
     //https://www.youtube.com/watch?v=7KiK0Aqtmzc&t=474s
     public void quickDrop()
     {
-        if(ground.onGround == false && jumpState == true)
+        Debug.Log("1 = " + player.GetComponent<Rigidbody>().velocity);
+
+        if (ground.onGround == false)
         {
-            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * (10f - 1) * Time.deltaTime;
+            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            Debug.Log("hELLO QUICK DROP");
+            Debug.Log("2 = "+player.GetComponent<Rigidbody>().velocity);
         }
-        jumpState = false;
     }
     //breaks singular jump when trying to quick drop from it
 
     public void handleQuickDrop()
     {
-        if (ground.onGround == false)
+        if (ground.onGround == true)
         {
             isQuickDropping = false;
-            jumpState = false;
         }
     }
     public void OnQuickDrop(InputAction.CallbackContext context)
@@ -147,8 +155,8 @@ public class PlayerController : MonoBehaviour
         isQuickDropping = context.ReadValueAsButton();
         if(isQuickDropping == true){
             quickDrop();
-            handleQuickDrop();
         }
+        handleQuickDrop();
 
     }
 
@@ -161,7 +169,7 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         float originalGravity = gravityScale;
         gravityScale = 0f;
-        rb.velocity = new Vector3(transform.localScale.x * dashingPower, 0f, transform.localScale.z);
+        rb.velocity = new Vector3(transform.localScale.x * dashingPower, 0f,0f);
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
