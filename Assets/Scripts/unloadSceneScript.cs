@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class unloadSceneScript : MonoBehaviour
 {
 
-    public string sceneToUnload;
+    //public string sceneToUnload;
     private mainGameScript mainGameScript;
 
     void Awake()

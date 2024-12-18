@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class loadSceneScript : MonoBehaviour
 {
    
-    public string sceneName;
+    //public string sceneName;
     private mainGameScript mainGameScript;
 
     void Awake()
@@ -17,8 +17,10 @@ public class loadSceneScript : MonoBehaviour
 
     public void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport" && !SceneManager.GetSceneByName(sceneName).isLoaded)
+
+        if (collision.gameObject.name == "playerExport")
         {
+
             //load the new scene
             SceneManager.LoadScene(mainGameScript.nextScene, LoadSceneMode.Additive);
 

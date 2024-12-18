@@ -32,8 +32,11 @@ public class mainGameScript : MonoBehaviour
         //the current scene
         currentScene = scenes[currSceneName];
 
-        //the next scene
-        nextScene = scenes[currSceneName+1];
+        if (currentScene != "EndScene")
+        {
+            //the next scene
+            nextScene = scenes[currSceneName + 1];
+        }
 
     }
 
