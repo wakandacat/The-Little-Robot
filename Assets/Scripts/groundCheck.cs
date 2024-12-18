@@ -15,20 +15,24 @@ public class groundCheck : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log("Ground = " + onGround);
+
     }
 
-    public void OnTriggerStay(Collider other)
+    public void OnCollisionStay(Collision collision)
     {
-        if (other.gameObject.tag == "ground")
+      
+        if (collision.gameObject.tag == "ground")
         {
             onGround = true;
             Debug.Log("Ground = " + onGround);
         }
+       
     }
 
-    public void OnTriggerExit(Collider other)
+    public void OnCollisionExit(Collision collision)
     {
         onGround = false;
+        Debug.Log("Ground = " + onGround);
     }
 }
