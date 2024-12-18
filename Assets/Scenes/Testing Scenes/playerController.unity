@@ -274,7 +274,7 @@ GameObject:
   - component: {fileID: 1205978454}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -498,6 +498,7 @@ GameObject:
   - component: {fileID: 2136082622}
   - component: {fileID: 2136082626}
   - component: {fileID: 2136082627}
+  - component: {fileID: 2136082628}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -633,6 +634,20 @@ MonoBehaviour:
   player: {fileID: 2136082620}
   jumpForce: 10
   speed: 0
+--- !u!114 &2136082628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136082620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc2f72916667bbe4fa0ddd552897f7d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2136082620}
+  onGround: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
