@@ -15,7 +15,7 @@ public class enemyTemp : MonoBehaviour
     public void OnTriggerEnter(Collider collision)
     {
 
-        if (collision.gameObject.name == "tempPlayer")
+        if (collision.gameObject.name == "playerExport")
         {
             Debug.Log("PLAYER KILLED ENEMY");
 

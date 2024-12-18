@@ -17,7 +17,7 @@ public class loadSceneScript : MonoBehaviour
 
     public void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.name == "tempPlayer" && !SceneManager.GetSceneByName(sceneName).isLoaded)
+        if (collision.gameObject.name == "playerExport" && !SceneManager.GetSceneByName(sceneName).isLoaded)
         {
             //load the new scene
             SceneManager.LoadScene(mainGameScript.nextScene, LoadSceneMode.Additive);

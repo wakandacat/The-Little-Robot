@@ -20,7 +20,7 @@ public class unloadSceneScript : MonoBehaviour
     public void OnTriggerEnter(Collider collision)
     {
 
-        if (collision.gameObject.name == "tempPlayer" && SceneManager.GetSceneByName(mainGameScript.currentScene).isLoaded)
+        if (collision.gameObject.name == "playerExport" && SceneManager.GetSceneByName(mainGameScript.currentScene).isLoaded)
         {
 
             SceneManager.UnloadSceneAsync(mainGameScript.currentScene);
@@ -31,7 +31,7 @@ public class unloadSceneScript : MonoBehaviour
 
     public void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.name == "tempPlayer")
+        if (collision.gameObject.name == "playerExport")
         {
             //get rid of the trigger area so it can't be triggered again
             this.gameObject.SetActive(false);
