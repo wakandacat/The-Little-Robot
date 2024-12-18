@@ -11,6 +11,7 @@ using UnityEngine.InputSystem;
 //Implement Roll
 //Implement Attack
 //Implement Attack Combo
+//
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -18,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
     PlayerControls pc;
     private float jumpForce = 10f;
-    private float speed = 5f;
+    private float speed = 7f;
     private float fallMultiplier = 1000f;
     groundCheck ground;
     private bool isJumping = false;
@@ -37,6 +38,8 @@ public class PlayerController : MonoBehaviour
     public float gravityScale = 1.0f;
     public static float globalGravity = -9.81f;
 
+    private Vector3 forwardVelocity;
+
 
     void Start()
     {
@@ -53,11 +56,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 forwardVelocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         //Move might have to be on performed cause u can move while jumping and dashing and i do not think that is the intended effect
-        if(isJumping == false)
+        if (ground.onGround == true)
         {
             moveCharacter();
-
+        }
+        else
+        {
+            forwardMovement();
         }
 
     }
@@ -69,11 +76,19 @@ public class PlayerController : MonoBehaviour
         Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
         player.transform.Translate(speed * translation * Time.deltaTime);
     }
+    public void forwardMovement()
+    {
+        Debug.Log("foeard movement called");
+
+        Vector3 translation = forwardVelocity;
+        player.transform.Translate(speed * translation * Time.deltaTime);
+    }
 
     //-----------------------------------------------Jump-----------------------------------------------//
     //https://www.youtube.com/watch?v=7KiK0Aqtmzc&t=474s
     public void Jump()
     {
+        
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
