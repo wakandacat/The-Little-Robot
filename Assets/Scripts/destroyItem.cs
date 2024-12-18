@@ -8,7 +8,11 @@ public class destroyItem : MonoBehaviour
     private void OnTriggerEnter(Collider collider)
     {
         Debug.Log("destroyed");
-        Destroy(collider.gameObject);
+        if(collider.gameObject.tag == "box")
+        {
+            Destroy(collider.gameObject);
+
+        }
     }
 
 }

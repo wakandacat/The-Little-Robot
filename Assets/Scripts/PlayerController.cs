@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     PlayerControls pc;
     private float jumpForce = 10f;
     private float speed = 7f;
-    private float fallMultiplier = 1000f;
+    private float fallMultiplier = 400f;
     groundCheck ground;
     private bool isJumping = false;
     private bool isQuickDropping = false;
