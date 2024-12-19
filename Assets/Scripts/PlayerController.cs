@@ -88,12 +88,9 @@ public class PlayerController : MonoBehaviour
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
+        //so the issue is that the jump is too floaty
+        //fixes is to make the gravity higher once it reaches the peak of the arc?
 
-        //this didn't fix the slow drop
-        if (player.GetComponent<Rigidbody>().velocity.y < 0)
-        {
-            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-        }
 
     }
 
@@ -176,7 +173,12 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         float originalGravity = gravityScale;
         gravityScale = 0f;
-        rb.velocity = new Vector3(transform.localScale.x * dashingPower, 0f,0f);
+        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
+
+        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
+        translation.Normalize();
+        player.transform.Translate(speed * translation * Time.deltaTime, Space.World);
+        rb.velocity = new Vector3(translation.x * dashingPower, 0f,0f);
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
