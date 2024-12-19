@@ -11,7 +11,6 @@ using UnityEngine.InputSystem;
 //Implement Roll
 //Implement Attack
 //Implement Attack Combo
-//
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -25,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private bool isQuickDropping = false;
     private int jumpCounter = 0;
+    float rotationSpeed = 720f;
 
     //Dash Booleans
     private bool canDash = true;
@@ -58,30 +58,26 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 forwardVelocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         //Move might have to be on performed cause u can move while jumping and dashing and i do not think that is the intended effect
-        if (ground.onGround == true)
-        {
-            moveCharacter();
-        }
-        else
-        {
-            forwardMovement();
-        }
+
+        moveCharacter();
+
 
     }
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter()
     {
+        //https://www.youtube.com/watch?v=BJzYGsMcy8Q
+        //This will change to follow convention of moving the rigidbody and not the gameObject
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
 
         Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        player.transform.Translate(speed * translation * Time.deltaTime);
-    }
-    public void forwardMovement()
-    {
-        Debug.Log("foeard movement called");
-
-        Vector3 translation = forwardVelocity;
-        player.transform.Translate(speed * translation * Time.deltaTime);
+        translation.Normalize();
+        player.transform.Translate(speed * translation * Time.deltaTime, Space.World);
+        if(translation != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(translation, Vector3.up);
+            player.transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 
     //-----------------------------------------------Jump-----------------------------------------------//
@@ -91,6 +87,7 @@ public class PlayerController : MonoBehaviour
         
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
 
         //this didn't fix the slow drop
         if (player.GetComponent<Rigidbody>().velocity.y < 0)
@@ -102,14 +99,7 @@ public class PlayerController : MonoBehaviour
 
     public void doubleJump()
     {
-        player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
-        player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-        //this didn't fix the slow drop
-        if (player.GetComponent<Rigidbody>().velocity.y < 0)
-        {
-            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-        }
+        Jump();
 
     }
     public void handleJump()
@@ -127,12 +117,14 @@ public class PlayerController : MonoBehaviour
         if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
             Jump();
+            player.GetComponent<Rigidbody>().freezeRotation = true;
             jumpCounter++;
             ground.jumpState = true;
         }
         if (ground.onGround == false && jumpCounter == 1 && isJumping)
         {
             doubleJump();
+            player.GetComponent<Rigidbody>().freezeRotation = true;
             jumpCounter = 0;
             ground.jumpState = true;
         }
