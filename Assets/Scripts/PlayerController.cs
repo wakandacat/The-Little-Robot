@@ -71,26 +71,26 @@ public class PlayerController : MonoBehaviour
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
         //This will change to follow convention of moving the rigidbody and not the gameObject
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
-        Vector3 movementDirection;
 
-        movementDirection.x = leftStick.x;
-        movementDirection.z = leftStick.y;
-        movementDirection.y = 0.0f;
+        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)).normalized;
+
+        Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
 
         player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
 
-        Vector3 positionToLookAt;
+        //Vector3 positionToLookAt;
 
-        positionToLookAt.x = leftStick.x;
-        positionToLookAt.y = 0.0f;
-        positionToLookAt.z = leftStick.y;
+        //positionToLookAt.x = leftStick.x;
+        //positionToLookAt.y = 0.0f;
+        //positionToLookAt.z = leftStick.y;
 
 
         Quaternion currentRotation = transform.rotation;
 
         if(movementDirection != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
+            Quaternion targetRotation = Quaternion.LookRotation(movementDirection);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed*Time.deltaTime);
         }
     }
