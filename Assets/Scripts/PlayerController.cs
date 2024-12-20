@@ -5,18 +5,21 @@ using UnityEngine.InputSystem;
 
 //ToDo
 //Fix the floatiness of the jump look at these resources --> https://www.youtube.com/watch?v=hG9SzQxaCm8, https://www.youtube.com/watch?app=desktop&v=h2r3_KjChf4&t=233s
-//Fix the walk so you cannot walk while in any other state
-//Dash starts vibrating after ur done idk why?
 //Implement Deflect
 //Implement Roll
 //Implement Attack
 //Implement Attack Combo
+//Might fall after dashing not sure why 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    //player variables
     public GameObject player;
+    public Rigidbody rb;
 
+    //player controller reference
     PlayerControls pc;
+
+    //jump variables
     private float jumpForce = 10f;
     private float speed = 7f;
     private float fallMultiplier = 400f;
@@ -33,12 +36,9 @@ public class PlayerController : MonoBehaviour
     private float dashingpower = 24f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
-    public Rigidbody rb;
     private bool Dashing = false;
     public float gravityScale = 1.0f;
     public static float globalGravity = -9.81f;
-
-    private Vector3 forwardVelocity;
 
 
     void Start()
@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour
 
         moveCharacter();
 
+        Debug.Log(rb.velocity.y);
 
     }
     //-----------------------------------------------Move-----------------------------------------------//
@@ -81,23 +82,28 @@ public class PlayerController : MonoBehaviour
     }
 
     //-----------------------------------------------Jump-----------------------------------------------//
-    //https://www.youtube.com/watch?v=7KiK0Aqtmzc&t=474s
     public void Jump()
     {
-        
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if (rb.velocity.y < 0) {
+            rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+        }
+
 
         //so the issue is that the jump is too floaty
         //fixes is to make the gravity higher once it reaches the peak of the arc?
 
+
+      /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
+        player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
 
     }
 
     public void doubleJump()
     {
         Jump();
-
+        
     }
     public void handleJump()
     {
@@ -140,7 +146,7 @@ public class PlayerController : MonoBehaviour
         {
             player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
             Debug.Log("hELLO QUICK DROP");
-            Debug.Log("2 = "+player.GetComponent<Rigidbody>().velocity);
+            Debug.Log("2 = " + player.GetComponent<Rigidbody>().velocity);
         }
     }
     //breaks singular jump when trying to quick drop from it
@@ -173,11 +179,13 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         float originalGravity = gravityScale;
         gravityScale = 0f;
-        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
 
+        //get the walk direction input needs to be refined
+        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
         Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
         translation.Normalize();
         player.transform.Translate(speed * translation * Time.deltaTime, Space.World);
+        
         rb.velocity = new Vector3(translation.x * dashingPower, 0f,0f);
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
