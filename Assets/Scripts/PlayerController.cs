@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
         translation.Normalize();
-        player.transform.Translate(speed * translation * Time.deltaTime, Space.World);
+        player.transform.Translate(speed * translation * Time.deltaTime);
         if(translation != Vector3.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(translation, Vector3.up);
