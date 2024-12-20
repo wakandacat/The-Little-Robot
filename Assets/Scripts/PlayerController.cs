@@ -9,7 +9,8 @@ using UnityEngine.InputSystem;
 //Implement Roll
 //Implement Attack
 //Implement Attack Combo
-//Might fall after dashing not sure why 
+//Might fall after dashing not sure why
+//add freecam
 public class PlayerController : MonoBehaviour
 {
     //player variables
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private bool isQuickDropping = false;
     private int jumpCounter = 0;
-    float rotationSpeed = 720f;
+    float rotationSpeed = 1.0f;
 
     //Dash Booleans
     private bool canDash = true;
@@ -61,8 +62,8 @@ public class PlayerController : MonoBehaviour
 
         moveCharacter();
 
-        Debug.Log(rb.velocity.y);
-
+        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+        Debug.DrawRay(transform.position, forward, Color.green);
     }
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter()
@@ -70,14 +71,27 @@ public class PlayerController : MonoBehaviour
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
         //This will change to follow convention of moving the rigidbody and not the gameObject
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
+        Vector3 movementDirection;
 
-        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        translation.Normalize();
-        player.transform.Translate(speed * translation * Time.deltaTime);
-        if(translation != Vector3.zero)
+        movementDirection.x = leftStick.x;
+        movementDirection.z = leftStick.y;
+        movementDirection.y = 0.0f;
+
+        player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
+
+        Vector3 positionToLookAt;
+
+        positionToLookAt.x = leftStick.x;
+        positionToLookAt.y = 0.0f;
+        positionToLookAt.z = leftStick.y;
+
+
+        Quaternion currentRotation = transform.rotation;
+
+        if(movementDirection != Vector3.zero)
         {
-            Quaternion toRotation = Quaternion.LookRotation(translation, Vector3.up);
-            player.transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+            Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
+            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed*Time.deltaTime);
         }
     }
 
@@ -183,8 +197,8 @@ public class PlayerController : MonoBehaviour
         //get the walk direction input needs to be refined
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
         Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        translation.Normalize();
-        player.transform.Translate(speed * translation * Time.deltaTime, Space.World);
+        //translation.Normalize();
+        player.transform.Translate(translation * Time.deltaTime);
         
         rb.velocity = new Vector3(translation.x * dashingPower, 0f,0f);
         yield return new WaitForSeconds(dashingTime);
