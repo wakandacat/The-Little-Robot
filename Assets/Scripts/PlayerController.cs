@@ -42,6 +42,10 @@ public class PlayerController : MonoBehaviour
     public static float globalGravity = -9.81f;
 
 
+    //pause vars
+    public bool isPaused = false;
+    public GameObject pauseMenu;
+
     void Start()
     {
         pc = new PlayerControls();     
@@ -50,9 +54,19 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
+        pc.Gameplay.Pause.performed += onPause;
         rb = player.gameObject.GetComponent<Rigidbody>();
         ground = player.GetComponent<groundCheck>();
+
     }
+
+    //open pause menu
+    public void onPause(InputAction.CallbackContext context)
+    {
+        pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
+
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -229,6 +243,6 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Jump.performed -= OnJump;
         pc.Gameplay.QuickDrop.performed -= OnQuickDrop;
         pc.Gameplay.Dash.performed -= OnDash;
-
+        pc.Gameplay.Pause.performed -= onPause;
     }
 }
