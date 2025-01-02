@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
         pc = new PlayerControls();     
         pc.Gameplay.Enable();
 
-        pc.Gameplay.Jump.performed += OnJump;
+        //pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
         pc.Gameplay.Pause.performed += onPause;
@@ -78,11 +78,24 @@ public class PlayerController : MonoBehaviour
 
         Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
         Debug.DrawRay(transform.position, forward, Color.green);
+
+        
+/*        if (pc.Gameplay.Jump == 1)
+        {
+            Debug.Log("Jump button pressed");
+            player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
+            player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            if (rb.velocity.y < 0)
+            {
+                rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            }
+        }*/
     }
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter()
     {
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
+        //https://www.youtube.com/watch?app=desktop&v=KjaRQr74jV0&t=210s
         //This will change to follow convention of moving the rigidbody and not the gameObject
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
 
@@ -91,7 +104,9 @@ public class PlayerController : MonoBehaviour
 
         Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
 
-        player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
+        //player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
+        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
+        rb.MovePosition(transform.position + translation * Time.deltaTime * speed);
 
         //Vector3 positionToLookAt;
 
@@ -114,17 +129,19 @@ public class PlayerController : MonoBehaviour
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        if (rb.velocity.y < 0) {
+        if (rb.velocity.y < 0)
+        {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
+
 
 
         //so the issue is that the jump is too floaty
         //fixes is to make the gravity higher once it reaches the peak of the arc?
 
 
-      /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
-        player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
+        /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
+          player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
 
     }
 
@@ -140,7 +157,7 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
             jumpCounter = 0;
     }
-    public void OnJump(InputAction.CallbackContext context)
+   /* public void OnJump(InputAction.CallbackContext context)
     {
         Debug.Log("OnJump triggered");
 
@@ -161,7 +178,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Debug.Log("help me");
-    }
+    }*/
 
     //-----------------------------------------------Quick Drop-----------------------------------------------//
     //The idea is that when quickdropping increase downwards velocity or increase gravity?
@@ -240,7 +257,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        pc.Gameplay.Jump.performed -= OnJump;
+        //pc.Gameplay.Jump.performed -= OnJump;
         pc.Gameplay.QuickDrop.performed -= OnQuickDrop;
         pc.Gameplay.Dash.performed -= OnDash;
         pc.Gameplay.Pause.performed -= onPause;
