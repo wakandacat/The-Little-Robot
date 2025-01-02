@@ -42,6 +42,8 @@ public class BossStateMachine
     {
         // Execute Update instructions for currentState
         currentState.Update();
+        // Execute CheckTransition instructions for currentState
+        currentState.CheckTransition();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -52,5 +54,13 @@ public class BossStateMachine
     {
         // Execute FixedUpdate instructions for currentState
         currentState.FixedUpdate();
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Get/Set Functions                                                                                                                                                                            * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    BossState returnCurrentState()
+    {
+        return currentState;
     }
 }

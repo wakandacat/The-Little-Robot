@@ -19,6 +19,9 @@ public class BossEnemy : MonoBehaviour
     // State Machine Attributes ---------------------------------------------------------------------------------------------------
     private BossStateMachine stateMachine;
 
+    // Player Actions/Location ----------------------------------------------------------------------------------------------------
+    private bool playerTriggeredBossWakeup = false;
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Start Function                                                                                                                                                                               * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -57,12 +60,39 @@ public class BossEnemy : MonoBehaviour
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Player Action/Location Functions                                                                                                                                                             * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public float returnDistanceOfPlayer()
+    {
+        return Vector3.Distance(transform.position, playerGameObject.transform.position);
+    }
+
+    public void playerEnteredWakeupTrigger()
+    {
+        playerTriggeredBossWakeup = true;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               State Transition Function                                                                                                                                                                    * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    private void TransitionToSleepingState()
+    public void TransitionToSleepingState()
     {
         SleepingState sleepingState = new SleepingState();
-        //sleepingState.Initialize(bossAnimator);
+        sleepingState.Initialize(bossAnimator, this);
         stateMachine.SetState(sleepingState);
+    }
+    public void TransitionToWakingUpState()
+    {
+        WakingUpState wakingUpState = new WakingUpState();
+        wakingUpState.Initialize(bossAnimator, this);
+        stateMachine.SetState(wakingUpState);
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Get/Set Functions                                                                                                                                                                            * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public bool returnPlayerTriggeredBossWakeup()
+    {
+        return playerTriggeredBossWakeup;
     }
 }
