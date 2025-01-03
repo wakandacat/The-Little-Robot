@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     //jump variables
     private float jumpForce = 10f;
     private float speed = 7f;
-    private float fallMultiplier = 400f;
+    private float fallMultiplier = 800f;
     groundCheck ground;
     private bool isJumping = false;
     private bool isQuickDropping = false;
@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
         pc = new PlayerControls();     
         pc.Gameplay.Enable();
 
-        //pc.Gameplay.Jump.performed += OnJump;
+        pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
         pc.Gameplay.Pause.performed += onPause;
@@ -78,18 +78,34 @@ public class PlayerController : MonoBehaviour
 
         Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
         Debug.DrawRay(transform.position, forward, Color.green);
+        Debug.Log(player.GetComponent<Rigidbody>().velocity.y);
 
-        
-/*        if (pc.Gameplay.Jump == 1)
+        if (isJumping == true && ground.onGround == true)
         {
             Debug.Log("Jump button pressed");
             player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
             player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+            if (rb.velocity.y < 0)
+            { 
+                rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            }
+            jumpCounter++;
+            ground.jumpState = true;
+        }
+        if (ground.onGround == false && jumpCounter == 1 && isJumping)
+        {
+            Debug.Log("Jump button pressed");
+            player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
+            player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
             if (rb.velocity.y < 0)
             {
                 rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
             }
-        }*/
+            jumpCounter = 0;
+            ground.jumpState = true;
+        }
     }
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter()
@@ -157,12 +173,12 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
             jumpCounter = 0;
     }
-   /* public void OnJump(InputAction.CallbackContext context)
+    public void OnJump(InputAction.CallbackContext context)
     {
         Debug.Log("OnJump triggered");
 
         isJumping = context.ReadValueAsButton();
-        if (ground.onGround == true && jumpCounter == 0 && isJumping)
+/*        if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
             Jump();
             player.GetComponent<Rigidbody>().freezeRotation = true;
@@ -177,8 +193,8 @@ public class PlayerController : MonoBehaviour
             ground.jumpState = true;
         }
 
-        Debug.Log("help me");
-    }*/
+        Debug.Log("help me");*/
+    }
 
     //-----------------------------------------------Quick Drop-----------------------------------------------//
     //The idea is that when quickdropping increase downwards velocity or increase gravity?
@@ -257,7 +273,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDestroy()
     {
-        //pc.Gameplay.Jump.performed -= OnJump;
+        pc.Gameplay.Jump.performed -= OnJump;
         pc.Gameplay.QuickDrop.performed -= OnQuickDrop;
         pc.Gameplay.Dash.performed -= OnDash;
         pc.Gameplay.Pause.performed -= onPause;
