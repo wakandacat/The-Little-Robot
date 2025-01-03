@@ -195,18 +195,21 @@ public class PlayerController : MonoBehaviour
         isJumping = context.ReadValueAsButton();
 /*        if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
-            Jump();
-            player.GetComponent<Rigidbody>().freezeRotation = true;
-            jumpCounter++;
-            ground.jumpState = true;
-        }
-        if (ground.onGround == false && jumpCounter == 1 && isJumping)
-        {
-            doubleJump();
-            player.GetComponent<Rigidbody>().freezeRotation = true;
-            jumpCounter = 0;
-            ground.jumpState = true;
-        }
+            isJumping = context.ReadValueAsButton();
+            if (ground.onGround == true && jumpCounter == 0 && isJumping)
+            {
+                Jump();
+                player.GetComponent<Rigidbody>().freezeRotation = true;
+                jumpCounter++;
+                ground.jumpState = true;
+            }
+            if (ground.onGround == false && jumpCounter == 1 && isJumping)
+            {
+                doubleJump();
+                player.GetComponent<Rigidbody>().freezeRotation = true;
+                jumpCounter = 0;
+                ground.jumpState = true;
+            }
 
         Debug.Log("help me");*/
     }
