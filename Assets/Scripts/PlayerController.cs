@@ -57,9 +57,6 @@ public class PlayerController : MonoBehaviour
     public bool isPaused = false;
     public GameObject pauseMenu;
 
-  
-
-
     void Start()
     {
         pc = new PlayerControls();     
