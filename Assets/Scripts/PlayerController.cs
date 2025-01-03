@@ -9,20 +9,26 @@ using UnityEngine.InputSystem;
 //Implement Roll
 //Implement Attack
 //Implement Attack Combo
-//Might fall after dashing not sure why
+//Might fall after dashing not sure why falls because the forces applied on the player are not balanced well enough so to fix freeze rotations lol
 //add freecam
 public class PlayerController : MonoBehaviour
 {
     //player variables
     public GameObject player;
     public Rigidbody rb;
+    private float playerHealth = 3;
+    private float playerDamage = 10;
+    private float playerCurrenthealth;
+    private float healthRegenDelay = 10f;
+    private bool deathState = false;
+
 
     //player controller reference
     PlayerControls pc;
 
     //jump variables
     private float jumpForce = 10f;
-    private float speed = 7f;
+    private float speed = 10f;
     private float fallMultiplier = 800f;
     groundCheck ground;
     private bool isJumping = false;
@@ -43,10 +49,15 @@ public class PlayerController : MonoBehaviour
     public Transform orientation;
     public float dashUpwardForce = 10f;
 
+    //Attack vars
+    private bool isAttacking = false;
+    private bool attackState = false;
 
     //pause vars
     public bool isPaused = false;
     public GameObject pauseMenu;
+
+  
 
 
     void Start()
@@ -57,6 +68,7 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
+        pc.Gameplay.Attack.performed += OnAttack;
         pc.Gameplay.Pause.performed += onPause;
         rb = player.gameObject.GetComponent<Rigidbody>();
         ground = player.GetComponent<groundCheck>();
@@ -254,6 +266,7 @@ public class PlayerController : MonoBehaviour
         gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
+
         canDash = true;
     }
     public void OnDash(InputAction.CallbackContext context)
@@ -270,14 +283,39 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Roll-----------------------------------------------//
     //-----------------------------------------------Deflect-----------------------------------------------//
     //-----------------------------------------------Attack-----------------------------------------------//
+    public void onAttack(InputAction.CallbackContext context)
+    {
+        isAttacking = context.ReadValueAsButton();
+        //write code here
+        attackState = true;
+    }
+    //-----------------------------------------------Health Regen-----------------------------------------------//
+    public void manageHealth()
+    {
+        if (playerCurrenthealth == 0)
+        {
+            deathState = true;
+        }
+        else
+        {
+            if ((playerCurrenthealth < playerHealth) && (attackState == false))
+            {
+                StartCoroutine(regenHealth);
+            }
+        }
+    }
 
+    IEnumerator regenHealth()
+    {
 
+    }
 
     private void OnDestroy()
     {
         pc.Gameplay.Jump.performed -= OnJump;
         pc.Gameplay.QuickDrop.performed -= OnQuickDrop;
         pc.Gameplay.Dash.performed -= OnDash;
+        pc.Gameplay.Attack.performed -= onAttack;
         pc.Gameplay.Pause.performed -= onPause;
     }
 }
