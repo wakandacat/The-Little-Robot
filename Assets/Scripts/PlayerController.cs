@@ -40,11 +40,14 @@ public class PlayerController : MonoBehaviour
     private bool Dashing = false;
     public float gravityScale = 1.0f;
     public static float globalGravity = -9.81f;
+    public Transform orientation;
+    public float dashUpwardForce = 10f;
 
 
     //pause vars
     public bool isPaused = false;
     public GameObject pauseMenu;
+
 
     void Start()
     {
@@ -234,6 +237,8 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Dash-----------------------------------------------//
     //https://www.youtube.com/watch?v=vTNWUbGkZ58
     //https://discussions.unity.com/t/why-does-rigidbody-3d-not-have-a-gravity-scale/645511/2
+    //https://discussions.unity.com/t/rigidbody-falls-over-when-addforce-addrelativeforce-is-used/421107/4
+    //https://www.youtube.com/watch?v=QRYGrCWumFw
     public IEnumerator Dash()
     {
         canDash = false;
@@ -242,12 +247,9 @@ public class PlayerController : MonoBehaviour
         gravityScale = 0f;
 
         //get the walk direction input needs to be refined
-        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
-        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        //translation.Normalize();
-        player.transform.Translate(translation * Time.deltaTime);
-        
-        rb.velocity = new Vector3(translation.x * dashingPower, 0f,0f);
+        Vector3 forceToApply = orientation.forward * dashingPower;
+        rb.freezeRotation = true;
+        rb.AddForce(forceToApply, ForceMode.Impulse);
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
