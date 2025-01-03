@@ -286,7 +286,7 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Roll-----------------------------------------------//
     //-----------------------------------------------Deflect-----------------------------------------------//
     //-----------------------------------------------Attack-----------------------------------------------//
-    public void onAttack(InputAction.CallbackContext context)
+    public void OnAttack(InputAction.CallbackContext context)
     {
         isAttacking = context.ReadValueAsButton();
         //write code here
@@ -303,22 +303,22 @@ public class PlayerController : MonoBehaviour
         {
             if ((playerCurrenthealth < playerHealth) && (attackState == false))
             {
-                StartCoroutine(regenHealth);
+                //StartCoroutine(regenHealth);
             }
         }
     }
 
-    IEnumerator regenHealth()
+/*    IEnumerator regenHealth()
     {
-
-    }
+       
+    }*/
 
     private void OnDestroy()
     {
         pc.Gameplay.Jump.performed -= OnJump;
         pc.Gameplay.QuickDrop.performed -= OnQuickDrop;
         pc.Gameplay.Dash.performed -= OnDash;
-        pc.Gameplay.Attack.performed -= onAttack;
+        pc.Gameplay.Attack.performed -= OnAttack;
         pc.Gameplay.Pause.performed -= onPause;
     }
 }
