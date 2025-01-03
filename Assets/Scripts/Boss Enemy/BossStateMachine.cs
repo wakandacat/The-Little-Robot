@@ -31,7 +31,7 @@ public class BossStateMachine
         // Execute Enter instructions for new currentState
         currentState = newState;
         currentState.Enter();
-        Debug.Log("Current State has been updated to: " + currentState.ToString());
+        //Debug.Log("Current State has been updated to: " + currentState.ToString());
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

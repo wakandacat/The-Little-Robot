@@ -75,9 +75,9 @@ public class SleepingState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (bossEnemyComponent.returnPlayerTriggeredBossWakeup() == true)
+        if (bossEnemyComponent.returnPlayerTriggeredBossWakeup() == true)   // check if the player has triggered the Boss Wakeup Trigger
         {
-            bossEnemyComponent.TransitionToWakingUpState();
+            bossEnemyComponent.TransitionToWakingUpState();                 // if so, transition to waking up state
         }
 
         // Animation Logic
@@ -131,7 +131,7 @@ public class WakingUpState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        //Debug.Log("debug text hehe :3");
+        bossEnemyComponent.TransitionToSelfCheckState();    // This *should* only be done when the animations finish for WakingUpState but that logic hasn't been implemented yet
 
         // Animation Logic
 
@@ -165,6 +165,7 @@ public class SelfCheckState : BossState
     public override void Enter()
     {
         // Programming Logic
+        Debug.Log("BossEnemy: Entering SelfCheckState");
 
         // Animation Logic
 
@@ -183,7 +184,14 @@ public class SelfCheckState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        //Debug.Log("debug text hehe :3");
+        if (bossEnemyComponent.returnCurrentEnergy() <= 0)   // check if the current energy count of the Boss Enemy is below or equal to 0
+        {
+            bossEnemyComponent.TransitionToLowEnergyState(); // if so, transition to low energy state
+        }
+        else
+        {
+            bossEnemyComponent.TransitionToAwakeState();     // if not, transition to awake state
+        }
 
         // Animation Logic
 
@@ -213,10 +221,19 @@ public class SelfCheckState : BossState
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 public class AwakeState : BossState
 {
+    // State Specific Properties
+    private bool attackChosen = false;
+    private bool delayFinished = false;
+    private float enterStateTimeStamp = 0.0f;
+
     // Called when the state machine transitions to this state
     public override void Enter()
     {
         // Programming Logic
+        Debug.Log("BossEnemy: Entering AwakeState");
+        enterStateTimeStamp = Time.time;
+
+        // INSERT: attack selection logic
 
         // Animation Logic
 
@@ -226,6 +243,7 @@ public class AwakeState : BossState
     public override void Update()
     {
         // Programming Logic
+        attackChosen = true;
 
         // Animation Logic
 
@@ -235,7 +253,19 @@ public class AwakeState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        //Debug.Log("debug text hehe :3");
+        if (delayFinished == false) // check if the delay has been completed
+        {
+            if (Time.time - enterStateTimeStamp >= bossEnemyComponent.AwakeState_Delay) // if not, check if the duration of the delay has been exceeded
+            {
+                delayFinished = true; // if so, set delay to have been completed
+            }
+        }
+
+        if (attackChosen == true && delayFinished == true)  // check if the delay has been completed and the attack has been chosen
+        {
+            // INSERT: attack selection procedure for state transitions
+            bossEnemyComponent.TransitionToAttackTestingState();
+        }
 
         // Animation Logic
 
@@ -269,6 +299,11 @@ public class LowEnergyState : BossState
     public override void Enter()
     {
         // Programming Logic
+        Debug.Log("BossEnemy: Entering LowEnergyState");
+
+        // TEMP DEBUGGING LOGIC
+        bossEnemyComponent.updateCurrentHP(bossEnemyComponent.returnCurrentHP() - 10.0f);
+        Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.returnCurrentHP());
 
         // Animation Logic
 
@@ -278,6 +313,10 @@ public class LowEnergyState : BossState
     public override void Update()
     {
         // Programming Logic
+        bossEnemyComponent.regainCurrentEnergyPerFrame();   // regain X% of Energy_RegainedPerSecond by multiplying the amount by the duration of time between frames (at 50fps, 1/50th)
+
+        // INSERT: check for strikes against enemy to regain energy from
+        // INSERT: check for strikes against enemy to lose HP from
 
         // Animation Logic
 
@@ -287,7 +326,16 @@ public class LowEnergyState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        //Debug.Log("debug text hehe :3");
+        if (bossEnemyComponent.returnCurrentHP() <= 0.0f)                                   // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToDeathState();                                    // if so, transition to Death State
+        }
+
+        if (bossEnemyComponent.returnCurrentEnergy() >= bossEnemyComponent.Energy_Maximum)  // check if Energy_Current has exceeded Energy_Maximum
+        {
+            bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.Energy_Maximum);      // if so, set Energy_Current to Energy_Maximum
+            bossEnemyComponent.TransitionToAwakeState();                                    // and, transition to Awake State
+        }
 
         // Animation Logic
 
@@ -321,6 +369,7 @@ public class DeathState : BossState
     public override void Enter()
     {
         // Programming Logic
+        Debug.Log("BossEnemy: Entering DeathState");
 
         // Animation Logic
 
@@ -367,15 +416,75 @@ public class DeathState : BossState
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // *               Attack Instruction States                                                                                                                                                                    * 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-public class MeleeSwingState : BossState
+public class AttackTestingState : BossState
 {
     // When to call this Attack Instruction State
     // -- insert here --
+
+    // State Specific Properties
+    private float Energy_Cost = 1.0f;
 
     // Called when the state machine transitions to this state
     public override void Enter()
     {
         // Programming Logic
+        Debug.Log("BossEnemy: Entering AttackTestingState");
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
+        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        bossEnemyComponent.TransitionToSelfCheckState();
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+}
+
+public class MeleeSwingState : BossState
+{
+    // When to call this Attack Instruction State
+    // -- insert here --
+    // only do when player is close
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+        Debug.Log("BossEnemy: Entering MeleeSwingState");
 
         // Animation Logic
 
