@@ -9,21 +9,27 @@ using UnityEngine.InputSystem;
 //Implement Roll
 //Implement Attack
 //Implement Attack Combo
-//Might fall after dashing not sure why
+//Might fall after dashing not sure why falls because the forces applied on the player are not balanced well enough so to fix freeze rotations lol
 //add freecam
 public class PlayerController : MonoBehaviour
 {
     //player variables
     public GameObject player;
     public Rigidbody rb;
+    private float playerHealth = 3;
+    private float playerDamage = 10;
+    private float playerCurrenthealth;
+    private float healthRegenDelay = 10f;
+    private bool deathState = false;
+
 
     //player controller reference
     PlayerControls pc;
 
     //jump variables
     private float jumpForce = 10f;
-    private float speed = 7f;
-    private float fallMultiplier = 400f;
+    private float speed = 10f;
+    private float fallMultiplier = 800f;
     groundCheck ground;
     private bool isJumping = false;
     private bool isQuickDropping = false;
@@ -40,11 +46,19 @@ public class PlayerController : MonoBehaviour
     private bool Dashing = false;
     public float gravityScale = 1.0f;
     public static float globalGravity = -9.81f;
+    public Transform orientation;
+    public float dashUpwardForce = 10f;
 
+    //Attack vars
+    private bool isAttacking = false;
+    private bool attackState = false;
 
     //pause vars
     public bool isPaused = false;
     public GameObject pauseMenu;
+
+  
+
 
     void Start()
     {
@@ -54,6 +68,7 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
+        pc.Gameplay.Attack.performed += OnAttack;
         pc.Gameplay.Pause.performed += onPause;
         rb = player.gameObject.GetComponent<Rigidbody>();
         ground = player.GetComponent<groundCheck>();
@@ -78,11 +93,40 @@ public class PlayerController : MonoBehaviour
 
         Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
         Debug.DrawRay(transform.position, forward, Color.green);
+        Debug.Log(player.GetComponent<Rigidbody>().velocity.y);
+
+        if (isJumping == true && ground.onGround == true)
+        {
+            Debug.Log("Jump button pressed");
+            player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
+            player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+            if (rb.velocity.y < 0)
+            { 
+                rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            }
+            jumpCounter++;
+            ground.jumpState = true;
+        }
+        if (ground.onGround == false && jumpCounter == 1 && isJumping)
+        {
+            Debug.Log("Jump button pressed");
+            player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
+            player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+            if (rb.velocity.y < 0)
+            {
+                rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            }
+            jumpCounter = 0;
+            ground.jumpState = true;
+        }
     }
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter()
     {
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
+        //https://www.youtube.com/watch?app=desktop&v=KjaRQr74jV0&t=210s
         //This will change to follow convention of moving the rigidbody and not the gameObject
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
 
@@ -91,7 +135,9 @@ public class PlayerController : MonoBehaviour
 
         Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
 
-        player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
+        //player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
+        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
+        rb.MovePosition(transform.position + translation * Time.deltaTime * speed);
 
         //Vector3 positionToLookAt;
 
@@ -114,17 +160,19 @@ public class PlayerController : MonoBehaviour
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        if (rb.velocity.y < 0) {
+        if (rb.velocity.y < 0)
+        {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
+
 
 
         //so the issue is that the jump is too floaty
         //fixes is to make the gravity higher once it reaches the peak of the arc?
 
 
-      /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
-        player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
+        /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
+          player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
 
     }
 
@@ -144,7 +192,8 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("OnJump triggered");
 
-        if (isPaused == false)
+        isJumping = context.ReadValueAsButton();
+/*        if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
             isJumping = context.ReadValueAsButton();
             if (ground.onGround == true && jumpCounter == 0 && isJumping)
@@ -162,9 +211,7 @@ public class PlayerController : MonoBehaviour
                 ground.jumpState = true;
             }
 
-            Debug.Log("help me");
-        }
-       
+        Debug.Log("help me");*/
     }
 
     //-----------------------------------------------Quick Drop-----------------------------------------------//
@@ -205,6 +252,8 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Dash-----------------------------------------------//
     //https://www.youtube.com/watch?v=vTNWUbGkZ58
     //https://discussions.unity.com/t/why-does-rigidbody-3d-not-have-a-gravity-scale/645511/2
+    //https://discussions.unity.com/t/rigidbody-falls-over-when-addforce-addrelativeforce-is-used/421107/4
+    //https://www.youtube.com/watch?v=QRYGrCWumFw
     public IEnumerator Dash()
     {
         canDash = false;
@@ -213,16 +262,14 @@ public class PlayerController : MonoBehaviour
         gravityScale = 0f;
 
         //get the walk direction input needs to be refined
-        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
-        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        //translation.Normalize();
-        player.transform.Translate(translation * Time.deltaTime);
-        
-        rb.velocity = new Vector3(translation.x * dashingPower, 0f,0f);
+        Vector3 forceToApply = orientation.forward * dashingPower;
+        rb.freezeRotation = true;
+        rb.AddForce(forceToApply, ForceMode.Impulse);
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
+
         canDash = true;
     }
     public void OnDash(InputAction.CallbackContext context)
@@ -239,14 +286,39 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Roll-----------------------------------------------//
     //-----------------------------------------------Deflect-----------------------------------------------//
     //-----------------------------------------------Attack-----------------------------------------------//
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        isAttacking = context.ReadValueAsButton();
+        //write code here
+        attackState = true;
+    }
+    //-----------------------------------------------Health Regen-----------------------------------------------//
+    public void manageHealth()
+    {
+        if (playerCurrenthealth == 0)
+        {
+            deathState = true;
+        }
+        else
+        {
+            if ((playerCurrenthealth < playerHealth) && (attackState == false))
+            {
+                //StartCoroutine(regenHealth);
+            }
+        }
+    }
 
-
+/*    IEnumerator regenHealth()
+    {
+       
+    }*/
 
     private void OnDestroy()
     {
         pc.Gameplay.Jump.performed -= OnJump;
         pc.Gameplay.QuickDrop.performed -= OnQuickDrop;
         pc.Gameplay.Dash.performed -= OnDash;
+        pc.Gameplay.Attack.performed -= OnAttack;
         pc.Gameplay.Pause.performed -= onPause;
     }
 }
