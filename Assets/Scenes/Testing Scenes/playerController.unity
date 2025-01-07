@@ -741,7 +741,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2136082620}
   rb: {fileID: 2136082626}
+  playerHealth: 3
+  playerCurrenthealth: 0
   gravityScale: 1
+  orientation: {fileID: 2136082625}
+  dashUpwardForce: 10
+  attackState: 0
   isPaused: 0
   pauseMenu: {fileID: 0}
 --- !u!114 &2136082628

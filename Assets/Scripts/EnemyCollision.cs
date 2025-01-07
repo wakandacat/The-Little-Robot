@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyCollision : MonoBehaviour
 {
+    public bool enemyCollision = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,4 +18,15 @@ public class EnemyCollision : MonoBehaviour
     }
 
     //somewhere here collide with smth i am not sure what though
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "enemy")
+        {
+            enemyCollision = true;
+        }
+    }
+    public void OnCollisionExit(Collision collision)
+    {
+        enemyCollision = false;
+    }
 }
