@@ -27,8 +27,8 @@ public class PlayerController : MonoBehaviour
     PlayerControls pc;
 
     //jump variables
-    private float jumpForce = 10f;
-    private float speed = 10f;
+    private float jumpForce = 5f;
+    private float speed = 20f;
     private float fallMultiplier = 800f;
     groundCheck ground;
     private bool isJumping = false;
@@ -127,8 +127,8 @@ public class PlayerController : MonoBehaviour
         //This will change to follow convention of moving the rigidbody and not the gameObject
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
 
-        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)).normalized;
+        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1));
+        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1));
 
         Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
 
@@ -298,7 +298,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if ((playerCurrenthealth < playerHealth) && (attackState == false))
+            if ((playerCurrenthealth < playerHealth) && (attackState == false) && (deathState == false))
             {
                 //StartCoroutine(regenHealth);
             }
@@ -309,6 +309,12 @@ public class PlayerController : MonoBehaviour
     {
        
     }*/
+//destroy player
+//fade to black re load scene
+    public void ManagedeathState()
+    {
+        Destroy(gameObject);
+    }
 
     private void OnDestroy()
     {
