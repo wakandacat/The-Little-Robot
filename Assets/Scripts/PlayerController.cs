@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 //ToDo
 //Fix the floatiness of the jump look at these resources --> https://www.youtube.com/watch?v=hG9SzQxaCm8, https://www.youtube.com/watch?app=desktop&v=h2r3_KjChf4&t=233s
@@ -66,6 +68,7 @@ public class PlayerController : MonoBehaviour
     //pause vars
     public bool isPaused = false;
     public GameObject pauseMenu;
+    private Scene currentScene;
 
     void Start()
     {
@@ -85,7 +88,8 @@ public class PlayerController : MonoBehaviour
         enemyCollision = player.GetComponent<EnemyCollision>();
 
         playerCurrenthealth = playerHealth;
-
+        
+        currentScene = SceneManager.GetActiveScene();
     }
 
     //open pause menu
@@ -99,6 +103,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(currentScene.name);
         if (deathState == false)
         {
             manageHealth();
@@ -109,8 +114,6 @@ public class PlayerController : MonoBehaviour
 
             Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
             Debug.DrawRay(transform.position, forward, Color.green);
-            Debug.Log(player.GetComponent<Rigidbody>().velocity.y);
-
             if (isJumping == true && ground.onGround == true)
             {
                 Debug.Log("Jump button pressed");
@@ -372,6 +375,8 @@ public class PlayerController : MonoBehaviour
     public void ManagedeathState()
     {
         Destroy(gameObject);
+
+        //SceneManager.LoadScene(currentScene);
     }
 
     private void OnDestroy()
