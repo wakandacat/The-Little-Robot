@@ -242,7 +242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &251530168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,8 +697,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0046379794, y: -0.0027828692, z: 0.000012907079, w: 0.9999854}
-  m_LocalPosition: {x: 2.1056554, y: 4.030759, z: -9.149415}
+  m_LocalRotation: {x: 0.122183226, y: 0.000000028655153, z: -0.0000000035276093,
+    w: 0.9925076}
+  m_LocalPosition: {x: 2.05, y: 4.4379997, z: -7.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3503,13 +3504,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9265fdbcd4394e545a3c366134638d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHealth: 3
+  playerCurrenthealth: 0
   player: {fileID: 1610854411}
   rb: {fileID: 1610854414}
   gravityScale: 1
   orientation: {fileID: 0}
   dashUpwardForce: 10
+  attackState: 0
   isPaused: 0
   pauseMenu: {fileID: 1414176718}
+  fadeOutPanel: {fileID: 251530167}
 --- !u!54 &1610854414
 Rigidbody:
   m_ObjectHideFlags: 0
