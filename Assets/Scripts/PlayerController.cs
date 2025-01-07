@@ -68,8 +68,6 @@ public class PlayerController : MonoBehaviour
     //pause vars
     public bool isPaused = false;
     public GameObject pauseMenu;
-    private Scene currentScene;
-
     void Start()
     {
         pc = new PlayerControls();     
@@ -88,8 +86,8 @@ public class PlayerController : MonoBehaviour
         enemyCollision = player.GetComponent<EnemyCollision>();
 
         playerCurrenthealth = playerHealth;
-        
-        currentScene = SceneManager.GetActiveScene();
+
+        Scene currentScene = SceneManager.GetActiveScene();
     }
 
     //open pause menu
@@ -376,7 +374,7 @@ public class PlayerController : MonoBehaviour
     {
         Destroy(gameObject);
 
-        //SceneManager.LoadScene(currentScene);
+        SceneManager.LoadScene(currentScene.name);
     }
 
     private void OnDestroy()
