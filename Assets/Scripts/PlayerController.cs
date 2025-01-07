@@ -15,18 +15,18 @@ using UnityEngine.SceneManagement;
 //add freecam
 public class PlayerController : MonoBehaviour
 {
-    //player variables
-    public GameObject player;
-    public Rigidbody rb;
+    //Script declarations
+
     groundCheck ground;
     EnemyCollision enemyCollision;
 
-
+    //player variables
     public int playerHealth = 3;
     private int playerDamage = 10;
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
-    private bool deathState = false;
+    public GameObject player;
+    public Rigidbody rb;
 
 
     //player controller reference
@@ -68,6 +68,13 @@ public class PlayerController : MonoBehaviour
     //pause vars
     public bool isPaused = false;
     public GameObject pauseMenu;
+
+    //Death handlers
+    UnityEngine.SceneManagement.Scene currentScene;
+    private bool deathState = false;
+    private int fadeDelay = 2;
+    public GameObject fadeOutPanel;
+
     void Start()
     {
         pc = new PlayerControls();     
@@ -86,8 +93,9 @@ public class PlayerController : MonoBehaviour
         enemyCollision = player.GetComponent<EnemyCollision>();
 
         playerCurrenthealth = playerHealth;
+        currentScene = SceneManager.GetActiveScene();
+        fadeOutPanel.SetActive(false);
 
-        Scene currentScene = SceneManager.GetActiveScene();
     }
 
     //open pause menu
@@ -101,7 +109,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(currentScene.name);
+        //Debug.Log(currentScene.name);
         if (deathState == false)
         {
             manageHealth();
@@ -141,6 +149,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(deathState == true)
         {
+            Debug.Log("hELLO 123");
             ManagedeathState();
         }
     }
@@ -368,13 +377,23 @@ public class PlayerController : MonoBehaviour
     }
 
     //-----------------------------------------------Death State-----------------------------------------------//
-    //destroy player
-    //fade to black re load scene
     public void ManagedeathState()
     {
-        Destroy(gameObject);
+        StartCoroutine(fadeinOut());
+    }
+    IEnumerator fadeinOut()
+    {
+        fadeOutPanel.SetActive(true);
+        gameObject.SetActive(false);
+        Debug.Log("Hello");
+        yield return new WaitForSeconds(fadeDelay);
+        Debug.Log("Hello 12");
 
         SceneManager.LoadScene(currentScene.name);
+        playerCurrenthealth = playerHealth;
+
+        //fadeOutPanel.SetActive(false);
+        //gameObject.SetActive(true);
     }
 
     private void OnDestroy()
