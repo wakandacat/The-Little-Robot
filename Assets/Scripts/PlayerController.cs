@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
     //Attack vars
     private bool isAttacking = false;
     public bool attackState = false;
+    private int attackCounter = 0;
 
     //Roll vars
     private bool Rolling = false;
@@ -213,7 +214,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("OnJump triggered");
 
         isJumping = context.ReadValueAsButton();
-/*        if (ground.onGround == true && jumpCounter == 0 && isJumping)
+/*      if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
             isJumping = context.ReadValueAsButton();
             if (ground.onGround == true && jumpCounter == 0 && isJumping)
@@ -307,6 +308,7 @@ public class PlayerController : MonoBehaviour
     public void OnRoll(InputAction.CallbackContext context)
     {
         Rolling = context.ReadValueAsButton();
+        //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
     }
     //-----------------------------------------------Deflect-----------------------------------------------//
     public void OnDeflect(InputAction.CallbackContext context)
@@ -321,9 +323,10 @@ public class PlayerController : MonoBehaviour
     public void OnAttack(InputAction.CallbackContext context)
     {
         isAttacking = context.ReadValueAsButton();
-        if(isAttacking && enemyCollision.enemyCollision == true)
+        if(isAttacking)
         {
             attackState = true;
+            attackCounter++;
             //write code here
         }
     }
