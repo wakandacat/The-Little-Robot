@@ -15,9 +15,9 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     //Script declarations
-
     groundCheck ground;
     EnemyCollision enemyCollision;
+    cameraRotation rotationCam;
 
     //player variables
     public int playerHealth = 3;
@@ -32,8 +32,8 @@ public class PlayerController : MonoBehaviour
     PlayerControls pc;
 
     //jump variables
-    private float jumpForce = 5f;
-    private float speed = 20f;
+    private float jumpForce = 10f;
+    private float speed = 30f;
     private float fallMultiplier = 800f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
@@ -92,6 +92,7 @@ public class PlayerController : MonoBehaviour
         rb = player.gameObject.GetComponent<Rigidbody>();
         ground = player.GetComponent<groundCheck>();
         enemyCollision = player.GetComponent<EnemyCollision>();
+        rotationCam = player.GetComponent<cameraRotation>();
 
         playerCurrenthealth = playerHealth;
         currentScene = SceneManager.GetActiveScene();
@@ -136,16 +137,29 @@ public class PlayerController : MonoBehaviour
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
         //https://www.youtube.com/watch?app=desktop&v=KjaRQr74jV0&t=210s
         //This will change to follow convention of moving the rigidbody and not the gameObject
-        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
 
-        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1));
-        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1));
+        //Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1));
+        //Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1));
 
-        Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
+        //Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
+
+        //Vector3 movementDirection = new Vector3(leftStick.x, 0f, leftStick.y);
+
+        //Vector3 movementDirection = ((player.transform.forward * leftStick.y) + (player.transform.right * leftStick.x)) * 1.0f;
+
 
         //player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
-        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        rb.MovePosition(transform.position + translation * Time.deltaTime * speed);
+        //Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
+
+
+        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
+        Vector3 movementInput = new Vector3(leftStick.x, 0f, leftStick.y);
+
+        Vector3 cameraRelativeMovement = rotationCam.convertToCamSpace(movementInput);
+
+
+
+        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * speed);
 
         //Vector3 positionToLookAt;
 
@@ -156,10 +170,10 @@ public class PlayerController : MonoBehaviour
 
         Quaternion currentRotation = transform.rotation;
 
-        if(movementDirection != Vector3.zero)
+        if (cameraRelativeMovement != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(movementDirection);
-            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed*Time.deltaTime);
+            Quaternion targetRotation = Quaternion.LookRotation(cameraRelativeMovement * Time.fixedDeltaTime);
+            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }
 
