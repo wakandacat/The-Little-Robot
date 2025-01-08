@@ -33,7 +33,7 @@ public class BossWakeupTrigger : MonoBehaviour
         if (other.gameObject ==  playerGameObject)
         {
             Debug.Log("Player Entered Boss Wakeup Trigger");
-            bossEnemyScriptComponent.playerEnteredWakeupTrigger();
+            bossEnemyScriptComponent.Player_EnteredWakeupTrigger();
         }
     }
 }

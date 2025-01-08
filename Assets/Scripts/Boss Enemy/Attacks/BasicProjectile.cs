@@ -1,75 +1,79 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class BossStateMachine
+public class BasicProjectile : MonoBehaviour
 {
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Public Fields                                                                                                                                                                                * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Debug Values ---------------------------------------------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Private/Protected Attributes                                                                                                                                                                 * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Object References ----------------------------------------------------------------------------------------------------------
-
-    // State Machine Attributes ---------------------------------------------------------------------------------------------------
-    private BossState currentState;
+    private float Projectile_Speed = 0.0f;
+    private Vector3 Projectile_InitialTargetPosition = Vector3.zero;
+    private Vector3 Projectile_TargetDirection = Vector3.zero;
+    private Vector3 Projectile_MovementDirection = Vector3.zero;
+    private bool Projectile_Fired = false;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               SetState Function                                                                                                                                                                            * 
+    // *               Start Function                                                                                                                                                                               * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void SetState(BossState newState)
+    // Start is called before the first frame update
+    void Start()
     {
-        // Execute Exit instructions for previous currentState
-        if (currentState != null)
-        {
-            currentState.Exit();
-        }
-
-        // Execute Enter instructions for new currentState
-        currentState = newState;
-        currentState.Enter();
-        //Debug.Log("Current State has been updated to: " + currentState.ToString());
+        
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Update Function                                                                                                                                                                              * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Update is called once per frame
-    public void Update()
+    void Update()
     {
-        // Execute Update instructions for currentState
-        currentState.Update();
-        // Execute CheckTransition instructions for currentState
-        currentState.CheckTransition();
+        
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Fixed Update Function                                                                                                                                                                        * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // FixedUpdate is called at set intervals
-    public void FixedUpdate()
+    void FixedUpdate()
     {
-        // Execute FixedUpdate instructions for currentState
-        currentState.FixedUpdate();
+        if (Projectile_Fired == true)
+        {
+            MoveProjectile();
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               Late Update Function                                                                                                                                                                         * 
+    // *               Movement Functions                                                                                                                                                                           * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Called after all other update functions
-    public void LateUpdate()
+    // Move the projectile infinitely in the direction it was fired
+    private void MoveProjectile()
     {
-        currentState.LateUpdate();
+        float step = Projectile_Speed * Time.fixedDeltaTime;                // calculate movement step based on speed and fixed delta time
+        transform.position += Projectile_TargetDirection * step;            // move the projectile in the direction it was initially fired
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Get/Set Functions                                                                                                                                                                            * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    BossState returnCurrentState()
+    public void FireProjectile(float NewSpeed, Vector3 NewInitialTargetPosition) 
     {
-        return currentState;
+        Projectile_Speed = NewSpeed;
+        Projectile_InitialTargetPosition = NewInitialTargetPosition;
+        Projectile_TargetDirection = (Projectile_InitialTargetPosition - transform.position).normalized;
+        Projectile_Fired = true;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Collision Functions                                                                                                                                                                          * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    private void OnTriggerEnter(Collider other)
+    {
+        Destroy(gameObject);    // delete itself when hitting something
     }
 }
