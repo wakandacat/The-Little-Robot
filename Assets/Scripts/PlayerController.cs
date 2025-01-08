@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -58,6 +57,8 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     public bool attackState = false;
     private int attackCounter = 0;
+    private float comboTimer = 0f;
+    private int comboMaxTime = 10;
 
     //Roll vars
     private bool Rolling = false;
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
     //Death handlers
     UnityEngine.SceneManagement.Scene currentScene;
     private bool deathState = false;
-    private int fadeDelay = 2;
+    private int fadeDelay = 10;
     public GameObject fadeOutPanel;
 
     void Start()
@@ -120,36 +121,12 @@ public class PlayerController : MonoBehaviour
 
             Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
             Debug.DrawRay(transform.position, forward, Color.green);
-            if (isJumping == true && ground.onGround == true)
-            {
-                Debug.Log("Jump button pressed");
-                player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
-                player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
-                if (rb.velocity.y < 0)
-                {
-                    rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-                }
-                jumpCounter++;
-                ground.jumpState = true;
-            }
-            if (ground.onGround == false && jumpCounter == 1 && isJumping)
-            {
-                Debug.Log("Jump button pressed");
-                player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
-                player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            Debug.Log("Jump Counter: " + jumpCounter);
 
-                if (rb.velocity.y < 0)
-                {
-                    rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-                }
-                jumpCounter = 0;
-                ground.jumpState = true;
-            }
         }
         else if(deathState == true)
         {
-            Debug.Log("hELLO 123");
             ManagedeathState();
         }
     }
@@ -195,16 +172,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
-
-
-
-        //so the issue is that the jump is too floaty
-        //fixes is to make the gravity higher once it reaches the peak of the arc?
-
-
-        /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
-          player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
-
     }
 
     public void doubleJump()
@@ -216,33 +183,32 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("we are handling jump");
        
-            isJumping = false;
-            jumpCounter = 0;
+        isJumping = false;
+        jumpCounter = 0;
     }
     public void OnJump(InputAction.CallbackContext context)
     {
+    
         Debug.Log("OnJump triggered");
 
         isJumping = context.ReadValueAsButton();
-/*      if (ground.onGround == true && jumpCounter == 0 && isJumping)
+        if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
-            isJumping = context.ReadValueAsButton();
-            if (ground.onGround == true && jumpCounter == 0 && isJumping)
-            {
-                Jump();
-                player.GetComponent<Rigidbody>().freezeRotation = true;
-                jumpCounter++;
-                ground.jumpState = true;
-            }
-            if (ground.onGround == false && jumpCounter == 1 && isJumping)
-            {
-                doubleJump();
-                player.GetComponent<Rigidbody>().freezeRotation = true;
-                jumpCounter = 0;
-                ground.jumpState = true;
-            }
+            Jump();
+            player.GetComponent<Rigidbody>().freezeRotation = true;
+            jumpCounter++;
+            ground.jumpState = true;
+        }
+        if (ground.onGround == false && jumpCounter == 1 && isJumping)
+        {
+            doubleJump();
+            player.GetComponent<Rigidbody>().freezeRotation = true;
+            jumpCounter = 0;
+            ground.jumpState = true;
+        }
 
-        Debug.Log("help me");*/
+        Debug.Log("help me");
+    
     }
 
     //-----------------------------------------------Quick Drop-----------------------------------------------//
@@ -326,18 +292,50 @@ public class PlayerController : MonoBehaviour
         Deflecting = context.ReadValueAsButton();
     }
     //-----------------------------------------------Attack-----------------------------------------------//
-    public void attackCombo()
+    public void attackCombo(int counter)
     {
-
+        if (counter == 0)
+        {
+            //animation here
+            //enemy healtj decrease here
+        }
+        if(counter == 1)
+        {
+            //animation here
+            //enemy healtj decrease here
+        }
+        if(counter == 2)
+        {
+            //animation here
+            //enemy healtj decrease here
+        }
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
         isAttacking = context.ReadValueAsButton();
         if(isAttacking)
         {
+            attackCounter++;
+            while (comboTimer < comboMaxTime)
+            {
+                comboTimer += Time.deltaTime;
+                attackCombo(attackCounter);
+                if(comboTimer == comboMaxTime)
+                {
+                    attackCombo(1);
+                }
+                if (attackCounter > comboMaxTime)
+                {
+                    attackCounter = comboMaxTime;
+                }
+            }
+/*            if(enemyCollision.enemyCollision == true)
+            {
+                //call enemy taking damage here
+            }
             attackState = true;
             attackCounter++;
-            //write code here
+            //write code here*/
         }
     }
     //-----------------------------------------------Health Regen-----------------------------------------------//
@@ -379,21 +377,22 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Death State-----------------------------------------------//
     public void ManagedeathState()
     {
-        StartCoroutine(fadeinOut());
+        fadeIn();
+        Invoke("fadeOut", fadeDelay);
     }
-    IEnumerator fadeinOut()
+
+    public void fadeIn()
     {
+
         fadeOutPanel.SetActive(true);
         gameObject.SetActive(false);
-        Debug.Log("Hello");
-        yield return new WaitForSeconds(fadeDelay);
-        Debug.Log("Hello 12");
-
+    }
+    public void fadeOut()
+    {
         SceneManager.LoadScene(currentScene.name);
         playerCurrenthealth = playerHealth;
-
-        //fadeOutPanel.SetActive(false);
-        //gameObject.SetActive(true);
+        fadeOutPanel.SetActive(false);
+        gameObject.SetActive(true);
     }
 
     private void OnDestroy()
