@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8724982552768333287}
   - component: {fileID: 3152532170338034946}
-  - component: {fileID: 635277476750428799}
+  - component: {fileID: 1180598971438033707}
   m_Layer: 0
-  m_Name: destroyBox (1)
+  m_Name: destroyBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +54,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &635277476750428799
+--- !u!114 &1180598971438033707
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,6 +157,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 398608213375141572}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 19c60ab9f22e1a845ab3c737e6e67e94,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9160687180386664748}
   m_SourcePrefab: {fileID: 100100000, guid: 19c60ab9f22e1a845ab3c737e6e67e94, type: 3}
 --- !u!4 &1656462151166408404 stripped
 Transform:
@@ -191,6 +195,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.022392653, y: 0.099999994, z: 0.0100000035}
   m_Center: {x: 4.4703483e-10, y: -0.01, z: -0.005000002}
+--- !u!114 &9160687180386664748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141249555626683502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bdd5ed688188e046acf54b19791e5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 700
+  direction: {x: 1, y: 0, z: 0}
 --- !u!1001 &2164055156064148209
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -257,7 +275,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e175a9b39b89fe04ea575f5aa0fc8cce,
         type: 3}
       propertyPath: m_Name
-      value: converter_belt
+      value: conveyor_belt
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
