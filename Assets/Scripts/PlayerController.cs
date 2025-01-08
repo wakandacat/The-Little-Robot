@@ -9,22 +9,31 @@ using UnityEngine.InputSystem;
 //Implement Roll
 //Implement Attack
 //Implement Attack Combo
-//Might fall after dashing not sure why
+//Might fall after dashing not sure why falls because the forces applied on the player are not balanced well enough so to fix freeze rotations lol
 //add freecam
 public class PlayerController : MonoBehaviour
 {
     //player variables
     public GameObject player;
     public Rigidbody rb;
+    groundCheck ground;
+    EnemyCollision enemyCollision;
+
+
+    public int playerHealth = 3;
+    private int playerDamage = 10;
+    public float playerCurrenthealth;
+    private int healthRegenDelay = 10;
+    private bool deathState = false;
+
 
     //player controller reference
     PlayerControls pc;
 
     //jump variables
-    private float jumpForce = 10f;
-    private float speed = 7f;
-    private float fallMultiplier = 400f;
-    groundCheck ground;
+    private float jumpForce = 5f;
+    private float speed = 20f;
+    private float fallMultiplier = 800f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
     private int jumpCounter = 0;
@@ -40,7 +49,19 @@ public class PlayerController : MonoBehaviour
     private bool Dashing = false;
     public float gravityScale = 1.0f;
     public static float globalGravity = -9.81f;
+    public Transform orientation;
+    public float dashUpwardForce = 10f;
 
+    //Attack vars
+    private bool isAttacking = false;
+    public bool attackState = false;
+    private int attackCounter = 0;
+
+    //Roll vars
+    private bool Rolling = false;
+
+    //Deflect vars
+    private bool Deflecting = false;
 
     //pause vars
     public bool isPaused = false;
@@ -54,9 +75,16 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
+        pc.Gameplay.Attack.performed += OnAttack;
+        pc.Gameplay.Roll.performed += OnRoll;
+        pc.Gameplay.Deflect.performed += OnDeflect;
         pc.Gameplay.Pause.performed += onPause;
+
         rb = player.gameObject.GetComponent<Rigidbody>();
         ground = player.GetComponent<groundCheck>();
+        enemyCollision = player.GetComponent<EnemyCollision>();
+
+        playerCurrenthealth = playerHealth;
 
     }
 
@@ -71,27 +99,66 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 forwardVelocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
-        //Move might have to be on performed cause u can move while jumping and dashing and i do not think that is the intended effect
+        if (deathState == false)
+        {
+            manageHealth();
+            Vector3 forwardVelocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
+            //Move might have to be on performed cause u can move while jumping and dashing and i do not think that is the intended effect
 
-        moveCharacter();
+            moveCharacter();
 
-        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
-        Debug.DrawRay(transform.position, forward, Color.green);
+            Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+            Debug.DrawRay(transform.position, forward, Color.green);
+            Debug.Log(player.GetComponent<Rigidbody>().velocity.y);
+
+            if (isJumping == true && ground.onGround == true)
+            {
+                Debug.Log("Jump button pressed");
+                player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
+                player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+                if (rb.velocity.y < 0)
+                {
+                    rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+                }
+                jumpCounter++;
+                ground.jumpState = true;
+            }
+            if (ground.onGround == false && jumpCounter == 1 && isJumping)
+            {
+                Debug.Log("Jump button pressed");
+                player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
+                player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+                if (rb.velocity.y < 0)
+                {
+                    rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+                }
+                jumpCounter = 0;
+                ground.jumpState = true;
+            }
+        }
+        else if(deathState == true)
+        {
+            ManagedeathState();
+        }
     }
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter()
     {
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
+        //https://www.youtube.com/watch?app=desktop&v=KjaRQr74jV0&t=210s
         //This will change to follow convention of moving the rigidbody and not the gameObject
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
 
-        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)).normalized;
+        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1));
+        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1));
 
         Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
 
-        player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
+        //player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
+        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
+        rb.MovePosition(transform.position + translation * Time.deltaTime * speed);
 
         //Vector3 positionToLookAt;
 
@@ -114,17 +181,19 @@ public class PlayerController : MonoBehaviour
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        if (rb.velocity.y < 0) {
+        if (rb.velocity.y < 0)
+        {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
+
 
 
         //so the issue is that the jump is too floaty
         //fixes is to make the gravity higher once it reaches the peak of the arc?
 
 
-      /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
-        player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
+        /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
+          player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
 
     }
 
@@ -145,22 +214,25 @@ public class PlayerController : MonoBehaviour
         Debug.Log("OnJump triggered");
 
         isJumping = context.ReadValueAsButton();
-        if (ground.onGround == true && jumpCounter == 0 && isJumping)
+/*      if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
-            Jump();
-            player.GetComponent<Rigidbody>().freezeRotation = true;
-            jumpCounter++;
-            ground.jumpState = true;
-        }
-        if (ground.onGround == false && jumpCounter == 1 && isJumping)
-        {
-            doubleJump();
-            player.GetComponent<Rigidbody>().freezeRotation = true;
-            jumpCounter = 0;
-            ground.jumpState = true;
-        }
+            isJumping = context.ReadValueAsButton();
+            if (ground.onGround == true && jumpCounter == 0 && isJumping)
+            {
+                Jump();
+                player.GetComponent<Rigidbody>().freezeRotation = true;
+                jumpCounter++;
+                ground.jumpState = true;
+            }
+            if (ground.onGround == false && jumpCounter == 1 && isJumping)
+            {
+                doubleJump();
+                player.GetComponent<Rigidbody>().freezeRotation = true;
+                jumpCounter = 0;
+                ground.jumpState = true;
+            }
 
-        Debug.Log("help me");
+        Debug.Log("help me");*/
     }
 
     //-----------------------------------------------Quick Drop-----------------------------------------------//
@@ -201,6 +273,8 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Dash-----------------------------------------------//
     //https://www.youtube.com/watch?v=vTNWUbGkZ58
     //https://discussions.unity.com/t/why-does-rigidbody-3d-not-have-a-gravity-scale/645511/2
+    //https://discussions.unity.com/t/rigidbody-falls-over-when-addforce-addrelativeforce-is-used/421107/4
+    //https://www.youtube.com/watch?v=QRYGrCWumFw
     public IEnumerator Dash()
     {
         canDash = false;
@@ -209,16 +283,14 @@ public class PlayerController : MonoBehaviour
         gravityScale = 0f;
 
         //get the walk direction input needs to be refined
-        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
-        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        //translation.Normalize();
-        player.transform.Translate(translation * Time.deltaTime);
-        
-        rb.velocity = new Vector3(translation.x * dashingPower, 0f,0f);
+        Vector3 forceToApply = orientation.forward * dashingPower;
+        rb.freezeRotation = true;
+        rb.AddForce(forceToApply, ForceMode.Impulse);
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
+
         canDash = true;
     }
     public void OnDash(InputAction.CallbackContext context)
@@ -233,16 +305,83 @@ public class PlayerController : MonoBehaviour
         }
     }
     //-----------------------------------------------Roll-----------------------------------------------//
+    public void OnRoll(InputAction.CallbackContext context)
+    {
+        Rolling = context.ReadValueAsButton();
+        //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
+    }
     //-----------------------------------------------Deflect-----------------------------------------------//
+    public void OnDeflect(InputAction.CallbackContext context)
+    {
+        Deflecting = context.ReadValueAsButton();
+    }
     //-----------------------------------------------Attack-----------------------------------------------//
+    public void attackCombo()
+    {
 
+    }
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        isAttacking = context.ReadValueAsButton();
+        if(isAttacking)
+        {
+            attackState = true;
+            attackCounter++;
+            //write code here
+        }
+    }
+    //-----------------------------------------------Health Regen-----------------------------------------------//
+    //https://www.youtube.com/watch?v=uGDOiq1c7Yc
+    public void manageHealth()
+    {
+        if (playerCurrenthealth == 0)
+        {
+            deathState = true;
+        }
+        else if (playerCurrenthealth < playerHealth)
+        {
+            if ( (attackState == false) && (deathState == false))
+            {
 
+                StartCoroutine(healthRegen());
+            }
+        }
+    }
+
+    IEnumerator healthRegen()
+    {
+        if(playerCurrenthealth == 1)
+        {
+            yield return new WaitForSeconds(healthRegenDelay);
+            playerCurrenthealth = 2;
+        }
+        else if(playerCurrenthealth == 2)
+        {
+            yield return new WaitForSeconds(healthRegenDelay);
+            playerCurrenthealth = 3;
+        }
+        else if(playerCurrenthealth == 3)
+        {
+            playerCurrenthealth = playerHealth;
+        }
+    }
+
+    //-----------------------------------------------Death State-----------------------------------------------//
+    //destroy player
+    //fade to black re load scene
+    public void ManagedeathState()
+    {
+        Destroy(gameObject);
+    }
 
     private void OnDestroy()
     {
         pc.Gameplay.Jump.performed -= OnJump;
         pc.Gameplay.QuickDrop.performed -= OnQuickDrop;
         pc.Gameplay.Dash.performed -= OnDash;
+        pc.Gameplay.Attack.performed -= OnAttack;
+        pc.Gameplay.Roll.performed -= OnRoll;
+        pc.Gameplay.Deflect.performed -= OnDeflect;
         pc.Gameplay.Pause.performed -= onPause;
     }
 }
