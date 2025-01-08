@@ -1,7 +1,9 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // *               Abstract Class BossState                                                                                                                                                                     * 
@@ -41,6 +43,9 @@ public abstract class BossState
 
     // FixedUpdate is called at set intervals
     public abstract void FixedUpdate();
+
+    // LateUpdate is called after all other update functions
+    public abstract void LateUpdate();
 
     // Exit is called when the state machine transitions to another state
     public abstract void Exit();
@@ -94,6 +99,15 @@ public class SleepingState : BossState
 
     }
 
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
     // Called when the state machine transitions out of this state
     public override void Exit()
     {
@@ -140,6 +154,15 @@ public class WakingUpState : BossState
 
     // Called at fixed intervals (used for physics updates)
     public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
     {
         // Programming Logic
 
@@ -207,6 +230,15 @@ public class SelfCheckState : BossState
 
     }
 
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
     // Called when the state machine transitions out of this state
     public override void Exit()
     {
@@ -222,7 +254,7 @@ public class SelfCheckState : BossState
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 public class AwakeState : BossState
 {
-    // State Specific Properties
+    // Attack_State Selection Properties
     private bool delayFinished = false;
     private float enterStateTimeStamp = 0.0f;
 
@@ -271,6 +303,15 @@ public class AwakeState : BossState
 
     // Called at fixed intervals (used for physics updates)
     public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
     {
         // Programming Logic
 
@@ -374,10 +415,9 @@ public class LowEnergyState : BossState
     {
         // Programming Logic
         Debug.Log("BossEnemy: Entering LowEnergyState");
+        Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
-        // TEMP DEBUGGING LOGIC
-        bossEnemyComponent.updateCurrentHP(bossEnemyComponent.returnCurrentHP() - 10.0f);
-        Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.returnCurrentHP());
+        bossEnemyComponent.HP_TurnInvulnerabilityOff();
 
         // Animation Logic
 
@@ -389,9 +429,6 @@ public class LowEnergyState : BossState
         // Programming Logic
         bossEnemyComponent.regainCurrentEnergyPerFrame();   // regain X% of Energy_RegainedPerSecond by multiplying the amount by the duration of time between frames (at 50fps, 1/50th)
 
-        // INSERT: check for strikes against enemy to regain energy from
-        // INSERT: check for strikes against enemy to lose HP from
-
         // Animation Logic
 
     }
@@ -400,7 +437,7 @@ public class LowEnergyState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (bossEnemyComponent.returnCurrentHP() <= 0.0f)                                   // check if HP_Current has fallen below 0
+        if (bossEnemyComponent.HP_ReturnCurrent() <= 0.0f)                                   // check if HP_Current has fallen below 0
         {
             bossEnemyComponent.TransitionToDeathState();                                    // if so, transition to Death State
         }
@@ -424,10 +461,20 @@ public class LowEnergyState : BossState
 
     }
 
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
     // Called when the state machine transitions out of this state
     public override void Exit()
     {
         // Programming Logic
+        bossEnemyComponent.HP_TurnInvulnerabilityOn();
 
         // Animation Logic
 
@@ -477,6 +524,15 @@ public class DeathState : BossState
 
     }
 
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
     // Called when the state machine transitions out of this state
     public override void Exit()
     {
@@ -493,7 +549,10 @@ public class DeathState : BossState
 // This state is used for testing attack selection 
 public class Attack_TestingState : BossState
 {
-    // State Specific Properties
+    // Private Attributes
+    private bool Attack_Completed = false;
+
+    // Attack_State Selection Properties
     public static string Attack_Name = "Attack_TestingState";
     public static float Energy_Cost = 1.0f;
     public static float Player_MinDistance = 20.0f;
@@ -535,6 +594,8 @@ public class Attack_TestingState : BossState
     public override void Update()
     {
         // Programming Logic
+        // TEMP DEBUGGING CODE:
+        Attack_Completed = true;
 
         // Animation Logic
 
@@ -544,7 +605,10 @@ public class Attack_TestingState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        bossEnemyComponent.TransitionToSelfCheckState();
+        if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToSelfCheckState();
+        }
 
         // Animation Logic
 
@@ -552,6 +616,15 @@ public class Attack_TestingState : BossState
 
     // Called at fixed intervals (used for physics updates)
     public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
     {
         // Programming Logic
 
@@ -572,11 +645,23 @@ public class Attack_TestingState : BossState
 
 public class Attack_Laser01State : BossState
 {
-    // State Specific Properties
+    // Private Attributes
+    private bool Attack_Completed = false;
+    private GameObject Attack_GameObjectParent;
+    private GameObject Attack_LaserOriginObject;
+    private Vector3 LaserSourceOffset = new Vector3(0, 5, 0);
+    private GameObject Attack_LaserObject;
+    private GameObject Attack_LaserContactObject;
+    private float Attack_Duration = 10.0f;
+    private float Attack_LaserDelay = 1.5f;
+    private float Attack_StartTimeStamp = 0.0f;
+    private float Attack_PlayerPositionDelay = 1.0f;
+
+    // Attack_State Selection Properties
     public static string Attack_Name = "Attack_Laser01State";
     public static float Energy_Cost = 1.0f;
-    public static float Player_MinDistance = 10.0f;
-    public static float Player_MaxDistance = 20.0f;
+    public static float Player_MinDistance = 5.0f;
+    public static float Player_MaxDistance = 30.0f;
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -602,9 +687,52 @@ public class Attack_Laser01State : BossState
     public override void Enter()
     {
         // Programming Logic
+        // Energy Update and Debugging
         Debug.Log("BossEnemy: Entering public class Attack_Laser01State : BossState");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Attack Setup Logic
+        Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
+
+        // Laser Source
+        Attack_LaserOriginObject = new GameObject("Attack_LaserOriginObject");
+        MeshFilter Attack_LaserOriginObject_meshfilter = Attack_LaserOriginObject.AddComponent<MeshFilter>();
+        Attack_LaserOriginObject_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        MeshRenderer Attack_LaserOriginObject_meshRenderer = Attack_LaserOriginObject.AddComponent<MeshRenderer>();
+        Attack_LaserOriginObject.transform.position = bossEnemyComponent.returnBossEnemyPosition() + LaserSourceOffset;
+        Attack_LaserOriginObject.transform.SetParent(Attack_GameObjectParent.transform);
+
+        // Laser
+        Attack_LaserObject = new GameObject("Attack_LaserObject");
+        Attack_LaserObject.SetActive(false);
+        LineRenderer lineRenderer = Attack_LaserObject.AddComponent<LineRenderer>();
+        lineRenderer.enabled = true;
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.2f;
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, Attack_LaserOriginObject.transform.position);
+        lineRenderer.SetPosition(1, bossEnemyComponent.Player_ReturnPositionFromXSecondsAgo(Attack_PlayerPositionDelay));
+        Attack_LaserObject.transform.SetParent(Attack_GameObjectParent.transform);
+
+        // Laser Contact
+        Attack_LaserContactObject = new GameObject("Attack_LaserContactObject");
+        Attack_LaserContactObject.SetActive(false);
+        MeshFilter Attack_LaserContactObject_meshfilter = Attack_LaserContactObject.AddComponent<MeshFilter>();
+        Attack_LaserContactObject_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        MeshRenderer Attack_LaserContactObject_meshRenderer = Attack_LaserContactObject.AddComponent<MeshRenderer>();
+        Rigidbody rigidBody = Attack_LaserObject.AddComponent<Rigidbody>();
+        rigidBody.useGravity = false;
+        rigidBody.isKinematic = true;
+        SphereCollider Attack_LaserContactObject_collider = Attack_LaserContactObject.AddComponent<SphereCollider>();
+        Attack_LaserContactObject_collider.isTrigger = true; 
+        Attack_LaserContactObject.tag = "Damage Source";
+        Attack_LaserContactObject.transform.position = bossEnemyComponent.Player_ReturnPositionFromXSecondsAgo(Attack_PlayerPositionDelay);
+        Attack_LaserContactObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        Attack_LaserContactObject.transform.SetParent(Attack_GameObjectParent.transform);
+
+        // Misc.
+        Attack_StartTimeStamp = Time.time;
 
         // Animation Logic
 
@@ -614,6 +742,20 @@ public class Attack_Laser01State : BossState
     public override void Update()
     {
         // Programming Logic
+        if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
+        {
+            Attack_Completed = true; // if so, set Attack_Completed to true
+        }
+
+        // laser and laser contact
+        if (Attack_LaserObject.activeSelf == false)                     // check if laser object is not active
+        {
+            if (Time.time - Attack_StartTimeStamp >= Attack_LaserDelay) // if so, check if the duration of the attack has been exceeded Attack_LaserDelay
+            {
+                Attack_LaserObject.SetActive(true);                     // if so, set laser object to active
+                Attack_LaserContactObject.SetActive(true);              // set laser contact object to active
+            }
+        }
 
         // Animation Logic
 
@@ -623,7 +765,10 @@ public class Attack_Laser01State : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        bossEnemyComponent.TransitionToSelfCheckState();
+        if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToSelfCheckState();
+        }
 
         // Animation Logic
 
@@ -631,6 +776,20 @@ public class Attack_Laser01State : BossState
 
     // Called at fixed intervals (used for physics updates)
     public override void FixedUpdate()
+    {
+        // Programming Logic
+        // Laser
+        Attack_LaserObject.GetComponent<LineRenderer>().SetPosition(1, bossEnemyComponent.Player_ReturnPositionFromXSecondsAgo(Attack_PlayerPositionDelay));
+
+        // Laser Contact
+        Attack_LaserContactObject.transform.position = bossEnemyComponent.Player_ReturnPositionFromXSecondsAgo(Attack_PlayerPositionDelay);
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
     {
         // Programming Logic
 
@@ -644,6 +803,9 @@ public class Attack_Laser01State : BossState
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
 
+        // Attack Logic
+        GameObject.Destroy(Attack_GameObjectParent);
+
         // Animation Logic
 
     }
@@ -651,11 +813,22 @@ public class Attack_Laser01State : BossState
 
 public class Attack_Melee01State : BossState
 {
-    // State Specific Properties
+    // Private Attributes
+    private bool Attack_Completed = false;
+    private GameObject Attack_GameObjectParent;
+    private GameObject Attack_ColliderSphere;
+    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 0.75f, 1.5f);
+    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(4.0f, 0.75f, 4.0f);
+    private bool Attack_IsColliderSphereScaleOut = false;
+    private float Attack_Duration = 4.0f;
+    private float Attack_Delay = 1.0f;
+    private float Attack_StartTimeStamp = 0.0f;
+
+    // Attack_State Selection Properties
     public static string Attack_Name = "Attack_Melee01State";
     public static float Energy_Cost = 1.0f;
     public static float Player_MinDistance = 0.0f;
-    public static float Player_MaxDistance = 10.0f;
+    public static float Player_MaxDistance = 5.0f;
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -664,7 +837,7 @@ public class Attack_Melee01State : BossState
         // Check distance ----------------------------*
         if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
         {
-            score += 1.0f;
+            score += 2.0f;
         }
         else
         {
@@ -685,6 +858,27 @@ public class Attack_Melee01State : BossState
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
+        // Attack Setup Logic
+        Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
+
+        // Collider Sphere
+        Attack_ColliderSphere = new GameObject("Attack_ColliderSphere");
+        MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
+        Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
+        Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
+        rigidBody.useGravity = false;
+        rigidBody.isKinematic = true;
+        SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();
+        Attack_LaserContactObject_collider.isTrigger = true;
+        Attack_ColliderSphere.tag = "Damage Source";
+        Attack_ColliderSphere.transform.position = bossEnemyComponent.returnBossEnemyPosition();
+        Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
+        Attack_ColliderSphere.transform.SetParent(Attack_GameObjectParent.transform);
+
+        // Misc.
+        Attack_StartTimeStamp = Time.time;
+
         // Animation Logic
 
     }
@@ -693,6 +887,20 @@ public class Attack_Melee01State : BossState
     public override void Update()
     {
         // Programming Logic
+        if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
+        {
+            Attack_Completed = true; // if so, set Attack_Completed to true
+        }
+
+        // laser and laser contact
+        if (Attack_IsColliderSphereScaleOut == false)              // check if collider sphere object scale has been set to use Attack_ColliderSphereScale_Out scaling
+        {
+            if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
+            {
+                Attack_IsColliderSphereScaleOut = true;                                         // if so, update Attack_IsColliderSphereScaleOut to true
+                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;    // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+            }
+        }
 
         // Animation Logic
 
@@ -702,7 +910,10 @@ public class Attack_Melee01State : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        bossEnemyComponent.TransitionToSelfCheckState();
+        if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToSelfCheckState();
+        }
 
         // Animation Logic
 
@@ -717,11 +928,23 @@ public class Attack_Melee01State : BossState
 
     }
 
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
     // Called when the state machine transitions out of this state
     public override void Exit()
     {
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Attack Logic
+        GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
 

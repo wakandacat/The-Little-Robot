@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class BossEnemy : MonoBehaviour
@@ -17,6 +19,11 @@ public class BossEnemy : MonoBehaviour
     [Tooltip("Amount of Energy the Boss Enemy when struck while in 'LowEnergyState'.")]
     public float Energy_RegainedOnStrike = 1.0f;
 
+    [Tooltip("Amount of time that passed between storing player position (in seconds).")]
+    public float Player_PositionTrackingTimeInterval = 0.01f;
+    [Tooltip("Amount of time that must pass before an entry in the Player_PositionHistory list is deleted (in seconds).")]
+    public float Player_PositionTrackingMaxTimeTracked = 3.0f;
+
     [Tooltip("Amount of time that must pass when entering the 'AwakeState' before the BossEnemy can execute the selected attack.")]
     public float AwakeState_Delay = 2.0f;
 
@@ -26,6 +33,7 @@ public class BossEnemy : MonoBehaviour
     // Boss Enemy Attributes ------------------------------------------------------------------------------------------------------
     private float HP_Current;
     private float Energy_Current;
+    private bool HP_BossInvulnerable = true;
 
     // Object References ----------------------------------------------------------------------------------------------------------
     private Animator bossAnimator;
@@ -36,6 +44,20 @@ public class BossEnemy : MonoBehaviour
 
     // Player Actions/Location ----------------------------------------------------------------------------------------------------
     private bool playerTriggeredBossWakeup = false;
+    private float Player_TimePassedSinceLastPositionTrack = 0f;
+    private List<Tuple<Vector3, float>> Player_PositionHistory = new List<Tuple<Vector3, float>>(); // stores past positions and timestamps of past positions
+
+    private class Tuple<T1, T2> // tuple for storing both position and timestamp
+    {
+        public T1 Item1 { get; private set; }
+        public T2 Item2 { get; private set; }
+
+        public Tuple(T1 item1, T2 item2)
+        {
+            Item1 = item1;
+            Item2 = item2;
+        }
+    }
 
     // Attack_State History -------------------------------------------------------------------------------------------------------
     private List<string> Attack_HistoryList = new List<string>();
@@ -74,8 +96,28 @@ public class BossEnemy : MonoBehaviour
     // FixedUpdate is called at set intervals
     void FixedUpdate()
     {
+        // Update Player_PositionHistory
+        Player_TimePassedSinceLastPositionTrack += Time.fixedDeltaTime; // track the time passed since the last stored position
+        if (Player_TimePassedSinceLastPositionTrack >= Player_PositionTrackingTimeInterval) // store position at the specified interval
+        {
+            Player_PositionHistory.Add(new Tuple<Vector3, float>(Player_ReturnPlayerPosition(), Time.time));
+            Player_TimePassedSinceLastPositionTrack = 0f;
+        }
+
+        // Remove entries from Player_PositionHistory older than maxStoredTime
+        Player_PositionHistoryRemoveOldEntries();
+
         // Execute FixedUpdate instructions for StateMachine
         stateMachine.FixedUpdate();
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Late Update Function                                                                                                                                                                         * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Called after all other update functions
+    public void LateUpdate()
+    {
+        stateMachine.LateUpdate();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -86,6 +128,11 @@ public class BossEnemy : MonoBehaviour
         return Vector3.Distance(transform.position, playerGameObject.transform.position);
     }
 
+    public Vector3 Player_ReturnPlayerPosition()
+    {
+        return playerGameObject.transform.position;
+    }
+
     public void Player_EnteredWakeupTrigger()
     {
         playerTriggeredBossWakeup = true;
@@ -93,6 +140,28 @@ public class BossEnemy : MonoBehaviour
     public bool Player_ReturnPlayerTriggeredBossWakeup()
     {
         return playerTriggeredBossWakeup;
+    }
+
+    public void Player_PositionHistoryRemoveOldEntries()
+    {
+        float currentTime = Time.time;
+        Player_PositionHistory.RemoveAll(entry => currentTime - entry.Item2 > Player_PositionTrackingMaxTimeTracked);
+    }
+
+    public Vector3 Player_ReturnPositionFromXSecondsAgo(float secondsAgo)
+    {
+        int index = Mathf.FloorToInt(secondsAgo / Player_PositionTrackingTimeInterval);
+
+        // Ensure the index is within bounds
+        if (index >= 0 && index < Player_PositionHistory.Count)
+        {
+            return Player_PositionHistory[Player_PositionHistory.Count - 1 - index].Item1;
+        }
+        else
+        {
+            Debug.LogWarning("Requested time is out of range. Returning the oldest stored position.");
+            return Player_PositionHistory.Count > 0 ? Player_PositionHistory[Player_PositionHistory.Count - 1].Item1 : transform.position; // if requested timestamp is out of range, the oldest stored position is instead used
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -156,14 +225,38 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               HP Functions                                                                                                                                                                                 * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public float returnCurrentHP()
+    public float HP_ReturnCurrent()
     {
         return HP_Current;
     }
 
-    public void updateCurrentHP(float newHPCurrent)
+    public void HP_UpdateCurrent(float newHPCurrent)
     {
         HP_Current = newHPCurrent;
+    }
+
+    public void HP_TakeDamage(float damageAmount)
+    {
+        if (damageAmount < 0)
+        {
+            damageAmount *= -1.0f;
+        }
+        HP_Current -= damageAmount;
+    }
+
+    public void HP_TurnInvulnerabilityOn()
+    {
+        HP_BossInvulnerable = true;
+    }
+
+    public void HP_TurnInvulnerabilityOff()
+    {
+        HP_BossInvulnerable = false;
+    }
+
+    public bool HP_ReturnInvulnerabilityStatus()
+    {
+        return HP_BossInvulnerable;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -187,6 +280,10 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Get/Set Functions                                                                                                                                                                            * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public Vector3 returnBossEnemyPosition()
+    {
+        return transform.position;
+    }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Attack History Functions                                                                                                                                                                     * 
