@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -75,7 +76,7 @@ public class SleepingState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (bossEnemyComponent.returnPlayerTriggeredBossWakeup() == true)   // check if the player has triggered the Boss Wakeup Trigger
+        if (bossEnemyComponent.Player_ReturnPlayerTriggeredBossWakeup() == true)   // check if the player has triggered the Boss Wakeup Trigger
         {
             bossEnemyComponent.TransitionToWakingUpState();                 // if so, transition to waking up state
         }
@@ -222,7 +223,6 @@ public class SelfCheckState : BossState
 public class AwakeState : BossState
 {
     // State Specific Properties
-    private bool attackChosen = false;
     private bool delayFinished = false;
     private float enterStateTimeStamp = 0.0f;
 
@@ -243,7 +243,6 @@ public class AwakeState : BossState
     public override void Update()
     {
         // Programming Logic
-        attackChosen = true;
 
         // Animation Logic
 
@@ -261,10 +260,9 @@ public class AwakeState : BossState
             }
         }
 
-        if (attackChosen == true && delayFinished == true)  // check if the delay has been completed and the attack has been chosen
+        if (delayFinished == true)  // check if the delay has been completed and the attack has been chosen
         {
-            // INSERT: attack selection procedure for state transitions
-            bossEnemyComponent.TransitionToAttackTestingState();
+            Attack_Selection();
         }
 
         // Animation Logic
@@ -287,6 +285,82 @@ public class AwakeState : BossState
 
         // Animation Logic
 
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Attack Selection                                                                                                                        * 
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Define a delegate that matches the signature of a function to later call
+    public delegate void MyFunctionDelegate();
+
+    // Determines which Attack_State to enter based on player information (attack_states must be manually added here)
+    public void Attack_Selection()
+    {
+        string Attack_BestName = null;
+        float Attack_BestScore = 0.0f;
+        MyFunctionDelegate Attack_TransitionToExecute = null;
+
+        // Determine Best Choice -----------------------------------------------------------------------------------*
+        for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
+        {
+            // Attack_TestingState -----------------------
+            if (Attack_TestingState.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = Attack_TestingState.Attack_Name;
+                Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+            }
+            else if (Attack_TestingState.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = Attack_TestingState.Attack_Name;
+                    Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+                }
+            }
+            // Attack_Laser01State -----------------------
+            if (Attack_Laser01State.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = Attack_Laser01State.Attack_Name;
+                Attack_BestScore = Attack_Laser01State.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_Laser01State;
+            }
+            else if (Attack_Laser01State.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = Attack_Laser01State.Attack_Name;
+                    Attack_BestScore = Attack_Laser01State.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_Laser01State;
+                }
+            }
+            // Attack_Melee01State -----------------------
+            if (Attack_Melee01State.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = Attack_Melee01State.Attack_Name;
+                Attack_BestScore = Attack_Melee01State.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_Melee01State;
+            }
+            else if (Attack_Melee01State.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = Attack_Melee01State.Attack_Name;
+                    Attack_BestScore = Attack_Melee01State.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_Melee01State;
+                }
+            }
+        }
+        // If No Attack Selected, Choose Default -------------------------------------------------------------------*
+        if (Attack_BestName == null)
+        {
+            Attack_BestName = Attack_TestingState.Attack_Name;
+            Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
+            Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+        }
+        // Transition to Best Choice -------------------------------------------------------------------------------*
+        Attack_TransitionToExecute();
     }
 }
 
@@ -416,19 +490,40 @@ public class DeathState : BossState
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // *               Attack Instruction States                                                                                                                                                                    * 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-public class AttackTestingState : BossState
+// This state is used for testing attack selection 
+public class Attack_TestingState : BossState
 {
-    // When to call this Attack Instruction State
-    // -- insert here --
-
     // State Specific Properties
-    private float Energy_Cost = 1.0f;
+    public static string Attack_Name = "Attack_TestingState";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 20.0f;
+    public static float Player_MaxDistance = 30.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
 
     // Called when the state machine transitions to this state
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering AttackTestingState");
+        Debug.Log("BossEnemy: Entering Attack_TestingState");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
@@ -468,23 +563,48 @@ public class AttackTestingState : BossState
     public override void Exit()
     {
         // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
 
         // Animation Logic
 
     }
 }
 
-public class MeleeSwingState : BossState
+public class Attack_Laser01State : BossState
 {
-    // When to call this Attack Instruction State
-    // -- insert here --
-    // only do when player is close
+    // State Specific Properties
+    public static string Attack_Name = "Attack_Laser01State";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 20.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
 
     // Called when the state machine transitions to this state
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering MeleeSwingState");
+        Debug.Log("BossEnemy: Entering public class Attack_Laser01State : BossState");
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
+        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Animation Logic
 
@@ -503,7 +623,7 @@ public class MeleeSwingState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        //Debug.Log("debug text hehe :3");
+        bossEnemyComponent.TransitionToSelfCheckState();
 
         // Animation Logic
 
@@ -522,6 +642,86 @@ public class MeleeSwingState : BossState
     public override void Exit()
     {
         // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Animation Logic
+
+    }
+}
+
+public class Attack_Melee01State : BossState
+{
+    // State Specific Properties
+    public static string Attack_Name = "Attack_Melee01State";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 0.0f;
+    public static float Player_MaxDistance = 10.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+        Debug.Log("BossEnemy: Entering public class Attack_Melee01State : BossState");
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
+        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        bossEnemyComponent.TransitionToSelfCheckState();
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
 
         // Animation Logic
 

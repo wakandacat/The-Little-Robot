@@ -37,16 +37,16 @@ public class BossEnemy : MonoBehaviour
     // Player Actions/Location ----------------------------------------------------------------------------------------------------
     private bool playerTriggeredBossWakeup = false;
 
+    // Attack_State History -------------------------------------------------------------------------------------------------------
+    private List<string> Attack_HistoryList = new List<string>();
+    private int Attack_HistoryLength = 3;
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Start Function                                                                                                                                                                               * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Start is called before the first frame update
     void Start()
     {
-        // Initialize Boss Enemy Attributes
-        HP_Current = HP_Maximum;
-        Energy_Current = Energy_Maximum;
-
         // Set Object References
         bossAnimator = GetComponent<Animator>(); // assign the Animator component of the BossEnemy to bossAnimator
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
@@ -54,8 +54,8 @@ public class BossEnemy : MonoBehaviour
         // Initialize Attributes
         stateMachine = new BossStateMachine();
 
-        // Set To SleepingState
-        TransitionToSleepingState();
+        // Initialize Boss Enemy Attributes and Set To SleepingState
+        resetBossEnemy();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -79,16 +79,20 @@ public class BossEnemy : MonoBehaviour
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               Player Action/Location Functions                                                                                                                                                             * 
+    // *               Player Functions                                                                                                                                                                             * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public float returnDistanceOfPlayer()
+    public float Player_ReturnDistance()
     {
         return Vector3.Distance(transform.position, playerGameObject.transform.position);
     }
 
-    public void playerEnteredWakeupTrigger()
+    public void Player_EnteredWakeupTrigger()
     {
         playerTriggeredBossWakeup = true;
+    }
+    public bool Player_ReturnPlayerTriggeredBossWakeup()
+    {
+        return playerTriggeredBossWakeup;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -130,11 +134,23 @@ public class BossEnemy : MonoBehaviour
         deathState.Initialize(bossAnimator, this);
         stateMachine.SetState(deathState);
     }
-    public void TransitionToAttackTestingState()
+    public void TransitionToAttack_TestingState()
     {
-        AttackTestingState attackTestingState = new AttackTestingState();
+        Attack_TestingState attackTestingState = new Attack_TestingState();
         attackTestingState.Initialize(bossAnimator, this);
         stateMachine.SetState(attackTestingState);
+    }
+    public void TransitionToAttack_Laser01State()
+    {
+        Attack_Laser01State attackLaser01State = new Attack_Laser01State();
+        attackLaser01State.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackLaser01State);
+    }
+    public void TransitionToAttack_Melee01State()
+    {
+        Attack_Melee01State attackMelee01State = new Attack_Melee01State();
+        attackMelee01State.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackMelee01State);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -171,8 +187,58 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Get/Set Functions                                                                                                                                                                            * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public bool returnPlayerTriggeredBossWakeup()
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Attack History Functions                                                                                                                                                                     * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void appendToAttackHistory(string attackName)
     {
-        return playerTriggeredBossWakeup;
+        // Add new attackName to Attack_HistoryList
+        Attack_HistoryList.Insert(0, attackName);
+
+        // Remove oldest attack if more than Attack_HistoryLength attacks are in the Attack_HistoryList
+        if (Attack_HistoryList.Count > Attack_HistoryLength )
+        {
+            Attack_HistoryList.RemoveAt(Attack_HistoryList.Count - 1);
+        }
+    }
+
+    // Checks if an attack was recently used, if so, the more recent the attack the lower the returned negative score, if not, a positive score is returned
+    public float returnAttackHistoryScore(string attackName)
+    {
+        float totalScore = 0.0f;
+
+        // Iterate through every entry in the Attack_HistoryList
+        for (int i = 0; i < Attack_HistoryList.Count; i++)
+        {
+            // Add the score based on the index (-1.0f for the last, 0.0f for second last, etc.)
+            if (Attack_HistoryList[i] == attackName)
+            {
+                // Score decreases by 1.0f the more recent the entry was
+                totalScore += -1.0f * (Attack_HistoryList.Count - i);
+            }
+        }
+
+        // If no match was found, return 1.0f
+        if (totalScore == 0.0f)
+        {
+            return 1.0f;
+        }
+
+        // Return the accumulated total score
+        return totalScore;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Misc. Functions                                                                                                                                                                              * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void resetBossEnemy()
+    {
+        // Initialize Boss Enemy Attributes
+        HP_Current = HP_Maximum;
+        Energy_Current = Energy_Maximum;
+
+        // Set To SleepingState
+        TransitionToSleepingState();
     }
 }
