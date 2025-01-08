@@ -353,6 +353,7 @@ public class PlayerController : MonoBehaviour
     {
         if(invulnerable == true)
         {
+            collision = false;
             yield return new WaitForSeconds(damageTakenDelay);
             invulnerable = false;
         }
