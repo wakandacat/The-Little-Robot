@@ -98,6 +98,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FreeLook"",
+                    ""type"": ""Value"",
+                    ""id"": ""3ba2249b-8cea-49ae-8f86-99e1ff1d2e85"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -188,6 +197,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07a378fc-aa5e-4f2c-8f68-414b5099bfd7"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FreeLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -252,6 +272,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Gameplay_Attack = m_Gameplay.FindAction("Attack", throwIfNotFound: true);
         m_Gameplay_Walk = m_Gameplay.FindAction("Walk", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_FreeLook = m_Gameplay.FindAction("FreeLook", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
@@ -325,6 +346,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Attack;
     private readonly InputAction m_Gameplay_Walk;
     private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_FreeLook;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -337,6 +359,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Attack => m_Wrapper.m_Gameplay_Attack;
         public InputAction @Walk => m_Wrapper.m_Gameplay_Walk;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @FreeLook => m_Wrapper.m_Gameplay_FreeLook;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -370,6 +393,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @FreeLook.started += instance.OnFreeLook;
+            @FreeLook.performed += instance.OnFreeLook;
+            @FreeLook.canceled += instance.OnFreeLook;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -398,6 +424,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @FreeLook.started -= instance.OnFreeLook;
+            @FreeLook.performed -= instance.OnFreeLook;
+            @FreeLook.canceled -= instance.OnFreeLook;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -479,6 +508,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnAttack(InputAction.CallbackContext context);
         void OnWalk(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnFreeLook(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

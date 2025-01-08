@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 //ToDo
 //Fix the floatiness of the jump look at these resources --> https://www.youtube.com/watch?v=hG9SzQxaCm8, https://www.youtube.com/watch?app=desktop&v=h2r3_KjChf4&t=233s
@@ -13,26 +14,25 @@ using UnityEngine.InputSystem;
 //add freecam
 public class PlayerController : MonoBehaviour
 {
-    //player variables
-    public GameObject player;
-    public Rigidbody rb;
+    //player controller reference
+    PlayerControls pc;
+
+    //Script declarations
     groundCheck ground;
     EnemyCollision enemyCollision;
+    cameraRotation rotationCam;
 
-
+    //player variables
     public int playerHealth = 3;
     private int playerDamage = 10;
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
-    private bool deathState = false;
-
-
-    //player controller reference
-    PlayerControls pc;
+    public GameObject player;
+    public Rigidbody rb;
 
     //jump variables
-    private float jumpForce = 5f;
-    private float speed = 20f;
+    private float jumpForce = 10f;
+    private float speed = 30f;
     private float fallMultiplier = 800f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     public bool attackState = false;
     private int attackCounter = 0;
+    private float comboTimer = 0f;
+    private int comboMaxTime = 10;
 
     //Roll vars
     private bool Rolling = false;
@@ -66,6 +68,17 @@ public class PlayerController : MonoBehaviour
     //pause vars
     public bool isPaused = false;
     public GameObject pauseMenu;
+
+    //Death handlers
+    UnityEngine.SceneManagement.Scene currentScene;
+    private bool deathState = false;
+    private int fadeDelay = 10;
+    public GameObject fadeOutPanel;
+
+    //Enemy collision temp handlers
+    public bool collision = false;
+    private int damageTakenDelay = 10;
+    private bool invulnerable = false;
 
     void Start()
     {
@@ -83,8 +96,11 @@ public class PlayerController : MonoBehaviour
         rb = player.gameObject.GetComponent<Rigidbody>();
         ground = player.GetComponent<groundCheck>();
         enemyCollision = player.GetComponent<EnemyCollision>();
+        rotationCam = player.GetComponent<cameraRotation>();
 
         playerCurrenthealth = playerHealth;
+        currentScene = SceneManager.GetActiveScene();
+        fadeOutPanel.SetActive(false);
 
     }
 
@@ -99,6 +115,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(currentScene.name);
         if (deathState == false)
         {
             manageHealth();
@@ -109,34 +126,9 @@ public class PlayerController : MonoBehaviour
 
             Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
             Debug.DrawRay(transform.position, forward, Color.green);
-            Debug.Log(player.GetComponent<Rigidbody>().velocity.y);
 
-            if (isJumping == true && ground.onGround == true)
-            {
-                Debug.Log("Jump button pressed");
-                player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
-                player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            Debug.Log("Jump Counter: " + jumpCounter);
 
-                if (rb.velocity.y < 0)
-                {
-                    rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-                }
-                jumpCounter++;
-                ground.jumpState = true;
-            }
-            if (ground.onGround == false && jumpCounter == 1 && isJumping)
-            {
-                Debug.Log("Jump button pressed");
-                player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
-                player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-                if (rb.velocity.y < 0)
-                {
-                    rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-                }
-                jumpCounter = 0;
-                ground.jumpState = true;
-            }
         }
         else if(deathState == true)
         {
@@ -148,31 +140,20 @@ public class PlayerController : MonoBehaviour
     {
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
         //https://www.youtube.com/watch?app=desktop&v=KjaRQr74jV0&t=210s
-        //This will change to follow convention of moving the rigidbody and not the gameObject
+
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
+        Vector3 movementInput = new Vector3(leftStick.x, 0f, leftStick.y);
 
-        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1));
-        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1));
+        Vector3 cameraRelativeMovement = rotationCam.convertToCamSpace(movementInput);
 
-        Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
-
-        //player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
-        Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-        rb.MovePosition(transform.position + translation * Time.deltaTime * speed);
-
-        //Vector3 positionToLookAt;
-
-        //positionToLookAt.x = leftStick.x;
-        //positionToLookAt.y = 0.0f;
-        //positionToLookAt.z = leftStick.y;
-
+        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * speed);
 
         Quaternion currentRotation = transform.rotation;
 
-        if(movementDirection != Vector3.zero)
+        if (cameraRelativeMovement != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(movementDirection);
-            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed*Time.deltaTime);
+            Quaternion targetRotation = Quaternion.LookRotation(cameraRelativeMovement * Time.fixedDeltaTime);
+            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }
 
@@ -185,16 +166,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
-
-
-
-        //so the issue is that the jump is too floaty
-        //fixes is to make the gravity higher once it reaches the peak of the arc?
-
-
-        /*  player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, intialVelocity, player.GetComponent<Rigidbody>().velocity.z);
-          player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpGravity, ForceMode.Impulse);*/
-
     }
 
     public void doubleJump()
@@ -206,33 +177,32 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("we are handling jump");
        
-            isJumping = false;
-            jumpCounter = 0;
+        isJumping = false;
+        jumpCounter = 0;
     }
     public void OnJump(InputAction.CallbackContext context)
     {
+    
         Debug.Log("OnJump triggered");
 
         isJumping = context.ReadValueAsButton();
-/*      if (ground.onGround == true && jumpCounter == 0 && isJumping)
+        if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
-            isJumping = context.ReadValueAsButton();
-            if (ground.onGround == true && jumpCounter == 0 && isJumping)
-            {
-                Jump();
-                player.GetComponent<Rigidbody>().freezeRotation = true;
-                jumpCounter++;
-                ground.jumpState = true;
-            }
-            if (ground.onGround == false && jumpCounter == 1 && isJumping)
-            {
-                doubleJump();
-                player.GetComponent<Rigidbody>().freezeRotation = true;
-                jumpCounter = 0;
-                ground.jumpState = true;
-            }
+            Jump();
+            player.GetComponent<Rigidbody>().freezeRotation = true;
+            jumpCounter++;
+            ground.jumpState = true;
+        }
+        if (ground.onGround == false && jumpCounter == 1 && isJumping)
+        {
+            doubleJump();
+            player.GetComponent<Rigidbody>().freezeRotation = true;
+            jumpCounter = 0;
+            ground.jumpState = true;
+        }
 
-        Debug.Log("help me");*/
+        Debug.Log("help me");
+    
     }
 
     //-----------------------------------------------Quick Drop-----------------------------------------------//
@@ -249,7 +219,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log("2 = " + player.GetComponent<Rigidbody>().velocity);
         }
     }
-    //breaks singular jump when trying to quick drop from it
 
     public void handleQuickDrop()
     {
@@ -281,8 +250,6 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         float originalGravity = gravityScale;
         gravityScale = 0f;
-
-        //get the walk direction input needs to be refined
         Vector3 forceToApply = orientation.forward * dashingPower;
         rb.freezeRotation = true;
         rb.AddForce(forceToApply, ForceMode.Impulse);
@@ -316,38 +283,102 @@ public class PlayerController : MonoBehaviour
         Deflecting = context.ReadValueAsButton();
     }
     //-----------------------------------------------Attack-----------------------------------------------//
-    public void attackCombo()
+    public void attackCombo(int counter)
     {
-
+        if (counter == 0)
+        {
+            //animation here
+            //enemy healtj decrease here
+        }
+        if(counter == 1)
+        {
+            //animation here
+            //enemy healtj decrease here
+        }
+        if(counter == 2)
+        {
+            //animation here
+            //enemy healtj decrease here
+        }
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
         isAttacking = context.ReadValueAsButton();
         if(isAttacking)
         {
+            attackCounter++;
+            while (comboTimer < comboMaxTime)
+            {
+                comboTimer += Time.deltaTime;
+                attackCombo(attackCounter);
+                if(comboTimer == comboMaxTime)
+                {
+                    attackCombo(1);
+                }
+                if (attackCounter > comboMaxTime)
+                {
+                    attackCounter = comboMaxTime;
+                }
+            }
+/*            if(enemyCollision.enemyCollision == true)
+            {
+                //call enemy taking damage here
+            }
             attackState = true;
             attackCounter++;
-            //write code here
+            //write code here*/
         }
+    }
+    //-----------------------------------------------Take Damage-----------------------------------------------//
+    public void TakeDamage()
+    {
+        takeDamage();
+    }
+
+    public void takeDamage()
+    {
+        if(collision == true)
+        {
+            playerCurrenthealth--;
+            invulnerable = true;
+            StartCoroutine(Immunity());
+            if(playerCurrenthealth < 0)
+            {
+                playerCurrenthealth = 0;
+            }
+        }
+    }
+
+    IEnumerator Immunity()
+    {
+        if(invulnerable == true)
+        {
+            collision = false;
+            yield return new WaitForSeconds(damageTakenDelay);
+            invulnerable = false;
+        }
+
     }
     //-----------------------------------------------Health Regen-----------------------------------------------//
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
+        takeDamage();
+
         if (playerCurrenthealth == 0)
         {
             deathState = true;
         }
         else if (playerCurrenthealth < playerHealth)
         {
-            if ( (attackState == false) && (deathState == false))
+            if ( (attackState == false || collision == false) && (deathState == false))
             {
 
                 StartCoroutine(healthRegen());
             }
         }
     }
-
+    //Make sure to add a check if player in combat or not
     IEnumerator healthRegen()
     {
         if(playerCurrenthealth == 1)
@@ -367,13 +398,28 @@ public class PlayerController : MonoBehaviour
     }
 
     //-----------------------------------------------Death State-----------------------------------------------//
-    //destroy player
-    //fade to black re load scene
     public void ManagedeathState()
     {
-        Destroy(gameObject);
+        fadeIn();
+        Invoke("fadeOut", fadeDelay);
     }
 
+    //Needs to change to use canvas opacity
+    public void fadeIn()
+    {
+
+        fadeOutPanel.SetActive(true);
+        gameObject.SetActive(false);
+    }
+    public void fadeOut()
+    {
+        SceneManager.LoadScene(currentScene.name);
+        playerCurrenthealth = playerHealth;
+        fadeOutPanel.SetActive(false);
+        gameObject.SetActive(true);
+    }
+
+    //Destroy inputs if not used
     private void OnDestroy()
     {
         pc.Gameplay.Jump.performed -= OnJump;
