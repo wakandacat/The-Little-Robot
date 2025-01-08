@@ -13,19 +13,23 @@ public class BossEnemy : MonoBehaviour
     [Tooltip("Maximum HP that the Boss Enemy can have.")]
     public float HP_Maximum = 30.0f;
     [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have.")]
-    public float Energy_Maximum = 3.0f;
+    public float Energy_Maximum = 4.0f;
     [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'LowEnergyState'.")]
     public float Energy_RegainedPerSecond = 0.5f;
     [Tooltip("Amount of Energy the Boss Enemy when struck while in 'LowEnergyState'.")]
     public float Energy_RegainedOnStrike = 1.0f;
 
     [Tooltip("Amount of time that passed between storing player position (in seconds).")]
-    public float Player_PositionTrackingTimeInterval = 0.01f;
+    public float Player_PositionTrackingTimeInterval = 0.02f;
     [Tooltip("Amount of time that must pass before an entry in the Player_PositionHistory list is deleted (in seconds).")]
     public float Player_PositionTrackingMaxTimeTracked = 3.0f;
 
     [Tooltip("Amount of time that must pass when entering the 'AwakeState' before the BossEnemy can execute the selected attack.")]
-    public float AwakeState_Delay = 2.0f;
+    public float AwakeState_Delay = 3.0f;
+
+    [Tooltip("The default projectile to be used for seeking projectile-based attacks.")]
+    public GameObject Attack_BasicProjectile01;
+
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Private/Protected Attributes                                                                                                                                                                 * 
@@ -164,6 +168,23 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
+    // Returns a quaternion pointing towards the position of the player from positionToCheckFrom
+    public Quaternion Player_ReturnDirectionOfPlayer(Vector3 positionToCheckFrom)
+    {
+        Vector3 playerPosition = Player_ReturnPlayerPosition();
+
+        Vector3 directionToPlayer = playerPosition - positionToCheckFrom;   // calculate the direction from the given position to the player
+
+        if (directionToPlayer != Vector3.zero)                              // check if the direction is non-zero to avoid errors
+        {
+            return Quaternion.LookRotation(directionToPlayer);              // return a Quaternion representing the direction
+        }
+        else
+        {
+            return Quaternion.identity;                                     // return an identity quaternion if there's no direction
+        }
+    }
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               State Transition Functions                                                                                                                                                                   * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -209,11 +230,35 @@ public class BossEnemy : MonoBehaviour
         attackTestingState.Initialize(bossAnimator, this);
         stateMachine.SetState(attackTestingState);
     }
+    public void TransitionToAttack_SeekingProjectile01State()
+    {
+        Attack_SeekingProjectile01State attackSeekingProjectile01State = new Attack_SeekingProjectile01State();
+        attackSeekingProjectile01State.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackSeekingProjectile01State);
+    }
+    public void TransitionToAttack_SeekingProjectile02State()
+    {
+        Attack_SeekingProjectile02State attackSeekingProjectile02State = new Attack_SeekingProjectile02State();
+        attackSeekingProjectile02State.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackSeekingProjectile02State);
+    }
+    public void TransitionToAttack_SeekingProjectile03State()
+    {
+        Attack_SeekingProjectile03State attackSeekingProjectile03State = new Attack_SeekingProjectile03State();
+        attackSeekingProjectile03State.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackSeekingProjectile03State);
+    }
     public void TransitionToAttack_Laser01State()
     {
         Attack_Laser01State attackLaser01State = new Attack_Laser01State();
         attackLaser01State.Initialize(bossAnimator, this);
         stateMachine.SetState(attackLaser01State);
+    }
+    public void TransitionToAttack_ArenaHazard01State()
+    {
+        Attack_ArenaHazard01State attackArenaHazard01State = new Attack_ArenaHazard01State();
+        attackArenaHazard01State.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackArenaHazard01State);
     }
     public void TransitionToAttack_Melee01State()
     {

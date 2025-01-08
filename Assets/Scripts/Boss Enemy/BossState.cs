@@ -345,19 +345,67 @@ public class AwakeState : BossState
         for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
         {
             // Attack_TestingState -----------------------
-            if (Attack_TestingState.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            //if (Attack_TestingState.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            //{
+            //    Attack_BestName = Attack_TestingState.Attack_Name;
+            //    Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
+            //    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+            //}
+            //else if (Attack_TestingState.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            //{
+            //    if (Random.Range(0, 2) == 0)
+            //    {
+            //        Attack_BestName = Attack_TestingState.Attack_Name;
+            //        Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
+            //        Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+            //    }
+            //}
+            // Attack_SeekingProjectile01State -----------
+            if (Attack_SeekingProjectile01State.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
-                Attack_BestName = Attack_TestingState.Attack_Name;
-                Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
-                Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+                Attack_BestName = Attack_SeekingProjectile01State.Attack_Name;
+                Attack_BestScore = Attack_SeekingProjectile01State.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile01State;
             }
-            else if (Attack_TestingState.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            else if (Attack_SeekingProjectile01State.CalculateScore(bossEnemyComponent) == Attack_BestScore)
             {
                 if (Random.Range(0, 2) == 0)
                 {
-                    Attack_BestName = Attack_TestingState.Attack_Name;
-                    Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
-                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+                    Attack_BestName = Attack_SeekingProjectile01State.Attack_Name;
+                    Attack_BestScore = Attack_SeekingProjectile01State.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile01State;
+                }
+            }
+            // Attack_SeekingProjectile02State -----------
+            if (Attack_SeekingProjectile02State.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = Attack_SeekingProjectile02State.Attack_Name;
+                Attack_BestScore = Attack_SeekingProjectile02State.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile02State;
+            }
+            else if (Attack_SeekingProjectile02State.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = Attack_SeekingProjectile02State.Attack_Name;
+                    Attack_BestScore = Attack_SeekingProjectile02State.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile02State;
+                }
+            }
+            // Attack_SeekingProjectile03State -----------
+            if (Attack_SeekingProjectile03State.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = Attack_SeekingProjectile03State.Attack_Name;
+                Attack_BestScore = Attack_SeekingProjectile03State.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile03State;
+            }
+            else if (Attack_SeekingProjectile03State.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 3) == 0)
+                {
+                    Attack_BestName = Attack_SeekingProjectile03State.Attack_Name;
+                    Attack_BestScore = Attack_SeekingProjectile03State.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile03State;
                 }
             }
             // Attack_Laser01State -----------------------
@@ -376,6 +424,22 @@ public class AwakeState : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_Laser01State;
                 }
             }
+            // Attack_ArenaHazard01State -----------------
+            //if (Attack_ArenaHazard01State.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            //{
+            //    Attack_BestName = Attack_ArenaHazard01State.Attack_Name;
+            //    Attack_BestScore = Attack_ArenaHazard01State.CalculateScore(bossEnemyComponent);
+            //    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_ArenaHazard01State;
+            //}
+            //else if (Attack_ArenaHazard01State.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            //{
+            //    if (Random.Range(0, 2) == 0)
+            //    {
+            //        Attack_BestName = Attack_ArenaHazard01State.Attack_Name;
+            //        Attack_BestScore = Attack_ArenaHazard01State.CalculateScore(bossEnemyComponent);
+            //        Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_ArenaHazard01State;
+            //    }
+            //}
             // Attack_Melee01State -----------------------
             if (Attack_Melee01State.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -396,9 +460,9 @@ public class AwakeState : BossState
         // If No Attack Selected, Choose Default -------------------------------------------------------------------*
         if (Attack_BestName == null)
         {
-            Attack_BestName = Attack_TestingState.Attack_Name;
-            Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
-            Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+            Attack_BestName = Attack_SeekingProjectile01State.Attack_Name;
+            Attack_BestScore = Attack_SeekingProjectile01State.CalculateScore(bossEnemyComponent);
+            Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile01State;
         }
         // Transition to Best Choice -------------------------------------------------------------------------------*
         Attack_TransitionToExecute();
@@ -546,6 +610,7 @@ public class DeathState : BossState
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // *               Attack Instruction States                                                                                                                                                                    * 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// When an attack is added, it must also have Transition() methods created in BossEnemy.cs and Attack Selection logic added in the AwakeState Inherited Class
 // This state is used for testing attack selection 
 public class Attack_TestingState : BossState
 {
@@ -643,6 +708,467 @@ public class Attack_TestingState : BossState
     }
 }
 
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+// *               Seeking Projectile Attacks                                                                                                       * 
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+public class Attack_SeekingProjectile01State : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+    private GameObject Attack_GameObjectParent;
+    private GameObject Attack_ProjectileOriginObject;
+    private int Attack_NumberOfProjectiles_ToFire = 15;
+    private int Attack_NumberOfProjectiles_BeenFired = 0;
+    private float Attack_ProjectileSpeed = 25.0f;
+    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 5, 0);
+    private float Attack_ProjectileInterval = 0.5f;
+    private float Attack_Delay = 1.0f;
+    private float Attack_StartTimeStamp = 0.0f;
+    private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
+    private float Attack_CompletionDelay = 2.0f;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "Attack_SeekingProjectile01State";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 40.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile01State");
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
+        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Timer
+        Attack_StartTimeStamp = Time.time;
+
+        // Attack Setup Logic
+        Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
+
+        // Projectile Origin Object
+        Attack_ProjectileOriginObject = new GameObject("Attack_ProjectileOriginObject");
+        MeshFilter Attack_ProjectileOriginObject_meshfilter = Attack_ProjectileOriginObject.AddComponent<MeshFilter>();
+        Attack_ProjectileOriginObject_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        MeshRenderer Attack_ProjectileOriginObject_meshRenderer = Attack_ProjectileOriginObject.AddComponent<MeshRenderer>();
+        Attack_ProjectileOriginObject.transform.position = bossEnemyComponent.returnBossEnemyPosition() + Attack_ProjectileSpawnOffset;
+        Attack_ProjectileOriginObject.transform.SetParent(Attack_GameObjectParent.transform);
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+        if (Attack_NumberOfProjectiles_BeenFired == Attack_NumberOfProjectiles_ToFire)              // check if all projectiles have been fired
+        {
+            Attack_Completed = true;                                                                // if so, end attack
+        }
+        else
+        {
+            if (Time.time - Attack_StartTimeStamp >= Attack_Delay)                                  // check if attack delay has been exceeded
+            {
+                if (Time.time - Attack_ProjectileLastFiredTimeStamp >= Attack_ProjectileInterval)   // if so, check if interval between projectiles has been exceeded
+                {
+                    Attack_NumberOfProjectiles_BeenFired += 1;                                      // if so, increment Attack_NumberOfProjectiles_BeenFired and fire projectile
+                    Attack_ProjectileLastFiredTimeStamp = Time.time;                                // update timestamp for most recent projectile being fired
+
+                    // Spawn Projectile
+                    GameObject Attack_NewProjectile = Object.Instantiate(bossEnemyComponent.Attack_BasicProjectile01, Attack_ProjectileSpawnOffset, bossEnemyComponent.Player_ReturnDirectionOfPlayer(bossEnemyComponent.returnBossEnemyPosition()));
+                    Attack_NewProjectile.name = "Attack_Projectile_" + Attack_NumberOfProjectiles_BeenFired;
+                    Attack_NewProjectile.tag = "Damage Source";
+                    Attack_NewProjectile.transform.SetParent(Attack_GameObjectParent.transform);
+
+                    // Move Projectile
+                    Attack_NewProjectile.GetComponent<BasicProjectile>().FireProjectile(Attack_ProjectileSpeed, bossEnemyComponent.Player_ReturnPlayerPosition());
+                }
+            }
+            
+
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (Attack_Completed == true)
+        {
+            if (Time.time - Attack_ProjectileLastFiredTimeStamp >= Attack_CompletionDelay)
+            {
+                bossEnemyComponent.TransitionToSelfCheckState();
+            }
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Attack Logic
+        GameObject.Destroy(Attack_GameObjectParent);
+
+        // Animation Logic
+
+    }
+}
+
+public class Attack_SeekingProjectile02State : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+    private GameObject Attack_GameObjectParent;
+    private GameObject Attack_ProjectileOriginObject;
+    private int Attack_NumberOfProjectiles_ToFire = 40;
+    private int Attack_NumberOfProjectiles_BeenFired = 0;
+    private float Attack_ProjectileSpeed = 15.0f;
+    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 5, 0);
+    private float Attack_ProjectileInterval = 0.2f;
+    private float Attack_Delay = 1.0f;
+    private float Attack_StartTimeStamp = 0.0f;
+    private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
+    private float Attack_CompletionDelay = 2.0f;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "Attack_SeekingProjectile02State";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 40.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile02State");
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
+        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Timer
+        Attack_StartTimeStamp = Time.time;
+
+        // Attack Setup Logic
+        Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
+
+        // Projectile Origin Object
+        Attack_ProjectileOriginObject = new GameObject("Attack_ProjectileOriginObject");
+        MeshFilter Attack_ProjectileOriginObject_meshfilter = Attack_ProjectileOriginObject.AddComponent<MeshFilter>();
+        Attack_ProjectileOriginObject_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        MeshRenderer Attack_ProjectileOriginObject_meshRenderer = Attack_ProjectileOriginObject.AddComponent<MeshRenderer>();
+        Attack_ProjectileOriginObject.transform.position = bossEnemyComponent.returnBossEnemyPosition() + Attack_ProjectileSpawnOffset;
+        Attack_ProjectileOriginObject.transform.SetParent(Attack_GameObjectParent.transform);
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+        if (Attack_NumberOfProjectiles_BeenFired == Attack_NumberOfProjectiles_ToFire)              // check if all projectiles have been fired
+        {
+            Attack_Completed = true;                                                                // if so, end attack
+        }
+        else
+        {
+            if (Time.time - Attack_StartTimeStamp >= Attack_Delay)                                  // check if attack delay has been exceeded
+            {
+                if (Time.time - Attack_ProjectileLastFiredTimeStamp >= Attack_ProjectileInterval)   // if so, check if interval between projectiles has been exceeded
+                {
+                    Attack_NumberOfProjectiles_BeenFired += 1;                                      // if so, increment Attack_NumberOfProjectiles_BeenFired and fire projectile
+                    Attack_ProjectileLastFiredTimeStamp = Time.time;                                // update timestamp for most recent projectile being fired
+
+                    // Spawn Projectile
+                    GameObject Attack_NewProjectile = Object.Instantiate(bossEnemyComponent.Attack_BasicProjectile01, Attack_ProjectileSpawnOffset, bossEnemyComponent.Player_ReturnDirectionOfPlayer(bossEnemyComponent.returnBossEnemyPosition()));
+                    Attack_NewProjectile.name = "Attack_Projectile_" + Attack_NumberOfProjectiles_BeenFired;
+                    Attack_NewProjectile.tag = "Damage Source";
+                    Attack_NewProjectile.transform.SetParent(Attack_GameObjectParent.transform);
+
+                    // Move Projectile
+                    Attack_NewProjectile.GetComponent<BasicProjectile>().FireProjectile(Attack_ProjectileSpeed, bossEnemyComponent.Player_ReturnPlayerPosition());
+                }
+            }
+
+
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (Attack_Completed == true)
+        {
+            if (Time.time - Attack_ProjectileLastFiredTimeStamp >= Attack_CompletionDelay)
+            {
+                bossEnemyComponent.TransitionToSelfCheckState();
+            }
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Attack Logic
+        GameObject.Destroy(Attack_GameObjectParent);
+
+        // Animation Logic
+
+    }
+}
+
+public class Attack_SeekingProjectile03State : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+    private GameObject Attack_GameObjectParent;
+    private GameObject Attack_ProjectileOriginObject;
+    private int Attack_NumberOfProjectiles_ToFire = 10;
+    private int Attack_NumberOfProjectiles_BeenFired = 0;
+    private float Attack_ProjectileSpeed = 10.0f;
+    private Vector3 Attack_ProjectileScale = new Vector3(3, 3, 3);
+    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 5, 0);
+    private float Attack_ProjectileInterval = 1.0f;
+    private float Attack_Delay = 1.0f;
+    private float Attack_StartTimeStamp = 0.0f;
+    private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
+    private float Attack_CompletionDelay = 3.0f;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "Attack_SeekingProjectile03State";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 40.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile03State");
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
+        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Timer
+        Attack_StartTimeStamp = Time.time;
+
+        // Attack Setup Logic
+        Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
+
+        // Projectile Origin Object
+        Attack_ProjectileOriginObject = new GameObject("Attack_ProjectileOriginObject");
+        MeshFilter Attack_ProjectileOriginObject_meshfilter = Attack_ProjectileOriginObject.AddComponent<MeshFilter>();
+        Attack_ProjectileOriginObject_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        MeshRenderer Attack_ProjectileOriginObject_meshRenderer = Attack_ProjectileOriginObject.AddComponent<MeshRenderer>();
+        Attack_ProjectileOriginObject.transform.position = bossEnemyComponent.returnBossEnemyPosition() + Attack_ProjectileSpawnOffset;
+        Attack_ProjectileOriginObject.transform.SetParent(Attack_GameObjectParent.transform);
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+        if (Attack_NumberOfProjectiles_BeenFired == Attack_NumberOfProjectiles_ToFire)              // check if all projectiles have been fired
+        {
+            Attack_Completed = true;                                                                // if so, end attack
+        }
+        else
+        {
+            if (Time.time - Attack_StartTimeStamp >= Attack_Delay)                                  // check if attack delay has been exceeded
+            {
+                if (Time.time - Attack_ProjectileLastFiredTimeStamp >= Attack_ProjectileInterval)   // if so, check if interval between projectiles has been exceeded
+                {
+                    Attack_NumberOfProjectiles_BeenFired += 1;                                      // if so, increment Attack_NumberOfProjectiles_BeenFired and fire projectile
+                    Attack_ProjectileLastFiredTimeStamp = Time.time;                                // update timestamp for most recent projectile being fired
+
+                    // Spawn Projectile
+                    GameObject Attack_NewProjectile = Object.Instantiate(bossEnemyComponent.Attack_BasicProjectile01, Attack_ProjectileSpawnOffset, bossEnemyComponent.Player_ReturnDirectionOfPlayer(bossEnemyComponent.returnBossEnemyPosition()));
+                    Attack_NewProjectile.transform.localScale = Attack_ProjectileScale;
+                    Attack_NewProjectile.name = "Attack_Projectile_" + Attack_NumberOfProjectiles_BeenFired;
+                    Attack_NewProjectile.tag = "Damage Source";
+                    Attack_NewProjectile.transform.SetParent(Attack_GameObjectParent.transform);
+
+                    // Move Projectile
+                    Attack_NewProjectile.GetComponent<BasicProjectile>().FireProjectile(Attack_ProjectileSpeed, bossEnemyComponent.Player_ReturnPlayerPosition());
+                }
+            }
+
+
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (Attack_Completed == true)
+        {
+            if (Time.time - Attack_ProjectileLastFiredTimeStamp >= Attack_CompletionDelay)
+            {
+                bossEnemyComponent.TransitionToSelfCheckState();
+            }
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Attack Logic
+        GameObject.Destroy(Attack_GameObjectParent);
+
+        // Animation Logic
+
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+// *               Laser Attacks                                                                                                                    * 
+// --------------------------------------------------------------------------------------------------------------------------------------------------
 public class Attack_Laser01State : BossState
 {
     // Private Attributes
@@ -661,7 +1187,7 @@ public class Attack_Laser01State : BossState
     public static string Attack_Name = "Attack_Laser01State";
     public static float Energy_Cost = 1.0f;
     public static float Player_MinDistance = 5.0f;
-    public static float Player_MaxDistance = 30.0f;
+    public static float Player_MaxDistance = 40.0f;
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -688,9 +1214,12 @@ public class Attack_Laser01State : BossState
     {
         // Programming Logic
         // Energy Update and Debugging
-        Debug.Log("BossEnemy: Entering public class Attack_Laser01State : BossState");
+        Debug.Log("BossEnemy: Entering Attack_Laser01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Timer
+        Attack_StartTimeStamp = Time.time;
 
         // Attack Setup Logic
         Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
@@ -721,18 +1250,12 @@ public class Attack_Laser01State : BossState
         MeshFilter Attack_LaserContactObject_meshfilter = Attack_LaserContactObject.AddComponent<MeshFilter>();
         Attack_LaserContactObject_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
         MeshRenderer Attack_LaserContactObject_meshRenderer = Attack_LaserContactObject.AddComponent<MeshRenderer>();
-        Rigidbody rigidBody = Attack_LaserObject.AddComponent<Rigidbody>();
-        rigidBody.useGravity = false;
-        rigidBody.isKinematic = true;
         SphereCollider Attack_LaserContactObject_collider = Attack_LaserContactObject.AddComponent<SphereCollider>();
         Attack_LaserContactObject_collider.isTrigger = true; 
         Attack_LaserContactObject.tag = "Damage Source";
         Attack_LaserContactObject.transform.position = bossEnemyComponent.Player_ReturnPositionFromXSecondsAgo(Attack_PlayerPositionDelay);
         Attack_LaserContactObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         Attack_LaserContactObject.transform.SetParent(Attack_GameObjectParent.transform);
-
-        // Misc.
-        Attack_StartTimeStamp = Time.time;
 
         // Animation Logic
 
@@ -811,14 +1334,116 @@ public class Attack_Laser01State : BossState
     }
 }
 
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+// *               Arena Hazard Attacks                                                                                                             * 
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+public class Attack_ArenaHazard01State : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "Attack_ArenaHazard01State";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 15.0f;
+    public static float Player_MaxDistance = 40.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+        Debug.Log("BossEnemy: Entering Attack_ArenaHazard01State");
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
+        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+        // TEMP DEBUGGING CODE:
+        Attack_Completed = true;
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToSelfCheckState();
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Animation Logic
+
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+// *               Melee Attacks                                                                                                                    * 
+// --------------------------------------------------------------------------------------------------------------------------------------------------
 public class Attack_Melee01State : BossState
 {
     // Private Attributes
     private bool Attack_Completed = false;
     private GameObject Attack_GameObjectParent;
     private GameObject Attack_ColliderSphere;
-    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 0.75f, 1.5f);
-    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(4.0f, 0.75f, 4.0f);
+    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 0.5f, 1.5f);
+    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(4.0f, 0.5f, 4.0f);
     private bool Attack_IsColliderSphereScaleOut = false;
     private float Attack_Duration = 4.0f;
     private float Attack_Delay = 1.0f;
@@ -841,7 +1466,7 @@ public class Attack_Melee01State : BossState
         }
         else
         {
-            score -= 1.0f;
+            score -= 10.0f;
         }
 
         // Check Attack_HistoryList ------------------*
@@ -854,7 +1479,7 @@ public class Attack_Melee01State : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering public class Attack_Melee01State : BossState");
+        Debug.Log("BossEnemy: Entering Attack_Melee01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
