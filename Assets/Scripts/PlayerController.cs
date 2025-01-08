@@ -14,6 +14,9 @@ using UnityEngine.SceneManagement;
 //add freecam
 public class PlayerController : MonoBehaviour
 {
+    //player controller reference
+    PlayerControls pc;
+
     //Script declarations
     groundCheck ground;
     EnemyCollision enemyCollision;
@@ -26,10 +29,6 @@ public class PlayerController : MonoBehaviour
     private int healthRegenDelay = 10;
     public GameObject player;
     public Rigidbody rb;
-
-
-    //player controller reference
-    PlayerControls pc;
 
     //jump variables
     private float jumpForce = 10f;
@@ -75,6 +74,11 @@ public class PlayerController : MonoBehaviour
     private bool deathState = false;
     private int fadeDelay = 10;
     public GameObject fadeOutPanel;
+
+    //Enemy collision temp handlers
+    public bool collision = false;
+    private int damageTakenDelay = 10;
+    private bool invulnerable = false;
 
     void Start()
     {
@@ -136,37 +140,13 @@ public class PlayerController : MonoBehaviour
     {
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
         //https://www.youtube.com/watch?app=desktop&v=KjaRQr74jV0&t=210s
-        //This will change to follow convention of moving the rigidbody and not the gameObject
-
-        //Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1));
-        //Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1));
-
-        //Vector3 movementDirection = ((camForward * leftStick.y) + (camRight * leftStick.x)) * 1.0f;
-
-        //Vector3 movementDirection = new Vector3(leftStick.x, 0f, leftStick.y);
-
-        //Vector3 movementDirection = ((player.transform.forward * leftStick.y) + (player.transform.right * leftStick.x)) * 1.0f;
-
-
-        //player.transform.Translate(speed * movementDirection * Time.deltaTime, Space.World);
-        //Vector3 translation = new Vector3(leftStick.x, 0f, leftStick.y);
-
 
         Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
         Vector3 movementInput = new Vector3(leftStick.x, 0f, leftStick.y);
 
         Vector3 cameraRelativeMovement = rotationCam.convertToCamSpace(movementInput);
 
-
-
         rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * speed);
-
-        //Vector3 positionToLookAt;
-
-        //positionToLookAt.x = leftStick.x;
-        //positionToLookAt.y = 0.0f;
-        //positionToLookAt.z = leftStick.y;
-
 
         Quaternion currentRotation = transform.rotation;
 
@@ -239,7 +219,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log("2 = " + player.GetComponent<Rigidbody>().velocity);
         }
     }
-    //breaks singular jump when trying to quick drop from it
 
     public void handleQuickDrop()
     {
@@ -271,8 +250,6 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         float originalGravity = gravityScale;
         gravityScale = 0f;
-
-        //get the walk direction input needs to be refined
         Vector3 forceToApply = orientation.forward * dashingPower;
         rb.freezeRotation = true;
         rb.AddForce(forceToApply, ForceMode.Impulse);
@@ -352,24 +329,55 @@ public class PlayerController : MonoBehaviour
             //write code here*/
         }
     }
+    //-----------------------------------------------Take Damage-----------------------------------------------//
+    public void TakeDamage()
+    {
+        takeDamage();
+    }
+
+    public void takeDamage()
+    {
+        if(collision == true)
+        {
+            playerCurrenthealth--;
+            invulnerable = true;
+            StartCoroutine(Immunity());
+            if(playerCurrenthealth < 0)
+            {
+                playerCurrenthealth = 0;
+            }
+        }
+    }
+
+    IEnumerator Immunity()
+    {
+        if(invulnerable == true)
+        {
+            yield return new WaitForSeconds(damageTakenDelay);
+            invulnerable = false;
+        }
+
+    }
     //-----------------------------------------------Health Regen-----------------------------------------------//
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
+        takeDamage();
+
         if (playerCurrenthealth == 0)
         {
             deathState = true;
         }
         else if (playerCurrenthealth < playerHealth)
         {
-            if ( (attackState == false) && (deathState == false))
+            if ( (attackState == false || collision == false) && (deathState == false))
             {
 
                 StartCoroutine(healthRegen());
             }
         }
     }
-
+    //Make sure to add a check if player in combat or not
     IEnumerator healthRegen()
     {
         if(playerCurrenthealth == 1)
@@ -395,6 +403,7 @@ public class PlayerController : MonoBehaviour
         Invoke("fadeOut", fadeDelay);
     }
 
+    //Needs to change to use canvas opacity
     public void fadeIn()
     {
 
@@ -409,6 +418,7 @@ public class PlayerController : MonoBehaviour
         gameObject.SetActive(true);
     }
 
+    //Destroy inputs if not used
     private void OnDestroy()
     {
         pc.Gameplay.Jump.performed -= OnJump;
