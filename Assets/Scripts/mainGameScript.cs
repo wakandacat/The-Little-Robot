@@ -34,6 +34,7 @@ public class mainGameScript : MonoBehaviour
     {
         //load the first scene in addition to the base scene
         SceneManager.LoadScene("Tutorial", LoadSceneMode.Additive);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Tutorial"));
 
         //ensure time is running and we are not still paused
         Time.timeScale = 1.0f;
