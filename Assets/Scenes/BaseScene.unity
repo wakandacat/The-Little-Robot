@@ -194,7 +194,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 119559988}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.053107142, y: 0.0034457028, z: -0.0001832511, w: 0.9985829}
+  m_LocalRotation: {x: 0.053107142, y: 0.0034457073, z: -0.00018325132, w: 0.9985829}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3739,6 +3739,12 @@ MonoBehaviour:
   orientation: {fileID: 1610854416}
   dashUpwardForce: 10
   attackState: 0
+  attackCounter: 0
+  comboTimer: 0
+  comboMaxTime: 5
+  Rolling: 0
+  rollState: 0
+  rollCounter: 0
   isPaused: 0
   pauseMenu: {fileID: 1414176718}
   fadeOutPanel: {fileID: 251530167}

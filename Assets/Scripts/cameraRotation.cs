@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//https://www.youtube.com/watch?v=XT6mUlpO4fA
+//https://www.youtube.com/watch?v=-shDcRpTypk
 public class cameraRotation : MonoBehaviour
 {
     public Vector3 convertToCamSpace(Vector3 VectorToRotate)
