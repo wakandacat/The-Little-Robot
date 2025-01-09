@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 //ToDo
 //Fix the floatiness of the jump look at these resources --> https://www.youtube.com/watch?v=hG9SzQxaCm8, https://www.youtube.com/watch?app=desktop&v=h2r3_KjChf4&t=233s
 //Implement Deflect
+//Might need to split up some code to different scripts 
 public class PlayerController : MonoBehaviour
 {
     //player controller reference
