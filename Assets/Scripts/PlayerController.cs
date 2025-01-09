@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private int playerDamage = 10;
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
-    private bool combatState = false;
+    public bool combatState = false;
     private float speed = 30f;
     public GameObject player;
     public Rigidbody rb;
@@ -396,7 +396,10 @@ public class PlayerController : MonoBehaviour
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
-        takeDamage();
+        if (combatState == true)
+        {
+            takeDamage();
+        }
 
         if (playerCurrenthealth == 0)
         {
