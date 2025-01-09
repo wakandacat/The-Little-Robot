@@ -55,9 +55,9 @@ public class PlayerController : MonoBehaviour
     //Attack vars
     private bool isAttacking = false;
     public bool attackState = false;
-    private int attackCounter = 0;
+    public int attackCounter = 0;
     public float comboTimer = 0f;
-    private int comboMaxTime = 5;
+    public float comboMaxTime = 5f;
 
     //Roll vars
     private bool Rolling = false;
@@ -128,6 +128,11 @@ public class PlayerController : MonoBehaviour
             Debug.DrawRay(transform.position, forward, Color.green);
 
             Debug.Log("Jump Counter: " + jumpCounter);
+
+            if(attackState == true)
+            {
+                timer();
+            }
 
         }
         else if(deathState == true)
@@ -285,48 +290,57 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Attack-----------------------------------------------//
     public void attackCombo(int counter)
     {
-        if (counter == 0)
+        if (counter == 1)
         {
             //animation here
             //enemy healtj decrease here
             Debug.Log("Attack 1");
-            handleAttack();
         }
-        if(counter == 1)
+        else if(counter == 2)
         {
             //animation here
             //enemy healtj decrease here
             Debug.Log("Attack 2");
-            handleAttack();
         }
-        if(counter == 2)
+        else if(counter == 3)
         {
             //animation here
             //enemy healtj decrease here
             Debug.Log("Attack 3");
-            handleAttack();
         }
     }
 
     public void handleAttack()
     {
         isAttacking = false;
+        attackState = false;
+        attackCounter = 0;
+        comboMaxTime = 5f;
+    }
+    public void timer()
+    {
+        comboMaxTime -= Time.deltaTime;
+       if (comboMaxTime < 0)
+        {
+            comboMaxTime = 0;
+            handleAttack();
+        }
+
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
         isAttacking = context.ReadValueAsButton();
-        if(isAttacking)
+        if (isAttacking)
         {
-            comboTimer += Time.deltaTime;
-            if (comboTimer < comboMaxTime)
+            attackState = true;
+            attackCounter++;
+            if (comboTimer < comboMaxTime && attackState == true)
             {
                 attackCombo(attackCounter);
-                attackCounter++;
-            }
-
-            if (attackCounter == 3 || comboTimer == comboMaxTime)
-            {
-                attackCounter = 0;
+                if(attackCounter == 4)
+                {
+                    handleAttack();
+                }
             }
         }
 
