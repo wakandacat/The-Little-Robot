@@ -7,39 +7,36 @@ using UnityEngine.SceneManagement;
 //ToDo
 //Fix the floatiness of the jump look at these resources --> https://www.youtube.com/watch?v=hG9SzQxaCm8, https://www.youtube.com/watch?app=desktop&v=h2r3_KjChf4&t=233s
 //Implement Deflect
-//Implement Roll
-//Implement Attack
-//Implement Attack Combo
-//Might fall after dashing not sure why falls because the forces applied on the player are not balanced well enough so to fix freeze rotations lol
-//add freecam
 public class PlayerController : MonoBehaviour
 {
     //player controller reference
     PlayerControls pc;
 
-    //Script declarations
+    //External Script declarations
     groundCheck ground;
     EnemyCollision enemyCollision;
     cameraRotation rotationCam;
+    BossEnemy enemy;
 
     //player variables
     public int playerHealth = 3;
     private int playerDamage = 10;
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
+    private bool combatState = false;
+    private float speed = 30f;
     public GameObject player;
     public Rigidbody rb;
 
-    //jump variables
+    //jump + quick drop vars
     private float jumpForce = 10f;
-    private float speed = 30f;
     private float fallMultiplier = 800f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
     private int jumpCounter = 0;
     float rotationSpeed = 1.0f;
 
-    //Dash Booleans
+    //Dash vars
     private bool canDash = true;
     private bool isDashing;
     private float dashingPower = 24f;
@@ -60,7 +57,9 @@ public class PlayerController : MonoBehaviour
     public float comboMaxTime = 5f;
 
     //Roll vars
-    private bool Rolling = false;
+    public  bool Rolling = false;
+    public  bool rollState = false;
+    public  int rollCounter = 0;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -69,13 +68,13 @@ public class PlayerController : MonoBehaviour
     public bool isPaused = false;
     public GameObject pauseMenu;
 
-    //Death handlers
+    //Death vars
     UnityEngine.SceneManagement.Scene currentScene;
     private bool deathState = false;
     private int fadeDelay = 10;
     public GameObject fadeOutPanel;
 
-    //Enemy collision temp handlers
+    //Player taken damage vars
     public bool collision = false;
     private int damageTakenDelay = 10;
     private bool invulnerable = false;
@@ -85,6 +84,17 @@ public class PlayerController : MonoBehaviour
         pc = new PlayerControls();     
         pc.Gameplay.Enable();
 
+        currentScene = SceneManager.GetActiveScene();
+
+        rb = player.gameObject.GetComponent<Rigidbody>();
+        ground = player.GetComponent<groundCheck>();
+        enemyCollision = player.GetComponent<EnemyCollision>();
+        rotationCam = player.GetComponent<cameraRotation>();
+        //enemy = enemy.GetComponent<BossEnemy>();
+
+        playerCurrenthealth = playerHealth;
+        fadeOutPanel.SetActive(false);
+
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
@@ -92,16 +102,6 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Roll.performed += OnRoll;
         pc.Gameplay.Deflect.performed += OnDeflect;
         pc.Gameplay.Pause.performed += onPause;
-
-        rb = player.gameObject.GetComponent<Rigidbody>();
-        ground = player.GetComponent<groundCheck>();
-        enemyCollision = player.GetComponent<EnemyCollision>();
-        rotationCam = player.GetComponent<cameraRotation>();
-
-        playerCurrenthealth = playerHealth;
-        currentScene = SceneManager.GetActiveScene();
-        fadeOutPanel.SetActive(false);
-
     }
 
     //open pause menu
@@ -115,20 +115,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(currentScene.name);
+        //Check if the player is dead or alive
         if (deathState == false)
         {
             manageHealth();
-            Vector3 forwardVelocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
-            //Move might have to be on performed cause u can move while jumping and dashing and i do not think that is the intended effect
-
             moveCharacter();
 
+            //Raycast for debugging purposes
             Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
             Debug.DrawRay(transform.position, forward, Color.green);
 
-            Debug.Log("Jump Counter: " + jumpCounter);
-
+            //if player in attack State start attack combo timer
             if(attackState == true)
             {
                 timer();
@@ -137,7 +134,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(deathState == true)
         {
-            ManagedeathState();
+           ManagedeathState();
         }
     }
     //-----------------------------------------------Move-----------------------------------------------//
@@ -151,8 +148,10 @@ public class PlayerController : MonoBehaviour
 
         Vector3 cameraRelativeMovement = rotationCam.convertToCamSpace(movementInput);
 
+        //Move player using the rigid body
         rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * speed);
 
+        //player rotation
         Quaternion currentRotation = transform.rotation;
 
         if (cameraRelativeMovement != Vector3.zero)
@@ -163,33 +162,27 @@ public class PlayerController : MonoBehaviour
     }
 
     //-----------------------------------------------Jump-----------------------------------------------//
+
+    //Basic Jump Script using rigidody forces
     public void Jump()
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        //this does not work as intended will need to be fixed
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
     }
 
-    public void doubleJump()
-    {
-        Jump();
-        
-    }
+    //Jump flags handler
     public void handleJump()
-    {
-        Debug.Log("we are handling jump");
-       
+    {       
         isJumping = false;
         jumpCounter = 0;
     }
     public void OnJump(InputAction.CallbackContext context)
-    {
-    
-        Debug.Log("OnJump triggered");
-
+    {   
         isJumping = context.ReadValueAsButton();
         if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
@@ -198,33 +191,28 @@ public class PlayerController : MonoBehaviour
             jumpCounter++;
             ground.jumpState = true;
         }
+        //Double Jump call
         if (ground.onGround == false && jumpCounter == 1 && isJumping)
         {
-            doubleJump();
+            Jump();
             player.GetComponent<Rigidbody>().freezeRotation = true;
             jumpCounter = 0;
             ground.jumpState = true;
         }
 
-        Debug.Log("help me");
-    
     }
 
     //-----------------------------------------------Quick Drop-----------------------------------------------//
-    //The idea is that when quickdropping increase downwards velocity or increase gravity?
     //https://www.youtube.com/watch?v=7KiK0Aqtmzc&t=474s
+    //Quick drop logic
     public void quickDrop()
     {
-        Debug.Log("1 = " + player.GetComponent<Rigidbody>().velocity);
-
         if (ground.onGround == false)
         {
             player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-            Debug.Log("hELLO QUICK DROP");
-            Debug.Log("2 = " + player.GetComponent<Rigidbody>().velocity);
         }
     }
-
+    //quick drop flag handler
     public void handleQuickDrop()
     {
         if (ground.onGround == true)
@@ -232,16 +220,14 @@ public class PlayerController : MonoBehaviour
             isQuickDropping = false;
         }
     }
+    //on button press call quick drop and handler
     public void OnQuickDrop(InputAction.CallbackContext context)
     {
-        Debug.Log("On quickdrop triggered");
-
         isQuickDropping = context.ReadValueAsButton();
         if(isQuickDropping == true){
             quickDrop();
         }
         handleQuickDrop();
-
     }
 
     //-----------------------------------------------Dash-----------------------------------------------//
@@ -249,6 +235,7 @@ public class PlayerController : MonoBehaviour
     //https://discussions.unity.com/t/why-does-rigidbody-3d-not-have-a-gravity-scale/645511/2
     //https://discussions.unity.com/t/rigidbody-falls-over-when-addforce-addrelativeforce-is-used/421107/4
     //https://www.youtube.com/watch?v=QRYGrCWumFw
+    //Dash coroutine
     public IEnumerator Dash()
     {
         canDash = false;
@@ -265,10 +252,9 @@ public class PlayerController : MonoBehaviour
 
         canDash = true;
     }
+    //coroutinr call on button press
     public void OnDash(InputAction.CallbackContext context)
     {
-        Debug.Log("OnDash triggered");
-
         Dashing = context.ReadValueAsButton();
         if (Dashing == true)
         {
@@ -277,10 +263,30 @@ public class PlayerController : MonoBehaviour
         }
     }
     //-----------------------------------------------Roll-----------------------------------------------//
+    //Roll flags handler
+    public void handleRoll()
+    {
+        Rolling = false;
+        rollState = false;
+        rollCounter = 0;
+    }
+    //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
+    //Execute roll on button press
     public void OnRoll(InputAction.CallbackContext context)
     {
         Rolling = context.ReadValueAsButton();
-        //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
+        if(Rolling == true)
+        {
+            rollCounter++;
+            //animation here
+            if(rollCounter == 1)
+            {
+                moveCharacter();
+            }
+            else if (rollCounter == 2){
+                handleRoll();
+            }
+        }
     }
     //-----------------------------------------------Deflect-----------------------------------------------//
     public void OnDeflect(InputAction.CallbackContext context)
@@ -288,28 +294,35 @@ public class PlayerController : MonoBehaviour
         Deflecting = context.ReadValueAsButton();
     }
     //-----------------------------------------------Attack-----------------------------------------------//
+    //Check which combo state we are in and returns the animation, enemy damage
     public void attackCombo(int counter)
     {
         if (counter == 1)
         {
             //animation here
-            //enemy healtj decrease here
-            Debug.Log("Attack 1");
+            if (enemyCollision.enemyCollision == true)
+            {
+                //enemy.HP_TakeDamage(playerDamage);
+            }
         }
         else if(counter == 2)
         {
             //animation here
-            //enemy healtj decrease here
-            Debug.Log("Attack 2");
+            if (enemyCollision.enemyCollision == true)
+            {
+                //enemy.HP_TakeDamage(playerDamage*5);
+            }
         }
         else if(counter == 3)
         {
             //animation here
-            //enemy healtj decrease here
-            Debug.Log("Attack 3");
+            if (enemyCollision.enemyCollision == true)
+            {
+                //enemy.HP_TakeDamage(playerDamage*10);
+            }
         }
     }
-
+    //Handles the combo attack flags
     public void handleAttack()
     {
         isAttacking = false;
@@ -317,6 +330,8 @@ public class PlayerController : MonoBehaviour
         attackCounter = 0;
         comboMaxTime = 5f;
     }
+    //Starts the timer and checks whether it is done or not
+    //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
     public void timer()
     {
         comboMaxTime -= Time.deltaTime;
@@ -327,6 +342,7 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+    //Call the relevant methods on button press or presses
     public void OnAttack(InputAction.CallbackContext context)
     {
         isAttacking = context.ReadValueAsButton();
@@ -387,7 +403,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (playerCurrenthealth < playerHealth)
         {
-            if ( (attackState == false || collision == false) && (deathState == false))
+            if ((combatState == false || collision == false) && (deathState == false))
             {
 
                 StartCoroutine(healthRegen());
