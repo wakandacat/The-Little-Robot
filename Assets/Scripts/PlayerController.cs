@@ -56,8 +56,8 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     public bool attackState = false;
     private int attackCounter = 0;
-    private float comboTimer = 0f;
-    private int comboMaxTime = 10;
+    public float comboTimer = 0f;
+    private int comboMaxTime = 5;
 
     //Roll vars
     private bool Rolling = false;
@@ -289,45 +289,47 @@ public class PlayerController : MonoBehaviour
         {
             //animation here
             //enemy healtj decrease here
+            Debug.Log("Attack 1");
+            handleAttack();
         }
         if(counter == 1)
         {
             //animation here
             //enemy healtj decrease here
+            Debug.Log("Attack 2");
+            handleAttack();
         }
         if(counter == 2)
         {
             //animation here
             //enemy healtj decrease here
+            Debug.Log("Attack 3");
+            handleAttack();
         }
+    }
+
+    public void handleAttack()
+    {
+        isAttacking = false;
     }
     public void OnAttack(InputAction.CallbackContext context)
     {
         isAttacking = context.ReadValueAsButton();
         if(isAttacking)
         {
-            attackCounter++;
-            while (comboTimer < comboMaxTime)
+            comboTimer += Time.deltaTime;
+            if (comboTimer < comboMaxTime)
             {
-                comboTimer += Time.deltaTime;
                 attackCombo(attackCounter);
-                if(comboTimer == comboMaxTime)
-                {
-                    attackCombo(1);
-                }
-                if (attackCounter > comboMaxTime)
-                {
-                    attackCounter = comboMaxTime;
-                }
+                attackCounter++;
             }
-/*            if(enemyCollision.enemyCollision == true)
+
+            if (attackCounter == 3 || comboTimer == comboMaxTime)
             {
-                //call enemy taking damage here
+                attackCounter = 0;
             }
-            attackState = true;
-            attackCounter++;
-            //write code here*/
         }
+
     }
     //-----------------------------------------------Take Damage-----------------------------------------------//
     public void TakeDamage()
