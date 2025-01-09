@@ -175,7 +175,7 @@ public class PlayerController : MonoBehaviour
     }
     public void handleJump()
     {
-        //Debug.Log("we are handling jump");
+        Debug.Log("we are handling jump");
        
         isJumping = false;
         jumpCounter = 0;
@@ -210,13 +210,13 @@ public class PlayerController : MonoBehaviour
     //https://www.youtube.com/watch?v=7KiK0Aqtmzc&t=474s
     public void quickDrop()
     {
-        //Debug.Log("1 = " + player.GetComponent<Rigidbody>().velocity);
+        Debug.Log("1 = " + player.GetComponent<Rigidbody>().velocity);
 
         if (ground.onGround == false)
         {
             player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-            //Debug.Log("hELLO QUICK DROP");
-            //Debug.Log("2 = " + player.GetComponent<Rigidbody>().velocity);
+            Debug.Log("hELLO QUICK DROP");
+            Debug.Log("2 = " + player.GetComponent<Rigidbody>().velocity);
         }
     }
 
@@ -229,7 +229,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnQuickDrop(InputAction.CallbackContext context)
     {
-        //Debug.Log("On quickdrop triggered");
+        Debug.Log("On quickdrop triggered");
 
         isQuickDropping = context.ReadValueAsButton();
         if(isQuickDropping == true){
@@ -262,7 +262,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnDash(InputAction.CallbackContext context)
     {
-        //Debug.Log("OnDash triggered");
+        Debug.Log("OnDash triggered");
 
         Dashing = context.ReadValueAsButton();
         if (Dashing == true)
@@ -285,29 +285,26 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Attack-----------------------------------------------//
     public void attackCombo(int counter)
     {
-        switch (counter)
+        if (counter == 0)
         {
-            case 1:
-                //animation here
-                //enemy healtj decrease here
-                Debug.Log("Attack 1");
-                isAttacking = false;
-                break;
-            case 2:
-                //animation here
-                //enemy healtj decrease here
-                Debug.Log("Attack 2");
-                isAttacking = false;
-                break;
-            case 3:
-                //animation here
-                //enemy healtj decrease here
-                Debug.Log("Attack 3");
-                isAttacking = false;
-                break;
-            default:
-                Debug.Log("Nothing is happening here");
-                break;
+            //animation here
+            //enemy healtj decrease here
+            Debug.Log("Attack 1");
+            handleAttack();
+        }
+        if(counter == 1)
+        {
+            //animation here
+            //enemy healtj decrease here
+            Debug.Log("Attack 2");
+            handleAttack();
+        }
+        if(counter == 2)
+        {
+            //animation here
+            //enemy healtj decrease here
+            Debug.Log("Attack 3");
+            handleAttack();
         }
     }
 
@@ -318,14 +315,18 @@ public class PlayerController : MonoBehaviour
     public void OnAttack(InputAction.CallbackContext context)
     {
         isAttacking = context.ReadValueAsButton();
-        if (isAttacking == true)
+        if(isAttacking)
         {
-            attackCounter++;
-            while (comboTimer < comboMaxTime)
+            comboTimer += Time.deltaTime;
+            if (comboTimer < comboMaxTime)
             {
-                comboTimer += Time.deltaTime;
                 attackCombo(attackCounter);
+                attackCounter++;
+            }
 
+            if (attackCounter == 3 || comboTimer == comboMaxTime)
+            {
+                attackCounter = 0;
             }
         }
 
@@ -349,6 +350,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
     IEnumerator Immunity()
     {
         if(invulnerable == true)
