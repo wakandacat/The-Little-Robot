@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class enemyTemp : MonoBehaviour
 {
+    //GET RID OF THIS WHEN REAL ENEMY IN AND FUNCTIONAL
     private mainGameScript mainGameScript;
     public GameObject loadObj;
 
@@ -27,7 +28,7 @@ public class enemyTemp : MonoBehaviour
             this.gameObject.tag = "Dead";
             this.GetComponent<BoxCollider>().enabled = false;
 
-            mainGameScript.switchCams();
+           // mainGameScript.SwitchToPlatformCam();
 
         }
     }

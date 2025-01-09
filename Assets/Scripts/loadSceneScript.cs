@@ -32,7 +32,6 @@ public class loadSceneScript : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        mainGameScript.switchCams();
 
         //remove to enusre it only runs once
         SceneManager.sceneLoaded -= OnSceneLoaded;
