@@ -80,6 +80,9 @@ public class PlayerController : MonoBehaviour
     private int damageTakenDelay = 10;
     private bool invulnerable = false;
 
+    //animator
+    private Animator playerAnimator;
+
     void Start()
     {
         pc = new PlayerControls();     
@@ -95,6 +98,9 @@ public class PlayerController : MonoBehaviour
 
         playerCurrenthealth = playerHealth;
         fadeOutPanel.SetActive(false);
+
+        //get animator
+        playerAnimator = player.GetComponent<Animator>();
 
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
@@ -159,6 +165,38 @@ public class PlayerController : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(cameraRelativeMovement * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+
+        //animation for walking
+        if (playerAnimator != null)
+        {
+            //set playback speed for animation
+            playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
+
+            //if the player is moving then trigger the walk animation
+            if (leftStick.magnitude > 0.1f)
+            {
+                if(Rolling == true)
+                {
+                    playerAnimator.SetBool("isRolling", true);
+                }
+                else
+                {
+                    playerAnimator.SetBool("isRolling", false);
+                    playerAnimator.SetBool("isWalking", true);
+
+                }
+                
+            }
+            else
+            {
+                //end walk cycle and set directions back to false
+                playerAnimator.SetBool("isRolling", false);
+                playerAnimator.SetBool("isWalking", false);
+
+            }
+
+
         }
     }
 
