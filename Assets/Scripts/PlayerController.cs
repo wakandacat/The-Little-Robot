@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
     public bool attackState = false;
     public int attackCounter = 0;
     public float comboTimer = 0f;
-    public float comboMaxTime = 5f;
+    private float comboMaxTime = 1.0f;
 
     //Roll vars
     public  bool Rolling = false;
@@ -184,7 +184,6 @@ public class PlayerController : MonoBehaviour
             {
                 playerAnimator.SetBool("isAttacking", true);
                 Debug.Log("Hello");
-                comboMaxTime = 0;
             }
             else
             {
@@ -304,7 +303,6 @@ public class PlayerController : MonoBehaviour
     //Dash coroutine
     public IEnumerator Dash()
     {
-        playerAnimator.SetBool("isDashing", true);
         canDash = false;
         isDashing = true;
         float originalGravity = gravityScale;
@@ -315,22 +313,30 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
-        playerAnimator.SetBool("isDashing", false);
         yield return new WaitForSeconds(dashingCooldown);
-
         canDash = true;
     }
     //coroutinr call on button press
     public void OnDash(InputAction.CallbackContext context)
     {
-        //playerAnimator.SetBool("isDashing", true);
+        playerAnimator.SetBool("isDashing", true);
         Dashing = context.ReadValueAsButton();
         if (Dashing == true)
         {
-
             StartCoroutine(Dash());
+            if (isDashing == true)
+            {
+                playerAnimator.SetBool("isDashing", true);
+
+            }
+            else
+            {
+                playerAnimator.SetBool("isDashing", false);
+
+            }
 
         }
+
     }
     //-----------------------------------------------Roll-----------------------------------------------//
     //Roll flags handler
@@ -398,10 +404,11 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         attackState = false;
         attackCounter = 0;
-        comboMaxTime = 5f;
+        comboMaxTime = 1.0f;
     }
     //Starts the timer and checks whether it is done or not
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
+    //when we get all combos remeber to reset timer
     public void timer()
     {
        comboMaxTime -= Time.deltaTime;
@@ -420,7 +427,7 @@ public class PlayerController : MonoBehaviour
         {
             attackState = true;
             attackCounter++;
-            if (comboTimer < comboMaxTime && attackState == true)
+            if (comboMaxTime > 0 && attackState == true)
             {
                 attackCombo(attackCounter);
                 if(attackCounter == 4)
