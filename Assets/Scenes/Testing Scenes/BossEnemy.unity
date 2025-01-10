@@ -390,6 +390,7 @@ GameObject:
   - component: {fileID: 1664625870}
   - component: {fileID: 1664625869}
   - component: {fileID: 1664625868}
+  - component: {fileID: 1664625872}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Player
@@ -477,12 +478,107 @@ Transform:
   m_GameObject: {fileID: 1664625867}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.99, y: 0, z: 0}
+  m_LocalPosition: {x: 15, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1664625872
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664625867}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!1001 &8260220523368113108
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831863741505875148, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3477886785870900262, guid: 4459f9591432f464b919de2f9f1d0e45,
+        type: 3}
+      propertyPath: m_Name
+      value: Boss Wakeup Trigger
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4459f9591432f464b919de2f9f1d0e45, type: 3}
 --- !u!1001 &8542128102720199375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -551,6 +647,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8726971319552774640, guid: 448e04ce750ac494c99a9b70c60fdb8c,
+        type: 3}
+      propertyPath: Energy_Maximum
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8726971319552774640, guid: 448e04ce750ac494c99a9b70c60fdb8c,
+        type: 3}
+      propertyPath: Attack_BasicProjectile01
+      value: 
+      objectReference: {fileID: 6745135230358999026, guid: ccb06d8ade8264744a78094086a672a9,
+        type: 3}
+    - target: {fileID: 8726971319552774640, guid: 448e04ce750ac494c99a9b70c60fdb8c,
+        type: 3}
+      propertyPath: Player_PositionTrackingTimeInterval
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8726971319552774640, guid: 448e04ce750ac494c99a9b70c60fdb8c,
+        type: 3}
+      propertyPath: Player_PositionTrackingMaxTimeTracked
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -564,3 +681,4 @@ SceneRoots:
   - {fileID: 1496345210}
   - {fileID: 8542128102720199375}
   - {fileID: 1664625871}
+  - {fileID: 8260220523368113108}

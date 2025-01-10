@@ -16,7 +16,7 @@ public class mainGameScript : MonoBehaviour
     public string currentScene = "Tutorial";
 
     //get the 2 virtual cameras
-    public CinemachineVirtualCamera platformCam;
+    public CinemachineFreeLook platformCam;
     public CinemachineVirtualCamera bossCam;
 
     private GameObject enemy;
@@ -78,30 +78,20 @@ public class mainGameScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
     }
 
-    public void switchCams()
+    public void SwitchToBossCam()
     {
-        //switch cameras for combat sections
-        if (GameObject.Find("enemy" + currLevelCount))
-        {
-            enemy = GameObject.Find("enemy" + currLevelCount);
+       // Debug.Log("boss cam");
 
-            if (enemy.gameObject.tag == "Dead")
-            {
-                platformCam.Priority = bossCam.Priority + 1;
-            } 
-            else
-            {
+        enemy = GameObject.Find("enemy" + currLevelCount);
 
-                bossCam.LookAt = enemy.transform;
-                bossCam.Priority = platformCam.Priority + 1;
+        bossCam.LookAt = enemy.transform;
+        bossCam.Priority = platformCam.Priority + 1;
+    }
 
-            }
-        }
-        else //switch back for platforming sections
-        {
-            platformCam.Priority = bossCam.Priority + 1;
-        }      
-   
+    public void SwitchToPlatformCam()
+    {
+        //Debug.Log("platform cam");
+        platformCam.Priority = bossCam.Priority + 1;
     }
 
 }

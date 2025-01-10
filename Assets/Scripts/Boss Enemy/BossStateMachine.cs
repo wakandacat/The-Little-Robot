@@ -31,7 +31,7 @@ public class BossStateMachine
         // Execute Enter instructions for new currentState
         currentState = newState;
         currentState.Enter();
-        Debug.Log("Current State has been updated to: " + currentState.ToString());
+        //Debug.Log("Current State has been updated to: " + currentState.ToString());
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -42,6 +42,8 @@ public class BossStateMachine
     {
         // Execute Update instructions for currentState
         currentState.Update();
+        // Execute CheckTransition instructions for currentState
+        currentState.CheckTransition();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -52,5 +54,22 @@ public class BossStateMachine
     {
         // Execute FixedUpdate instructions for currentState
         currentState.FixedUpdate();
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Late Update Function                                                                                                                                                                         * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Called after all other update functions
+    public void LateUpdate()
+    {
+        currentState.LateUpdate();
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Get/Set Functions                                                                                                                                                                            * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    BossState returnCurrentState()
+    {
+        return currentState;
     }
 }

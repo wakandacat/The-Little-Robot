@@ -118,4 +118,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 522e422fbd544a84f8dba57f74cab199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossAnimator: {fileID: 0}
+  HP_Maximum: 30
+  Energy_Maximum: 5
+  Energy_RegainedPerSecond: 0.5
+  Energy_RegainedOnStrike: 1
+  Player_PositionTrackingTimeInterval: 0.02
+  Player_PositionTrackingMaxTimeTracked: 3
+  AwakeState_Delay: 3
+  Attack_BasicProjectile01: {fileID: 6745135230358999026, guid: ccb06d8ade8264744a78094086a672a9,
+    type: 3}

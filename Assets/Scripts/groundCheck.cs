@@ -18,6 +18,7 @@ public class groundCheck : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Ground = " + onGround);
 
     }
 
