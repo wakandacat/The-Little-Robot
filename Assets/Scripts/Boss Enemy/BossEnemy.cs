@@ -140,6 +140,7 @@ public class BossEnemy : MonoBehaviour
     public void Player_EnteredWakeupTrigger()
     {
         playerTriggeredBossWakeup = true;
+        bossAnimator.SetBool("woken", true); //set wake up animation to true
     }
     public bool Player_ReturnPlayerTriggeredBossWakeup()
     {

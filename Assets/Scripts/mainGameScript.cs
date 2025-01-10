@@ -55,11 +55,11 @@ public class mainGameScript : MonoBehaviour
             nextScene = scenes[currSceneName + 1];
         }
         //-------------------TEMPORARY FOR MILESTONE 3 DEMO---------------------------------------
-        if (currentScene == "Platform2" && gameEnded == false)
-        {
-            EndGame();
-            gameEnded = true;
-        }
+        //if (currentScene == "Platform2" && gameEnded == false)
+        //{
+        //    EndGame();
+        //    gameEnded = true;
+        //}
         //--------------------------------------------------------------------------------------------
     }
 
