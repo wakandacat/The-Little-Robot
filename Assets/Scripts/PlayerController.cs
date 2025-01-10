@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     groundCheck ground;
     EnemyCollision enemyCollision;
     cameraRotation rotationCam;
+    checkPointScript checkPoint;
     BossEnemy enemy;
 
     //player variables
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour
     private float speed = 30f;
     public GameObject player;
     public Rigidbody rb;
+    private Vector2 leftStick;
+
 
     //jump + quick drop vars
     private float jumpForce = 10f;
@@ -71,7 +74,7 @@ public class PlayerController : MonoBehaviour
 
     //Death vars
     UnityEngine.SceneManagement.Scene currentScene;
-    private bool deathState = false;
+    public bool deathState = false;
     private int fadeDelay = 10;
     public GameObject fadeOutPanel;
 
@@ -94,6 +97,7 @@ public class PlayerController : MonoBehaviour
         ground = player.GetComponent<groundCheck>();
         enemyCollision = player.GetComponent<EnemyCollision>();
         rotationCam = player.GetComponent<cameraRotation>();
+        checkPoint = player.GetComponent<checkPointScript>();
         //enemy = enemy.GetComponent<BossEnemy>();
 
         playerCurrenthealth = playerHealth;
@@ -122,6 +126,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        animationCalls();
         //Check if the player is dead or alive
         if (deathState == false)
         {
@@ -144,13 +149,67 @@ public class PlayerController : MonoBehaviour
            ManagedeathState();
         }
     }
+    //-----------------------------------------------Animation Calls-----------------------------------------------//
+    public void animationCalls()
+    {
+        //animation for walking
+        if (playerAnimator != null)
+        {
+            //set playback speed for animation
+            playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
+
+            //if the player is moving then trigger the walk animation
+            if (leftStick.magnitude > 0.1f)
+            {
+                if (Rolling == true)
+                {
+                    playerAnimator.SetBool("isRolling", true);
+                }
+                else
+                {
+                    playerAnimator.SetBool("isRolling", false);
+                    playerAnimator.SetBool("isWalking", true);
+                }
+
+            }
+            else
+            {
+                //end walk cycle and set directions back to false
+                playerAnimator.SetBool("isRolling", false);
+                playerAnimator.SetBool("isWalking", false);
+            }
+
+            //if attacking, plays animation once then sets bool to false after the if checks
+            if (isAttacking == true)
+            {
+                playerAnimator.SetBool("isAttacking", true);
+                Debug.Log("Hello");
+                comboMaxTime = 0;
+            }
+            else
+            {
+                playerAnimator.SetBool("isAttacking", false);
+
+            }
+
+            //if dashing, plays animation once then sets bool to false after the if checks
+            //if (isDashing == true)
+            //{
+            //    playerAnimator.SetBool("isDashing", true);
+            //}
+
+            //playerAnimator.SetBool("isDashing", false);
+        }
+
+    }
+
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter()
     {
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
         //https://www.youtube.com/watch?app=desktop&v=KjaRQr74jV0&t=210s
 
-        Vector2 leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
+        leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
         Vector3 movementInput = new Vector3(leftStick.x, 0f, leftStick.y);
 
         Vector3 cameraRelativeMovement = rotationCam.convertToCamSpace(movementInput);
@@ -165,38 +224,6 @@ public class PlayerController : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(cameraRelativeMovement * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
-
-        //animation for walking
-        if (playerAnimator != null)
-        {
-            //set playback speed for animation
-            playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
-
-            //if the player is moving then trigger the walk animation
-            if (leftStick.magnitude > 0.1f)
-            {
-                if(Rolling == true)
-                {
-                    playerAnimator.SetBool("isRolling", true);
-                }
-                else
-                {
-                    playerAnimator.SetBool("isRolling", false);
-                    playerAnimator.SetBool("isWalking", true);
-
-                }
-                
-            }
-            else
-            {
-                //end walk cycle and set directions back to false
-                playerAnimator.SetBool("isRolling", false);
-                playerAnimator.SetBool("isWalking", false);
-
-            }
-
-
         }
     }
 
@@ -277,6 +304,7 @@ public class PlayerController : MonoBehaviour
     //Dash coroutine
     public IEnumerator Dash()
     {
+        playerAnimator.SetBool("isDashing", true);
         canDash = false;
         isDashing = true;
         float originalGravity = gravityScale;
@@ -287,6 +315,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
+        playerAnimator.SetBool("isDashing", false);
         yield return new WaitForSeconds(dashingCooldown);
 
         canDash = true;
@@ -294,9 +323,11 @@ public class PlayerController : MonoBehaviour
     //coroutinr call on button press
     public void OnDash(InputAction.CallbackContext context)
     {
+        //playerAnimator.SetBool("isDashing", true);
         Dashing = context.ReadValueAsButton();
         if (Dashing == true)
         {
+
             StartCoroutine(Dash());
 
         }
@@ -339,26 +370,26 @@ public class PlayerController : MonoBehaviour
         if (counter == 1)
         {
             //animation here
-            if (enemyCollision.enemyCollision == true)
+/*            if (enemyCollision.enemyCollision == true)
             {
                 //enemy.HP_TakeDamage(playerDamage);
-            }
+            }*/
         }
         else if(counter == 2)
         {
-            //animation here
+/*            //animation here
             if (enemyCollision.enemyCollision == true)
             {
                 //enemy.HP_TakeDamage(playerDamage*5);
-            }
+            }*/
         }
         else if(counter == 3)
         {
-            //animation here
+/*            //animation here
             if (enemyCollision.enemyCollision == true)
             {
                 //enemy.HP_TakeDamage(playerDamage*10);
-            }
+            }*/
         }
     }
     //Handles the combo attack flags
@@ -373,7 +404,7 @@ public class PlayerController : MonoBehaviour
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
     public void timer()
     {
-        comboMaxTime -= Time.deltaTime;
+       comboMaxTime -= Time.deltaTime;
        if (comboMaxTime < 0)
         {
             comboMaxTime = 0;
@@ -490,6 +521,7 @@ public class PlayerController : MonoBehaviour
         SceneManager.LoadScene(currentScene.name);
         playerCurrenthealth = playerHealth;
         fadeOutPanel.SetActive(false);
+        checkPoint.MoveToCheckpoint();
         gameObject.SetActive(true);
     }
 
