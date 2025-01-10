@@ -319,21 +319,21 @@ public class PlayerController : MonoBehaviour
     //coroutinr call on button press
     public void OnDash(InputAction.CallbackContext context)
     {
-        playerAnimator.SetBool("isDashing", true);
+        //playerAnimator.SetBool("isDashing", true);
         Dashing = context.ReadValueAsButton();
         if (Dashing == true)
         {
             StartCoroutine(Dash());
-            if (isDashing == true)
-            {
-                playerAnimator.SetBool("isDashing", true);
+            //if (isDashing == true)
+            //{
+            //    playerAnimator.SetBool("isDashing", true);
 
-            }
-            else
-            {
-                playerAnimator.SetBool("isDashing", false);
+            //}
+            //else
+            //{
+            //    playerAnimator.SetBool("isDashing", false);
 
-            }
+            //}
 
         }
 

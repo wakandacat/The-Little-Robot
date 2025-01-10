@@ -19,7 +19,7 @@ public class ConveyorSpawn : MonoBehaviour
         {
             GameObject spawnedBox = Instantiate(box, this.transform.position, Quaternion.identity);
             spawnedBox.transform.SetParent(this.transform);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3);
         }
 
     }
