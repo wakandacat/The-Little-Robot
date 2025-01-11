@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class checkPointScript : MonoBehaviour
 {
@@ -21,7 +22,6 @@ public class checkPointScript : MonoBehaviour
         currCheckpoint = GameObject.FindWithTag("Checkpoint");
 
         //move the player there
-        Debug.Log(currCheckpoint);
         this.transform.position = currCheckpoint.transform.position;
 
         //do any resetting of the scene

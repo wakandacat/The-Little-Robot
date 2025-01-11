@@ -53,7 +53,7 @@ public class movingPlatformScript : MonoBehaviour
 
         //lerp the platform
         platform.transform.position = Vector3.Lerp(prevWaypoint.position, targetWaypoint.position, elapsedPercent);
-        platform.transform.rotation = Quaternion.Lerp(prevWaypoint.rotation, targetWaypoint.rotation, elapsedPercent); //optional rotation as well
+        //platform.transform.rotation = Quaternion.Lerp(prevWaypoint.rotation, targetWaypoint.rotation, elapsedPercent); //optional rotation as well
        
         //move onto the next waypoint once the platform is at destination
         if (elapsedPercent >= 1)

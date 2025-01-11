@@ -41,4 +41,14 @@ public class loadSceneScript : MonoBehaviour
 
     }
 
+    public void OnTriggerExit(Collider collision)
+    {
+        if (collision.gameObject.name == "playerExport")
+        {
+            //get rid of the trigger area so it can't be triggered again
+            this.gameObject.SetActive(false);
+
+        }
+    }
+
 }

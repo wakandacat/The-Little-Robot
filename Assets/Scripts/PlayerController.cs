@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
     //Death vars
     UnityEngine.SceneManagement.Scene currentScene;
     public bool deathState = false;
-    private int fadeDelay = 10;
+    private int fadeDelay = 5;
     public GameObject fadeOutPanel;
 
     //Player taken damage vars
@@ -146,7 +146,8 @@ public class PlayerController : MonoBehaviour
         }
         else if(deathState == true)
         {
-           ManagedeathState();
+            ManagedeathState();
+            deathState = false;
         }
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
@@ -525,7 +526,11 @@ public class PlayerController : MonoBehaviour
     }
     public void fadeOut()
     {
-        SceneManager.LoadScene(currentScene.name);
+        
+        //reload the currently active scene
+        currentScene = SceneManager.GetActiveScene();
+        SceneManager.UnloadSceneAsync(currentScene.name);
+        SceneManager.LoadScene(currentScene.name, LoadSceneMode.Additive);
         playerCurrenthealth = playerHealth;
         fadeOutPanel.SetActive(false);
         checkPoint.MoveToCheckpoint();

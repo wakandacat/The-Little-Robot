@@ -11,7 +11,7 @@ public class deathPitScript : MonoBehaviour
         if (collision.gameObject.name == "playerExport")
         {
             Debug.Log("Player Died");
-            //collision.gameObject.GetComponent<PlayerController>().deathState = true;
+
             GameObject.Find("playerExport").GetComponent<PlayerController>().deathState = true;
 
         }
