@@ -7,7 +7,7 @@ public class destroyItem : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("destroyed");
+       // Debug.Log("destroyed");
         if(collider.gameObject.name == "Crate" || collider.gameObject.name == "Crate(Clone)")
         {
             Destroy(collider.gameObject);

@@ -19,11 +19,9 @@ public class StartEndBattleScript : MonoBehaviour
     void Update()
     {
         //check enemy's state here for death
-        //enemy.GetComponent<BossStateMachine>().returnCurrentState == deathState;
-
-        if (enemy.gameObject.tag == "Dead" && runOnce == false)
+        if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0 && runOnce == false)
         {
-            Debug.Log("dead enemyyyyy");
+            Debug.Log("dead enemy");
             //open end bridge
             endBridge.GetComponent<bridgeScript>().moveBridgeLeft();
 
@@ -39,6 +37,7 @@ public class StartEndBattleScript : MonoBehaviour
     {
         if (collision.gameObject.name == "playerExport")
         {
+            Debug.Log("triggeredddd");
             //hide the bridges
             startBridge.GetComponent<bridgeScript>().moveBridgeLeft();
             endBridge.GetComponent<bridgeScript>().moveBridgeRight();

@@ -32,11 +32,19 @@ public class conveyorMove : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         movingObjects.Add(collision.gameObject);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<PlayerController>().jumpForce = 100f;
+        }
     }
 
     //when something leaves the belt
     public void OnCollisionExit(Collision collision)
     {
         movingObjects.Remove(collision.gameObject);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<PlayerController>().jumpForce = 20f;
+        }
     }
 }

@@ -92,7 +92,7 @@ public class BossEnemy : MonoBehaviour
     {
         // Execute Update instructions for StateMachine
         stateMachine.Update();
-        Debug.Log(HP_Current);
+       // Debug.Log(HP_Current);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

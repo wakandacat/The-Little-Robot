@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 leftStick;
 
     //jump + quick drop vars
-    private float jumpForce = 10f;
+    public float jumpForce = 20f;
     private float fallMultiplier = 800f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
@@ -270,7 +270,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
-        Debug.Log(jumpCounter);
+        //Debug.Log(jumpCounter);
     }
 
     //Jump flags handler
@@ -577,19 +577,17 @@ public class PlayerController : MonoBehaviour
     //Needs to change to use canvas opacity
     public void fadeIn()
     {
-
+        Debug.Log("fade in canvas");
         fadeOutPanel.SetActive(true);
         gameObject.SetActive(false);
     }
     public void fadeOut()
     {
-        //reload the currently active scene
-        currentScene = SceneManager.GetActiveScene();
-        SceneManager.UnloadSceneAsync(currentScene.name);
-        SceneManager.LoadScene(currentScene.name, LoadSceneMode.Additive);
+        Debug.Log("fade out canvas");
+       
         playerCurrenthealth = playerHealth;
         fadeOutPanel.SetActive(false);
-        //checkPoint.MoveToCheckpoint();
+        checkPoint.MoveToCheckpoint();
         gameObject.SetActive(true);
     }
 

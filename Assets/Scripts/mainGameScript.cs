@@ -46,15 +46,7 @@ public class mainGameScript : MonoBehaviour
     }
     void Update()
     {
-        //the current scene
-        currentScene = scenes[currSceneName];
-
-
-        if (currentScene != "EndScene")
-        {
-            //the next scene
-            nextScene = scenes[currSceneName + 1];
-        }
+  
         //-------------------TEMPORARY FOR MILESTONE 3 DEMO---------------------------------------
         //if (currentScene == "Platform2" && gameEnded == false)
         //{
