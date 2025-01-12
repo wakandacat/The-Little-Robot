@@ -11,6 +11,7 @@ public class conveyorMove : MonoBehaviour
     private List<GameObject> movingObjects;
     public float speed;
     public Vector3 direction;
+    public Vector3 xVel;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class conveyorMove : MonoBehaviour
         //for each object on the conveyor, add a force to it
         for (int i = 0; i < movingObjects.Count; i++)
         {
+            //xVel = new Vector3(1.0f, 0.0f, 0.0f);
             movingObjects[i].GetComponent<Rigidbody>().velocity = speed * direction * Time.deltaTime;
         }
     }

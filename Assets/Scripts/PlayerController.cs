@@ -270,6 +270,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
+        Debug.Log(jumpCounter);
     }
 
     //Jump flags handler

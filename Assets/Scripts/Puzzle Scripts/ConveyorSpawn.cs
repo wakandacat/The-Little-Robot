@@ -17,7 +17,8 @@ public class ConveyorSpawn : MonoBehaviour
     {
         while (true)
         {
-            GameObject spawnedBox = Instantiate(box, this.transform.position, Quaternion.identity);
+            //x offset for spawn location due to parent xyz coordinate
+            GameObject spawnedBox = Instantiate(box, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity);
             spawnedBox.transform.SetParent(this.transform);
             yield return new WaitForSeconds(3);
         }
