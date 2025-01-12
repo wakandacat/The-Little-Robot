@@ -37,7 +37,7 @@ public class BossEnemy : MonoBehaviour
     // Boss Enemy Attributes ------------------------------------------------------------------------------------------------------
     private float HP_Current;
     private float Energy_Current;
-    private bool HP_BossInvulnerable = true;
+    private bool HP_BossInvulnerable = false; //changed from default true
 
     // Object References ----------------------------------------------------------------------------------------------------------
     private Animator bossAnimator;
@@ -92,6 +92,7 @@ public class BossEnemy : MonoBehaviour
     {
         // Execute Update instructions for StateMachine
         stateMachine.Update();
+        Debug.Log(HP_Current);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -140,7 +141,6 @@ public class BossEnemy : MonoBehaviour
     public void Player_EnteredWakeupTrigger()
     {
         playerTriggeredBossWakeup = true;
-        bossAnimator.SetBool("woken", true); //set wake up animation to true
     }
     public bool Player_ReturnPlayerTriggeredBossWakeup()
     {
@@ -164,7 +164,7 @@ public class BossEnemy : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Requested time is out of range. Returning the oldest stored position.");
+           // Debug.LogWarning("Requested time is out of range. Returning the oldest stored position.");
             return Player_PositionHistory.Count > 0 ? Player_PositionHistory[Player_PositionHistory.Count - 1].Item1 : transform.position; // if requested timestamp is out of range, the oldest stored position is instead used
         }
     }
@@ -283,10 +283,10 @@ public class BossEnemy : MonoBehaviour
 
     public void HP_TakeDamage(float damageAmount)
     {
-        if (damageAmount < 0)
-        {
-            damageAmount *= -1.0f;
-        }
+        //if (damageAmount < 0)
+        //{
+        //    damageAmount *= -1.0f;
+        //}
         HP_Current -= damageAmount;
     }
 

@@ -18,11 +18,10 @@ public class PlayerController : MonoBehaviour
     EnemyCollision enemyCollision;
     cameraRotation rotationCam;
     checkPointScript checkPoint;
-    BossEnemy enemy;
 
     //player variables
     public int playerHealth = 3;
-    private int playerDamage = 10;
+    private float playerDamage = 10.0f;
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
     public bool combatState = false;
@@ -30,7 +29,6 @@ public class PlayerController : MonoBehaviour
     public GameObject player;
     public Rigidbody rb;
     private Vector2 leftStick;
-
 
     //jump + quick drop vars
     private float jumpForce = 10f;
@@ -58,12 +56,12 @@ public class PlayerController : MonoBehaviour
     public bool attackState = false;
     public int attackCounter = 0;
     public float comboTimer = 0f;
-    private float comboMaxTime = 1.0f;
+    private float comboMaxTime = 5.0f;
 
     //Roll vars
-    public  bool Rolling = false;
-    public  bool rollState = false;
-    public  int rollCounter = 0;
+    public bool Rolling = false;
+    public bool rollState = false;
+    public int rollCounter = 0;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -75,7 +73,7 @@ public class PlayerController : MonoBehaviour
     //Death vars
     UnityEngine.SceneManagement.Scene currentScene;
     public bool deathState = false;
-    private int fadeDelay = 5;
+    public int fadeDelay = 5;
     public GameObject fadeOutPanel;
 
     //Player taken damage vars
@@ -86,9 +84,13 @@ public class PlayerController : MonoBehaviour
     //animator
     private Animator playerAnimator;
 
+    //Game Vars
+    public string[] Combatscenes = new[] { "Combat1", "Combat2", "Combat3" };
+    private GameObject enemy;
+
     void Start()
     {
-        pc = new PlayerControls();     
+        pc = new PlayerControls();
         pc.Gameplay.Enable();
 
         currentScene = SceneManager.GetActiveScene();
@@ -98,10 +100,9 @@ public class PlayerController : MonoBehaviour
         enemyCollision = player.GetComponent<EnemyCollision>();
         rotationCam = player.GetComponent<cameraRotation>();
         checkPoint = player.GetComponent<checkPointScript>();
-        //enemy = enemy.GetComponent<BossEnemy>();
 
         playerCurrenthealth = playerHealth;
-        fadeOutPanel.SetActive(false);
+        //fadeOutPanel.SetActive(false);
 
         //get animator
         playerAnimator = player.GetComponent<Animator>();
@@ -115,6 +116,7 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Pause.performed += onPause;
     }
 
+
     //open pause menu
     public void onPause(InputAction.CallbackContext context)
     {
@@ -122,11 +124,39 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
+    public void findEnemy()
+    {
+        enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+       
+    }
     // Update is called once per frame
     void Update()
     {
+        //updated animations
         animationCalls();
+
+        //update current scene reference
+        currentScene = SceneManager.GetActiveScene();
+        
+      
+        if(currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
+        {
+            if(GameObject.FindGameObjectWithTag("Dead") == null)
+            {
+                //assign current enemy
+                findEnemy();
+            }
+            
+
+            //set battle state to true
+            combatState = true;
+
+        }
+        else
+        {
+            combatState = false;
+        }
+
         //Check if the player is dead or alive
         if (deathState == false)
         {
@@ -138,13 +168,13 @@ public class PlayerController : MonoBehaviour
             Debug.DrawRay(transform.position, forward, Color.green);
 
             //if player in attack State start attack combo timer
-            if(attackState == true)
+            if (attackState == true)
             {
                 timer();
             }
 
         }
-        else if(deathState == true)
+        else if (deathState == true)
         {
             ManagedeathState();
             deathState = false;
@@ -156,6 +186,17 @@ public class PlayerController : MonoBehaviour
         //animation for walking
         if (playerAnimator != null)
         {
+            //if attacking, plays animation once then sets bool to false after the if checks
+            if (isAttacking == true)
+            {
+                playerAnimator.SetBool("isAttacking", true);
+                //Debug.Log("Hello");
+            }
+            else
+            {
+                playerAnimator.SetBool("isAttacking", false);
+
+            }
             //set playback speed for animation
             playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
 
@@ -180,17 +221,7 @@ public class PlayerController : MonoBehaviour
                 playerAnimator.SetBool("isWalking", false);
             }
 
-            //if attacking, plays animation once then sets bool to false after the if checks
-            if (isAttacking == true)
-            {
-                playerAnimator.SetBool("isAttacking", true);
-                Debug.Log("Hello");
-            }
-            else
-            {
-                playerAnimator.SetBool("isAttacking", false);
 
-            }
 
             //if dashing, plays animation once then sets bool to false after the if checks
             //if (isDashing == true)
@@ -243,12 +274,12 @@ public class PlayerController : MonoBehaviour
 
     //Jump flags handler
     public void handleJump()
-    {       
+    {
         isJumping = false;
         jumpCounter = 0;
     }
     public void OnJump(InputAction.CallbackContext context)
-    {   
+    {
         isJumping = context.ReadValueAsButton();
         if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
@@ -290,7 +321,8 @@ public class PlayerController : MonoBehaviour
     public void OnQuickDrop(InputAction.CallbackContext context)
     {
         isQuickDropping = context.ReadValueAsButton();
-        if(isQuickDropping == true){
+        if (isQuickDropping == true)
+        {
             quickDrop();
         }
         handleQuickDrop();
@@ -352,15 +384,16 @@ public class PlayerController : MonoBehaviour
     public void OnRoll(InputAction.CallbackContext context)
     {
         Rolling = context.ReadValueAsButton();
-        if(Rolling == true)
+        if (Rolling == true)
         {
             rollCounter++;
             //animation here
-            if(rollCounter == 1)
+            if (rollCounter == 1)
             {
                 moveCharacter();
             }
-            else if (rollCounter == 2){
+            else if (rollCounter == 2)
+            {
                 handleRoll();
             }
         }
@@ -374,29 +407,34 @@ public class PlayerController : MonoBehaviour
     //Check which combo state we are in and returns the animation, enemy damage
     public void attackCombo(int counter)
     {
+        //Debug.Log("Hello 12314");
+
         if (counter == 1)
         {
+            Debug.Log("attack 1");
             //animation here
-/*            if (enemyCollision.enemyCollision == true)
-            {
-                //enemy.HP_TakeDamage(playerDamage);
-            }*/
-        }
-        else if(counter == 2)
-        {
-/*            //animation here
             if (enemyCollision.enemyCollision == true)
             {
-                //enemy.HP_TakeDamage(playerDamage*5);
-            }*/
+                enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
+            }
         }
-        else if(counter == 3)
+        else if (counter == 2)
         {
-/*            //animation here
+            Debug.Log("attack 2");
+            //animation here
             if (enemyCollision.enemyCollision == true)
             {
-                //enemy.HP_TakeDamage(playerDamage*10);
-            }*/
+                enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
+            }
+        }
+        else if (counter == 3)
+        {
+            Debug.Log("attack 3");
+            //animation here
+            if (enemyCollision.enemyCollision == true)
+            {
+                enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3);
+            }
         }
     }
     //Handles the combo attack flags
@@ -405,15 +443,15 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         attackState = false;
         attackCounter = 0;
-        comboMaxTime = 1.0f;
+        comboMaxTime = 5.0f;
     }
     //Starts the timer and checks whether it is done or not
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
     //when we get all combos remeber to reset timer
     public void timer()
     {
-       comboMaxTime -= Time.deltaTime;
-       if (comboMaxTime < 0)
+        comboMaxTime -= Time.deltaTime;
+        if (comboMaxTime < 0)
         {
             comboMaxTime = 0;
             handleAttack();
@@ -431,7 +469,7 @@ public class PlayerController : MonoBehaviour
             if (comboMaxTime > 0 && attackState == true)
             {
                 attackCombo(attackCounter);
-                if(attackCounter == 4)
+                if (attackCounter == 4)
                 {
                     handleAttack();
                 }
@@ -440,28 +478,46 @@ public class PlayerController : MonoBehaviour
 
     }
     //-----------------------------------------------Take Damage-----------------------------------------------//
-    public void TakeDamage()
+    public void TakeDamage() //please change name this case sensitive stuff is bad for my health
     {
         takeDamage();
     }
 
     public void takeDamage()
     {
-        if(collision == true)
+        if (collision == true)
         {
             playerCurrenthealth--;
             invulnerable = true;
             StartCoroutine(Immunity());
-            if(playerCurrenthealth < 0)
+            if (playerCurrenthealth < 0)
             {
                 playerCurrenthealth = 0;
             }
         }
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Damage Source")
+        {
+            Debug.Log("touched the butt");
+            collision = true;
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Damage Source")
+        {
+            Debug.Log("bye bye butt");
+            collision = false;
+        }
+    }
+
     IEnumerator Immunity()
     {
-        if(invulnerable == true)
+        if (invulnerable == true)
         {
             collision = false;
             yield return new WaitForSeconds(damageTakenDelay);
@@ -484,7 +540,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (playerCurrenthealth < playerHealth)
         {
-            if ((combatState == false || collision == false) && (deathState == false))
+            if ((combatState == false) && (deathState == false))
             {
 
                 StartCoroutine(healthRegen());
@@ -494,17 +550,17 @@ public class PlayerController : MonoBehaviour
     //Make sure to add a check if player in combat or not
     IEnumerator healthRegen()
     {
-        if(playerCurrenthealth == 1)
+        if (playerCurrenthealth == 1)
         {
             yield return new WaitForSeconds(healthRegenDelay);
             playerCurrenthealth = 2;
         }
-        else if(playerCurrenthealth == 2)
+        else if (playerCurrenthealth == 2)
         {
             yield return new WaitForSeconds(healthRegenDelay);
             playerCurrenthealth = 3;
         }
-        else if(playerCurrenthealth == 3)
+        else if (playerCurrenthealth == 3)
         {
             playerCurrenthealth = playerHealth;
         }
@@ -526,14 +582,13 @@ public class PlayerController : MonoBehaviour
     }
     public void fadeOut()
     {
-        
         //reload the currently active scene
         currentScene = SceneManager.GetActiveScene();
         SceneManager.UnloadSceneAsync(currentScene.name);
         SceneManager.LoadScene(currentScene.name, LoadSceneMode.Additive);
         playerCurrenthealth = playerHealth;
         fadeOutPanel.SetActive(false);
-        checkPoint.MoveToCheckpoint();
+        //checkPoint.MoveToCheckpoint();
         gameObject.SetActive(true);
     }
 

@@ -26,7 +26,7 @@ public class enemyTemp : MonoBehaviour
 
             //kill the enemy
             this.gameObject.tag = "Dead";
-            this.GetComponent<BoxCollider>().enabled = false;
+            //this.GetComponent<BoxCollider>().enabled = false;
 
            // mainGameScript.SwitchToPlatformCam();
 

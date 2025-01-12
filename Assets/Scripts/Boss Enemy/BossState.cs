@@ -84,6 +84,7 @@ public class SleepingState : BossState
         if (bossEnemyComponent.Player_ReturnPlayerTriggeredBossWakeup() == true)   // check if the player has triggered the Boss Wakeup Trigger
         {
             bossEnemyComponent.TransitionToWakingUpState();                 // if so, transition to waking up state
+            //animator.SetBool("woken", true);
         }
 
         // Animation Logic
@@ -130,6 +131,7 @@ public class WakingUpState : BossState
         Debug.Log("BossEnemy: Entering WakingUpState");
 
         // Animation Logic
+        animator.SetBool("woken", true);
 
     }
 
@@ -192,6 +194,7 @@ public class SelfCheckState : BossState
         Debug.Log("BossEnemy: Entering SelfCheckState");
 
         // Animation Logic
+        animator.SetBool("toIdle", true);
 
     }
 
@@ -268,6 +271,8 @@ public class AwakeState : BossState
         // INSERT: attack selection logic
 
         // Animation Logic
+        animator.SetBool("toIdle", true);
+
 
     }
 
@@ -481,9 +486,11 @@ public class LowEnergyState : BossState
         Debug.Log("BossEnemy: Entering LowEnergyState");
         Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
-        bossEnemyComponent.HP_TurnInvulnerabilityOff();
+        //bossEnemyComponent.HP_TurnInvulnerabilityOff();
 
         // Animation Logic
+        animator.SetBool("downed", true);
+        animator.SetBool("inAttack", false);
 
     }
 
@@ -538,10 +545,10 @@ public class LowEnergyState : BossState
     public override void Exit()
     {
         // Programming Logic
-        bossEnemyComponent.HP_TurnInvulnerabilityOn();
+        //bossEnemyComponent.HP_TurnInvulnerabilityOn();
 
         // Animation Logic
-
+        animator.SetBool("downed", false);
     }
 }
 
@@ -557,6 +564,7 @@ public class DeathState : BossState
         Debug.Log("BossEnemy: Entering DeathState");
 
         // Animation Logic
+        animator.SetBool("die", true);
 
     }
 
@@ -649,9 +657,10 @@ public class Attack_TestingState : BossState
         // Programming Logic
         Debug.Log("BossEnemy: Entering Attack_TestingState");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Animation Logic
+        animator.SetBool("inAttack", true);
 
     }
 
@@ -704,6 +713,7 @@ public class Attack_TestingState : BossState
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
 
     }
 }
@@ -757,9 +767,9 @@ public class Attack_SeekingProjectile01State : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile01State");
+        //Debug.Log("BossEnemy: Entering Attack_SeekingProjectile01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Timer
         Attack_StartTimeStamp = Time.time;
@@ -776,6 +786,7 @@ public class Attack_SeekingProjectile01State : BossState
         Attack_ProjectileOriginObject.transform.SetParent(Attack_GameObjectParent.transform);
 
         // Animation Logic
+        animator.SetBool("inAttack", true);
 
     }
 
@@ -858,6 +869,7 @@ public class Attack_SeekingProjectile01State : BossState
         GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
 
     }
 }
@@ -908,9 +920,9 @@ public class Attack_SeekingProjectile02State : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile02State");
+        //Debug.Log("BossEnemy: Entering Attack_SeekingProjectile02State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Timer
         Attack_StartTimeStamp = Time.time;
@@ -927,6 +939,7 @@ public class Attack_SeekingProjectile02State : BossState
         Attack_ProjectileOriginObject.transform.SetParent(Attack_GameObjectParent.transform);
 
         // Animation Logic
+        animator.SetBool("inAttack", true);
 
     }
 
@@ -1009,6 +1022,7 @@ public class Attack_SeekingProjectile02State : BossState
         GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
 
     }
 }
@@ -1060,9 +1074,9 @@ public class Attack_SeekingProjectile03State : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile03State");
+        //Debug.Log("BossEnemy: Entering Attack_SeekingProjectile03State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Timer
         Attack_StartTimeStamp = Time.time;
@@ -1079,6 +1093,7 @@ public class Attack_SeekingProjectile03State : BossState
         Attack_ProjectileOriginObject.transform.SetParent(Attack_GameObjectParent.transform);
 
         // Animation Logic
+        animator.SetBool("inAttack", true);
 
     }
 
@@ -1162,6 +1177,7 @@ public class Attack_SeekingProjectile03State : BossState
         GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
 
     }
 }
@@ -1214,9 +1230,9 @@ public class Attack_Laser01State : BossState
     {
         // Programming Logic
         // Energy Update and Debugging
-        Debug.Log("BossEnemy: Entering Attack_Laser01State");
+        //Debug.Log("BossEnemy: Entering Attack_Laser01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Timer
         Attack_StartTimeStamp = Time.time;
@@ -1258,6 +1274,7 @@ public class Attack_Laser01State : BossState
         Attack_LaserContactObject.transform.SetParent(Attack_GameObjectParent.transform);
 
         // Animation Logic
+        animator.SetBool("inAttack", true);
 
     }
 
@@ -1330,6 +1347,7 @@ public class Attack_Laser01State : BossState
         GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
 
     }
 }
@@ -1372,11 +1390,12 @@ public class Attack_ArenaHazard01State : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering Attack_ArenaHazard01State");
+        //Debug.Log("BossEnemy: Entering Attack_ArenaHazard01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Animation Logic
+        animator.SetBool("inAttack", true);
 
     }
 
@@ -1429,6 +1448,7 @@ public class Attack_ArenaHazard01State : BossState
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
 
     }
 }
@@ -1479,9 +1499,9 @@ public class Attack_Melee01State : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering Attack_Melee01State");
+        //Debug.Log("BossEnemy: Entering Attack_Melee01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Attack Setup Logic
         Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
@@ -1505,6 +1525,7 @@ public class Attack_Melee01State : BossState
         Attack_StartTimeStamp = Time.time;
 
         // Animation Logic
+        animator.SetBool("inAttack", true);
 
     }
 
@@ -1572,6 +1593,7 @@ public class Attack_Melee01State : BossState
         GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
 
     }
 }
