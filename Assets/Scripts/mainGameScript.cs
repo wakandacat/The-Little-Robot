@@ -78,6 +78,7 @@ public class mainGameScript : MonoBehaviour
         enemy = GameObject.Find("enemy" + currLevelCount);
 
         bossCam.LookAt = enemy.transform;
+        //bossCam.Follow = enemy.transform;
         bossCam.Priority = platformCam.Priority + 1;
     }
 
