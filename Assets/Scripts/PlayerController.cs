@@ -190,7 +190,6 @@ public class PlayerController : MonoBehaviour
             if (isAttacking == true)
             {
                 playerAnimator.SetBool("isAttacking", true);
-                //Debug.Log("Hello");
             }
             else
             {
@@ -270,7 +269,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
-        //Debug.Log(jumpCounter);
     }
 
     //Jump flags handler
@@ -408,29 +406,27 @@ public class PlayerController : MonoBehaviour
     //Check which combo state we are in and returns the animation, enemy damage
     public void attackCombo(int counter)
     {
-        //Debug.Log("Hello 12314");
-
-        if (counter == 1)
+        if (counter == 0)
         {
-            Debug.Log("attack 1");
+
             //animation here
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
             }
         }
-        else if (counter == 2)
+        else if (counter == 1)
         {
-            Debug.Log("attack 2");
+
             //animation here
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
             }
         }
-        else if (counter == 3)
+        else if (counter == 2)
         {
-            Debug.Log("attack 3");
+
             //animation here
             if (enemyCollision.enemyCollision == true)
             {
@@ -467,14 +463,13 @@ public class PlayerController : MonoBehaviour
         {
             attackState = true;
             attackCounter++;
-            if (comboMaxTime > 0 && attackState == true)
+
+            attackCombo(attackCounter);
+            if (attackCounter == 3)
             {
-                attackCombo(attackCounter);
-                if (attackCounter == 4)
-                {
-                    handleAttack();
-                }
+                handleAttack();
             }
+            
         }
 
     }
@@ -502,7 +497,6 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.tag == "Damage Source")
         {
-            Debug.Log("touched the butt");
             collision = true;
         }
     }
@@ -511,7 +505,6 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Damage Source")
         {
-            Debug.Log("bye bye butt");
             collision = false;
         }
     }
@@ -577,13 +570,11 @@ public class PlayerController : MonoBehaviour
     //Needs to change to use canvas opacity
     public void fadeIn()
     {
-        Debug.Log("fade in canvas");
         fadeOutPanel.SetActive(true);
         gameObject.SetActive(false);
     }
     public void fadeOut()
     {
-        Debug.Log("fade out canvas");
        
         playerCurrenthealth = playerHealth;
         fadeOutPanel.SetActive(false);
