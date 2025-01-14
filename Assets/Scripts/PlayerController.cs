@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour
         if (playerAnimator != null)
         {
             //if attacking, plays animation once then sets bool to false after the if checks
-            if (isAttacking == true)
+/*            if (isAttacking == true)
             {
                 playerAnimator.SetBool("isAttacking", true);
             }
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
             {
                 playerAnimator.SetBool("isAttacking", false);
 
-            }
+            }*/
             //set playback speed for animation
             playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
 
