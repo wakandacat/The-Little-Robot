@@ -24,7 +24,6 @@ public class EnemyCollision : MonoBehaviour
         if (collision.gameObject.tag == "Boss Enemy")
         {
             enemyCollision = true;
-            Debug.Log("in enemyCollision inside if");
         }
     }
     public void OnCollisionExit(Collision collision)

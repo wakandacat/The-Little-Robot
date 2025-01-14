@@ -453,6 +453,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyCollision: 0
+--- !u!65 &259396669
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259396649}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.581222, y: 1.4925115, z: 1.6500136}
+  m_Center: {x: 0.025921583, y: 0.6739634, z: 0.002544105}
 --- !u!1 &270954676
 GameObject:
   m_ObjectHideFlags: 0
@@ -3936,6 +3957,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 833388355080012287, guid: 5ed84d66467e6384994c393c17bbdbd1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1225444292453859057, guid: 5ed84d66467e6384994c393c17bbdbd1,
         type: 3}
       propertyPath: pauseMenu
@@ -4012,7 +4038,11 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5234305018232121671, guid: 5ed84d66467e6384994c393c17bbdbd1,
         type: 3}
-      insertIndex: 5
+      insertIndex: 1
+      addedObject: {fileID: 259396669}
+    - targetCorrespondingSourceObject: {fileID: 5234305018232121671, guid: 5ed84d66467e6384994c393c17bbdbd1,
+        type: 3}
+      insertIndex: 6
       addedObject: {fileID: 259396668}
     - targetCorrespondingSourceObject: {fileID: 5234305018232121671, guid: 5ed84d66467e6384994c393c17bbdbd1,
         type: 3}
@@ -4355,7 +4385,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887847756}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0004090848, y: 0.99734324, z: -0.07262773, w: 0.0056176605}
+  m_LocalRotation: {x: 0.0004090873, y: 0.99734324, z: -0.07262773, w: 0.005617695}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

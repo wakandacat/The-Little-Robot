@@ -407,41 +407,40 @@ public class PlayerController : MonoBehaviour
     //Check which combo state we are in and returns the animation, enemy damage
     public void attackCombo(int counter)
     {
-        if (counter == 0)
+        if (counter == 1)
         {
-
             //animation here
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
             }
+            isAttacking = false;        
         }
-        else if (counter == 1)
+        else if (counter == 2)
         {
-
             //animation here
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
             }
+            isAttacking = false;
         }
-        else if (counter == 2)
+        else if (counter == 3)
         {
-
             //animation here
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3);
             }
+            isAttacking = false;
         }
     }
     //Handles the combo attack flags
     public void handleAttack()
     {
-        isAttacking = false;
-        attackState = false;
         attackCounter = 0;
         comboMaxTime = 5.0f;
+        attackState = false;
     }
     //Starts the timer and checks whether it is done or not
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
@@ -449,10 +448,11 @@ public class PlayerController : MonoBehaviour
     public void timer()
     {
         comboMaxTime -= Time.deltaTime;
+        Debug.Log("combo max time" + comboMaxTime);
         if (comboMaxTime < 0)
         {
-            comboMaxTime = 0;
             handleAttack();
+            comboMaxTime = 0;
         }
 
     }
@@ -466,11 +466,12 @@ public class PlayerController : MonoBehaviour
             attackCounter++;
 
             attackCombo(attackCounter);
-            if (attackCounter == 3)
+
+            if (attackCounter == 4)
             {
                 handleAttack();
             }
-            
+
         }
 
     }
