@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     //player variables
     public int playerHealth = 3;
-    private float playerDamage = 10.0f;
+    private float playerDamage = 1.0f;
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
     public bool combatState = false;
@@ -135,8 +135,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Y velocity" + rb.velocity.y);
-
         //updated animations
         animationCalls();
 
@@ -351,7 +349,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
-        yield return new WaitForSeconds(dashingCooldown);
+        yield return new WaitForSeconds(10);
         canDash = true;
     }
     //coroutinr call on button press
@@ -359,7 +357,7 @@ public class PlayerController : MonoBehaviour
     {
         //playerAnimator.SetBool("isDashing", true);
         Dashing = context.ReadValueAsButton();
-        if (Dashing == true)
+        if (Dashing == true && canDash == true)
         {
             StartCoroutine(Dash());
             //if (isDashing == true)
@@ -374,7 +372,6 @@ public class PlayerController : MonoBehaviour
             //}
 
         }
-
     }
     //-----------------------------------------------Roll-----------------------------------------------//
     //Roll flags handler
@@ -395,11 +392,17 @@ public class PlayerController : MonoBehaviour
             //animation here
             if (rollCounter == 1)
             {
-                moveCharacter(rollSpeed*Time.deltaTime);
+                rollSpeed += 10 * Time.deltaTime;
+                moveCharacter(rollSpeed);
+                player.GetComponent<SphereCollider>().enabled = true;
+                player.GetComponent<BoxCollider>().enabled = false;
+
             }
             else if (rollCounter == 2)
             {
                 handleRoll();
+                player.GetComponent<SphereCollider>().enabled = false;
+                player.GetComponent<BoxCollider>().enabled = true;
             }
         }
     }
@@ -435,7 +438,7 @@ public class PlayerController : MonoBehaviour
             //animation here
             if (enemyCollision.enemyCollision == true)
             {
-                enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3);
+                enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
             }
             isAttacking = false;
         }
