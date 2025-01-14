@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
     public bool Rolling = false;
     public bool rollState = false;
     public int rollCounter = 0;
+    private float rollSpeed = 10.0f;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -161,7 +162,7 @@ public class PlayerController : MonoBehaviour
         if (deathState == false)
         {
             manageHealth();
-            moveCharacter();
+            moveCharacter(speed);
 
             //Raycast for debugging purposes
             Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
@@ -234,7 +235,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //-----------------------------------------------Move-----------------------------------------------//
-    public void moveCharacter()
+    public void moveCharacter(float playerSpeed)
     {
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q
         //https://www.youtube.com/watch?app=desktop&v=KjaRQr74jV0&t=210s
@@ -245,7 +246,7 @@ public class PlayerController : MonoBehaviour
         Vector3 cameraRelativeMovement = rotationCam.convertToCamSpace(movementInput);
 
         //Move player using the rigid body
-        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * speed);
+        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed);
 
         //player rotation
         Quaternion currentRotation = transform.rotation;
@@ -389,7 +390,7 @@ public class PlayerController : MonoBehaviour
             //animation here
             if (rollCounter == 1)
             {
-                moveCharacter();
+                moveCharacter(rollSpeed*Time.deltaTime);
             }
             else if (rollCounter == 2)
             {
