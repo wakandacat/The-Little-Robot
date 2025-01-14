@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private bool isQuickDropping = false;
     private int jumpCounter = 0;
-    float rotationSpeed = 1.0f;
+    private float rotationSpeed = 1.0f;
 
     //Dash vars
     private bool canDash = true;
@@ -46,23 +46,24 @@ public class PlayerController : MonoBehaviour
     private float dashingTime = 0.2f;
     private float dashingCooldown = 5f;
     private bool Dashing = false;
-    public float gravityScale = 1.0f;
-    public static float globalGravity = -9.81f;
-    public Transform orientation;
-    public float dashUpwardForce = 10f;
+    private float gravityScale = 1.0f;
+    private static float globalGravity = -9.81f;
+    private Transform orientation;
+    private float dashUpwardForce = 10f;
 
     //Attack vars
     private bool isAttacking = false;
-    public bool attackState = false;
-    public int attackCounter = 0;
-    public float comboTimer = 0f;
+    private bool attackState = false;
+    private int attackCounter = 0;
+    private float comboTimer = 0f;
     private float comboMaxTime = 5.0f;
 
     //Roll vars
     public bool Rolling = false;
-    public bool rollState = false;
     public int rollCounter = 0;
     private float rollSpeed = 10.0f;
+    public float rollTime = 10.0f;
+    public float maxRollSpeed = 50.0f;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -174,6 +175,11 @@ public class PlayerController : MonoBehaviour
             if (attackState == true)
             {
                 timer();
+            }
+            if(Rolling == true)
+            {
+                rollTimer();
+                Debug.Log("tHIS IS THE ROLL SPEDD" + rollSpeed);
             }
 
         }
@@ -378,25 +384,33 @@ public class PlayerController : MonoBehaviour
     public void handleRoll()
     {
         Rolling = false;
-        rollState = false;
         rollCounter = 0;
+        rollTime = 5.0f;
     }
     //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
     //Execute roll on button press
+    public void rollTimer()
+    {
+        rollTime -=Time.deltaTime;
+        rollSpeed += Time.deltaTime;
+        if (rollTime < 0 || rollSpeed > maxRollSpeed)
+        {
+            rollTime = 0;
+            rollSpeed = maxRollSpeed;
+        }
+    }
     public void OnRoll(InputAction.CallbackContext context)
     {
         Rolling = context.ReadValueAsButton();
-        if (Rolling == true)
-        {
+        if(Rolling)
+        {        
             rollCounter++;
             //animation here
             if (rollCounter == 1)
             {
-                rollSpeed += 10 * Time.deltaTime;
                 moveCharacter(rollSpeed);
                 player.GetComponent<SphereCollider>().enabled = true;
                 player.GetComponent<BoxCollider>().enabled = false;
-
             }
             else if (rollCounter == 2)
             {
