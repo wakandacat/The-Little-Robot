@@ -73,8 +73,10 @@ public class PlayerController : MonoBehaviour
     //Death vars
     UnityEngine.SceneManagement.Scene currentScene;
     public bool deathState = false;
-    public int fadeDelay = 5;
-    public GameObject fadeOutPanel;
+
+    //canvas fade bool
+    public bool fadingIn = false;
+    public bool fadingOut = false;
 
     //Player taken damage vars
     public bool collision = false;
@@ -571,22 +573,19 @@ public class PlayerController : MonoBehaviour
     public void ManagedeathState()
     {
         fadeIn();
-        Invoke("fadeOut", fadeDelay);
+       // Invoke("fadeOut", fadeDelay);
     }
 
     //Needs to change to use canvas opacity
     public void fadeIn()
     {
-        Debug.Log("fade in canvas");
-        fadeOutPanel.SetActive(true);
+        fadingIn = true;
         gameObject.SetActive(false);
     }
     public void fadeOut()
     {
-        Debug.Log("fade out canvas");
-       
+        fadingOut = true;
         playerCurrenthealth = playerHealth;
-        fadeOutPanel.SetActive(false);
         checkPoint.MoveToCheckpoint();
         gameObject.SetActive(true);
     }
