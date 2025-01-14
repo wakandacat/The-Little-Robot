@@ -448,7 +448,6 @@ public class PlayerController : MonoBehaviour
     public void timer()
     {
         comboMaxTime -= Time.deltaTime;
-        Debug.Log("combo max time" + comboMaxTime);
         if (comboMaxTime < 0)
         {
             handleAttack();
