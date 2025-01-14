@@ -15,7 +15,7 @@ public class BossEnemy : MonoBehaviour
     [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have.")]
     public float Energy_Maximum = 4.0f;
     [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'LowEnergyState'.")]
-    public float Energy_RegainedPerSecond = 0.5f;
+    public float Energy_RegainedPerSecond = 0.25f;
     [Tooltip("Amount of Energy the Boss Enemy when struck while in 'LowEnergyState'.")]
     public float Energy_RegainedOnStrike = 1.0f;
 
@@ -37,7 +37,7 @@ public class BossEnemy : MonoBehaviour
     // Boss Enemy Attributes ------------------------------------------------------------------------------------------------------
     private float HP_Current;
     private float Energy_Current;
-    private bool HP_BossInvulnerable = false; //changed from default true
+    private bool HP_BossInvulnerable = false; //changed from default true (isn't currently utilized, the functionality for if enemy can take damage is hardcoded into HP_TakeDamage()
 
     // Object References ----------------------------------------------------------------------------------------------------------
     private Animator bossAnimator;
@@ -92,7 +92,7 @@ public class BossEnemy : MonoBehaviour
     {
         // Execute Update instructions for StateMachine
         stateMachine.Update();
-       // Debug.Log(HP_Current);
+        //Debug.Log(HP_Current);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -287,7 +287,12 @@ public class BossEnemy : MonoBehaviour
         //{
         //    damageAmount *= -1.0f;
         //}
-        HP_Current -= damageAmount;
+        if (stateMachine.returnCurrentState() is LowEnergyState )
+        {
+            HP_Current -= damageAmount;
+            Energy_Current += Energy_RegainedOnStrike;
+            Debug.Log("BossEnemy: " + damageAmount + " Damage Taken | HP = " + HP_Current);
+        }
     }
 
     public void HP_TurnInvulnerabilityOn()
@@ -320,7 +325,8 @@ public class BossEnemy : MonoBehaviour
 
     public void regainCurrentEnergyPerFrame()
     {
-        Energy_Current += Energy_RegainedPerSecond * Time.fixedDeltaTime;   // regain X% of Energy_RegainedPerSecond by multiplying the amount by the duration of time between frames (at 50fps, 1/50th)
+        Energy_Current += Energy_RegainedPerSecond * Time.deltaTime;   // regain X% of Energy_RegainedPerSecond by multiplying the amount by the duration of time between frames (at 50fps, 1/50th)
+        //Debug.Log("BossEnemy: Current Energy = " + Energy_Current);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

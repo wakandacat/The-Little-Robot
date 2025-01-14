@@ -37,7 +37,7 @@ public class StartEndBattleScript : MonoBehaviour
     {
         if (collision.gameObject.name == "playerExport")
         {
-            Debug.Log("triggeredddd");
+           // Debug.Log("triggeredddd");
             //hide the bridges
             startBridge.GetComponent<bridgeScript>().moveBridgeLeft();
             endBridge.GetComponent<bridgeScript>().moveBridgeRight();

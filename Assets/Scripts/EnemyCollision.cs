@@ -24,10 +24,15 @@ public class EnemyCollision : MonoBehaviour
         if (collision.gameObject.tag == "Boss Enemy")
         {
             enemyCollision = true;
+            Debug.Log("EnemyCollision: enemyCollision = true");
         }
     }
     public void OnCollisionExit(Collision collision)
     {
-        enemyCollision = false;
+        if (collision.gameObject.tag == "Boss Enemy")
+        {
+            enemyCollision = false;
+            Debug.Log("EnemyCollision: enemyCollision = false");
+        }
     }
 }
