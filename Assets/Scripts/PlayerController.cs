@@ -454,7 +454,6 @@ public class PlayerController : MonoBehaviour
             handleAttack();
             comboMaxTime = 0;
         }
-
     }
     //Call the relevant methods on button press or presses
     public void OnAttack(InputAction.CallbackContext context)
@@ -471,9 +470,7 @@ public class PlayerController : MonoBehaviour
             {
                 handleAttack();
             }
-
         }
-
     }
     //-----------------------------------------------Take Damage-----------------------------------------------//
     public void TakeDamage() //please change name this case sensitive stuff is bad for my health
