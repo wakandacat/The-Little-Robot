@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
-    private Transform orientation;
+    public Transform orientation;
     private float dashUpwardForce = 10f;
 
     //Attack vars
@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
             if(Rolling == true)
             {
                 rollTimer();
-                Debug.Log("tHIS IS THE ROLL SPEDD" + rollSpeed);
+                //Debug.Log("tHIS IS THE ROLL SPEDD" + rollSpeed);
             }
 
         }
@@ -205,6 +205,7 @@ public class PlayerController : MonoBehaviour
                 playerAnimator.SetBool("isAttacking", false);
 
             }*/
+
             //set playback speed for animation
             playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
 
@@ -224,9 +225,10 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                //end walk cycle and set directions back to false
+                //end walking or rolling animations 
                 playerAnimator.SetBool("isRolling", false);
                 playerAnimator.SetBool("isWalking", false);
+                playerAnimator.SetFloat("walkSpeed", 1.25f);
             }
 
 
@@ -358,6 +360,19 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(10);
         canDash = true;
     }
+    public IEnumerator turnOffAnim()
+    {
+        //always wait a little bit then check if isAttacking was true
+        yield return new WaitForSeconds(0.8f);
+
+        //if it's true then turn it off
+        if (playerAnimator.GetBool("isAttacking") == true)
+        {
+            playerAnimator.SetBool("isAttacking", false);
+        }
+        
+    }
+
     //coroutinr call on button press
     public void OnDash(InputAction.CallbackContext context)
     {
@@ -366,6 +381,7 @@ public class PlayerController : MonoBehaviour
         if (Dashing == true && canDash == true)
         {
             StartCoroutine(Dash());
+            //dash animation variables removed from animator, re-add to animator when re-implementing
             //if (isDashing == true)
             //{
             //    playerAnimator.SetBool("isDashing", true);
@@ -431,7 +447,9 @@ public class PlayerController : MonoBehaviour
     {
         if (counter == 1)
         {
-            //animation here
+            //animation call reagrdless of if you collide 
+            //playerAnimator.SetBool("isAttacking", true);
+
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
@@ -440,7 +458,9 @@ public class PlayerController : MonoBehaviour
         }
         else if (counter == 2)
         {
-            //animation here
+            //animation call reagrdless of if you collide 
+            //playerAnimator.SetBool("isAttacking", true);
+
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
@@ -449,13 +469,21 @@ public class PlayerController : MonoBehaviour
         }
         else if (counter == 3)
         {
-            //animation here
+            //animation call reagrdless of if you collide 
+            //playerAnimator.SetBool("isAttacking", true);
+
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
             }
             isAttacking = false;
         }
+
+        //set attacking animation back to false
+        //yield return new WaitForSeconds(0.1f);
+        //playerAnimator.SetBool("isAttacking", false);
+        //StartCoroutine(turnOffAnim());
+
     }
     //Handles the combo attack flags
     public void handleAttack()
@@ -482,6 +510,10 @@ public class PlayerController : MonoBehaviour
         isAttacking = context.ReadValueAsButton();
         if (isAttacking)
         {
+            //set animation to true, should run once per button call
+            playerAnimator.SetBool("isAttacking", true);
+            //Debug.Log("animator should be true");
+
             attackState = true;
             attackCounter++;
 
@@ -492,6 +524,11 @@ public class PlayerController : MonoBehaviour
                 handleAttack();
             }
         }
+
+        //set animation flag to false for the next attacking/for when not attacking
+        //playerAnimator.SetBool("isAttacking", false);
+        StartCoroutine(turnOffAnim());
+        //Debug.Log("animator should be false");
     }
     //-----------------------------------------------Take Damage-----------------------------------------------//
     public void TakeDamage() //please change name this case sensitive stuff is bad for my health
