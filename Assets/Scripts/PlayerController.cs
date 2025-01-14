@@ -187,16 +187,6 @@ public class PlayerController : MonoBehaviour
         //animation for walking
         if (playerAnimator != null)
         {
-            //if attacking, plays animation once then sets bool to false after the if checks
-            if (isAttacking == true)
-            {
-                playerAnimator.SetBool("isAttacking", true);
-            }
-            else
-            {
-                playerAnimator.SetBool("isAttacking", false);
-
-            }
             //set playback speed for animation
             playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
 
@@ -221,15 +211,6 @@ public class PlayerController : MonoBehaviour
                 playerAnimator.SetBool("isWalking", false);
             }
 
-
-
-            //if dashing, plays animation once then sets bool to false after the if checks
-            //if (isDashing == true)
-            //{
-            //    playerAnimator.SetBool("isDashing", true);
-            //}
-
-            //playerAnimator.SetBool("isDashing", false);
         }
 
     }
@@ -391,6 +372,7 @@ public class PlayerController : MonoBehaviour
             if (rollCounter == 1)
             {
                 moveCharacter(rollSpeed*Time.deltaTime);
+
             }
             else if (rollCounter == 2)
             {
