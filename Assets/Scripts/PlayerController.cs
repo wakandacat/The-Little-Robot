@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
     public bool combatState = false;
-    private float speed = 30f;
+    private float speed = 35f;
     public GameObject player;
     public Rigidbody rb;
     private Vector2 leftStick;
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     private float dashingPower = 24f;
     private float dashingpower = 24f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 1f;
+    private float dashingCooldown = 5f;
     private bool Dashing = false;
     public float gravityScale = 1.0f;
     public static float globalGravity = -9.81f;
@@ -133,6 +133,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Y velocity" + rb.velocity.y);
+
         //updated animations
         animationCalls();
 
@@ -268,7 +270,7 @@ public class PlayerController : MonoBehaviour
         //this does not work as intended will need to be fixed
         if (rb.velocity.y < 0)
         {
-            rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
     }
 
@@ -280,6 +282,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
+
         isJumping = context.ReadValueAsButton();
         if (ground.onGround == true && jumpCounter == 0 && isJumping)
         {
