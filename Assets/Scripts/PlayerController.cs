@@ -72,6 +72,10 @@ public class PlayerController : MonoBehaviour
     public bool isPaused = false;
     public GameObject pauseMenu;
 
+    //cutscene vars
+    public GameObject worldManager;
+    private mainGameScript mainScript;
+
     //Death vars
     UnityEngine.SceneManagement.Scene currentScene;
     public bool deathState = false;
@@ -133,61 +137,74 @@ public class PlayerController : MonoBehaviour
         enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
        
     }
+
+    void Awake()
+    {
+        mainScript = worldManager.GetComponent<mainGameScript>();
+    }
+
+
     // Update is called once per frame
     void Update()
     {
-        //updated animations
-        animationCalls();
 
-        //update current scene reference
-        currentScene = SceneManager.GetActiveScene();
+        if (mainScript.cutScenePlaying == false)
+        {
+            //updated animations
+            animationCalls();
+
+            //update current scene reference
+            currentScene = SceneManager.GetActiveScene();
+
+
+            if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
+            {
+                if (GameObject.FindGameObjectWithTag("Dead") == null)
+                {
+                    //assign current enemy
+                    findEnemy();
+                }
+
+
+                //set battle state to true
+                combatState = true;
+
+            }
+            else
+            {
+                combatState = false;
+            }
+
+            //Check if the player is dead or alive
+            if (deathState == false)
+            {
+                manageHealth();
+                moveCharacter(speed);
+
+                //Raycast for debugging purposes
+                Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+                Debug.DrawRay(transform.position, forward, Color.green);
+
+                //if player in attack State start attack combo timer
+                if (attackState == true)
+                {
+                    timer();
+                }
+                if (Rolling == true)
+                {
+                    rollTimer();
+                    //Debug.Log("tHIS IS THE ROLL SPEDD" + rollSpeed);
+                }
+
+            }
+            else if (deathState == true)
+            {
+                ManagedeathState();
+                deathState = false;
+            }
+        }
+
         
-      
-        if(currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
-        {
-            if(GameObject.FindGameObjectWithTag("Dead") == null)
-            {
-                //assign current enemy
-                findEnemy();
-            }
-            
-
-            //set battle state to true
-            combatState = true;
-
-        }
-        else
-        {
-            combatState = false;
-        }
-
-        //Check if the player is dead or alive
-        if (deathState == false)
-        {
-            manageHealth();
-            moveCharacter(speed);
-
-            //Raycast for debugging purposes
-            Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
-            Debug.DrawRay(transform.position, forward, Color.green);
-
-            //if player in attack State start attack combo timer
-            if (attackState == true)
-            {
-                timer();
-            }
-            if(Rolling == true)
-            {
-                rollTimer();
-                //Debug.Log("tHIS IS THE ROLL SPEDD" + rollSpeed);
-            }
-
-        }
-        else if (deathState == true)
-        {
-            ManagedeathState();
-            deathState = false;
-        }
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
     public void animationCalls()
@@ -290,22 +307,24 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-
-        isJumping = context.ReadValueAsButton();
-        if (ground.onGround == true && jumpCounter == 0 && isJumping)
+        if (mainScript.cutScenePlaying == false)
         {
-            Jump();
-            player.GetComponent<Rigidbody>().freezeRotation = true;
-            jumpCounter++;
-            ground.jumpState = true;
-        }
-        //Double Jump call
-        if (ground.onGround == false && jumpCounter == 1 && isJumping)
-        {
-            Jump();
-            player.GetComponent<Rigidbody>().freezeRotation = true;
-            jumpCounter = 0;
-            ground.jumpState = true;
+            isJumping = context.ReadValueAsButton();
+            if (ground.onGround == true && jumpCounter == 0 && isJumping)
+            {
+                Jump();
+                player.GetComponent<Rigidbody>().freezeRotation = true;
+                jumpCounter++;
+                ground.jumpState = true;
+            }
+            //Double Jump call
+            if (ground.onGround == false && jumpCounter == 1 && isJumping)
+            {
+                Jump();
+                player.GetComponent<Rigidbody>().freezeRotation = true;
+                jumpCounter = 0;
+                ground.jumpState = true;
+            }
         }
 
     }
@@ -331,12 +350,15 @@ public class PlayerController : MonoBehaviour
     //on button press call quick drop and handler
     public void OnQuickDrop(InputAction.CallbackContext context)
     {
-        isQuickDropping = context.ReadValueAsButton();
-        if (isQuickDropping == true)
+        if (mainScript.cutScenePlaying == false)
         {
-            quickDrop();
+            isQuickDropping = context.ReadValueAsButton();
+            if (isQuickDropping == true)
+            {
+                quickDrop();
+            }
+            handleQuickDrop();
         }
-        handleQuickDrop();
     }
 
     //-----------------------------------------------Dash-----------------------------------------------//
@@ -376,23 +398,26 @@ public class PlayerController : MonoBehaviour
     //coroutinr call on button press
     public void OnDash(InputAction.CallbackContext context)
     {
-        //playerAnimator.SetBool("isDashing", true);
-        Dashing = context.ReadValueAsButton();
-        if (Dashing == true && canDash == true)
+        if (mainScript.cutScenePlaying == false)
         {
-            StartCoroutine(Dash());
-            //dash animation variables removed from animator, re-add to animator when re-implementing
-            //if (isDashing == true)
-            //{
-            //    playerAnimator.SetBool("isDashing", true);
+            //playerAnimator.SetBool("isDashing", true);
+            Dashing = context.ReadValueAsButton();
+            if (Dashing == true && canDash == true)
+            {
+                StartCoroutine(Dash());
+                //dash animation variables removed from animator, re-add to animator when re-implementing
+                //if (isDashing == true)
+                //{
+                //    playerAnimator.SetBool("isDashing", true);
 
-            //}
-            //else
-            //{
-            //    playerAnimator.SetBool("isDashing", false);
+                //}
+                //else
+                //{
+                //    playerAnimator.SetBool("isDashing", false);
 
-            //}
+                //}
 
+            }
         }
     }
     //-----------------------------------------------Roll-----------------------------------------------//
@@ -417,29 +442,35 @@ public class PlayerController : MonoBehaviour
     }
     public void OnRoll(InputAction.CallbackContext context)
     {
-        Rolling = context.ReadValueAsButton();
-        if(Rolling)
-        {        
-            rollCounter++;
-            //animation here
-            if (rollCounter == 1)
+        if (mainScript.cutScenePlaying == false)
+        {
+            Rolling = context.ReadValueAsButton();
+            if (Rolling)
             {
-                moveCharacter(rollSpeed);
-                player.GetComponent<SphereCollider>().enabled = true;
-                player.GetComponent<BoxCollider>().enabled = false;
-            }
-            else if (rollCounter == 2)
-            {
-                handleRoll();
-                player.GetComponent<SphereCollider>().enabled = false;
-                player.GetComponent<BoxCollider>().enabled = true;
+                rollCounter++;
+                //animation here
+                if (rollCounter == 1)
+                {
+                    moveCharacter(rollSpeed);
+                    player.GetComponent<SphereCollider>().enabled = true;
+                    player.GetComponent<BoxCollider>().enabled = false;
+                }
+                else if (rollCounter == 2)
+                {
+                    handleRoll();
+                    player.GetComponent<SphereCollider>().enabled = false;
+                    player.GetComponent<BoxCollider>().enabled = true;
+                }
             }
         }
     }
     //-----------------------------------------------Deflect-----------------------------------------------//
     public void OnDeflect(InputAction.CallbackContext context)
     {
-        Deflecting = context.ReadValueAsButton();
+        if (mainScript.cutScenePlaying == false)
+        {
+            Deflecting = context.ReadValueAsButton();
+        }
     }
     //-----------------------------------------------Attack-----------------------------------------------//
     //Check which combo state we are in and returns the animation, enemy damage
@@ -507,28 +538,31 @@ public class PlayerController : MonoBehaviour
     //Call the relevant methods on button press or presses
     public void OnAttack(InputAction.CallbackContext context)
     {
-        isAttacking = context.ReadValueAsButton();
-        if (isAttacking)
+        if (mainScript.cutScenePlaying == false)
         {
-            //set animation to true, should run once per button call
-            playerAnimator.SetBool("isAttacking", true);
-            //Debug.Log("animator should be true");
-
-            attackState = true;
-            attackCounter++;
-
-            attackCombo(attackCounter);
-
-            if (attackCounter == 4)
+            isAttacking = context.ReadValueAsButton();
+            if (isAttacking)
             {
-                handleAttack();
-            }
-        }
+                //set animation to true, should run once per button call
+                playerAnimator.SetBool("isAttacking", true);
+                //Debug.Log("animator should be true");
 
-        //set animation flag to false for the next attacking/for when not attacking
-        //playerAnimator.SetBool("isAttacking", false);
-        StartCoroutine(turnOffAnim());
-        //Debug.Log("animator should be false");
+                attackState = true;
+                attackCounter++;
+
+                attackCombo(attackCounter);
+
+                if (attackCounter == 4)
+                {
+                    handleAttack();
+                }
+            }
+
+            //set animation flag to false for the next attacking/for when not attacking
+            //playerAnimator.SetBool("isAttacking", false);
+            StartCoroutine(turnOffAnim());
+            //Debug.Log("animator should be false");
+        }
     }
     //-----------------------------------------------Take Damage-----------------------------------------------//
     public void TakeDamage() //please change name this case sensitive stuff is bad for my health

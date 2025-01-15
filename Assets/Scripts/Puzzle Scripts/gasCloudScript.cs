@@ -6,7 +6,7 @@ public class gasCloudScript : MonoBehaviour
     //to use: inside gas cloud fungus prefab there is an empty gameobject with a box collider that can be resized using it's size attributes (don't touch the scale!)
 
     int tempHealth;
-    PlayerController player;
+    public PlayerController player;
 
     private void Start()
     {
