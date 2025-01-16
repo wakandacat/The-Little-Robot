@@ -172,7 +172,7 @@ public class mainGameScript : MonoBehaviour
                 }
                 else
                 {
-                    camPos += Mathf.Lerp(0, 1, 0.001f);
+                    camPos += Mathf.Lerp(0, 1, 0.0004f);
                     introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
                 }
             }
