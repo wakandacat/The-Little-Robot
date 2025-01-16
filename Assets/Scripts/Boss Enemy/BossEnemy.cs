@@ -11,13 +11,13 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Debug Values ---------------------------------------------------------------------------------------------------------------
     [Tooltip("Maximum HP that the Boss Enemy can have.")]
-    public float HP_Maximum = 30.0f;
+    public float HP_Maximum = 20.0f;
     [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have.")]
     public float Energy_Maximum = 4.0f;
     [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'LowEnergyState'.")]
-    public float Energy_RegainedPerSecond = 0.25f;
+    public float Energy_RegainedPerSecond = 0.15f;
     [Tooltip("Amount of Energy the Boss Enemy when struck while in 'LowEnergyState'.")]
-    public float Energy_RegainedOnStrike = 1.0f;
+    public float Energy_RegainedOnStrike = 0.7f;
 
     [Tooltip("Amount of time that passed between storing player position (in seconds).")]
     public float Player_PositionTrackingTimeInterval = 0.02f;
@@ -25,7 +25,7 @@ public class BossEnemy : MonoBehaviour
     public float Player_PositionTrackingMaxTimeTracked = 3.0f;
 
     [Tooltip("Amount of time that must pass when entering the 'AwakeState' before the BossEnemy can execute the selected attack.")]
-    public float AwakeState_Delay = 3.0f;
+    public float AwakeState_Delay = 1.25f;
 
     [Tooltip("The default projectile to be used for seeking projectile-based attacks.")]
     public GameObject Attack_BasicProjectile01;
@@ -287,7 +287,7 @@ public class BossEnemy : MonoBehaviour
         //{
         //    damageAmount *= -1.0f;
         //}
-        if (stateMachine.returnCurrentState() is LowEnergyState )
+        if (!HP_ReturnInvulnerabilityStatus())
         {
             HP_Current -= damageAmount;
             Energy_Current += Energy_RegainedOnStrike;
