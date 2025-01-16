@@ -9,6 +9,7 @@ public class StartEndBattleScript : MonoBehaviour
     public GameObject endBridge;
     public GameObject enemy;
     private mainGameScript mainGameScript;
+    public GameObject loadObj;
     private bool runOnce = false;
 
     void Awake()
@@ -19,11 +20,16 @@ public class StartEndBattleScript : MonoBehaviour
     void Update()
     {
         //check enemy's state here for death
-        if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0 && runOnce == false)
+        //if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0 && runOnce == false)
+        if (enemy.tag == "Dead" && runOnce == false) //TEMPPPP
         {
             Debug.Log("dead enemy");
             //open end bridge
             endBridge.GetComponent<bridgeScript>().moveBridgeLeft();
+
+            loadObj.SetActive(true);
+
+            mainGameScript.currLevelCount++;
 
             //switch cameras
             mainGameScript.SwitchToPlatformCam();
@@ -37,7 +43,6 @@ public class StartEndBattleScript : MonoBehaviour
     {
         if (collision.gameObject.name == "playerExport")
         {
-           // Debug.Log("triggeredddd");
             //hide the bridges
             startBridge.GetComponent<bridgeScript>().moveBridgeLeft();
             endBridge.GetComponent<bridgeScript>().moveBridgeRight();

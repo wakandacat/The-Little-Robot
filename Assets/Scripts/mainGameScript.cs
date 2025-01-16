@@ -9,7 +9,6 @@ public class mainGameScript : MonoBehaviour
 {
 
     //global vars
-    public bool playerCanMove = false; //toggle for when menus open or cutscenes
     public int currLevelCount = 1;
     public int maxLevelCount = 3;
     public string nextScene = "Platform1";
@@ -27,7 +26,7 @@ public class mainGameScript : MonoBehaviour
     private float camPos = 0;
 
     //cutscenes
-    public bool cutScenePlaying = true;
+    public bool cutScenePlaying = true; //toggle for when menus open or cutscenes
 
     private GameObject enemy;
     public string[] scenes = new[] { "Tutorial", "Platform1", "Combat1", "Platform2", "Combat2", "Platform3", "Combat3", "EndScene" };
@@ -35,7 +34,7 @@ public class mainGameScript : MonoBehaviour
     
     //menu vars
     public GameObject demoEndScreen;
-    public GameObject mainMenu;
+   // public GameObject mainMenu;
     public GameObject controlMenu;
     public GameObject demoEndFirstButton;
     bool gameEnded = false;
@@ -120,11 +119,11 @@ public class mainGameScript : MonoBehaviour
 
     public void EndGame()
     {
-        Debug.Log("Demo Over");
+        Debug.Log("Thanks for playing!");
         demoEndScreen.SetActive(true);
         Time.timeScale = 0.0f;
         GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = true;
-        mainMenu.SetActive(false);
+       // mainMenu.SetActive(false);
         controlMenu.SetActive(false);
 
         //clear event selected object

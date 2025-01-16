@@ -26,7 +26,7 @@ public class loadSceneScript : MonoBehaviour
 
             //load the new scene
             SceneManager.LoadScene(mainGameScript.currentScene, LoadSceneMode.Additive);
-            //Debug.Log("loading: " + mainGameScript.currentScene);
+            Debug.Log("loading: " + mainGameScript.currentScene);
 
             //callback once the scene is fully loaded
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -42,7 +42,7 @@ public class loadSceneScript : MonoBehaviour
 
         //set newest scene to active
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(mainGameScript.currentScene));
-       // Debug.Log("set  " + mainGameScript.currentScene + "as active");
+        Debug.Log("set  " + mainGameScript.currentScene + "as active");
 
     }
 
