@@ -27,7 +27,6 @@ public class unloadSceneScript : MonoBehaviour
     //unload the previous scene
     public void OnTriggerEnter(Collider collision)
     {
-
         if (collision.gameObject.name == "playerExport" && SceneManager.GetSceneByName(mainGameScript.currentScene).isLoaded)
         {
             SceneManager.UnloadSceneAsync(mainGameScript.scenes[mainGameScript.currSceneName - 1]);

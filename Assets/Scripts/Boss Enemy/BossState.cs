@@ -211,7 +211,12 @@ public class SelfCheckState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (bossEnemyComponent.returnCurrentEnergy() <= 0)   // check if the current energy count of the Boss Enemy is below or equal to 0
+
+        if (bossEnemyComponent.HP_ReturnCurrent() <= 0) // check if HP is less than or equal to 0
+        {
+            bossEnemyComponent.TransitionToDeathState();     // if so, transition to death state
+        }
+        else if (bossEnemyComponent.returnCurrentEnergy() <= 0)   // check if the current energy count of the Boss Enemy is below or equal to 0
         {
             bossEnemyComponent.TransitionToLowEnergyState(); // if so, transition to low energy state
         }
@@ -266,6 +271,7 @@ public class AwakeState : BossState
     {
         // Programming Logic
         Debug.Log("BossEnemy: Entering AwakeState");
+        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
         enterStateTimeStamp = Time.time;
 
         // INSERT: attack selection logic
@@ -297,7 +303,11 @@ public class AwakeState : BossState
             }
         }
 
-        if (delayFinished == true)  // check if the delay has been completed and the attack has been chosen
+        if (bossEnemyComponent.HP_ReturnCurrent() <= 0) // check if HP is less than or equal to 0
+        {
+            bossEnemyComponent.TransitionToDeathState();     // if so, transition to death state
+        }
+        else if (delayFinished == true)  // check if the delay has been completed and the attack has been chosen
         {
             Attack_Selection();
         }
@@ -508,12 +518,12 @@ public class LowEnergyState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (bossEnemyComponent.HP_ReturnCurrent() <= 0.0f)                                   // check if HP_Current has fallen below 0
+        if (bossEnemyComponent.HP_ReturnCurrent() <= 0.0f)                                  // check if HP_Current has fallen below 0
         {
             bossEnemyComponent.TransitionToDeathState();                                    // if so, transition to Death State
         }
 
-        if (bossEnemyComponent.returnCurrentEnergy() >= bossEnemyComponent.Energy_Maximum)  // check if Energy_Current has exceeded Energy_Maximum
+        else if (bossEnemyComponent.returnCurrentEnergy() >= bossEnemyComponent.Energy_Maximum)  // check if Energy_Current has exceeded Energy_Maximum
         {
             bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.Energy_Maximum);      // if so, set Energy_Current to Energy_Maximum
             bossEnemyComponent.TransitionToAwakeState();                                    // and, transition to Awake State
@@ -546,6 +556,7 @@ public class LowEnergyState : BossState
     {
         // Programming Logic
         //bossEnemyComponent.HP_TurnInvulnerabilityOn();
+        Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
         // Animation Logic
         animator.SetBool("downed", false);
@@ -727,15 +738,16 @@ public class Attack_SeekingProjectile01State : BossState
     private bool Attack_Completed = false;
     private GameObject Attack_GameObjectParent;
     private GameObject Attack_ProjectileOriginObject;
-    private int Attack_NumberOfProjectiles_ToFire = 15;
+    private int Attack_NumberOfProjectiles_ToFire = 10;
     private int Attack_NumberOfProjectiles_BeenFired = 0;
-    private float Attack_ProjectileSpeed = 25.0f;
-    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 5, 0);
-    private float Attack_ProjectileInterval = 0.5f;
-    private float Attack_Delay = 1.0f;
+    private float Attack_ProjectileSpeed = 60.0f;
+    private Vector3 Attack_ProjectileScale = new Vector3(1.75f, 1.75f, 1.75f);
+    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 10, 0);
+    private float Attack_ProjectileInterval = 0.75f;
+    private float Attack_Delay = 0.75f;
     private float Attack_StartTimeStamp = 0.0f;
     private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
-    private float Attack_CompletionDelay = 2.0f;
+    private float Attack_CompletionDelay = 1.0f;
 
     // Attack_State Selection Properties
     public static string Attack_Name = "Attack_SeekingProjectile01State";
@@ -767,7 +779,7 @@ public class Attack_SeekingProjectile01State : BossState
     public override void Enter()
     {
         // Programming Logic
-        //Debug.Log("BossEnemy: Entering Attack_SeekingProjectile01State");
+        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
@@ -809,9 +821,11 @@ public class Attack_SeekingProjectile01State : BossState
 
                     // Spawn Projectile
                     GameObject Attack_NewProjectile = Object.Instantiate(bossEnemyComponent.Attack_BasicProjectile01, Attack_ProjectileSpawnOffset, bossEnemyComponent.Player_ReturnDirectionOfPlayer(bossEnemyComponent.returnBossEnemyPosition()));
+                    Attack_NewProjectile.transform.localScale = Attack_ProjectileScale;
                     Attack_NewProjectile.name = "Attack_Projectile_" + Attack_NumberOfProjectiles_BeenFired;
                     Attack_NewProjectile.tag = "Damage Source";
-                    Attack_NewProjectile.transform.SetParent(Attack_GameObjectParent.transform);
+                    Attack_NewProjectile.transform.SetParent(Attack_ProjectileOriginObject.transform);
+                    Attack_NewProjectile.transform.localPosition = Vector3.zero;                    // reset local position
 
                     // Move Projectile
                     Attack_NewProjectile.GetComponent<BasicProjectile>().FireProjectile(Attack_ProjectileSpeed, bossEnemyComponent.Player_ReturnPlayerPosition());
@@ -880,15 +894,15 @@ public class Attack_SeekingProjectile02State : BossState
     private bool Attack_Completed = false;
     private GameObject Attack_GameObjectParent;
     private GameObject Attack_ProjectileOriginObject;
-    private int Attack_NumberOfProjectiles_ToFire = 40;
+    private int Attack_NumberOfProjectiles_ToFire = 60;
     private int Attack_NumberOfProjectiles_BeenFired = 0;
-    private float Attack_ProjectileSpeed = 15.0f;
-    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 5, 0);
-    private float Attack_ProjectileInterval = 0.2f;
-    private float Attack_Delay = 1.0f;
+    private float Attack_ProjectileSpeed = 30.0f;
+    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 10, 0);
+    private float Attack_ProjectileInterval = 0.125f;
+    private float Attack_Delay = 0.75f;
     private float Attack_StartTimeStamp = 0.0f;
     private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
-    private float Attack_CompletionDelay = 2.0f;
+    private float Attack_CompletionDelay = 1.0f;
 
     // Attack_State Selection Properties
     public static string Attack_Name = "Attack_SeekingProjectile02State";
@@ -920,7 +934,7 @@ public class Attack_SeekingProjectile02State : BossState
     public override void Enter()
     {
         // Programming Logic
-        //Debug.Log("BossEnemy: Entering Attack_SeekingProjectile02State");
+        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile02State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
@@ -964,7 +978,8 @@ public class Attack_SeekingProjectile02State : BossState
                     GameObject Attack_NewProjectile = Object.Instantiate(bossEnemyComponent.Attack_BasicProjectile01, Attack_ProjectileSpawnOffset, bossEnemyComponent.Player_ReturnDirectionOfPlayer(bossEnemyComponent.returnBossEnemyPosition()));
                     Attack_NewProjectile.name = "Attack_Projectile_" + Attack_NumberOfProjectiles_BeenFired;
                     Attack_NewProjectile.tag = "Damage Source";
-                    Attack_NewProjectile.transform.SetParent(Attack_GameObjectParent.transform);
+                    Attack_NewProjectile.transform.SetParent(Attack_ProjectileOriginObject.transform);
+                    Attack_NewProjectile.transform.localPosition = Vector3.zero;                    // reset local position
 
                     // Move Projectile
                     Attack_NewProjectile.GetComponent<BasicProjectile>().FireProjectile(Attack_ProjectileSpeed, bossEnemyComponent.Player_ReturnPlayerPosition());
@@ -1035,14 +1050,14 @@ public class Attack_SeekingProjectile03State : BossState
     private GameObject Attack_ProjectileOriginObject;
     private int Attack_NumberOfProjectiles_ToFire = 10;
     private int Attack_NumberOfProjectiles_BeenFired = 0;
-    private float Attack_ProjectileSpeed = 10.0f;
+    private float Attack_ProjectileSpeed = 40.0f;
     private Vector3 Attack_ProjectileScale = new Vector3(3, 3, 3);
-    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 5, 0);
-    private float Attack_ProjectileInterval = 1.0f;
-    private float Attack_Delay = 1.0f;
+    private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 10, 0);
+    private float Attack_ProjectileInterval = 0.75f;
+    private float Attack_Delay = 0.75f;
     private float Attack_StartTimeStamp = 0.0f;
     private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
-    private float Attack_CompletionDelay = 3.0f;
+    private float Attack_CompletionDelay = 2.0f;
 
     // Attack_State Selection Properties
     public static string Attack_Name = "Attack_SeekingProjectile03State";
@@ -1074,7 +1089,7 @@ public class Attack_SeekingProjectile03State : BossState
     public override void Enter()
     {
         // Programming Logic
-        //Debug.Log("BossEnemy: Entering Attack_SeekingProjectile03State");
+        Debug.Log("BossEnemy: Entering Attack_SeekingProjectile03State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
@@ -1119,7 +1134,8 @@ public class Attack_SeekingProjectile03State : BossState
                     Attack_NewProjectile.transform.localScale = Attack_ProjectileScale;
                     Attack_NewProjectile.name = "Attack_Projectile_" + Attack_NumberOfProjectiles_BeenFired;
                     Attack_NewProjectile.tag = "Damage Source";
-                    Attack_NewProjectile.transform.SetParent(Attack_GameObjectParent.transform);
+                    Attack_NewProjectile.transform.SetParent(Attack_ProjectileOriginObject.transform);
+                    Attack_NewProjectile.transform.localPosition = Vector3.zero;                    // reset local position
 
                     // Move Projectile
                     Attack_NewProjectile.GetComponent<BasicProjectile>().FireProjectile(Attack_ProjectileSpeed, bossEnemyComponent.Player_ReturnPlayerPosition());
@@ -1195,9 +1211,9 @@ public class Attack_Laser01State : BossState
     private GameObject Attack_LaserObject;
     private GameObject Attack_LaserContactObject;
     private float Attack_Duration = 10.0f;
-    private float Attack_LaserDelay = 1.5f;
+    private float Attack_LaserDelay = 0.75f;
     private float Attack_StartTimeStamp = 0.0f;
-    private float Attack_PlayerPositionDelay = 1.0f;
+    private float Attack_PlayerPositionDelay = 0.5f;
 
     // Attack_State Selection Properties
     public static string Attack_Name = "Attack_Laser01State";
@@ -1230,7 +1246,7 @@ public class Attack_Laser01State : BossState
     {
         // Programming Logic
         // Energy Update and Debugging
-        //Debug.Log("BossEnemy: Entering Attack_Laser01State");
+        Debug.Log("BossEnemy: Entering Attack_Laser01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
@@ -1462,11 +1478,11 @@ public class Attack_Melee01State : BossState
     private bool Attack_Completed = false;
     private GameObject Attack_GameObjectParent;
     private GameObject Attack_ColliderSphere;
-    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 0.5f, 1.5f);
-    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(4.0f, 0.5f, 4.0f);
+    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 4.0f, 1.5f);
+    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(8.0f, 4.0f, 8.0f);
     private bool Attack_IsColliderSphereScaleOut = false;
-    private float Attack_Duration = 4.0f;
-    private float Attack_Delay = 1.0f;
+    private float Attack_Duration = 3.0f;
+    private float Attack_Delay = 0.5f;
     private float Attack_StartTimeStamp = 0.0f;
 
     // Attack_State Selection Properties
@@ -1499,7 +1515,7 @@ public class Attack_Melee01State : BossState
     public override void Enter()
     {
         // Programming Logic
-        //Debug.Log("BossEnemy: Entering Attack_Melee01State");
+        Debug.Log("BossEnemy: Entering Attack_Melee01State");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
         //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 

@@ -11,13 +11,13 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Debug Values ---------------------------------------------------------------------------------------------------------------
     [Tooltip("Maximum HP that the Boss Enemy can have.")]
-    public float HP_Maximum = 30.0f;
+    public float HP_Maximum = 20.0f;
     [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have.")]
     public float Energy_Maximum = 4.0f;
     [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'LowEnergyState'.")]
-    public float Energy_RegainedPerSecond = 0.5f;
+    public float Energy_RegainedPerSecond = 0.15f;
     [Tooltip("Amount of Energy the Boss Enemy when struck while in 'LowEnergyState'.")]
-    public float Energy_RegainedOnStrike = 1.0f;
+    public float Energy_RegainedOnStrike = 0.7f;
 
     [Tooltip("Amount of time that passed between storing player position (in seconds).")]
     public float Player_PositionTrackingTimeInterval = 0.02f;
@@ -25,7 +25,7 @@ public class BossEnemy : MonoBehaviour
     public float Player_PositionTrackingMaxTimeTracked = 3.0f;
 
     [Tooltip("Amount of time that must pass when entering the 'AwakeState' before the BossEnemy can execute the selected attack.")]
-    public float AwakeState_Delay = 3.0f;
+    public float AwakeState_Delay = 1.25f;
 
     [Tooltip("The default projectile to be used for seeking projectile-based attacks.")]
     public GameObject Attack_BasicProjectile01;
@@ -37,7 +37,7 @@ public class BossEnemy : MonoBehaviour
     // Boss Enemy Attributes ------------------------------------------------------------------------------------------------------
     private float HP_Current;
     private float Energy_Current;
-    private bool HP_BossInvulnerable = false; //changed from default true
+    private bool HP_BossInvulnerable = false; //changed from default true (isn't currently utilized, the functionality for if enemy can take damage is hardcoded into HP_TakeDamage()
 
     // Object References ----------------------------------------------------------------------------------------------------------
     private Animator bossAnimator;
@@ -92,7 +92,7 @@ public class BossEnemy : MonoBehaviour
     {
         // Execute Update instructions for StateMachine
         stateMachine.Update();
-       // Debug.Log(HP_Current);
+        //Debug.Log(HP_Current);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -287,7 +287,12 @@ public class BossEnemy : MonoBehaviour
         //{
         //    damageAmount *= -1.0f;
         //}
-        HP_Current -= damageAmount;
+        if (!HP_ReturnInvulnerabilityStatus())
+        {
+            HP_Current -= damageAmount;
+            Energy_Current += Energy_RegainedOnStrike;
+            Debug.Log("BossEnemy: " + damageAmount + " Damage Taken | HP = " + HP_Current);
+        }
     }
 
     public void HP_TurnInvulnerabilityOn()
@@ -320,7 +325,8 @@ public class BossEnemy : MonoBehaviour
 
     public void regainCurrentEnergyPerFrame()
     {
-        Energy_Current += Energy_RegainedPerSecond * Time.fixedDeltaTime;   // regain X% of Energy_RegainedPerSecond by multiplying the amount by the duration of time between frames (at 50fps, 1/50th)
+        Energy_Current += Energy_RegainedPerSecond * Time.deltaTime;   // regain X% of Energy_RegainedPerSecond by multiplying the amount by the duration of time between frames (at 50fps, 1/50th)
+        //Debug.Log("BossEnemy: Current Energy = " + Energy_Current);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

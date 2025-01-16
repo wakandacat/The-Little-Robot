@@ -34,6 +34,10 @@ public class conveyorMove : MonoBehaviour
         movingObjects.Add(collision.gameObject);
         if (collision.gameObject.CompareTag("Player"))
         {
+            if (collision.gameObject.GetComponent<PlayerController>().Rolling == true)
+            {
+                //Debug.Log("rolling"); //if the bug can be replicated then put adjustment code here
+            }
             collision.gameObject.GetComponent<PlayerController>().jumpForce = 100f;
         }
     }

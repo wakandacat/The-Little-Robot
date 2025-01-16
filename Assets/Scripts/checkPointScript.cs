@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class checkPointScript : MonoBehaviour
 {
@@ -31,7 +31,7 @@ public class checkPointScript : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //Debug.Log("current scene loaded");
+
         //remove to enusre it only runs once
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
@@ -43,6 +43,11 @@ public class checkPointScript : MonoBehaviour
 
         //move the player there
         this.transform.position = currCheckpoint.transform.position;
+
+        //rotate them to face forward
+        this.transform.rotation = currCheckpoint.transform.rotation;
+
+        //MAKE THE FREELOOK CAMERA FACE FORWARD AS WELL
 
         //switch cameras if needed
         mainGameScript.SwitchToPlatformCam();

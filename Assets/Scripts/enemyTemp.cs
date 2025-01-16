@@ -6,7 +6,6 @@ public class enemyTemp : MonoBehaviour
 {
     //GET RID OF THIS WHEN REAL ENEMY IN AND FUNCTIONAL
     private mainGameScript mainGameScript;
-    public GameObject loadObj;
 
     void Awake()
     {
@@ -20,15 +19,8 @@ public class enemyTemp : MonoBehaviour
         {
             Debug.Log("PLAYER KILLED ENEMY");
 
-            mainGameScript.currLevelCount++;
-
-            loadObj.SetActive(true);
-
             //kill the enemy
             this.gameObject.tag = "Dead";
-            //this.GetComponent<BoxCollider>().enabled = false;
-
-           // mainGameScript.SwitchToPlatformCam();
 
         }
     }
