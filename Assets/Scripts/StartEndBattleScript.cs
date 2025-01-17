@@ -20,8 +20,8 @@ public class StartEndBattleScript : MonoBehaviour
     void Update()
     {
         //check enemy's state here for death
-        //if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0 && runOnce == false)
-        if (enemy.tag == "Dead" && runOnce == false) //TEMPPPP
+        if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0 && runOnce == false)
+        //if (enemy.tag == "Dead" && runOnce == false) //TEMPPPP
         {
             Debug.Log("dead enemy");
             //open end bridge
