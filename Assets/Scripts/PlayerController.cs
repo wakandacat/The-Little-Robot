@@ -25,26 +25,27 @@ public class PlayerController : MonoBehaviour
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
     public bool combatState = false;
-    private float speed = 35f;
+    private float speed = 7.0f;
     public GameObject player;
     public Rigidbody rb;
     private Vector2 leftStick;
 
     //jump + quick drop vars
-    public float jumpForce = 20f;
-    private float fallMultiplier = 800f;
+    //Make double jump multiplier add
+    public float jumpForce = 20.0f;
+    private float fallMultiplier = 5.0f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
     private int jumpCounter = 0;
     private float rotationSpeed = 1.0f;
+    private float quickDropMultiplier = 600.0f;
 
     //Dash vars
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 24f;
-    private float dashingpower = 24f;
-    private float dashingTime = 0.2f;
-    private float dashingCooldown = 5f;
+    private float dashingPower = 30.0f;
+    private float dashingTime = 0.5f;
+    private float dashingCooldown = 2.0f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour
     private float rollSpeed = 10.0f;
     public float rollTime = 10.0f;
     public float maxRollSpeed = 50.0f;
+    public bool rollState = false;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -145,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
         if (mainScript.cutScenePlaying == false)
@@ -176,7 +178,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //Check if the player is dead or alive
-            if (deathState == false)
+            if (deathState == false && Physics.gravity.y >= -9.81f)
             {
                 manageHealth();
                 moveCharacter(speed);
@@ -190,21 +192,24 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
-                if (Rolling == true)
+                if (rollState == true)
                 {
                     rollTimer();
                     //Debug.Log("tHIS IS THE ROLL SPEDD" + rollSpeed);
                 }
 
             }
-            else if (deathState == true)
+            else if (deathState == true) 
             {
                 ManagedeathState();
                 deathState = false;
             }
         }
+        if (rb.velocity.y < 0 && isQuickDropping == false)
+        {
+            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+        }
 
-        
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
     public void animationCalls()
@@ -271,10 +276,6 @@ public class PlayerController : MonoBehaviour
         Vector3 movementInput = new Vector3(leftStick.x, 0f, leftStick.y);
 
         Vector3 cameraRelativeMovement = rotationCam.convertToCamSpace(movementInput);
-
-        //Move player using the rigid body
-        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed);
-
         //player rotation
         Quaternion currentRotation = transform.rotation;
 
@@ -283,6 +284,11 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(cameraRelativeMovement * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
+
+        //Move player using the rigid body
+        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed);
+       
+
     }
 
     //-----------------------------------------------Jump-----------------------------------------------//
@@ -292,11 +298,6 @@ public class PlayerController : MonoBehaviour
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        //this does not work as intended will need to be fixed
-        if (rb.velocity.y < 0)
-        {
-            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-        }
     }
 
     //Jump flags handler
@@ -336,7 +337,7 @@ public class PlayerController : MonoBehaviour
     {
         if (ground.onGround == false)
         {
-            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * quickDropMultiplier * Time.deltaTime;
         }
     }
     //quick drop flag handler
@@ -379,7 +380,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
     public IEnumerator turnOffAnim()
@@ -427,6 +428,7 @@ public class PlayerController : MonoBehaviour
         Rolling = false;
         rollCounter = 0;
         rollTime = 5.0f;
+        rollState = false;
     }
     //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
     //Execute roll on button press
@@ -434,6 +436,7 @@ public class PlayerController : MonoBehaviour
     {
         rollTime -=Time.deltaTime;
         rollSpeed += Time.deltaTime;
+        Debug.Log("Roll Speed" + rollSpeed);
         if (rollTime < 0 || rollSpeed > maxRollSpeed)
         {
             rollTime = 0;
@@ -445,7 +448,12 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             Rolling = context.ReadValueAsButton();
-            if (Rolling)
+            Debug.Log("Roll state = " + rollState);
+            if(Rolling == true)
+            {
+                rollState = true;
+            }
+            if (rollState)
             {
                 rollCounter++;
                 //animation here
