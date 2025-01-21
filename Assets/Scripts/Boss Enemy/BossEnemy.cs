@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
+//using UnityEditorInternal;
 using UnityEngine;
 
 public class BossEnemy : MonoBehaviour
@@ -25,7 +25,7 @@ public class BossEnemy : MonoBehaviour
     public float Player_PositionTrackingMaxTimeTracked = 3.0f;
 
     [Tooltip("Amount of time that must pass when entering the 'AwakeState' before the BossEnemy can execute the selected attack.")]
-    public float AwakeState_Delay = 1.25f;
+    public float AwakeState_Delay = 2.25f;
 
     [Tooltip("The default projectile to be used for seeking projectile-based attacks.")]
     public GameObject Attack_BasicProjectile01;

@@ -675,16 +675,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHealth: 3
   playerCurrenthealth: 0
+  combatState: 0
   player: {fileID: 702898863}
   rb: {fileID: 1806403677}
+  jumpForce: 20
   gravityScale: 1
   orientation: {fileID: 1806403675}
   dashUpwardForce: 10
   attackState: 0
+  attackCounter: 0
+  comboTimer: 0
+  Rolling: 0
+  rollState: 0
+  rollCounter: 0
   isPaused: 0
   pauseMenu: {fileID: 0}
+  deathState: 0
+  fadeDelay: 5
   fadeOutPanel: {fileID: 0}
   collision: 0
+  Combatscenes:
+  - Combat1
+  - Combat2
+  - Combat3
 --- !u!114 &1806403679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,16 +862,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHealth: 3
   playerCurrenthealth: 0
+  combatState: 0
   player: {fileID: 702898863}
   rb: {fileID: 2136082626}
+  jumpForce: 20
   gravityScale: 1
   orientation: {fileID: 2136082625}
   dashUpwardForce: 10
   attackState: 0
+  attackCounter: 0
+  comboTimer: 0
+  Rolling: 0
+  rollState: 0
+  rollCounter: 0
   isPaused: 0
   pauseMenu: {fileID: 0}
+  deathState: 0
+  fadeDelay: 5
   fadeOutPanel: {fileID: 0}
   collision: 1
+  Combatscenes:
+  - Combat1
+  - Combat2
+  - Combat3
 --- !u!114 &2136082628
 MonoBehaviour:
   m_ObjectHideFlags: 0
