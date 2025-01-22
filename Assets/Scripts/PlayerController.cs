@@ -25,32 +25,31 @@ public class PlayerController : MonoBehaviour
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
     public bool combatState = false;
-    private float speed = 7.0f;
+    private float speed = 8.0f;
     public GameObject player;
     public Rigidbody rb;
     private Vector2 leftStick;
 
     //jump + quick drop vars
-    //Make double jump multiplier add
     public float jumpForce = 20.0f;
     private float fallMultiplier = 5.0f;
+    private float quickDropMultiplier = 800.0f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
     private int jumpCounter = 0;
-    private float rotationSpeed = 1.0f;
-    private float quickDropMultiplier = 600.0f;
+    private float rotationSpeed = 2.0f;
 
     //Dash vars
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 30.0f;
-    private float dashingTime = 0.5f;
-    private float dashingCooldown = 2.0f;
+    private float dashingPower = 40.0f;
+    private float dashingTime = 0.2f;
+    private float dashingCooldown = 4.0f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
     public Transform orientation;
-    private float dashUpwardForce = 10f;
+    private float dashUpwardForce = 10.0f;
 
     //Attack vars
     private bool isAttacking = false;
@@ -204,6 +203,12 @@ public class PlayerController : MonoBehaviour
                 ManagedeathState();
                 deathState = false;
             }
+
+            //jump
+            if (rb.velocity.y < 0)
+            {
+                player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            }
         }
         if (rb.velocity.y < 0 && isQuickDropping == false)
         {
@@ -298,6 +303,8 @@ public class PlayerController : MonoBehaviour
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        //this does not work as intended will need to be fixed
+        
     }
 
     //Jump flags handler
@@ -386,14 +393,27 @@ public class PlayerController : MonoBehaviour
     public IEnumerator turnOffAnim()
     {
         //always wait a little bit then check if isAttacking was true
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.2f);
 
         //if it's true then turn it off
-        if (playerAnimator.GetBool("isAttacking") == true)
+        //if (playerAnimator.GetBool("isAttacking") == true)
+        //{
+        //    playerAnimator.SetBool("isAttacking", false);
+        //}
+
+        if(playerAnimator.GetBool("attack1") == true)
         {
-            playerAnimator.SetBool("isAttacking", false);
+            playerAnimator.SetBool("attack1", false);
         }
-        
+        else if(playerAnimator.GetBool("attack2") == true)
+        {
+            playerAnimator.SetBool("attack2", false);
+        }
+        else if(playerAnimator.GetBool("attack3") == true)
+        {
+            playerAnimator.SetBool("attack3", false);
+        }
+
     }
 
     //coroutinr call on button press
@@ -487,35 +507,35 @@ public class PlayerController : MonoBehaviour
         if (counter == 1)
         {
             //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("isAttacking", true);
+            playerAnimator.SetBool("attack1", true);
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
             }
-            isAttacking = false;        
+            //isAttacking = false;        
         }
         else if (counter == 2)
         {
             //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("isAttacking", true);
+            playerAnimator.SetBool("attack2", true);
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
             }
-            isAttacking = false;
+            //isAttacking = false;
         }
         else if (counter == 3)
         {
             //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("isAttacking", true);
+            playerAnimator.SetBool("attack3", true);
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
             }
-            isAttacking = false;
+            //isAttacking = false;
         }
 
         //set attacking animation back to false
@@ -552,7 +572,7 @@ public class PlayerController : MonoBehaviour
             if (isAttacking)
             {
                 //set animation to true, should run once per button call
-                playerAnimator.SetBool("isAttacking", true);
+                //playerAnimator.SetBool("isAttacking", true);
                 //Debug.Log("animator should be true");
 
                 attackState = true;
@@ -663,7 +683,8 @@ public class PlayerController : MonoBehaviour
     public void ManagedeathState()
     {
         fadeIn();
-       // Invoke("fadeOut", fadeDelay);
+        canDash = true;
+        // Invoke("fadeOut", fadeDelay);
     }
 
     //Needs to change to use canvas opacity

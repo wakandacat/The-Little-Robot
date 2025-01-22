@@ -186,6 +186,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5591425553899949880, guid: 8903471acb54f8c498ed29b3f33f9466,
+        type: 3}
+      propertyPath: HP_Maximum
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6407149229446419360, guid: 8903471acb54f8c498ed29b3f33f9466, type: 3}
     m_RemovedGameObjects: []
@@ -329,7 +334,6 @@ GameObject:
   - component: {fileID: 622251581}
   - component: {fileID: 622251580}
   - component: {fileID: 622251579}
-  - component: {fileID: 622251583}
   m_Layer: 0
   m_Name: startBattleTrigger
   m_TagString: Boss Enemy
@@ -401,18 +405,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &622251583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 622251578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7151af5fa24e942469122e8ac9d07c53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &735118802
 PrefabInstance:
   m_ObjectHideFlags: 0

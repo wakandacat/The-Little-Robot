@@ -740,11 +740,11 @@ public class Attack_SeekingProjectile01State : BossState
     private GameObject Attack_ProjectileOriginObject;
     private int Attack_NumberOfProjectiles_ToFire = 10;
     private int Attack_NumberOfProjectiles_BeenFired = 0;
-    private float Attack_ProjectileSpeed = 60.0f;
+    private float Attack_ProjectileSpeed = 30.0f;
     private Vector3 Attack_ProjectileScale = new Vector3(1.75f, 1.75f, 1.75f);
     private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 10, 0);
-    private float Attack_ProjectileInterval = 0.75f;
-    private float Attack_Delay = 0.75f;
+    private float Attack_ProjectileInterval = 0.8f;
+    private float Attack_Delay = 1.0f;
     private float Attack_StartTimeStamp = 0.0f;
     private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
     private float Attack_CompletionDelay = 1.0f;
@@ -894,12 +894,12 @@ public class Attack_SeekingProjectile02State : BossState
     private bool Attack_Completed = false;
     private GameObject Attack_GameObjectParent;
     private GameObject Attack_ProjectileOriginObject;
-    private int Attack_NumberOfProjectiles_ToFire = 60;
+    private int Attack_NumberOfProjectiles_ToFire = 50;
     private int Attack_NumberOfProjectiles_BeenFired = 0;
-    private float Attack_ProjectileSpeed = 30.0f;
+    private float Attack_ProjectileSpeed = 25.0f;
     private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 10, 0);
     private float Attack_ProjectileInterval = 0.125f;
-    private float Attack_Delay = 0.75f;
+    private float Attack_Delay = 1.0f;
     private float Attack_StartTimeStamp = 0.0f;
     private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
     private float Attack_CompletionDelay = 1.0f;
@@ -1050,11 +1050,11 @@ public class Attack_SeekingProjectile03State : BossState
     private GameObject Attack_ProjectileOriginObject;
     private int Attack_NumberOfProjectiles_ToFire = 10;
     private int Attack_NumberOfProjectiles_BeenFired = 0;
-    private float Attack_ProjectileSpeed = 40.0f;
+    private float Attack_ProjectileSpeed = 25.0f;
     private Vector3 Attack_ProjectileScale = new Vector3(3, 3, 3);
     private Vector3 Attack_ProjectileSpawnOffset = new Vector3(0, 10, 0);
     private float Attack_ProjectileInterval = 0.75f;
-    private float Attack_Delay = 0.75f;
+    private float Attack_Delay = 1.0f;
     private float Attack_StartTimeStamp = 0.0f;
     private float Attack_ProjectileLastFiredTimeStamp = 0.0f;
     private float Attack_CompletionDelay = 2.0f;
@@ -1211,9 +1211,9 @@ public class Attack_Laser01State : BossState
     private GameObject Attack_LaserObject;
     private GameObject Attack_LaserContactObject;
     private float Attack_Duration = 10.0f;
-    private float Attack_LaserDelay = 0.75f;
+    private float Attack_LaserDelay = 0.8f;
     private float Attack_StartTimeStamp = 0.0f;
-    private float Attack_PlayerPositionDelay = 0.5f;
+    private float Attack_PlayerPositionDelay = 0.6f;
 
     // Attack_State Selection Properties
     public static string Attack_Name = "Attack_Laser01State";
@@ -1482,7 +1482,7 @@ public class Attack_Melee01State : BossState
     private Vector3 Attack_ColliderSphereScale_Out = new Vector3(8.0f, 4.0f, 8.0f);
     private bool Attack_IsColliderSphereScaleOut = false;
     private float Attack_Duration = 3.0f;
-    private float Attack_Delay = 0.5f;
+    private float Attack_Delay = 1.0f;
     private float Attack_StartTimeStamp = 0.0f;
 
     // Attack_State Selection Properties
