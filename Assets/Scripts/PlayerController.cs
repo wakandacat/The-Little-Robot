@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Roll.performed += OnRoll;
         pc.Gameplay.Deflect.performed += OnDeflect;
         pc.Gameplay.Pause.performed += onPause;
+        pc.Gameplay.Skip.performed += onSkip;
     }
 
 
@@ -130,6 +131,12 @@ public class PlayerController : MonoBehaviour
     {
         pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
 
+    }
+
+    //skip cinematic
+    public void onSkip(InputAction.CallbackContext context)
+    {
+        mainScript.GetComponent<mainGameScript>().SkipIntro();
     }
 
     public void findEnemy()
@@ -699,5 +706,6 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Roll.performed -= OnRoll;
         pc.Gameplay.Deflect.performed -= OnDeflect;
         pc.Gameplay.Pause.performed -= onPause;
+        pc.Gameplay.Pause.performed -= onSkip;
     }
 }

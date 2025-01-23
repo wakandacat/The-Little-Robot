@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Cinemachine;
+using UnityEngine.UI;
 
 public class PauseMenuScript : MonoBehaviour
 {
@@ -11,15 +13,20 @@ public class PauseMenuScript : MonoBehaviour
     //public canvas objects
     public GameObject pauseMenu;
     public GameObject controlMenu;
+    public GameObject settingsMenu;
 
     //menu items for event system
     public GameObject pauseFirstButton;
     public GameObject controlsFirstButton;
+    public GameObject settingsFirstButton;
 
     //input system
     public InputActionAsset inputActions;
     private InputActionMap playerControls;
     private InputActionMap menuControls;
+
+    //freelook cam
+    public CinemachineFreeLook freeCam;
 
     void Awake()
     {
@@ -123,10 +130,39 @@ public class PauseMenuScript : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    //view the settings menu
+    public void GoToSettings()
+    {
+        pauseMenu.SetActive(false);
+        settingsMenu.SetActive(true);
+
+        //clear event selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new default selected
+        EventSystem.current.SetSelectedGameObject(settingsFirstButton);
+    }
+
     //exit button
     public void QuitGame()
     {
         Debug.Log("Game Closed");
         Application.Quit();
+    }
+
+    //adjust the camera sensitivity
+    public void AdjustCamSens(float sens)
+    {
+        Debug.Log("adjusted cam sens to:" + sens);
+        freeCam.m_XAxis.m_MaxSpeed = 300 * sens; //middle is 150
+        freeCam.m_YAxis.m_MaxSpeed = 4 * sens; //middle is 2
+
+    }
+
+    //reset the camera sensitivity
+    public void ResetCamSens(float sens)
+    {
+        freeCam.m_XAxis.m_MaxSpeed = 150; //middle is 150
+        freeCam.m_YAxis.m_MaxSpeed = 2; //middle is 2
+        settingsMenu.GetComponentInChildren<Slider>().value = 0.5f;
     }
 }
