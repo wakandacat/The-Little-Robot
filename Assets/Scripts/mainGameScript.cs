@@ -24,6 +24,8 @@ public class mainGameScript : MonoBehaviour
     public CinemachineVirtualCamera introCam;
     bool introPlayed = false;
     private float camPos = 0;
+    public float introCamSpeed = 0.003f;
+    private float camStillTimer = 0f;
 
     //cutscenes
     public bool cutScenePlaying = true; //toggle for when menus open or cutscenes
@@ -53,12 +55,11 @@ public class mainGameScript : MonoBehaviour
         //set new default selected
         EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
     }
-    void Update()
-    {
 
+    void FixedUpdate()
+    {
         //--------------INTRO CUTSCENE---------------
         IntroCam();
-
 
         //---------------BOSS CAM-------------------
         if (GameObject.Find("enemy" + currLevelCount) && usingBossCam == true && GameObject.FindWithTag("Player"))
@@ -114,6 +115,11 @@ public class mainGameScript : MonoBehaviour
                 bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += 1f;
             }
         }
+    }
+
+    public void SkipIntro()
+    {
+        cutScenePlaying = false;
 
     }
 
@@ -159,7 +165,7 @@ public class mainGameScript : MonoBehaviour
 
     public void IntroCam()
     {
-        if (!Input.GetKeyDown(KeyCode.S)) //press "s" to skip cutscene
+        if (cutScenePlaying) //left button on controller to skip cutscenes
         {
             if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
             {
@@ -169,15 +175,29 @@ public class mainGameScript : MonoBehaviour
                     SwitchToPlatformCam();
                     introPlayed = true;
                     cutScenePlaying = false;
+                    camStillTimer = 0;
                 }
                 else
                 {
-                    camPos += Mathf.Lerp(0, 1, 0.0004f);
-                    introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
+                    camStillTimer = camStillTimer + Time.deltaTime;
+
+                    //wait a few seconds at the beginning before starting the movement
+                    if (camStillTimer >= 2.0f)
+                    {
+                        camPos += Mathf.Lerp(0, 1, introCamSpeed);
+                        introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
+                    } 
+                    else //otherwise adjust the fov
+                    {
+                        if (introCam.m_Lens.FieldOfView > 70) 
+                        {
+                            introCam.m_Lens.FieldOfView = Mathf.Lerp(100f, 70f, camStillTimer * 0.5f); 
+                        }
+                    }
                 }
             }
         }
-        else if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false)
+        else if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false || cutScenePlaying == false)
         {
             //Debug.Log("intro cinematic finished");
             SwitchToPlatformCam();
