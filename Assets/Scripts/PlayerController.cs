@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false;
     private bool isQuickDropping = false;
     private int jumpCounter = 0;
-    private float rotationSpeed = 2.0f;
+    private float rotationSpeed = 1.0f;
 
     //Dash vars
     private bool canDash = true;
@@ -294,7 +294,7 @@ public class PlayerController : MonoBehaviour
         if (cameraRelativeMovement != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(cameraRelativeMovement * Time.fixedDeltaTime);
-            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed);
         }
 
         //Move player using the rigid body
@@ -320,6 +320,8 @@ public class PlayerController : MonoBehaviour
         isJumping = false;
         jumpCounter = 0;
     }
+
+    //Jump Logic here
     public void OnJump(InputAction.CallbackContext context)
     {
         if (mainScript.cutScenePlaying == false)
