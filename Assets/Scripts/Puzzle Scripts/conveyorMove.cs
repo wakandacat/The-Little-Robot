@@ -18,7 +18,7 @@ public class conveyorMove : MonoBehaviour
         movingObjects = new List<GameObject>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //for each object on the conveyor, add a force to it
         for (int i = 0; i < movingObjects.Count; i++)
