@@ -4,9 +4,13 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class mainGameScript : MonoBehaviour
 {
+    //main game settings from main menu
+    private GameObject gameSettings;
+    public GameObject settingsMenu;
 
     //global vars
     public int currLevelCount = 1;
@@ -36,7 +40,6 @@ public class mainGameScript : MonoBehaviour
     
     //menu vars
     public GameObject demoEndScreen;
-   // public GameObject mainMenu;
     public GameObject controlMenu;
     public GameObject demoEndFirstButton;
     bool gameEnded = false;
@@ -54,6 +57,35 @@ public class mainGameScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         //set new default selected
         EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
+
+
+        //get teh game settings
+        if (GameObject.Find("GameSettings"))
+        {
+            gameSettings = GameObject.Find("GameSettings");
+        }
+
+        setSettings();
+
+    }
+
+    //method to set all the values from the main game settings that carried over
+    void setSettings()
+    {
+        if (gameSettings)
+        {
+            //set the initial freelook sensitivity from main menu
+            platformCam.m_XAxis.m_MaxSpeed = 300 * gameSettings.GetComponent<GameSettings>().freelookSens; //middle is 150
+            platformCam.m_YAxis.m_MaxSpeed = 4 * gameSettings.GetComponent<GameSettings>().freelookSens; //middle is 2
+            settingsMenu.GetComponentInChildren<Slider>().value = gameSettings.GetComponent<GameSettings>().freelookSens;
+        } 
+        else
+        {
+            //set the initial freelook sensitivity from main menu
+            platformCam.m_XAxis.m_MaxSpeed = 300 * 0.5f; //middle is 150
+            platformCam.m_YAxis.m_MaxSpeed = 4 * 0.5f; //middle is 2
+            settingsMenu.GetComponentInChildren<Slider>().value = 0.5f;
+        }
     }
 
     void FixedUpdate()
