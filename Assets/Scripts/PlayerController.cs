@@ -311,6 +311,7 @@ public class PlayerController : MonoBehaviour
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         //this does not work as intended will need to be fixed
+        //playerAnimator.CrossFadeInFixedTime("jumpUp", 0.2f, 0, 0.2f);
         
     }
 

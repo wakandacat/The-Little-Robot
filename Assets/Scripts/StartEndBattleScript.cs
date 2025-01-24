@@ -23,9 +23,10 @@ public class StartEndBattleScript : MonoBehaviour
         if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0 && runOnce == false)
         //if (enemy.tag == "Dead" && runOnce == false) //TEMPPPP
         {
-            Debug.Log("dead enemy");
+            //Debug.Log("dead enemy");
             //open end bridge
             endBridge.GetComponent<bridgeScript>().moveBridgeLeft();
+            startBridge.GetComponent<bridgeScript>().moveBridgeRight();
 
             loadObj.SetActive(true);
 
@@ -43,6 +44,8 @@ public class StartEndBattleScript : MonoBehaviour
     {
         if (collision.gameObject.name == "playerExport")
         {
+            Debug.Log("switch to boss cam");
+
             //hide the bridges
             startBridge.GetComponent<bridgeScript>().moveBridgeLeft();
             endBridge.GetComponent<bridgeScript>().moveBridgeRight();
