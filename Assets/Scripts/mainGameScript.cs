@@ -59,12 +59,14 @@ public class mainGameScript : MonoBehaviour
     void FixedUpdate()
     {
         //--------------INTRO CUTSCENE---------------
-        IntroCam();
+        if (introPlayed == false)
+        {
+            IntroCam();
+        }
 
         //---------------BOSS CAM-------------------
         if (GameObject.Find("enemy" + currLevelCount) && usingBossCam == true && GameObject.FindWithTag("Player"))
         {
-
             //calculate the direction from the track center to the player    
             Vector3 direction = GameObject.FindWithTag("Player").transform.position - battleTrack.transform.position;
 
@@ -125,7 +127,7 @@ public class mainGameScript : MonoBehaviour
 
     public void EndGame()
     {
-        Debug.Log("Thanks for playing!");
+       // Debug.Log("Thanks for playing!");
         demoEndScreen.SetActive(true);
         Time.timeScale = 0.0f;
         GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = true;
@@ -140,7 +142,7 @@ public class mainGameScript : MonoBehaviour
 
     public void SwitchToBossCam()
     {
-
+        //Debug.Log("battle cam");
         enemy = GameObject.Find("enemy" + currLevelCount);
 
         //move the track to teh enemy's position
