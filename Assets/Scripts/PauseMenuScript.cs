@@ -152,14 +152,13 @@ public class PauseMenuScript : MonoBehaviour
     //adjust the camera sensitivity
     public void AdjustCamSens(float sens)
     {
-        Debug.Log("adjusted cam sens to:" + sens);
         freeCam.m_XAxis.m_MaxSpeed = 300 * sens; //middle is 150
         freeCam.m_YAxis.m_MaxSpeed = 4 * sens; //middle is 2
 
     }
 
     //reset the camera sensitivity
-    public void ResetCamSens(float sens)
+    public void ResetCamSens()
     {
         freeCam.m_XAxis.m_MaxSpeed = 150; //middle is 150
         freeCam.m_YAxis.m_MaxSpeed = 2; //middle is 2
