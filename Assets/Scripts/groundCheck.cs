@@ -7,6 +7,7 @@ public class groundCheck : MonoBehaviour
     public GameObject player;
     public bool onGround = false;
     public bool jumpState = false;
+    public bool doublejumpState = false;
     PlayerController jumping;
     // Start is called before the first frame update
     void Start()
@@ -29,13 +30,14 @@ public class groundCheck : MonoBehaviour
         {
             onGround = true;
             jumpState = false;
-
+            doublejumpState = false;
         }
        
     }
     public void OnCollisionEnter(Collision collision)
     {
         jumping.handleJump();
+        jumping.handleQuickDrop();
     }
 
     public void OnCollisionExit(Collision collision)

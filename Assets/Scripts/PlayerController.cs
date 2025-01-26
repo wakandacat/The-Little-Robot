@@ -32,11 +32,12 @@ public class PlayerController : MonoBehaviour
 
     //jump + quick drop vars
     public float jumpForce = 20.0f;
-    private float fallMultiplier = 5.0f;
-    private float quickDropMultiplier = 800.0f;
+    private float JfallMultiplier = 5.0f;
+    private float DJfallMultiplier = 10.0f;
+    private float quickDropMultiplier = 20.0f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
-    private int jumpCounter = 0;
+    public int jumpCounter = 0;
     private float rotationSpeed = 1.0f;
 
     //Dash vars
@@ -184,7 +185,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //Check if the player is dead or alive
-            if (deathState == false && Physics.gravity.y >= -9.81f)
+            if (deathState == false && Physics.gravity.y <= -9.81f)
             {
                 manageHealth();
                 moveCharacter(speed);
@@ -201,27 +202,19 @@ public class PlayerController : MonoBehaviour
                 if (rollState == true)
                 {
                     rollTimer();
-                    //Debug.Log("tHIS IS THE ROLL SPEDD" + rollSpeed);
                 }
-
             }
             else if (deathState == true) 
             {
                 ManagedeathState();
                 deathState = false;
             }
-
-            //jump
-            if (rb.velocity.y < 0)
+            manageFall(DJfallMultiplier);
+            if(isQuickDropping == true)
             {
-                player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-            }
+                quickDrop();
+             }
         }
-        if (rb.velocity.y < 0 && isQuickDropping == false)
-        {
-            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
-        }
-
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
     public void animationCalls()
@@ -229,17 +222,6 @@ public class PlayerController : MonoBehaviour
         //animation for walking
         if (playerAnimator != null)
         {
-            //if attacking, plays animation once then sets bool to false after the if checks
-/*            if (isAttacking == true)
-            {
-                playerAnimator.SetBool("isAttacking", true);
-            }
-            else
-            {
-                playerAnimator.SetBool("isAttacking", false);
-
-            }*/
-
             //set playback speed for animation
             playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
 
@@ -264,16 +246,6 @@ public class PlayerController : MonoBehaviour
                 playerAnimator.SetBool("isWalking", false);
                 playerAnimator.SetFloat("walkSpeed", 1.25f);
             }
-
-
-
-            //if dashing, plays animation once then sets bool to false after the if checks
-            //if (isDashing == true)
-            //{
-            //    playerAnimator.SetBool("isDashing", true);
-            //}
-
-            //playerAnimator.SetBool("isDashing", false);
         }
 
     }
@@ -310,9 +282,9 @@ public class PlayerController : MonoBehaviour
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        player.GetComponent<Rigidbody>().freezeRotation = true;
         //this does not work as intended will need to be fixed
-        //playerAnimator.CrossFadeInFixedTime("jumpUp", 0.2f, 0, 0.2f);
-        
+        //playerAnimator.CrossFadeInFixedTime("jumpUp", 0.2f, 0, 0.2f);      
     }
 
     //Jump flags handler
@@ -321,7 +293,14 @@ public class PlayerController : MonoBehaviour
         isJumping = false;
         jumpCounter = 0;
     }
-
+    //Jump fallmultiplier
+    public void manageFall(float fallMultiplier)
+    {
+        if (rb.velocity.y < 0)
+        {
+           rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+        }
+    }
     //Jump Logic here
     public void OnJump(InputAction.CallbackContext context)
     {
@@ -331,7 +310,6 @@ public class PlayerController : MonoBehaviour
             if (ground.onGround == true && jumpCounter == 0 && isJumping)
             {
                 Jump();
-                player.GetComponent<Rigidbody>().freezeRotation = true;
                 jumpCounter++;
                 ground.jumpState = true;
             }
@@ -339,12 +317,10 @@ public class PlayerController : MonoBehaviour
             if (ground.onGround == false && jumpCounter == 1 && isJumping)
             {
                 Jump();
-                player.GetComponent<Rigidbody>().freezeRotation = true;
                 jumpCounter = 0;
-                ground.jumpState = true;
+                ground.doublejumpState = true;
             }
         }
-
     }
 
     //-----------------------------------------------Quick Drop-----------------------------------------------//
@@ -352,18 +328,15 @@ public class PlayerController : MonoBehaviour
     //Quick drop logic
     public void quickDrop()
     {
-        if (ground.onGround == false)
+        if (ground.onGround == false && (rb.velocity.y < 0))
         {
-            player.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * quickDropMultiplier * Time.deltaTime;
+            rb.velocity += Vector3.up * Physics.gravity.y * quickDropMultiplier * Time.deltaTime;
         }
     }
     //quick drop flag handler
     public void handleQuickDrop()
     {
-        if (ground.onGround == true)
-        {
-            isQuickDropping = false;
-        }
+        isQuickDropping = false;
     }
     //on button press call quick drop and handler
     public void OnQuickDrop(InputAction.CallbackContext context)
@@ -371,11 +344,10 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             isQuickDropping = context.ReadValueAsButton();
-            if (isQuickDropping == true)
+/*            if (isQuickDropping == true)
             {
                 quickDrop();
-            }
-            handleQuickDrop();
+            }*/
         }
     }
 
@@ -426,7 +398,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    //coroutinr call on button press
+    //coroutine call on button press
     public void OnDash(InputAction.CallbackContext context)
     {
         if (mainScript.cutScenePlaying == false)
@@ -436,18 +408,6 @@ public class PlayerController : MonoBehaviour
             if (Dashing == true && canDash == true)
             {
                 StartCoroutine(Dash());
-                //dash animation variables removed from animator, re-add to animator when re-implementing
-                //if (isDashing == true)
-                //{
-                //    playerAnimator.SetBool("isDashing", true);
-
-                //}
-                //else
-                //{
-                //    playerAnimator.SetBool("isDashing", false);
-
-                //}
-
             }
         }
     }
@@ -590,7 +550,7 @@ public class PlayerController : MonoBehaviour
 
                 attackCombo(attackCounter);
 
-                if (attackCounter == 4)
+                if (attackCounter == 3)
                 {
                     handleAttack();
                 }
@@ -603,11 +563,6 @@ public class PlayerController : MonoBehaviour
         }
     }
     //-----------------------------------------------Take Damage-----------------------------------------------//
-    public void TakeDamage() //please change name this case sensitive stuff is bad for my health
-    {
-        takeDamage();
-    }
-
     public void takeDamage()
     {
         if (collision == true)
@@ -640,7 +595,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Immunity()
     {
-        if (invulnerable == true)
+        if (invulnerable == true || enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0)
         {
             collision = false;
             yield return new WaitForSeconds(damageTakenDelay);
