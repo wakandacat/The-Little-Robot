@@ -8,6 +8,7 @@ public class loadSceneScript : MonoBehaviour
    
     //public string sceneName;
     private mainGameScript mainGameScript;
+    private GameObject door;
 
     void Awake()
     {
@@ -36,6 +37,10 @@ public class loadSceneScript : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+
+        //find the door and open it 
+        door = GameObject.Find("DoorGroup").transform.GetChild(mainGameScript.doorNum).gameObject;
+        door.GetComponent<doorScript>().openDoor();
 
         //remove to enusre it only runs once
         SceneManager.sceneLoaded -= OnSceneLoaded;

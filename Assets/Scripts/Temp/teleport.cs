@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class teleport : MonoBehaviour
 {
     private GameObject worldManager;
+    private GameObject door;
 
     void Awake()
     {
@@ -50,9 +51,15 @@ public class teleport : MonoBehaviour
 
         // Move the player to the checkpoint
         GameObject player = GameObject.Find("playerExport");
+
         if (player != null)
         {
             player.GetComponent<checkPointScript>().MoveToCheckpoint();
         }
+
+        //update the door number
+        door = GameObject.Find("DoorGroup").transform.GetChild(worldManager.GetComponent<mainGameScript>().doorNum).gameObject;
+        worldManager.GetComponent<mainGameScript>().doorNum = 2;
+
     }
 }

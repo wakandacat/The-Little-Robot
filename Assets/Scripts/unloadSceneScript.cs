@@ -8,6 +8,7 @@ public class unloadSceneScript : MonoBehaviour
 
     //public string sceneToUnload;
     private mainGameScript mainGameScript;
+    private GameObject door;
 
     void Awake()
     {
@@ -31,6 +32,11 @@ public class unloadSceneScript : MonoBehaviour
         {
             SceneManager.UnloadSceneAsync(mainGameScript.scenes[mainGameScript.currSceneName - 1]);
             //Debug.Log("get rid of previous scene: " + mainGameScript.scenes[mainGameScript.currSceneName - 1]);
+
+            //find the door and open it 
+            door = GameObject.Find("DoorGroup").transform.GetChild(mainGameScript.doorNum).gameObject;
+            door.GetComponent<doorScript>().closeDoor();
+            mainGameScript.doorNum++;
         }
     }
 
