@@ -12,11 +12,13 @@ public class mainGameScript : MonoBehaviour
     private GameObject gameSettings;
     public GameObject settingsMenu;
 
-    //global vars
+    //global scene vars
     public int currLevelCount = 1;
     public int maxLevelCount = 3;
     public string nextScene = "Platform1";
     public string currentScene = "Tutorial";
+    public string[] scenes = new[] { "Tutorial", "Platform1", "Combat1", "Platform2", "Combat2", "Platform3", "Combat3", "EndScene" };
+    public int currSceneName = 0;
 
     //get the 2 virtual cameras
     public CinemachineFreeLook platformCam;
@@ -34,15 +36,17 @@ public class mainGameScript : MonoBehaviour
     //cutscenes
     public bool cutScenePlaying = true; //toggle for when menus open or cutscenes
 
+    //enemy
     private GameObject enemy;
-    public string[] scenes = new[] { "Tutorial", "Platform1", "Combat1", "Platform2", "Combat2", "Platform3", "Combat3", "EndScene" };
-    public int currSceneName = 0;
     
     //menu vars
     public GameObject demoEndScreen;
     public GameObject controlMenu;
     public GameObject demoEndFirstButton;
     bool gameEnded = false;
+
+    //doors between scenes
+    public int doorNum = 0;
 
     void Awake()
     {
