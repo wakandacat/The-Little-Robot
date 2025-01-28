@@ -98,6 +98,9 @@ public class PlayerController : MonoBehaviour
     public string[] Combatscenes = new[] { "Combat1", "Combat2", "Combat3" };
     private GameObject enemy;
 
+    //platforming vars
+    public Vector3 platformMovement;
+
     void Start()
     {
         pc = new PlayerControls();
@@ -168,11 +171,11 @@ public class PlayerController : MonoBehaviour
 
             if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
             {
-                if (GameObject.FindGameObjectWithTag("Dead") == null)
-                {
+                //if (GameObject.FindGameObjectWithTag("Dead") == null)
+                //{
                     //assign current enemy
                     findEnemy();
-                }
+                //}
 
 
                 //set battle state to true
@@ -270,7 +273,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Move player using the rigid body
-        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed);
+        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed + platformMovement);
        
 
     }
@@ -450,14 +453,14 @@ public class PlayerController : MonoBehaviour
                 if (rollCounter == 1)
                 {
                     moveCharacter(rollSpeed);
-                    player.GetComponent<SphereCollider>().enabled = true;
-                    player.GetComponent<BoxCollider>().enabled = false;
+                   // player.GetComponent<SphereCollider>().enabled = true;
+                   // player.GetComponent<BoxCollider>().enabled = false;
                 }
                 else if (rollCounter == 2)
                 {
                     handleRoll();
-                    player.GetComponent<SphereCollider>().enabled = false;
-                    player.GetComponent<BoxCollider>().enabled = true;
+                   // player.GetComponent<SphereCollider>().enabled = false;
+                   // player.GetComponent<BoxCollider>().enabled = true;
                 }
             }
         }
@@ -660,6 +663,7 @@ public class PlayerController : MonoBehaviour
     }
     public void fadeOut()
     {
+        Debug.Log("yoooooooooooooo");
         fadingOut = true;
         playerCurrenthealth = playerHealth;
         checkPoint.MoveToCheckpoint();

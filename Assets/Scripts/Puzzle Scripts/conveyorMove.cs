@@ -23,8 +23,17 @@ public class conveyorMove : MonoBehaviour
         //for each object on the conveyor, add a force to it
         for (int i = 0; i < movingObjects.Count; i++)
         {
-            //xVel = new Vector3(1.0f, 0.0f, 0.0f);
-            movingObjects[i].GetComponent<Rigidbody>().velocity = speed * direction * Time.deltaTime;
+            // movingObjects[i].GetComponent<Rigidbody>().velocity = speed * direction * Time.deltaTime;
+
+            //additively add conveyor velocity so as not to overwrite
+            if (movingObjects[i].GetComponent<Rigidbody>())
+            {
+                Rigidbody rb = movingObjects[i].GetComponent<Rigidbody>();
+                Vector3 conveyorVelocity = speed * direction * Time.deltaTime;
+
+                //keep the jump velocity
+                rb.velocity = new Vector3(conveyorVelocity.x, rb.velocity.y, conveyorVelocity.z);
+            }
         }
     }
 
@@ -32,23 +41,11 @@ public class conveyorMove : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         movingObjects.Add(collision.gameObject);
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (collision.gameObject.GetComponent<PlayerController>().Rolling == true)
-            {
-                //Debug.Log("rolling"); //if the bug can be replicated then put adjustment code here
-            }
-            collision.gameObject.GetComponent<PlayerController>().jumpForce = 100f;
-        }
     }
 
     //when something leaves the belt
     public void OnCollisionExit(Collision collision)
     {
         movingObjects.Remove(collision.gameObject);
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            collision.gameObject.GetComponent<PlayerController>().jumpForce = 20f;
-        }
     }
 }

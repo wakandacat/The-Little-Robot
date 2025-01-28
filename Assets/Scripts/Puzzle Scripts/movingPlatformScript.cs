@@ -10,6 +10,7 @@ public class movingPlatformScript : MonoBehaviour
     //the platformPath holds a bunch of empty gameobjects that you can select and manually move to where you want the platform to go
     //you should be able to add as many platformPath objects as you want
     //KEEP THE ORDER OF ELEMENTS IN THE PREFAB ALWAYS IN THE SAME ORDER: GEO ABOVE PATHS
+    //you can modify the speed variable in the outliner
 
 
     //referenced this tutorial: https://www.youtube.com/watch?v=ly9mK0TGJJo
@@ -21,7 +22,7 @@ public class movingPlatformScript : MonoBehaviour
     private Transform waypointParent;
 
     //platform vars
-    private float speed;
+    public float speed = 5;
     private int targetWaypointIndex;
     private float timeToPoint;
     private float elapsedTime;
@@ -30,11 +31,13 @@ public class movingPlatformScript : MonoBehaviour
     private Transform targetWaypoint;
     private Transform prevWaypoint;
 
+    //fungus bool
+    public bool isFungus = false;
+
     void Awake()
     {
         platform = transform.GetChild(0).gameObject;
         waypointParent = transform.GetChild(1);
-        speed = 5;
         targetWaypointIndex = 0;
     }
 
@@ -43,23 +46,27 @@ public class movingPlatformScript : MonoBehaviour
         UpdateWaypoints();
     }
 
-    void Update() //ensure that this is the same as the player moevemtn -> if fixedUpdate then this should also be fixedUpdate
+    void FixedUpdate()
     {
-        elapsedTime += Time.deltaTime;
-        float elapsedPercent = elapsedTime / timeToPoint;
 
-        //optional smoothing when closer to a waypoint
-        elapsedPercent = Mathf.SmoothStep(0, 1, elapsedPercent);
-
-        //lerp the platform
-        platform.transform.position = Vector3.Lerp(prevWaypoint.position, targetWaypoint.position, elapsedPercent);
-        //platform.transform.rotation = Quaternion.Lerp(prevWaypoint.rotation, targetWaypoint.rotation, elapsedPercent); //optional rotation as well
-       
-        //move onto the next waypoint once the platform is at destination
-        if (elapsedPercent >= 1)
+        if (isFungus == false)
         {
-            UpdateWaypoints();
+            elapsedTime += Time.deltaTime;
+            float elapsedPercent = elapsedTime / timeToPoint;
+
+            //optional smoothing when closer to a waypoint
+            elapsedPercent = Mathf.SmoothStep(0, 1, elapsedPercent);
+
+            //lerp the platform
+            platform.transform.position = Vector3.Lerp(prevWaypoint.position, targetWaypoint.position, elapsedPercent);
+
+            //move onto the next waypoint once the platform is at destination
+            if (elapsedPercent >= 1)
+            {
+                UpdateWaypoints();
+            }
         }
+
     }
 
     //get the next waypoint child INDEX and loop if we've hit the max

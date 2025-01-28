@@ -1,32 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public class platformTriggerScript : MonoBehaviour
 {
     private GameObject platform;
+    private bool playerOn = false;
+    private Vector3 lastPlatformPosition;
+    private GameObject player;
+
     void Awake()
     {
-        //platform = transform.gameObject;
+        platform = transform.gameObject;
     }
 
-    //trigger to determine if player is on platform or not
+    //get teh platform movement and send it to the player controller
+    private void FixedUpdate()
+    {
+        Vector3 platformDelta = platform.transform.position - lastPlatformPosition;
+
+        if (playerOn && player)
+        {
+            player.gameObject.GetComponent<PlayerController>().platformMovement = platformDelta;
+
+        }
+        else if (playerOn == false && player)
+        {
+            player.gameObject.GetComponent<PlayerController>().platformMovement = Vector3.zero;
+        }
+
+        lastPlatformPosition = platform.transform.position;
+    }
+
+    //trigger to determine if player is on platform
     private void OnTriggerEnter(Collider other)
     {
         //fi player collided
-        //if (other.gameObject.name == "playerExport")
-        //{
-        //   // Debug.Log("on platform");
-        //    other.transform.SetParent(platform.transform);
-        //}
+        if (other.gameObject.name == "playerExport")
+        {
+            //Debug.Log("on platform");
+
+            player = other.gameObject;
+            playerOn = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         //if player leaves
-        //if (other.gameObject.name == "playerExport")
-        //{
-        //    //Debug.Log("off platform");
-        //    other.transform.SetParent(null);
-        //}
+        if (other.gameObject.name == "playerExport")
+        {
+            //Debug.Log("off platform");
+
+            playerOn = false;
+        }
     }
 }
