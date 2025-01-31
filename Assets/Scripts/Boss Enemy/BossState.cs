@@ -359,22 +359,6 @@ public class AwakeState : BossState
         // Determine Best Choice -----------------------------------------------------------------------------------*
         for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
         {
-            // Attack_TestingState -----------------------
-            //if (Attack_TestingState.CalculateScore(bossEnemyComponent) > Attack_BestScore)
-            //{
-            //    Attack_BestName = Attack_TestingState.Attack_Name;
-            //    Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
-            //    Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
-            //}
-            //else if (Attack_TestingState.CalculateScore(bossEnemyComponent) == Attack_BestScore)
-            //{
-            //    if (Random.Range(0, 2) == 0)
-            //    {
-            //        Attack_BestName = Attack_TestingState.Attack_Name;
-            //        Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
-            //        Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
-            //    }
-            //}
             // Attack_SeekingProjectile01State -----------
             if (Attack_SeekingProjectile01State.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -479,6 +463,13 @@ public class AwakeState : BossState
             Attack_BestScore = Attack_SeekingProjectile01State.CalculateScore(bossEnemyComponent);
             Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile01State;
         }
+
+        // DEBUGGING:
+        // Attack_TestingState -----------------------
+        Attack_BestName = Attack_TestingState.Attack_Name;
+        Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
+        Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_TestingState;
+
         // Transition to Best Choice -------------------------------------------------------------------------------*
         Attack_TransitionToExecute();
     }

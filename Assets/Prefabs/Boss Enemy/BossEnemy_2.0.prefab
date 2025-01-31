@@ -1337,6 +1337,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8379778867830888751}
   - {fileID: 4172850405964903696}
   - {fileID: 4284253285308751542}
   - {fileID: 6529560531627094738}
@@ -1404,8 +1405,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Spawner_ProjectilePool: {fileID: 6820387772739586338, guid: db39edd7df159844aa2e53adbb50019c,
     type: 3}
-  Spawner_FirePoint: {fileID: 0}
+  Spawner_FirePoint_GameObject: {fileID: 5776426818584315548}
   Spawner_FireRate: 1
+  Spawner_RemainingAttackCount: 1
 --- !u!54 &2808467725153756840
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4078,6 +4080,38 @@ SkinnedMeshRenderer:
     m_Center: {x: -4.785877, y: 1.4482358, z: -0.000000044703484}
     m_Extent: {x: 0.7360928, y: 0.15750128, z: 0.1575012}
   m_DirtyAABB: 0
+--- !u!1 &4004520029439947013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8379778867830888751}
+  m_Layer: 0
+  m_Name: Projectile_Spawners
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8379778867830888751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4004520029439947013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5647165933859694541}
+  m_Father: {fileID: 1790235215717638030}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4007652954852856450
 GameObject:
   m_ObjectHideFlags: 0
@@ -6118,6 +6152,37 @@ SkinnedMeshRenderer:
     m_Center: {x: 1.1955656, y: -0.4457628, z: -0.13775949}
     m_Extent: {x: 0.2650622, y: 0.3870257, z: 0.16896997}
   m_DirtyAABB: 0
+--- !u!1 &5776426818584315548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5647165933859694541}
+  m_Layer: 0
+  m_Name: ProjectileSpawner_Bullet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5647165933859694541
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5776426818584315548}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8379778867830888751}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5790704987573561831
 GameObject:
   m_ObjectHideFlags: 0

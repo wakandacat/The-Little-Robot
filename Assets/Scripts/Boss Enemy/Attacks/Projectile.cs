@@ -21,6 +21,7 @@ public class Projectile : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialization                                                                                                                                                                               * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Initializes the Projectile Game Object
     public void Initialize(ProjectilePool Projectile_Pool, Vector3 New_Direction)
     {
         // Set the target direction of the projectile
@@ -29,6 +30,25 @@ public class Projectile : MonoBehaviour
 
         // Update Projectile_HomePool
         Projectile_HomePool = Projectile_Pool;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Projectile Value Update Functions                                                                                                                                                            * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void UpdateAllProjectileValues(float New_ProjectileSpeed, float New_ProjectileLifetime)
+    {
+        UpdateProjectileSpeed(New_ProjectileSpeed);
+        UpdateProjectileLifetime(New_ProjectileLifetime);
+    }
+
+    public void UpdateProjectileSpeed(float New_ProjectileSpeed)
+    {
+        Projectile_Speed = New_ProjectileSpeed;
+    }
+
+    public void UpdateProjectileLifetime(float New_ProjectileLifetime)
+    {
+        Projectile_Lifetime = New_ProjectileLifetime;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -55,7 +75,7 @@ public class Projectile : MonoBehaviour
     // FixedUpdate is called at set intervals
     void FixedUpdate()
     {
-
+        MoveProjectile();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ public class ProjectilePool : MonoBehaviour
             Pool_Projectiles.Enqueue(NewProjectile);                    // add it to the Pool_Projectiles queue
         }
     }
-
+    
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Pool_Projectiles Queue Functions                                                                                                                                                             * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -48,5 +48,42 @@ public class ProjectilePool : MonoBehaviour
     {
         ReturningProjectile.SetActive(false);
         Pool_Projectiles.Enqueue(ReturningProjectile);
+    }
+
+    public bool CheckIfAllProjectilesHaveBeenReturnedToQueue()
+    {
+        if (Pool_Projectiles.Count == Pool_Size)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Update Projectiles in Pool_Projectiles Queue Functions                                                                                                                                       * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void UpdateAllProjectileValues(float New_ProjectileSpeed, float New_ProjectileLifetime)
+    {
+        UpdateProjectileSpeed(New_ProjectileSpeed);
+        UpdateProjectileLifetime(New_ProjectileLifetime);
+    }
+
+    public void UpdateProjectileSpeed(float New_ProjectileSpeed)
+    {
+        foreach (GameObject projectile in Pool_Projectiles)
+        {
+            projectile.GetComponent<Projectile>().UpdateProjectileSpeed(New_ProjectileSpeed);
+        }
+    }
+
+    public void UpdateProjectileLifetime(float New_ProjectileLifetime)
+    {
+        foreach (GameObject projectile in Pool_Projectiles)
+        {
+            projectile.GetComponent<Projectile>().UpdateProjectileLifetime(New_ProjectileLifetime);
+        }
     }
 }
