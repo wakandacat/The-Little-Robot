@@ -55,9 +55,9 @@ public class PlayerController : MonoBehaviour
     //Attack vars
     private bool isAttacking = false;
     private bool attackState = false;
-    private int attackCounter = 0;
-    private float comboTimer = 0f;
+    public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
+    private float attackCD = 2.0f;
 
     //Roll vars
     public bool Rolling = false;
@@ -453,14 +453,10 @@ public class PlayerController : MonoBehaviour
                 if (rollCounter == 1)
                 {
                     moveCharacter(rollSpeed);
-                   // player.GetComponent<SphereCollider>().enabled = true;
-                   // player.GetComponent<BoxCollider>().enabled = false;
                 }
                 else if (rollCounter == 2)
                 {
                     handleRoll();
-                   // player.GetComponent<SphereCollider>().enabled = false;
-                   // player.GetComponent<BoxCollider>().enabled = true;
                 }
             }
         }
@@ -536,6 +532,11 @@ public class PlayerController : MonoBehaviour
             comboMaxTime = 0;
         }
     }
+    IEnumerator attackCooldown()
+    {
+        yield return new WaitForSeconds(attackCD);
+        handleAttack();
+    }
     //Call the relevant methods on button press or presses
     public void OnAttack(InputAction.CallbackContext context)
     {
@@ -547,7 +548,7 @@ public class PlayerController : MonoBehaviour
                 //set animation to true, should run once per button call
                 //playerAnimator.SetBool("isAttacking", true);
                 //Debug.Log("animator should be true");
-
+                
                 attackState = true;
                 attackCounter++;
 
@@ -555,7 +556,7 @@ public class PlayerController : MonoBehaviour
 
                 if (attackCounter == 3)
                 {
-                    handleAttack();
+                    StartCoroutine(attackCooldown());
                 }
             }
 
