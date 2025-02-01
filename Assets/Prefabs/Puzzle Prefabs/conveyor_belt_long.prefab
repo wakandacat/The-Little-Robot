@@ -111,7 +111,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce848b5d181860e489a487d082021994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  box: {fileID: 6376361310034119682, guid: 617f78d8b255cd144aa797fb5f92571b, type: 3}
+  items:
+  - {fileID: 6376361310034119682, guid: 617f78d8b255cd144aa797fb5f92571b, type: 3}
+  - {fileID: 8143049080014085744, guid: 68485db4da92a064f9772581cb863dfa, type: 3}
+  - {fileID: 5124088389607708071, guid: 19f125e40be24fe4e90ac60c2ac4fd12, type: 3}
+  spawnRate: 3
 --- !u!65 &8546226931769608107
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -258,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bdd5ed688188e046acf54b19791e5ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 700
+  speed: 400
   direction: {x: 1, y: 0, z: 0}
   xVel: {x: 0, y: 0, z: 0}
 --- !u!65 &3892805874335119030

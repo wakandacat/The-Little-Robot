@@ -48,6 +48,10 @@ public class mainGameScript : MonoBehaviour
     //doors between scenes
     public int doorNum = 0;
 
+    //checkpoint management
+    public GameObject currCheckpoint;
+    public GameObject checkpointGrp;
+
     void Awake()
     {
         //load the first scene in addition to the base scene
@@ -62,8 +66,7 @@ public class mainGameScript : MonoBehaviour
         //set new default selected
         EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
 
-
-        //get teh game settings
+        //get teh game settings if they exist --> if gameplay started from MainMenu scene then it will exist, otherwise it wont
         if (GameObject.Find("GameSettings"))
         {
             gameSettings = GameObject.Find("GameSettings");
@@ -71,6 +74,24 @@ public class mainGameScript : MonoBehaviour
 
         setSettings();
 
+        //get the first checkpoint from the checkpoint group
+        currCheckpoint = checkpointGrp.transform.GetChild(0).gameObject;
+
+        //callback once the scene is fully loaded
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Tutorial")
+        {
+            // Set the Tutorial scene as active
+            SceneManager.SetActiveScene(scene);
+
+            // Remove the event listener to ensure it only runs once
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
     }
 
     //method to set all the values from the main game settings that carried over
@@ -85,7 +106,7 @@ public class mainGameScript : MonoBehaviour
         } 
         else
         {
-            //set the initial freelook sensitivity from main menu
+            //set the defaul freelook sensitivity if gamesettings not chosen
             platformCam.m_XAxis.m_MaxSpeed = 300 * 0.5f; //middle is 150
             platformCam.m_YAxis.m_MaxSpeed = 4 * 0.5f; //middle is 2
             settingsMenu.GetComponentInChildren<Slider>().value = 0.5f;
@@ -94,6 +115,7 @@ public class mainGameScript : MonoBehaviour
 
     void FixedUpdate()
     {
+
         //--------------INTRO CUTSCENE---------------
         if (introPlayed == false)
         {

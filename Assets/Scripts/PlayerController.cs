@@ -664,7 +664,7 @@ public class PlayerController : MonoBehaviour
     }
     public void fadeOut()
     {
-        Debug.Log("yoooooooooooooo");
+        //Debug.Log("yoooooooooooooo");
         fadingOut = true;
         playerCurrenthealth = playerHealth;
         checkPoint.MoveToCheckpoint();
