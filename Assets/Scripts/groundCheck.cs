@@ -20,6 +20,11 @@ public class groundCheck : MonoBehaviour
     void Update()
     {
         //Debug.Log("Ground = " + onGround);
+        if(onGround == true)
+        {
+            //jumpState = false;
+            doublejumpState = false;
+        }
 
     }
 
@@ -29,21 +34,26 @@ public class groundCheck : MonoBehaviour
         if (collision.gameObject.tag == "ground")
         {
             onGround = true;
-            jumpState = false;
-            doublejumpState = false;
         }
        
     }
     public void OnCollisionEnter(Collision collision)
     {
-        jumping.handleJump();
-        jumping.handleQuickDrop();
+        if (collision.gameObject.tag == "ground")
+        {
+            jumping.handleJump();
+            jumping.handleQuickDrop();
+        }
+
     }
 
     public void OnCollisionExit(Collision collision)
     {
-        onGround = false;
-        
+        if (collision.gameObject.tag == "ground")
+        {
+            onGround = false;
+        }
+
     }
 
 
