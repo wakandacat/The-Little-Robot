@@ -19,8 +19,8 @@ public abstract class BossState
     // *               Private/Protected Attributes                                                                                                                                                                 * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Object References ----------------------------------------------------------------------------------------------------------
-    protected BossEnemy bossEnemyComponent; // the BossEnemy.cs script attached to the Boss Enemy
-    protected Animator animator; // will be set to whatever animator is being used for Boss Enemy
+    protected BossEnemy bossEnemyComponent;                 // the BossEnemy.cs script attached to the Boss Enemy
+    protected Animator animator;                            // will be set to whatever animator is being used for Boss Enemy
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialize Function                                                                                                                                                                          * 
@@ -212,9 +212,9 @@ public class SelfCheckState : BossState
     {
         // Programming Logic
 
-        if (bossEnemyComponent.HP_ReturnCurrent() <= 0) // check if HP is less than or equal to 0
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
         {
-            bossEnemyComponent.TransitionToDeathState();     // if so, transition to death state
+            bossEnemyComponent.TransitionToDeathState();                     // if so, transition to Death State
         }
         else if (bossEnemyComponent.returnCurrentEnergy() <= 0)   // check if the current energy count of the Boss Enemy is below or equal to 0
         {
@@ -303,9 +303,9 @@ public class AwakeState : BossState
             }
         }
 
-        if (bossEnemyComponent.HP_ReturnCurrent() <= 0) // check if HP is less than or equal to 0
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
         {
-            bossEnemyComponent.TransitionToDeathState();     // if so, transition to death state
+            bossEnemyComponent.TransitionToDeathState();                     // if so, transition to Death State
         }
         else if (delayFinished == true)  // check if the delay has been completed and the attack has been chosen
         {
@@ -464,7 +464,7 @@ public class AwakeState : BossState
             Attack_TransitionToExecute = bossEnemyComponent.TransitionToAttack_SeekingProjectile01State;
         }
 
-        // DEBUGGING:
+        // DEBUGGING (MUST BE REMOVED):
         // Attack_TestingState -----------------------
         Attack_BestName = Attack_TestingState.Attack_Name;
         Attack_BestScore = Attack_TestingState.CalculateScore(bossEnemyComponent);
@@ -509,12 +509,12 @@ public class LowEnergyState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (bossEnemyComponent.HP_ReturnCurrent() <= 0.0f)                                  // check if HP_Current has fallen below 0
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
         {
-            bossEnemyComponent.TransitionToDeathState();                                    // if so, transition to Death State
+            bossEnemyComponent.TransitionToDeathState();                     // if so, transition to Death State
         }
 
-        else if (bossEnemyComponent.returnCurrentEnergy() >= bossEnemyComponent.Energy_Maximum)  // check if Energy_Current has exceeded Energy_Maximum
+        else if (bossEnemyComponent.Energy_IsFull())                                        // check if Energy_Current has exceeded Energy_Maximum
         {
             bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.Energy_Maximum);      // if so, set Energy_Current to Energy_Maximum
             bossEnemyComponent.TransitionToAwakeState();                                    // and, transition to Awake State
@@ -630,8 +630,29 @@ public class Attack_TestingState : BossState
     // Attack_State Selection Properties
     public static string Attack_Name = "Attack_TestingState";
     public static float Energy_Cost = 1.0f;
-    public static float Player_MinDistance = 20.0f;
-    public static float Player_MaxDistance = 30.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 50.0f;
+
+    // Spawner Values
+    private float Attack_FireRate = 0.5f;
+    private int Attack_Count = 10;
+    private bool Attack_TrackHorizontal = true;
+    private bool Attack_TrackVertical = false;
+    private float Attack_TrackSpeed = 20.0f;
+    private float Attack_ProjectileSpeed = 15.0f;
+    private float Attack_ProjectileLifetime = 10.0f;
+
+    // Attack Spawner
+    private ProjectileSpawner SpawnerComponent_Bullet;
+
+    // Attack Values
+    // SpawnStackedSpreadAttack(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    private int Attack_ProjectileCount = 10;
+    private float Attack_AngleOfSpread = 45.0f;
+    private int Attack_ProjectileVerticalCount = 3;
+    private float Attack_MinHeight = 0.0f;
+    private float Attack_MaxHeight = 3.0f;
+
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -656,10 +677,19 @@ public class Attack_TestingState : BossState
     // Called when the state machine transitions to this state
     public override void Enter()
     {
-        // Programming Logic
+        // Debugging
         Debug.Log("BossEnemy: Entering Attack_TestingState");
-        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+
+        // Boss Enemy Logic
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+        // Spawner Logic
+        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+        SpawnerComponent_Bullet.UpdateAllProjectileValues(Attack_ProjectileSpeed, Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+        SpawnerComponent_Bullet.StartAttack();
 
         // Animation Logic
         animator.SetBool("inAttack", true);
@@ -670,8 +700,27 @@ public class Attack_TestingState : BossState
     public override void Update()
     {
         // Programming Logic
-        // TEMP DEBUGGING CODE:
-        Attack_Completed = true;
+
+        // Spawner Logic
+        // Attack is still occuring
+        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+        {
+            Debug.Log("BossEnemy: Spawner Is Active");
+            // Spawner is ready for next projectile fire
+            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+            {
+                Debug.Log("BossEnemy: Spawner Ready To Fire");
+                SpawnerComponent_Bullet.PreAttackLogic();
+                SpawnerComponent_Bullet.SpawnStackedSpreadAttack(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                SpawnerComponent_Bullet.PostAttackLogic();
+            }
+        }
+        // Attack has finished
+        else
+        {
+            Debug.Log("BossEnemy: Attack Completed");
+            Attack_Completed = true;
+        }
 
         // Animation Logic
 
@@ -681,7 +730,11 @@ public class Attack_TestingState : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (Attack_Completed == true)
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToDeathState();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
         {
             bossEnemyComponent.TransitionToSelfCheckState();
         }

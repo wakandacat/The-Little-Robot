@@ -15,7 +15,8 @@ public class ProjectilePool : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Private/Protected Attributes                                                                                                                                                                 * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    private Queue<GameObject> Pool_Projectiles = new Queue<GameObject>();   // this is the pool of projectiles that the spawner can use
+    private Queue<GameObject> Pool_Projectiles = new Queue<GameObject>();       // this is the pool of projectiles that the spawner can use
+    private List<GameObject> Pool_ActiveProjectiles = new List<GameObject>();   // this list contains all projectiles that have been fired and are no longer in the pool ("active")
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Start Function                                                                                                                                                                               * 
@@ -38,8 +39,9 @@ public class ProjectilePool : MonoBehaviour
     // Returns (and takes out) the next Projectile in the Pool_Projectiles queue
     public GameObject GetNextProjectile()
     {
-        GameObject NextProjectile = Pool_Projectiles.Dequeue();
+        GameObject NextProjectile = Pool_Projectiles.Dequeue();     // remove new projectile from pool
         NextProjectile.SetActive(true);
+        Pool_ActiveProjectiles.Add(NextProjectile);                 // add new projectile to active list
         return NextProjectile;
     }
 
@@ -47,7 +49,17 @@ public class ProjectilePool : MonoBehaviour
     public void ReturnProjectileToPool(GameObject ReturningProjectile)
     {
         ReturningProjectile.SetActive(false);
-        Pool_Projectiles.Enqueue(ReturningProjectile);
+        Pool_Projectiles.Enqueue(ReturningProjectile);          // add returning projectile to pool
+        Pool_ActiveProjectiles.Remove(ReturningProjectile);     // remove returning projectile from active list
+    }
+
+    //
+    public void ReturnAllProjectilesToPool()
+    {
+        foreach (GameObject Projectile in new List<GameObject>(Pool_ActiveProjectiles))
+        {
+            ReturnProjectileToPool(Projectile);
+        }
     }
 
     public bool CheckIfAllProjectilesHaveBeenReturnedToQueue()

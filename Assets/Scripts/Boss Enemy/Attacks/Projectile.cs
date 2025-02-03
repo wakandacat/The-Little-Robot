@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour
     {
         // Set the target direction of the projectile
         Projectile_Direction = New_Direction.normalized;
-        Invoke(nameof(DestroyProjectile), Projectile_Lifetime);
+        Invoke(nameof(ReturnToPool), Projectile_Lifetime);
 
         // Update Projectile_HomePool
         Projectile_HomePool = Projectile_Pool;
@@ -89,7 +89,7 @@ public class Projectile : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Destroy Functions                                                                                                                                                                            * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    void DestroyProjectile()
+    void ReturnToPool()
     {
         Projectile_HomePool.ReturnProjectileToPool(gameObject);
     }

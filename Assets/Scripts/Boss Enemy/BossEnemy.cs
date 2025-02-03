@@ -43,6 +43,9 @@ public class BossEnemy : MonoBehaviour
     private Animator bossAnimator;
     GameObject playerGameObject;
 
+    // Spawners -------------------------------------------------------------------------------------------------------------------
+    private ProjectileSpawner[] ProjectileSpawnersList;
+
     // State Machine Attributes ---------------------------------------------------------------------------------------------------
     private BossStateMachine stateMachine;
 
@@ -76,6 +79,9 @@ public class BossEnemy : MonoBehaviour
         // Set Object References
         bossAnimator = GetComponent<Animator>(); // assign the Animator component of the BossEnemy to bossAnimator
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
+
+        // Set Spawner References
+        ProjectileSpawnersList = GetComponents<ProjectileSpawner>();
 
         // Initialize Attributes
         stateMachine = new BossStateMachine();
@@ -187,6 +193,21 @@ public class BossEnemy : MonoBehaviour
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Spawner Functions                                                                                                                                                                            * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public ProjectileSpawner ReturnComponent_Spawner_Bullet()
+    {
+        foreach (var Spawner in ProjectileSpawnersList)
+        {
+            if (Spawner.Spawner_ID == "Bullet")
+            {
+                return Spawner;
+            }
+        }
+        return null;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               State Transition Functions                                                                                                                                                                   * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void TransitionToSleepingState()
@@ -276,6 +297,18 @@ public class BossEnemy : MonoBehaviour
         return HP_Current;
     }
 
+    public bool HP_IsZero()
+    {
+        if (HP_Current <= 0.0f)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public void HP_UpdateCurrent(float newHPCurrent)
     {
         HP_Current = newHPCurrent;
@@ -316,6 +349,18 @@ public class BossEnemy : MonoBehaviour
     public float returnCurrentEnergy()
     {
         return Energy_Current;
+    }
+
+    public bool Energy_IsFull()
+    {
+        if (Energy_Current >= Energy_Maximum)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void updateCurrentEnergy(float newEnergyCurrent)
