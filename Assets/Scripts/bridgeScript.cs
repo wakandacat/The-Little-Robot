@@ -10,6 +10,7 @@ public class bridgeScript : MonoBehaviour
     private bool movingLeft = false;
     private bool movingRight = false;
     private Vector3 startPos;
+    private float timeToMove = 1.0f;
 
 
     public void Awake()
@@ -19,24 +20,24 @@ public class bridgeScript : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (timer < 1 && movingLeft) {
+        if (timer < timeToMove && movingLeft) {
             timer += timeStep;
             //Debug.Log("moving bridge left");
             moveBridgeLeft();
 
-            if (timer >= 1)
+            if (timer >= timeToMove)
             {
                 movingLeft = false;
                 startPos = this.transform.position;
             }
         } 
-        else if (timer < 1 && movingRight)
+        else if (timer < timeToMove && movingRight)
         {
             timer += timeStep;
             //Debug.Log("moving bridge right");
             moveBridgeRight();
 
-            if (timer >= 1)
+            if (timer >= timeToMove)
             {
                 movingRight = false;
                 startPos = this.transform.position;

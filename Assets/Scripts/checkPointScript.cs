@@ -20,8 +20,6 @@ public class checkPointScript : MonoBehaviour
         //get the current scene
         currScene = mainGameScript.currentScene;
 
-        //reload the currently active scene
-       // Debug.Log("current scene:" + currScene);
         SceneManager.UnloadSceneAsync(currScene);
         SceneManager.LoadScene(currScene, LoadSceneMode.Additive);
 
@@ -38,8 +36,9 @@ public class checkPointScript : MonoBehaviour
         //set newest scene to active
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(currScene));
 
-        //find the object with the tag "Checkpoint" in that scene
-        currCheckpoint = GameObject.FindWithTag("Checkpoint");
+        //get the current checkpoint from the main script
+        currCheckpoint = mainGameScript.currCheckpoint;
+        Debug.Log("checkpoint: " + currCheckpoint);
 
         //move the player there
         this.transform.position = currCheckpoint.transform.position;

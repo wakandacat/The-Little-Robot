@@ -32,13 +32,14 @@ public class PlayerController : MonoBehaviour
 
     //jump + quick drop vars
     public float jumpForce = 20.0f;
-    private float JfallMultiplier = 5.0f;
-    private float DJfallMultiplier = 10.0f;
+    private float JfallMultiplier = 10.0f;
+    private float DJfallMultiplier = 15.0f;
     private float quickDropMultiplier = 20.0f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
     public int jumpCounter = 0;
     private float rotationSpeed = 1.0f;
+    public bool jumpState = false;
 
     //Dash vars
     private bool canDash = true;
@@ -212,8 +213,18 @@ public class PlayerController : MonoBehaviour
                 ManagedeathState();
                 deathState = false;
             }
-            manageFall(DJfallMultiplier);
-            if(isQuickDropping == true)
+            if (ground.jumpState == true)
+            {
+                manageFall(JfallMultiplier);
+                Debug.Log(jumpState);
+            }
+            if (ground.doublejumpState == true)
+            {
+                Debug.Log("We are here");
+                manageFall(DJfallMultiplier);
+
+            }
+            if (isQuickDropping == true)
             {
                 quickDrop();
              }
@@ -281,13 +292,23 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Jump-----------------------------------------------//
 
     //Basic Jump Script using rigidody forces
-    public void Jump()
+    public void JumpForce()
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         player.GetComponent<Rigidbody>().freezeRotation = true;
         //this does not work as intended will need to be fixed
         //playerAnimator.CrossFadeInFixedTime("jumpUp", 0.2f, 0, 0.2f);      
+    }
+    public void manageJump()
+    {
+        JumpForce();
+        ground.jumpState = true;
+    }
+    public void manageDoubleJump()
+    {
+        JumpForce();
+        ground.doublejumpState = true;
     }
 
     //Jump flags handler
@@ -312,16 +333,14 @@ public class PlayerController : MonoBehaviour
             isJumping = context.ReadValueAsButton();
             if (ground.onGround == true && jumpCounter == 0 && isJumping)
             {
-                Jump();
+                manageJump();
                 jumpCounter++;
-                ground.jumpState = true;
             }
             //Double Jump call
             if (ground.onGround == false && jumpCounter == 1 && isJumping)
             {
-                Jump();
+                manageDoubleJump();
                 jumpCounter = 0;
-                ground.doublejumpState = true;
             }
         }
     }
@@ -347,10 +366,6 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             isQuickDropping = context.ReadValueAsButton();
-/*            if (isQuickDropping == true)
-            {
-                quickDrop();
-            }*/
         }
     }
 
@@ -664,7 +679,7 @@ public class PlayerController : MonoBehaviour
     }
     public void fadeOut()
     {
-        Debug.Log("yoooooooooooooo");
+        //Debug.Log("yoooooooooooooo");
         fadingOut = true;
         playerCurrenthealth = playerHealth;
         checkPoint.MoveToCheckpoint();

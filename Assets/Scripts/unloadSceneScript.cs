@@ -25,21 +25,28 @@ public class unloadSceneScript : MonoBehaviour
         } 
     }
 
+
     //unload the previous scene
     public void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.name == "playerExport" && SceneManager.GetSceneByName(mainGameScript.currentScene).isLoaded)
         {
-            SceneManager.UnloadSceneAsync(mainGameScript.scenes[mainGameScript.currSceneName - 1]);
-            //Debug.Log("get rid of previous scene: " + mainGameScript.scenes[mainGameScript.currSceneName - 1]);
-
-            //find the door and open it 
+            //find the door and close it 
             door = GameObject.Find("DoorGroup").transform.GetChild(mainGameScript.doorNum).gameObject;
             door.GetComponent<doorScript>().closeDoor();
             mainGameScript.doorNum++;
+
+            Invoke(nameof(UnloadScene), door.GetComponent<doorScript>().timeToOpen + door.GetComponent<doorScript>().delay); //may not be perfect but good enough for now
+
         }
     }
 
+    public void UnloadScene()
+    {
+        //once the door has finished closing, unload the scene
+        SceneManager.UnloadSceneAsync(mainGameScript.scenes[mainGameScript.currSceneName - 1]);
+        //Debug.Log("get rid of previous scene: " + mainGameScript.scenes[mainGameScript.currSceneName - 1]);
+    }
 
     public void OnTriggerExit(Collider collision)
     {
