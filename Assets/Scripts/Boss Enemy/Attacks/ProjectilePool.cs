@@ -39,6 +39,12 @@ public class ProjectilePool : MonoBehaviour
     // Returns (and takes out) the next Projectile in the Pool_Projectiles queue
     public GameObject GetNextProjectile()
     {
+        // check if queue is empty, if so return oldest projectile
+        if (Pool_Projectiles.Count == 0)
+        {
+            ReturnOldestActiveProjectileToPool();
+        }
+
         GameObject NextProjectile = Pool_Projectiles.Dequeue();     // remove new projectile from pool
         NextProjectile.SetActive(true);
         Pool_ActiveProjectiles.Add(NextProjectile);                 // add new projectile to active list
@@ -71,6 +77,16 @@ public class ProjectilePool : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    public void ReturnOldestActiveProjectileToPool()
+    {
+        if (Pool_ActiveProjectiles.Count > 0)
+        {
+            Debug.Log("ProjectilePool: Oldest Active Projectile Returned To Pool");
+            GameObject oldestProjectile = Pool_ActiveProjectiles[0];    // get the first (oldest) projectile in the list
+            ReturnProjectileToPool(oldestProjectile);                   // Return it to the pool
         }
     }
 

@@ -18,18 +18,37 @@ public class Projectile : MonoBehaviour
     private Vector3 Projectile_Direction;
     private ProjectilePool Projectile_HomePool;
 
+    private Coroutine Coroutine_ReturnProjectileToPool;
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialization                                                                                                                                                                               * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Initializes the Projectile Game Object
     public void Initialize(ProjectilePool Projectile_Pool, Vector3 New_Direction)
     {
+        // Stop previous coroutine if active
+        if (Coroutine_ReturnProjectileToPool != null)
+        {
+            StopCoroutine(Coroutine_ReturnProjectileToPool);
+        }
+
         // Set the target direction of the projectile
         Projectile_Direction = New_Direction.normalized;
-        Invoke(nameof(ReturnToPool), Projectile_Lifetime);
+        //Invoke(nameof(ReturnToPool), Projectile_Lifetime);    // OUTDATED
+
+        Coroutine_ReturnProjectileToPool = StartCoroutine(AutoReturnToPool());
 
         // Update Projectile_HomePool
         Projectile_HomePool = Projectile_Pool;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Coroutine Functions                                                                                                                                                                          * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    private IEnumerator AutoReturnToPool()
+    {
+        yield return new WaitForSeconds(Projectile_Lifetime);
+        ReturnToPool();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

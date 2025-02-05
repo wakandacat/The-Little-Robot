@@ -1382,14 +1382,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 522e422fbd544a84f8dba57f74cab199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP_Maximum: 30
-  Energy_Maximum: 5
-  Energy_RegainedPerSecond: 0.5
-  Energy_RegainedOnStrike: 1
+  HP_Maximum: 20
+  Energy_Maximum: 4
+  Energy_RegainedPerSecond: 0.15
+  Energy_RegainedOnStrike: 0.7
   Player_PositionTrackingTimeInterval: 0.02
   Player_PositionTrackingMaxTimeTracked: 3
-  AwakeState_Delay: 3
-  Attack_BasicProjectile01: {fileID: 6745135230358999026, guid: ccb06d8ade8264744a78094086a672a9,
+  AwakeState_Delay: 2.25
+  Attack_BasicProjectile01: {fileID: 6745135230358999026, guid: 77ec102bea06b4441a0c3e3e93f81cb1,
     type: 3}
 --- !u!114 &549276119542833208
 MonoBehaviour:
@@ -1408,8 +1408,6 @@ MonoBehaviour:
   Spawner_FirePoint_GameObject: {fileID: 5776426818584315548}
   Spawner_FireRate: 1
   Spawner_RemainingAttackCount: 1
-  Spawner_Player_GameObject: {fileID: 5234305018232121671, guid: 5ed84d66467e6384994c393c17bbdbd1,
-    type: 3}
 --- !u!54 &2808467725153756840
 Rigidbody:
   m_ObjectHideFlags: 0
