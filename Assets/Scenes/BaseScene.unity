@@ -2601,13 +2601,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 836459249}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.35165393, y: 0.5961478, z: 0.62982845, w: 0.3525104}
+  m_LocalRotation: {x: -0.45162657, y: 0.5244865, z: 0.5574837, w: 0.4584314}
   m_LocalPosition: {x: 0.64, y: 0.19, z: -0.01}
   m_LocalScale: {x: 1.3759995, y: 1.3759995, z: 1.3759995}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1804104422}
-  m_LocalEulerAnglesHint: {x: -87.27, y: 331.585, z: -211.328}
+  m_LocalEulerAnglesHint: {x: -87.27, y: 331.585, z: -231.72}
 --- !u!199 &836459251
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -2673,7 +2673,7 @@ ParticleSystemRenderer:
   m_VertexStreams: 00010304
   m_UseCustomTrailVertexStreams: 0
   m_TrailVertexStreams: 00010304
-  m_Mesh: {fileID: 2534964839176971238, guid: dd644972744f7a24fbda3b4943fa661f, type: 3}
+  m_Mesh: {fileID: 2534964839176971238, guid: ccbde845d858f0f44beb5908082b0555, type: 3}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
@@ -3955,7 +3955,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 8.726646
+      scalar: 10.471975
       minScalar: 0.7853982
       maxCurve:
         serializedVersion: 2
@@ -13342,7 +13342,7 @@ Transform:
   m_GameObject: {fileID: 993367873}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.607, y: -0.155, z: 0.035}
+  m_LocalPosition: {x: 1.607, y: -0.155, z: 0.112}
   m_LocalScale: {x: 0.54745, y: 0.54745, z: 0.54745}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18271,8 +18271,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1067897218}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.83069026, y: 0.37, z: 2.5507748}
+  m_LocalRotation: {x: -0, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.6439098, y: 0.092, z: 0.46182132}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18280,7 +18280,7 @@ Transform:
   - {fileID: 840333889}
   - {fileID: 1575991766}
   - {fileID: 1173399862}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 259396655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1075800262
 GameObject:
@@ -31205,7 +31205,15 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 833388355080012287, guid: 5ed84d66467e6384994c393c17bbdbd1, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4893209386055726077, guid: 5ed84d66467e6384994c393c17bbdbd1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1804104422}
+    - targetCorrespondingSourceObject: {fileID: 4893209386055726077, guid: 5ed84d66467e6384994c393c17bbdbd1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1067897219}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5234305018232121671, guid: 5ed84d66467e6384994c393c17bbdbd1,
         type: 3}
@@ -31383,13 +31391,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1804104421}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.83069026, y: 0.98401535, z: 2.5507748}
+  m_LocalRotation: {x: -0, y: 0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.6439098, y: 0.19401532, z: 0.46182132}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 836459250}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 259396655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1809629094
 PrefabInstance:
@@ -31663,7 +31671,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887847756}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0004090848, y: 0.99734324, z: -0.07262773, w: 0.0056176605}
+  m_LocalRotation: {x: 0.0004090873, y: 0.99734324, z: -0.07262773, w: 0.005617695}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -32889,5 +32897,3 @@ SceneRoots:
   - {fileID: 1610915390}
   - {fileID: 1891201353}
   - {fileID: 57281594}
-  - {fileID: 1804104422}
-  - {fileID: 1067897219}
