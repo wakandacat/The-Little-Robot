@@ -38,7 +38,10 @@ public class mainGameScript : MonoBehaviour
 
     //enemy
     private GameObject enemy;
-    
+    public bool firstBossDead = false;
+    public bool secondBossDead = false;
+    public bool thirdBossDead = false;
+
     //menu vars
     public GameObject demoEndScreen;
     public GameObject controlMenu;
@@ -123,58 +126,58 @@ public class mainGameScript : MonoBehaviour
         }
 
         //---------------BOSS CAM-------------------
-        if (GameObject.Find("enemy" + currLevelCount) && usingBossCam == true && GameObject.FindWithTag("Player"))
-        {
-            //calculate the direction from the track center to the player    
-            Vector3 direction = GameObject.FindWithTag("Player").transform.position - battleTrack.transform.position;
+        //if (GameObject.Find("enemy" + currLevelCount) && usingBossCam == true && GameObject.FindWithTag("Player"))
+        //{
+        //    //calculate the direction from the track center to the player    
+        //    Vector3 direction = GameObject.FindWithTag("Player").transform.position - battleTrack.transform.position;
 
-            //calculate the angle in degrees (0 to 360) around the track center
-            float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
+        //    //calculate the angle in degrees (0 to 360) around the track center
+        //    float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
 
-            //ensure its positive
-            if (angle < 0)
-            {
-                angle = angle + 360f;
-            }
-            angle = angle - 270f;  //camera is offset by 270?
+        //    //ensure its positive
+        //    if (angle < 0)
+        //    {
+        //        angle = angle + 360f;
+        //    }
+        //    angle = angle - 270f;  //camera is offset by 270?
 
-            //normalize again
-            if (angle < 0)
-            {
-                angle = angle + 360f;
-            }
+        //    //normalize again
+        //    if (angle < 0)
+        //    {
+        //        angle = angle + 360f;
+        //    }
 
-            //map the angle to a normalized path position (0 to 1) -> we are using normalized on battleCam
-            float targetPathPosition = angle / 360f;
+        //    //map the angle to a normalized path position (0 to 1) -> we are using normalized on battleCam
+        //    float targetPathPosition = angle / 360f;
 
-            //get path placement
-            float currentPathPosition = bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition;
-            float shortestRoute = targetPathPosition - currentPathPosition;
+        //    //get path placement
+        //    float currentPathPosition = bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition;
+        //    float shortestRoute = targetPathPosition - currentPathPosition;
 
-            //shortest route to avoid track look bugging at beginning of loop
-            if (shortestRoute > 0.5f)
-            {
-                shortestRoute -= 1f;
-            }
-            else if (shortestRoute < -0.5f)
-            {
-                shortestRoute += 1f;
-            }
+        //    //shortest route to avoid track look bugging at beginning of loop
+        //    if (shortestRoute > 0.5f)
+        //    {
+        //        shortestRoute -= 1f;
+        //    }
+        //    else if (shortestRoute < -0.5f)
+        //    {
+        //        shortestRoute += 1f;
+        //    }
 
-            //take into account the player's distance from the center enemy (closer should move the camera less quickly)
-            // float distanceToCenter = Vector3.Distance(GameObject.FindWithTag("Player").transform.position, GameObject.Find("enemy" + currLevelCount).transform.position);
-            //damping factor
-            // float dampingFactor = Mathf.Clamp01(distanceToCenter / 10f);
-            // bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += shortestRoute * Time.deltaTime * 10f * dampingFactor;
-            // Debug.Log(shortestRoute * Time.deltaTime * 10f * dampingFactor);
+        //    //take into account the player's distance from the center enemy (closer should move the camera less quickly)
+        //    // float distanceToCenter = Vector3.Distance(GameObject.FindWithTag("Player").transform.position, GameObject.Find("enemy" + currLevelCount).transform.position);
+        //    //damping factor
+        //    // float dampingFactor = Mathf.Clamp01(distanceToCenter / 10f);
+        //    // bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += shortestRoute * Time.deltaTime * 10f * dampingFactor;
+        //    // Debug.Log(shortestRoute * Time.deltaTime * 10f * dampingFactor);
 
-            bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += shortestRoute * Time.deltaTime * 10f;
-            bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition %= 1f;
-            if (bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition < 0)
-            {
-                bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += 1f;
-            }
-        }
+        //    bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += shortestRoute * Time.deltaTime * 10f;
+        //    bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition %= 1f;
+        //    if (bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition < 0)
+        //    {
+        //        bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += 1f;
+        //    }
+        //}
     }
 
     public void SkipIntro()
@@ -201,7 +204,8 @@ public class mainGameScript : MonoBehaviour
     public void SwitchToBossCam()
     {
         //Debug.Log("battle cam");
-        enemy = GameObject.Find("enemy" + currLevelCount);
+        // enemy = GameObject.Find("enemy" + currLevelCount);
+        enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
 
         //move the track to teh enemy's position
         Vector3 bossPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10, enemy.transform.position.z);
@@ -214,13 +218,25 @@ public class mainGameScript : MonoBehaviour
         usingBossCam = true;
     }
 
-    public void SwitchToPlatformCam()
+    public void SwitchToPlatformCam(float yaxis)
     {
-
+        //maybe a slightly better transition idk
+        if (SceneManager.GetActiveScene().name.Contains("Combat"))
+        {
+            platformCam.m_XAxis.Value = bossCam.transform.rotation.x;
+        }
         //Debug.Log("platform cam");
         platformCam.Priority = bossCam.Priority + 1;
+        platformCam.m_YAxis.Value = yaxis; //position up teh spine axis
 
         usingBossCam = false;
+    }
+
+    public void CheckPointResetPlatformCam(float rotation)
+    {
+        platformCam.m_XAxis.Value = rotation;
+        platformCam.ForceCameraPosition(transform.position, Quaternion.Euler(0, rotation, 0)); //force freelook to have player's rotation
+        platformCam.m_YAxis.Value = 0.4f; //position up teh spine axis
     }
 
     public void IntroCam()
@@ -232,7 +248,7 @@ public class mainGameScript : MonoBehaviour
                 if (introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 1 && introPlayed == false)
                 {
                   //  Debug.Log("intro cinematic finished");
-                    SwitchToPlatformCam();
+                    SwitchToPlatformCam(0.2f);
                     introPlayed = true;
                     cutScenePlaying = false;
                     camStillTimer = 0;
@@ -260,7 +276,7 @@ public class mainGameScript : MonoBehaviour
         else if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false || cutScenePlaying == false)
         {
             //Debug.Log("intro cinematic finished");
-            SwitchToPlatformCam();
+            SwitchToPlatformCam(0.2f);
             introPlayed = true;
             cutScenePlaying = false;
         }

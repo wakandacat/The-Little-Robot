@@ -216,11 +216,11 @@ public class PlayerController : MonoBehaviour
             if (ground.jumpState == true)
             {
                 manageFall(JfallMultiplier);
-                Debug.Log(jumpState);
+               // Debug.Log(jumpState);
             }
             if (ground.doublejumpState == true)
             {
-                Debug.Log("We are here");
+               // Debug.Log("We are here");
                 manageFall(DJfallMultiplier);
 
             }
