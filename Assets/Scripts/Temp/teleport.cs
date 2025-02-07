@@ -54,6 +54,9 @@ public class teleport : MonoBehaviour
 
         if (player != null)
         {
+            GameObject checkpt = GameObject.Find("checkPointC1");
+            worldManager.GetComponent<mainGameScript>().currCheckpoint = checkpt;
+
             player.GetComponent<checkPointScript>().MoveToCheckpoint();
         }
 
