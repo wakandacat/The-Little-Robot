@@ -135,20 +135,14 @@ public class ProjectileSpawner : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Projectile Update Functions                                                                                                                                                                  * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void UpdateAllProjectileValues(float New_ProjectileSpeed, float New_ProjectileLifetime)
+    public void Set_All_ProjectileLifetime(float New_ProjectileLifetime)
     {
-        Spawner_ProjectilePool.UpdateProjectileSpeed(New_ProjectileSpeed);
-        Spawner_ProjectilePool.UpdateProjectileLifetime(New_ProjectileLifetime);
+        Spawner_ProjectilePool.Set_All_ProjectileLifetime(New_ProjectileLifetime);
     }
 
-    public void UpdateProjectileSpeed(float New_ProjectileSpeed)
+    public void Set_Bullet_ProjectileSpeed(float New_ProjectileSpeed)
     {
-        Spawner_ProjectilePool.UpdateProjectileSpeed(New_ProjectileSpeed);
-    }
-
-    public void UpdateProjectileLifetime(float New_ProjectileLifetime)
-    {
-        Spawner_ProjectilePool.UpdateProjectileLifetime(New_ProjectileLifetime);
+        Spawner_ProjectilePool.Set_Bullet_ProjectileSpeed(New_ProjectileSpeed);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -271,19 +265,19 @@ public class ProjectileSpawner : MonoBehaviour
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               Spawning Projectiles Functions                                                                                                                                                               * 
+    // *               Spawner BULLET Projectiles Functions                                                                                                                                                         * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Fires a single projectile towards where the spawner is pointing
-    public void SpawnProjectile()
+    public void Spawner_Bullet_SingleShot()
     {
         GameObject NewProjectile = Spawner_ProjectilePool.GetNextProjectile();
         NewProjectile.transform.position = Spawner_FirePoint.position;
         NewProjectile.transform.rotation = Spawner_FirePoint.rotation;
-        NewProjectile.GetComponent<Projectile>().Initialize(Spawner_ProjectilePool, Spawner_FirePoint.forward);
+        NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, Spawner_FirePoint.forward);
     }
 
     // Fires Projectiles_Count projectiles spread over AngleOfSpread
-    public void SpawnSpreadAttack(int Projectile_Count, float AngleOfSpread)
+    public void Spawner_Bullet_ConeShot(int Projectile_Count, float AngleOfSpread)
     {
         float startAngle = -AngleOfSpread / 2;
         float angleStep = AngleOfSpread / (Projectile_Count - 1);
@@ -295,12 +289,12 @@ public class ProjectileSpawner : MonoBehaviour
             GameObject NewProjectile = Spawner_ProjectilePool.GetNextProjectile();
             NewProjectile.transform.position = Spawner_FirePoint.position;
             NewProjectile.transform.rotation = New_Rotation;
-            NewProjectile.GetComponent<Projectile>().Initialize(Spawner_ProjectilePool, New_Rotation * Vector3.forward);
+            NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, New_Rotation * Vector3.forward);
         }
     }
 
     // Fires Projectiles_Count projectiles spread over AngleOfSpread, stacked vertically Projectile_VerticalCount times spread across a distance of Spawner_MinHeight to Spawner_MaxHeight
-    public void SpawnStackedSpreadAttack(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    public void Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
     {
         float startAngle = -AngleOfSpread / 2;
         float angleStep = (Projectile_Count > 1) ? AngleOfSpread / (Projectile_Count - 1) : 0;
@@ -322,7 +316,7 @@ public class ProjectileSpawner : MonoBehaviour
 
                 Vector3 direction = New_Rotation * Vector3.forward;
 
-                NewProjectile.GetComponent<Projectile>().Initialize(Spawner_ProjectilePool, direction);
+                NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, direction);
             }
         }
     }

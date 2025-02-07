@@ -646,7 +646,7 @@ public class Attack_TestingState : BossState
     private ProjectileSpawner SpawnerComponent_Bullet;
 
     // Attack Values
-    // SpawnStackedSpreadAttack(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
     private int Attack_ProjectileCount = 10;
     private float Attack_AngleOfSpread = 45.0f;
     private int Attack_ProjectileVerticalCount = 3;
@@ -686,7 +686,9 @@ public class Attack_TestingState : BossState
         // Spawner Logic
         SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
         SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
-        SpawnerComponent_Bullet.UpdateAllProjectileValues(Attack_ProjectileSpeed, Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
         SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.StartAttack();
@@ -705,13 +707,13 @@ public class Attack_TestingState : BossState
         // Attack is still occuring
         if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
         {
-            Debug.Log("BossEnemy: Spawner Is Active");
+            //Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
                 Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
-                SpawnerComponent_Bullet.SpawnStackedSpreadAttack(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
         }
@@ -726,7 +728,7 @@ public class Attack_TestingState : BossState
 
     }
 
-    // Called once per frame
+    // Called once per frame - after update
     public override void CheckTransition()
     {
         // Programming Logic
