@@ -112,6 +112,11 @@ public class ProjectileSpawner : MonoBehaviour
         Spawner_FirePoint.transform.position = NewPosition;
     }
 
+    public void Update_FirePointRotation(Quaternion NewRotation)
+    {
+        Spawner_FirePoint.transform.rotation = NewRotation;
+    }
+
     // update position for the fire point with optional positional values (pass 'null' to not change a value when calling)
     public void Update_FirePointPosition(float? x = null, float? y = null, float? z = null)
     {
@@ -127,9 +132,29 @@ public class ProjectileSpawner : MonoBehaviour
         Spawner_FirePoint.transform.position = new Vector3(newX, newY, newZ);
     }
 
+    // update rotation for the fire point with optional rotation values (pass 'null' to keep a value unchanged)
+    public void Update_FirePointRotation(float? x = null, float? y = null, float? z = null)
+    {
+        // get the current rotation as Euler angles
+        Vector3 currentRotation = Spawner_FirePoint.transform.eulerAngles;
+
+        // update the rotation only if the value is provided
+        float newX = x.HasValue ? x.Value : currentRotation.x;
+        float newY = y.HasValue ? y.Value : currentRotation.y;
+        float newZ = z.HasValue ? z.Value : currentRotation.z;
+
+        // apply the updated rotation
+        Spawner_FirePoint.transform.rotation = Quaternion.Euler(newX, newY, newZ);
+    }
+
     public void Reset_FirePointPositionToGameObject()
     {
         Update_FirePointPosition(Spawner_FirePoint_GameObject.transform.position);
+    }
+
+    public void Reset_FirePointRotationToGameObject()
+    {
+        Update_FirePointRotation(Spawner_FirePoint_GameObject.transform.rotation);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -319,5 +344,25 @@ public class ProjectileSpawner : MonoBehaviour
                 NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, direction);
             }
         }
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Spawner MINE Projectiles Functions                                                                                                                                                           * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Tosses a single mine on the ground a set distance from the spawner
+    public void Spawner_Mine_TossSingle(float Toss_Distance, float Arc_Height, float Arc_Duration)
+    {
+        // Get the next available mine from the projectile pool
+        GameObject NewMine = Spawner_ProjectilePool.GetNextProjectile();
+
+        // Set spawn position and target position
+        Vector3 spawnPosition = Spawner_FirePoint.position;
+        Vector3 forwardDirection = Spawner_FirePoint.forward;
+        Vector3 targetPosition = spawnPosition + forwardDirection * Toss_Distance;
+        targetPosition.y = 0;
+
+        // Activate and initialize the mine
+        NewMine.transform.position = spawnPosition;
+        NewMine.GetComponent<Projectile_Mine>().Initialize_Mine(Spawner_ProjectilePool, targetPosition, Arc_Height, Arc_Duration);
     }
 }

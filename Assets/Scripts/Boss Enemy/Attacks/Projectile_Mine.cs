@@ -37,7 +37,7 @@ public class Projectile_Mine : Projectile
         Disabled
     }
 
-    private MineState Mine_CurrentState = MineState.ArcMovement;
+    private MineState Mine_CurrentState = MineState.Disabled;
 
     private float Mine_TimeToArm_ElapsedTime = 0.0f;
     private float Mine_TimeToExplode_ElapsedTime = 0.0f;
@@ -46,14 +46,15 @@ public class Projectile_Mine : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialization                                                                                                                         * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void Initialize_Mine(ProjectilePool Projectile_Pool)
+    public void Initialize_Mine(ProjectilePool Projectile_Pool, Vector3 Arc_NewTarget, float Arc_NewHeight, float Arc_NewDuration)
     {
         // Run base Initialize() function
         Initialize(Projectile_Pool);
 
+        InitializeArcMovement(Arc_NewTarget, Arc_NewHeight, Arc_NewDuration);
+
         // 
         ExplosionActive(false);
-
     }
 
     public void InitializeArcMovement(Vector3 Arc_NewTarget, float Arc_NewHeight, float Arc_NewDuration)
