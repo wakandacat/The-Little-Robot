@@ -264,11 +264,23 @@ public class BossEnemy : MonoBehaviour
         attackTestingState.Initialize(bossAnimator, this);
         stateMachine.SetState(attackTestingState);
     }
-    public void TransitionToState_Attack_Bullet_TrackingConeState()
+    public void TransitionToState_Attack_Bullet_TrackingCone()
     {
         State_Attack_Bullet_TrackingCone attackBulletTrackingCone = new State_Attack_Bullet_TrackingCone();
         attackBulletTrackingCone.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletTrackingCone);
+    }
+    public void TransitionToState_Attack_Bullet_RotatingWall()
+    {
+        State_Attack_Bullet_RotatingWall attackBulletRotatingWall = new State_Attack_Bullet_RotatingWall();
+        attackBulletRotatingWall.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletRotatingWall);
+    }
+    public void TransitionToState_Attack_ArenaHazard_Mine_Random()
+    {
+        State_Attack_ArenaHazard_Mine_Random attackArenaHazardMineRandom = new State_Attack_ArenaHazard_Mine_Random();
+        attackArenaHazardMineRandom.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackArenaHazardMineRandom);
     }
     public void TransitionToState_Attack_Melee01()
     {
@@ -283,6 +295,11 @@ public class BossEnemy : MonoBehaviour
     public float HP_ReturnCurrent()
     {
         return HP_Current;
+    }
+
+    public float HP_ReturnMax()
+    {
+        return HP_Maximum;
     }
 
     public bool HP_IsZero()

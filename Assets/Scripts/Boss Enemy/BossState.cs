@@ -364,7 +364,7 @@ public class State_Awake : BossState
             {
                 Attack_BestName = State_Attack_Bullet_TrackingCone.Attack_Name;
                 Attack_BestScore = State_Attack_Bullet_TrackingCone.CalculateScore(bossEnemyComponent);
-                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingConeState;
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone;
             }
             else if (State_Attack_Bullet_TrackingCone.CalculateScore(bossEnemyComponent) == Attack_BestScore)
             {
@@ -372,10 +372,42 @@ public class State_Awake : BossState
                 {
                     Attack_BestName = State_Attack_Bullet_TrackingCone.Attack_Name;
                     Attack_BestScore = State_Attack_Bullet_TrackingCone.CalculateScore(bossEnemyComponent);
-                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingConeState;
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone;
                 }
             }
-            // State_Attack_Melee01 -----------------------
+            // State_Attack_Bullet_RotatingWall -----------------------
+            if (State_Attack_Bullet_RotatingWall.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_Bullet_RotatingWall.Attack_Name;
+                Attack_BestScore = State_Attack_Bullet_RotatingWall.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall;
+            }
+            else if (State_Attack_Bullet_RotatingWall.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_Bullet_RotatingWall.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RotatingWall.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall;
+                }
+            }
+            // TransitionToState_Attack_ArenaHazard_Mine_Random -------
+            if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
+                Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
+            }
+            else if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
+                    Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
+                }
+            }
+            // State_Attack_Melee01 -----------------------------------
             if (State_Attack_Melee01.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
                 Attack_BestName = State_Attack_Melee01.Attack_Name;
@@ -400,9 +432,9 @@ public class State_Awake : BossState
 
         // DEBUGGING (MUST BE REMOVED):
         // State_Attack_Testing -----------------------
-        Attack_BestName = State_Attack_Testing.Attack_Name;
-        Attack_BestScore = State_Attack_Testing.CalculateScore(bossEnemyComponent);
-        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Testing;
+        //Attack_BestName = State_Attack_Testing.Attack_Name;
+        //Attack_BestScore = State_Attack_Testing.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Testing;
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
         Attack_TransitionToExecute();
@@ -565,32 +597,35 @@ public class State_Attack_Testing : BossState
     public static string Attack_Name = "State_Attack_Testing";
     public static float Energy_Cost = 1.0f;
     public static float Player_MinDistance = 10.0f;
-    public static float Player_MaxDistance = 30.0f;
+    public static float Player_MaxDistance = 50.0f;
 
     // Spawner Values
-    private float Attack_FireRate = 3.0f;
-    private int Attack_Count = 12;
-    private bool Attack_TrackHorizontal = false;
+    private float Attack_FireRate = 4.0f;
+    private float Attack_FireRateDelay = 1f;
+    private int Attack_Count = 40;
+    private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
-    private float Attack_TrackSpeed = 0.0f;
-    private float Attack_ProjectileLifetime = 30.0f;
+    private float Attack_TrackSpeed = 40.0f;
+    private float Attack_ProjectileSpeed = 30.0f;
+    private float Attack_ProjectileLifetime = 10.0f;
     private float Spawner_Rotation_Y = 0.0f;
 
     // Attack Spawner
-    private ProjectileSpawner SpawnerComponent_Mine;
+    private ProjectileSpawner SpawnerComponent_Bullet;
 
     // Attack Values
-    // public void Spawner_Mine_TossSingle(float Toss_Distance, float Arc_Height, float Arc_Duration)
-    private float Mine_MinTossDistance = 5.0f;
-    private float Mine_MaxTossDistance = 23.0f;
-    private float Mine_TossDistance = 5.0f;
-    private float Mine_ArcHeight = 2.0f;
-    private float Mine_ArcDuration = 1.0f;
+    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    private int Attack_ProjectileCount = 1;
+    private float Attack_AngleOfSpread = 1.0f;
+    private int Attack_ProjectileVerticalCount = 8;
+    private float Attack_MinHeight = 0.0f;
+    private float Attack_MaxHeight = 7.0f;
 
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
         float score = 0.0f;
+
         // Check distance ----------------------------*
         if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
         {
@@ -600,8 +635,10 @@ public class State_Attack_Testing : BossState
         {
             score -= 1.0f;
         }
+
         // Check Attack_HistoryList ------------------*
         score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
         return score;
     }
 
@@ -615,13 +652,14 @@ public class State_Attack_Testing : BossState
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
 
         // Spawner Logic
-        SpawnerComponent_Mine = bossEnemyComponent.ReturnComponent_Spawner_Mine();
-        SpawnerComponent_Mine.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
-        SpawnerComponent_Mine.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Mine.Reset_FirePointPositionToGameObject();
-        //SpawnerComponent_Mine.ReturnAllProjectilesToPool();
-        SpawnerComponent_Mine.StartAttack();
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
         animator.SetBool("inAttack", true);
@@ -635,19 +673,16 @@ public class State_Attack_Testing : BossState
 
         // Spawner Logic
         // Attack is still occuring
-        if (SpawnerComponent_Mine.ReturnSpawnerActive() == true)
+        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
         {
             //Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
-            if (SpawnerComponent_Mine.IsSpawnerReadyToFire() == true)
+            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
                 //Debug.Log("BossEnemy: Spawner Ready To Fire");
-                SpawnerComponent_Mine.PreAttackLogic();
-                Spawner_Rotation_Y = Random.Range(0f, 360f);
-                SpawnerComponent_Mine.Update_FirePointRotation(null, Spawner_Rotation_Y, null);
-                Mine_TossDistance = Random.Range(Mine_MinTossDistance, Mine_MaxTossDistance);
-                SpawnerComponent_Mine.Spawner_Mine_TossSingle(Mine_TossDistance, Mine_ArcHeight, Mine_ArcDuration);
-                SpawnerComponent_Mine.PostAttackLogic();
+                SpawnerComponent_Bullet.PreAttackLogic();
+                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                SpawnerComponent_Bullet.PostAttackLogic();
             }
         }
         // Attack has finished
@@ -723,10 +758,11 @@ public class State_Attack_Bullet_TrackingCone : BossState
 
     // Spawner Values
     private float Attack_FireRate = 0.5f;
+    private float Attack_FireRateDelay = 1f;
     private int Attack_Count = 10;
     private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
-    private float Attack_TrackSpeed = 40.0f;
+    private float Attack_TrackSpeed = 60.0f;
     private float Attack_ProjectileSpeed = 15.0f;
     private float Attack_ProjectileLifetime = 10.0f;
 
@@ -739,7 +775,7 @@ public class State_Attack_Bullet_TrackingCone : BossState
     private float Attack_AngleOfSpread = 45.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
-    private float Attack_MaxHeight = 3.0f;
+    private float Attack_MaxHeight = 2.5f;
 
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
@@ -779,7 +815,7 @@ public class State_Attack_Bullet_TrackingCone : BossState
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
         SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
-        SpawnerComponent_Bullet.StartAttack();
+        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
         animator.SetBool("inAttack", true);
@@ -803,6 +839,317 @@ public class State_Attack_Bullet_TrackingCone : BossState
                 SpawnerComponent_Bullet.PreAttackLogic();
                 SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
                 SpawnerComponent_Bullet.PostAttackLogic();
+            }
+        }
+        // Attack has finished
+        else
+        {
+            Debug.Log("BossEnemy: Attack Completed");
+            Attack_Completed = true;
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame - after update
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToState_SelfCheck();
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Animation Logic
+        animator.SetBool("inAttack", false);
+
+    }
+}
+
+public class State_Attack_Bullet_RotatingWall : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "State_Attack_Bullet_RotatingWall";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 50.0f;
+
+    // Spawner Values
+    private float Attack_FireRate = 4.0f;
+    private float Attack_FireRateDelay = 1f;
+    private int Attack_Count = 40;
+    private bool Attack_TrackHorizontal = true;
+    private bool Attack_TrackVertical = false;
+    private float Attack_TrackSpeed = 40.0f;
+    private float Attack_ProjectileSpeed = 30.0f;
+    private float Attack_ProjectileLifetime = 10.0f;
+    private float Spawner_Rotation_Y = 0.0f;
+
+    // Attack Spawner
+    private ProjectileSpawner SpawnerComponent_Bullet;
+
+    // Attack Values
+    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    private int Attack_ProjectileCount = 1;
+    private float Attack_AngleOfSpread = 1.0f;
+    private int Attack_ProjectileVerticalCount = 8;
+    private float Attack_MinHeight = 0.0f;
+    private float Attack_MaxHeight = 7.0f;
+
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Debugging
+        Debug.Log("BossEnemy: Entering State_Attack_Bullet_RotatingWall");
+
+        // Boss Enemy Logic
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+        // Spawner Logic
+        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+        // Animation Logic
+        animator.SetBool("inAttack", true);
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Spawner Logic
+        // Attack is still occuring
+        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+        {
+            //Debug.Log("BossEnemy: Spawner Is Active");
+            // Spawner is ready for next projectile fire
+            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+            {
+                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                SpawnerComponent_Bullet.PreAttackLogic();
+                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                SpawnerComponent_Bullet.PostAttackLogic();
+            }
+        }
+        // Attack has finished
+        else
+        {
+            Debug.Log("BossEnemy: Attack Completed");
+            Attack_Completed = true;
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame - after update
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToState_SelfCheck();
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Animation Logic
+        animator.SetBool("inAttack", false);
+
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+// *               Arena Hazard Attacks                                                                                                             * 
+// --------------------------------------------------------------------------------------------------------------------------------------------------
+public class State_Attack_ArenaHazard_Mine_Random : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "State_Attack_ArenaHazard_Mine_Random";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 30.0f;
+
+    // Spawner Values
+    private float Attack_FireRate = 3.0f;
+    private float Attack_FireRateDelay = 1f;
+    private int Attack_Count = 12;
+    private bool Attack_TrackHorizontal = false;
+    private bool Attack_TrackVertical = false;
+    private float Attack_TrackSpeed = 0.0f;
+    private float Attack_ProjectileLifetime = 30.0f;
+    private float Spawner_Rotation_Y = 0.0f;
+
+    // Attack Spawner
+    private ProjectileSpawner SpawnerComponent_Mine;
+
+    // Attack Values
+    // public void Spawner_Mine_TossSingle(float Toss_Distance, float Arc_Height, float Arc_Duration)
+    private float Mine_MinTossDistance = 5.0f;
+    private float Mine_MaxTossDistance = 23.0f;
+    private float Mine_TossDistance = 5.0f;
+    private float Mine_ArcHeight = 2.0f;
+    private float Mine_ArcDuration = 1.0f;
+
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Debugging
+        Debug.Log("BossEnemy: Entering State_Attack_ArenaHazard_Mine_Random");
+
+        // Boss Enemy Logic
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+        // Spawner Logic
+        SpawnerComponent_Mine = bossEnemyComponent.ReturnComponent_Spawner_Mine();
+        SpawnerComponent_Mine.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+        SpawnerComponent_Mine.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+
+        SpawnerComponent_Mine.Reset_FirePointPositionToGameObject();
+        //SpawnerComponent_Mine.ReturnAllProjectilesToPool();
+        SpawnerComponent_Mine.StartAttack(Attack_FireRateDelay);
+
+        // Animation Logic
+        animator.SetBool("inAttack", true);
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Spawner Logic
+        // Attack is still occuring
+        if (SpawnerComponent_Mine.ReturnSpawnerActive() == true)
+        {
+            //Debug.Log("BossEnemy: Spawner Is Active");
+            // Spawner is ready for next projectile fire
+            if (SpawnerComponent_Mine.IsSpawnerReadyToFire() == true)
+            {
+                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                SpawnerComponent_Mine.PreAttackLogic();
+                Spawner_Rotation_Y = Random.Range(0f, 360f);
+                SpawnerComponent_Mine.Update_FirePointRotation(null, Spawner_Rotation_Y, null);
+                Mine_TossDistance = Random.Range(Mine_MinTossDistance, Mine_MaxTossDistance);
+                SpawnerComponent_Mine.Spawner_Mine_TossSingle(Mine_TossDistance, Mine_ArcHeight, Mine_ArcDuration);
+                SpawnerComponent_Mine.PostAttackLogic();
             }
         }
         // Attack has finished

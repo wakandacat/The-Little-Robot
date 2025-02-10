@@ -100,6 +100,18 @@ public class ProjectileSpawner : MonoBehaviour
         Spawner_NextFireTime = Time.time + 1f / Spawner_FireRate;
     }
 
+    // Updates Spawner_NextFireTime to equal the current time
+    public void UpdateSpawner_NextFireTime_Now()
+    {
+        Spawner_NextFireTime = Time.time;
+    }
+
+    // Updates Spawner_NextFireTime to equal the current time plus a set delay
+    public void UpdateSpawner_NextFireTime_Delay(float DelaySeconds)
+    {
+        Spawner_NextFireTime = Time.time + DelaySeconds;
+    }
+
     public void UpdateSpawner_Tracking(bool New_SpawnerTrackingHorizontal, bool New_SpawnerTrackingVertical, float New_TrackingSpeed)
     {
         Spawner_TrackingHorizontal = New_SpawnerTrackingHorizontal;
@@ -224,9 +236,9 @@ public class ProjectileSpawner : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Spawner Logic Functions                                                                                                                                                                      * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void StartAttack()
+    public void StartAttack(float AttackFireTimeDelay)
     {
-        UpdateSpawner_NextFireTime();
+        UpdateSpawner_NextFireTime_Delay(AttackFireTimeDelay);
         Spawner_Active = true;
     }
 
