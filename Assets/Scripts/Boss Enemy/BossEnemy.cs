@@ -282,6 +282,12 @@ public class BossEnemy : MonoBehaviour
         attackArenaHazardMineRandom.Initialize(bossAnimator, this);
         stateMachine.SetState(attackArenaHazardMineRandom);
     }
+    public void TransitionToState_Attack_StandUpMelee()
+    {
+        State_Attack_StandUpMelee attackStandUpMelee = new State_Attack_StandUpMelee();
+        attackStandUpMelee.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackStandUpMelee);
+    }
     public void TransitionToState_Attack_Melee01()
     {
         State_Attack_Melee01 attackMelee01State = new State_Attack_Melee01();

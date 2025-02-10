@@ -483,7 +483,8 @@ public class State_LowEnergy : BossState
         else if (bossEnemyComponent.Energy_IsFull())                                        // check if Energy_Current has exceeded Energy_Maximum
         {
             bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.Energy_Maximum);      // if so, set Energy_Current to Energy_Maximum
-            bossEnemyComponent.TransitionToState_Awake();                                    // and, transition to Awake State
+            //bossEnemyComponent.TransitionToState_Awake();                                    // and, transition to Awake State
+            bossEnemyComponent.TransitionToState_Attack_StandUpMelee();
         }
 
         // Animation Logic
@@ -1213,6 +1214,116 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
 // --------------------------------------------------------------------------------------------------------------------------------------------------
 // *               Melee Attacks                                                                                                                    * 
 // --------------------------------------------------------------------------------------------------------------------------------------------------
+public class State_Attack_StandUpMelee : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+    private GameObject Attack_GameObjectParent;
+    private GameObject Attack_ColliderSphere;
+    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 4.0f, 1.5f);
+    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(8.0f, 4.0f, 8.0f);
+    private bool Attack_IsColliderSphereScaleOut = false;
+    private float Attack_Duration = 3.0f;
+    private float Attack_Delay = 1.0f;
+    private float Attack_StartTimeStamp = 0.0f;
+    
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Programming Logic
+        Debug.Log("BossEnemy: Entering State_Attack_StandUpMelee");
+        // Attack Setup Logic
+        Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
+
+        // Collider Sphere
+        Attack_ColliderSphere = new GameObject("Attack_ColliderSphere");
+        MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
+        Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
+        Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
+        rigidBody.useGravity = false;
+        rigidBody.isKinematic = true;
+        SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();
+        Attack_LaserContactObject_collider.isTrigger = true;
+        Attack_ColliderSphere.tag = "Damage Source";
+        Attack_ColliderSphere.transform.position = bossEnemyComponent.returnBossEnemyPosition();
+        Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
+        Attack_ColliderSphere.transform.SetParent(Attack_GameObjectParent.transform);
+
+        // Misc.
+        Attack_StartTimeStamp = Time.time;
+
+        // Animation Logic
+        animator.SetBool("inAttack", true);
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+        if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
+        {
+            Attack_Completed = true; // if so, set Attack_Completed to true
+        }
+
+        // laser and laser contact
+        if (Attack_IsColliderSphereScaleOut == false)              // check if collider sphere object scale has been set to use Attack_ColliderSphereScale_Out scaling
+        {
+            if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
+            {
+                Attack_IsColliderSphereScaleOut = true;                                         // if so, update Attack_IsColliderSphereScaleOut to true
+                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;    // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+            }
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToState_Awake();
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Attack Logic
+        GameObject.Destroy(Attack_GameObjectParent);
+
+        // Animation Logic
+        animator.SetBool("inAttack", false);
+
+    }
+}
+
 public class State_Attack_Melee01 : BossState
 {
     // Private Attributes
