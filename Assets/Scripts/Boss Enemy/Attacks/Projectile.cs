@@ -20,6 +20,18 @@ public abstract class Projectile : MonoBehaviour
 
     private Coroutine Coroutine_ReturnProjectileToPool;
 
+    private Color Animation_OriginalMaterialColor;
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Start Function                                                                                                                                                                               * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Set Object References
+        Animation_OriginalMaterialColor = GetComponent<Renderer>().material.color;
+    }
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialization                                                                                                                         * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -70,5 +82,26 @@ public abstract class Projectile : MonoBehaviour
     protected void ReturnToPool()
     {
         Projectile_HomePool.ReturnProjectileToPool(gameObject);
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Animation Functions                                                                                                                    * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    protected void Animation_UpdateMaterialColor(Color newColor)
+    {
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        if (renderer != null)
+        {
+            renderer.material.color = newColor;
+        }
+    }
+
+    protected void Animation_ResetMaterialColor()
+    {
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        if (renderer != null)
+        {
+            renderer.material.color = Animation_OriginalMaterialColor;
+        }
     }
 }

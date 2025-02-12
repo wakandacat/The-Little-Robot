@@ -55,6 +55,9 @@ public class Projectile_Mine : Projectile
 
         // 
         ExplosionActive(false);
+
+        // Animation Stuff
+        Animation_Reset();
     }
 
     public void InitializeArcMovement(Vector3 Arc_NewTarget, float Arc_NewHeight, float Arc_NewDuration)
@@ -120,6 +123,7 @@ public class Projectile_Mine : Projectile
         if (Mine_TimeToArm_ElapsedTime >= Mine_TimeToArm)
         {
             Mine_CurrentState = MineState.Armed;
+            Animation_Armed();
         }
     }
 
@@ -175,5 +179,18 @@ public class Projectile_Mine : Projectile
         {
             Mine_CurrentState = MineState.Arming;
         }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Animation Functions                                                                                                                    * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    private void Animation_Reset()
+    {
+        Animation_ResetMaterialColor();
+    }
+
+    private void Animation_Armed()
+    {
+        Animation_UpdateMaterialColor(Color.red);
     }
 }
