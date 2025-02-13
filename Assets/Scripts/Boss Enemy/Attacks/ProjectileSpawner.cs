@@ -100,6 +100,18 @@ public class ProjectileSpawner : MonoBehaviour
         Spawner_NextFireTime = Time.time + 1f / Spawner_FireRate;
     }
 
+    // Updates Spawner_NextFireTime to equal the current time
+    public void UpdateSpawner_NextFireTime_Now()
+    {
+        Spawner_NextFireTime = Time.time;
+    }
+
+    // Updates Spawner_NextFireTime to equal the current time plus a set delay
+    public void UpdateSpawner_NextFireTime_Delay(float DelaySeconds)
+    {
+        Spawner_NextFireTime = Time.time + DelaySeconds;
+    }
+
     public void UpdateSpawner_Tracking(bool New_SpawnerTrackingHorizontal, bool New_SpawnerTrackingVertical, float New_TrackingSpeed)
     {
         Spawner_TrackingHorizontal = New_SpawnerTrackingHorizontal;
@@ -110,6 +122,11 @@ public class ProjectileSpawner : MonoBehaviour
     public void Update_FirePointPosition(Vector3 NewPosition)
     {
         Spawner_FirePoint.transform.position = NewPosition;
+    }
+
+    public void Update_FirePointRotation(Quaternion NewRotation)
+    {
+        Spawner_FirePoint.transform.rotation = NewRotation;
     }
 
     // update position for the fire point with optional positional values (pass 'null' to not change a value when calling)
@@ -127,28 +144,42 @@ public class ProjectileSpawner : MonoBehaviour
         Spawner_FirePoint.transform.position = new Vector3(newX, newY, newZ);
     }
 
+    // update rotation for the fire point with optional rotation values (pass 'null' to keep a value unchanged)
+    public void Update_FirePointRotation(float? x = null, float? y = null, float? z = null)
+    {
+        // get the current rotation as Euler angles
+        Vector3 currentRotation = Spawner_FirePoint.transform.eulerAngles;
+
+        // update the rotation only if the value is provided
+        float newX = x.HasValue ? x.Value : currentRotation.x;
+        float newY = y.HasValue ? y.Value : currentRotation.y;
+        float newZ = z.HasValue ? z.Value : currentRotation.z;
+
+        // apply the updated rotation
+        Spawner_FirePoint.transform.rotation = Quaternion.Euler(newX, newY, newZ);
+    }
+
     public void Reset_FirePointPositionToGameObject()
     {
         Update_FirePointPosition(Spawner_FirePoint_GameObject.transform.position);
     }
 
+    public void Reset_FirePointRotationToGameObject()
+    {
+        Update_FirePointRotation(Spawner_FirePoint_GameObject.transform.rotation);
+    }
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Projectile Update Functions                                                                                                                                                                  * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void UpdateAllProjectileValues(float New_ProjectileSpeed, float New_ProjectileLifetime)
+    public void Set_All_ProjectileLifetime(float New_ProjectileLifetime)
     {
-        Spawner_ProjectilePool.UpdateProjectileSpeed(New_ProjectileSpeed);
-        Spawner_ProjectilePool.UpdateProjectileLifetime(New_ProjectileLifetime);
+        Spawner_ProjectilePool.Set_All_ProjectileLifetime(New_ProjectileLifetime);
     }
 
-    public void UpdateProjectileSpeed(float New_ProjectileSpeed)
+    public void Set_Bullet_ProjectileSpeed(float New_ProjectileSpeed)
     {
-        Spawner_ProjectilePool.UpdateProjectileSpeed(New_ProjectileSpeed);
-    }
-
-    public void UpdateProjectileLifetime(float New_ProjectileLifetime)
-    {
-        Spawner_ProjectilePool.UpdateProjectileLifetime(New_ProjectileLifetime);
+        Spawner_ProjectilePool.Set_Bullet_ProjectileSpeed(New_ProjectileSpeed);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -205,9 +236,9 @@ public class ProjectileSpawner : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Spawner Logic Functions                                                                                                                                                                      * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void StartAttack()
+    public void StartAttack(float AttackFireTimeDelay)
     {
-        UpdateSpawner_NextFireTime();
+        UpdateSpawner_NextFireTime_Delay(AttackFireTimeDelay);
         Spawner_Active = true;
     }
 
@@ -271,19 +302,19 @@ public class ProjectileSpawner : MonoBehaviour
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               Spawning Projectiles Functions                                                                                                                                                               * 
+    // *               Spawner BULLET Projectiles Functions                                                                                                                                                         * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Fires a single projectile towards where the spawner is pointing
-    public void SpawnProjectile()
+    public void Spawner_Bullet_SingleShot()
     {
         GameObject NewProjectile = Spawner_ProjectilePool.GetNextProjectile();
         NewProjectile.transform.position = Spawner_FirePoint.position;
         NewProjectile.transform.rotation = Spawner_FirePoint.rotation;
-        NewProjectile.GetComponent<Projectile>().Initialize(Spawner_ProjectilePool, Spawner_FirePoint.forward);
+        NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, Spawner_FirePoint.forward);
     }
 
     // Fires Projectiles_Count projectiles spread over AngleOfSpread
-    public void SpawnSpreadAttack(int Projectile_Count, float AngleOfSpread)
+    public void Spawner_Bullet_ConeShot(int Projectile_Count, float AngleOfSpread)
     {
         float startAngle = -AngleOfSpread / 2;
         float angleStep = AngleOfSpread / (Projectile_Count - 1);
@@ -295,12 +326,12 @@ public class ProjectileSpawner : MonoBehaviour
             GameObject NewProjectile = Spawner_ProjectilePool.GetNextProjectile();
             NewProjectile.transform.position = Spawner_FirePoint.position;
             NewProjectile.transform.rotation = New_Rotation;
-            NewProjectile.GetComponent<Projectile>().Initialize(Spawner_ProjectilePool, New_Rotation * Vector3.forward);
+            NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, New_Rotation * Vector3.forward);
         }
     }
 
     // Fires Projectiles_Count projectiles spread over AngleOfSpread, stacked vertically Projectile_VerticalCount times spread across a distance of Spawner_MinHeight to Spawner_MaxHeight
-    public void SpawnStackedSpreadAttack(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    public void Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
     {
         float startAngle = -AngleOfSpread / 2;
         float angleStep = (Projectile_Count > 1) ? AngleOfSpread / (Projectile_Count - 1) : 0;
@@ -322,8 +353,28 @@ public class ProjectileSpawner : MonoBehaviour
 
                 Vector3 direction = New_Rotation * Vector3.forward;
 
-                NewProjectile.GetComponent<Projectile>().Initialize(Spawner_ProjectilePool, direction);
+                NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, direction);
             }
         }
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Spawner MINE Projectiles Functions                                                                                                                                                           * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Tosses a single mine on the ground a set distance from the spawner
+    public void Spawner_Mine_TossSingle(float Toss_Distance, float Arc_Height, float Arc_Duration)
+    {
+        // Get the next available mine from the projectile pool
+        GameObject NewMine = Spawner_ProjectilePool.GetNextProjectile();
+
+        // Set spawn position and target position
+        Vector3 spawnPosition = Spawner_FirePoint.position;
+        Vector3 forwardDirection = Spawner_FirePoint.forward;
+        Vector3 targetPosition = spawnPosition + forwardDirection * Toss_Distance;
+        targetPosition.y = 0;
+
+        // Activate and initialize the mine
+        NewMine.transform.position = spawnPosition;
+        NewMine.GetComponent<Projectile_Mine>().Initialize_Mine(Spawner_ProjectilePool, targetPosition, Arc_Height, Arc_Duration);
     }
 }
