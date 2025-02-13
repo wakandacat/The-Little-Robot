@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private float dashUpwardForce = 10.0f;
 
     //Attack vars
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
@@ -131,12 +131,10 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Skip.performed += onSkip;
     }
 
-
     //open pause menu
     public void onPause(InputAction.CallbackContext context)
     {
         pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
-
     }
 
     //skip cinematic
@@ -147,13 +145,28 @@ public class PlayerController : MonoBehaviour
 
     public void findEnemy()
     {
-        enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
-       
+        //update current scene reference
+        currentScene = SceneManager.GetActiveScene();
+
+
+        if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
+        {
+            //assign current enemy
+            enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+
+            //set battle state to true
+            combatState = true;
+        }
+        else
+        {
+            combatState = false;
+        }
     }
 
     void Awake()
     {
         mainScript = worldManager.GetComponent<mainGameScript>();
+
     }
 
 
@@ -163,30 +176,11 @@ public class PlayerController : MonoBehaviour
 
         if (mainScript.cutScenePlaying == false)
         {
+            //Find enemy 
+            findEnemy();
+
             //updated animations
             animationCalls();
-
-            //update current scene reference
-            currentScene = SceneManager.GetActiveScene();
-
-
-            if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
-            {
-                //if (GameObject.FindGameObjectWithTag("Dead") == null)
-                //{
-                    //assign current enemy
-                    findEnemy();
-                //}
-
-
-                //set battle state to true
-                combatState = true;
-
-            }
-            else
-            {
-                combatState = false;
-            }
 
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
@@ -497,7 +491,7 @@ public class PlayerController : MonoBehaviour
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
             }
-            //isAttacking = false;        
+            isAttacking = false;        
         }
         else if (counter == 2)
         {
@@ -508,7 +502,7 @@ public class PlayerController : MonoBehaviour
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
             }
-            //isAttacking = false;
+            isAttacking = false;
         }
         else if (counter == 3)
         {
@@ -519,7 +513,7 @@ public class PlayerController : MonoBehaviour
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
             }
-            //isAttacking = false;
+            isAttacking = false;
         }
 
         //set attacking animation back to false
