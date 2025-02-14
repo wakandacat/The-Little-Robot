@@ -131,7 +131,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ad1c6ef9b20d07e468845db9755471a4,
         type: 3}
       propertyPath: m_Name
-      value: playerExportBallIn (1)
+      value: playerExport
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ad1c6ef9b20d07e468845db9755471a4,
         type: 3}
@@ -185,10 +185,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad1c6ef9b20d07e468845db9755471a4,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 833388355080012287}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad1c6ef9b20d07e468845db9755471a4,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1061254705278022727}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad1c6ef9b20d07e468845db9755471a4,
         type: 3}
@@ -209,27 +205,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4927665317637264406}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &833388355080012287
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5234305018232121671}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.6
-  m_Center: {x: 0, y: 0.65, z: 0}
 --- !u!54 &1061254705278022727
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -269,11 +244,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9265fdbcd4394e545a3c366134638d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHealth: 3
+  playerCurrenthealth: 0
+  combatState: 0
   player: {fileID: 5234305018232121671}
   rb: {fileID: 1061254705278022727}
-  gravityScale: 1
+  jumpForce: 20
+  jumpCounter: 0
+  jumpState: 0
+  canDash: 1
+  orientation: {fileID: 0}
+  isAttacking: 0
+  attackCounter: 0
+  Rolling: 0
+  rollCounter: 0
+  rollTime: 10
+  maxRollSpeed: 50
+  rollState: 0
   isPaused: 0
   pauseMenu: {fileID: 0}
+  worldManager: {fileID: 0}
+  deathState: 0
+  fadingIn: 0
+  fadingOut: 0
+  collision: 0
+  Combatscenes:
+  - Combat1
+  - Combat2
+  - Combat3
+  platformMovement: {x: 0, y: 0, z: 0}
 --- !u!114 &285968248693905006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +288,7 @@ MonoBehaviour:
   player: {fileID: 5234305018232121671}
   onGround: 0
   jumpState: 0
+  doublejumpState: 0
 --- !u!95 &8418913702701424501
 Animator:
   serializedVersion: 5
