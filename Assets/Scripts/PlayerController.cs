@@ -32,8 +32,8 @@ public class PlayerController : MonoBehaviour
 
     //jump + quick drop vars
     public float jumpForce = 20.0f;
-    private float JfallMultiplier = 10.0f;
-    private float quickDropMultiplier = 15.0f;
+    private float JfallMultiplier = 8.0f;
+    private float quickDropMultiplier = 20.0f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
     public int jumpCounter = 0;
