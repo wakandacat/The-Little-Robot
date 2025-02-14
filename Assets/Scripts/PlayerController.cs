@@ -60,12 +60,12 @@ public class PlayerController : MonoBehaviour
     private float attackCD = 2.0f;
 
     //Roll vars
-    public bool Rolling = false;
-    public int rollCounter = 0;
+    private bool Rolling = false;
+    private int rollCounter = 0;
     private float rollSpeed = 10.0f;
-    public float rollTime = 10.0f;
-    public float maxRollSpeed = 50.0f;
-    public bool rollState = false;
+    private float rollTime = 3.0f;
+    private float maxRollSpeed = 16.0f;
+    private bool rollState = false;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -172,7 +172,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
         if (mainScript.cutScenePlaying == false)
         {
             //Find enemy 
@@ -196,9 +195,15 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
-                if (rollState == true)
+                if (rollCounter == 1)
                 {
+                    Debug.Log(rollState);
+                    roll();
                     rollTimer();
+                }
+                if (isQuickDropping == true)
+                {
+                    quickDrop();
                 }
             }
             else if (deathState == true) 
@@ -207,10 +212,6 @@ public class PlayerController : MonoBehaviour
                 deathState = false;
             }
             manageFall(JfallMultiplier);
-            if (isQuickDropping == true)
-            {
-                quickDrop();
-            }
         }
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
@@ -406,6 +407,7 @@ public class PlayerController : MonoBehaviour
         rollCounter = 0;
         rollTime = 5.0f;
         rollState = false;
+        rollSpeed = 10.0f;
     }
     //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
     //Execute roll on button press
@@ -420,28 +422,31 @@ public class PlayerController : MonoBehaviour
             rollSpeed = maxRollSpeed;
         }
     }
+    public void roll()
+    {
+        if (rollState ==  true)
+        {
+            //animation here
+            if (rollCounter == 1)
+            {
+                moveCharacter(rollSpeed);
+            }
+            if (rollCounter == 2)
+            {
+                handleRoll();
+            }
+        }
+    }
     public void OnRoll(InputAction.CallbackContext context)
     {
         if (mainScript.cutScenePlaying == false)
         {
             Rolling = context.ReadValueAsButton();
-            Debug.Log("Roll state = " + rollState);
-            if(Rolling == true)
+            Debug.Log("Rolling = " + Rolling);
+            if (Rolling == true)
             {
                 rollState = true;
-            }
-            if (rollState)
-            {
                 rollCounter++;
-                //animation here
-                if (rollCounter == 1)
-                {
-                    moveCharacter(rollSpeed);
-                }
-                else if (rollCounter == 2)
-                {
-                    handleRoll();
-                }
             }
         }
     }
