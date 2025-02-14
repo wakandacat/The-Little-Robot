@@ -55,6 +55,9 @@ public class mainGameScript : MonoBehaviour
     public GameObject currCheckpoint;
     public GameObject checkpointGrp;
 
+    //audio vars
+    public audioManager m_audio;
+
     void Awake()
     {
         //load the first scene in addition to the base scene
@@ -80,6 +83,9 @@ public class mainGameScript : MonoBehaviour
         //get the first checkpoint from the checkpoint group
         currCheckpoint = checkpointGrp.transform.GetChild(0).gameObject;
 
+        //set background music
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
+
         //callback once the scene is fully loaded
         SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -94,6 +100,9 @@ public class mainGameScript : MonoBehaviour
 
             // Remove the event listener to ensure it only runs once
             SceneManager.sceneLoaded -= OnSceneLoaded;
+
+            //call for music
+            m_audio.playBackgroundMusic(scene.name);
         }
     }
 

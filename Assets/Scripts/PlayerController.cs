@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private float speed = 8.0f;
     public GameObject player;
     public Rigidbody rb;
-    private Vector2 leftStick;
+    public Vector2 leftStick;
 
     //jump + quick drop vars
     public float jumpForce = 20.0f;
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
     private bool isDashing;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 4.0f;
+    private float dashingCooldown = 2.0f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private float dashUpwardForce = 10.0f;
 
     //Attack vars
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
@@ -163,8 +163,6 @@ public class PlayerController : MonoBehaviour
 
         if (mainScript.cutScenePlaying == false)
         {
-            //updated animations
-            animationCalls();
 
             //update current scene reference
             currentScene = SceneManager.GetActiveScene();
@@ -231,38 +229,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
-    public void animationCalls()
-    {
-        //animation for walking
-        if (playerAnimator != null)
-        {
-            //set playback speed for animation
-            playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
-
-            //if the player is moving then trigger the walk animation
-            if (leftStick.magnitude > 0.1f)
-            {
-                if (Rolling == true)
-                {
-                    playerAnimator.SetBool("isRolling", true);
-                }
-                else
-                {
-                    playerAnimator.SetBool("isRolling", false);
-                    playerAnimator.SetBool("isWalking", true);
-                }
-
-            }
-            else
-            {
-                //end walking or rolling animations 
-                playerAnimator.SetBool("isRolling", false);
-                playerAnimator.SetBool("isWalking", false);
-                playerAnimator.SetFloat("walkSpeed", 1.25f);
-            }
-        }
-
-    }
+    //moved to player_fx_behaviors script
 
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter(float playerSpeed)
@@ -297,8 +264,7 @@ public class PlayerController : MonoBehaviour
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         player.GetComponent<Rigidbody>().freezeRotation = true;
-        //this does not work as intended will need to be fixed
-        //playerAnimator.CrossFadeInFixedTime("jumpUp", 0.2f, 0, 0.2f);      
+     
     }
     public void manageJump()
     {
@@ -395,21 +361,15 @@ public class PlayerController : MonoBehaviour
         //always wait a little bit then check if isAttacking was true
         yield return new WaitForSeconds(0.2f);
 
-        //if it's true then turn it off
-        //if (playerAnimator.GetBool("isAttacking") == true)
-        //{
-        //    playerAnimator.SetBool("isAttacking", false);
-        //}
-
-        if(playerAnimator.GetBool("attack1") == true)
+        if (playerAnimator.GetBool("attack1") == true)
         {
             playerAnimator.SetBool("attack1", false);
         }
-        else if(playerAnimator.GetBool("attack2") == true)
+        else if (playerAnimator.GetBool("attack2") == true)
         {
             playerAnimator.SetBool("attack2", false);
         }
-        else if(playerAnimator.GetBool("attack3") == true)
+        else if (playerAnimator.GetBool("attack3") == true)
         {
             playerAnimator.SetBool("attack3", false);
         }
@@ -444,7 +404,7 @@ public class PlayerController : MonoBehaviour
     {
         rollTime -=Time.deltaTime;
         rollSpeed += Time.deltaTime;
-        Debug.Log("Roll Speed" + rollSpeed);
+        //Debug.Log("Roll Speed" + rollSpeed);
         if (rollTime < 0 || rollSpeed > maxRollSpeed)
         {
             rollTime = 0;
@@ -456,7 +416,7 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             Rolling = context.ReadValueAsButton();
-            Debug.Log("Roll state = " + rollState);
+            //Debug.Log("Roll state = " + rollState);
             if(Rolling == true)
             {
                 rollState = true;
@@ -488,44 +448,45 @@ public class PlayerController : MonoBehaviour
     //Check which combo state we are in and returns the animation, enemy damage
     public void attackCombo(int counter)
     {
+        //Debug.Log("playerController counter: " + counter);
         if (counter == 1)
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack1", true);
 
+            Debug.Log("playerController counter 1: " + counter);
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
             }
-            //isAttacking = false;        
+            isAttacking = false;        
         }
         else if (counter == 2)
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack2", true);
+            Debug.Log("playerController counter 2: " + counter);
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
             }
-            //isAttacking = false;
+            isAttacking = false;
         }
         else if (counter == 3)
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack3", true);
-
+            Debug.Log("playerController counter 3: " + counter);
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
             }
-            //isAttacking = false;
+            isAttacking = false;
         }
 
         //set attacking animation back to false
-        //yield return new WaitForSeconds(0.1f);
-        //playerAnimator.SetBool("isAttacking", false);
-        //StartCoroutine(turnOffAnim());
+        StartCoroutine(turnOffAnim());
 
     }
     //Handles the combo attack flags
@@ -576,8 +537,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //set animation flag to false for the next attacking/for when not attacking
-            //playerAnimator.SetBool("isAttacking", false);
-            StartCoroutine(turnOffAnim());
+            //StartCoroutine(turnOffAnim());
             //Debug.Log("animator should be false");
         }
     }
