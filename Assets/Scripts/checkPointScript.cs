@@ -29,12 +29,33 @@ public class checkPointScript : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-
         //remove to enusre it only runs once
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
         //set newest scene to active
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(currScene));
+
+
+        //don't respawn the enemy or its triggers if the player dies after the eney is dead
+        if (SceneManager.GetActiveScene().name == "Combat1" && mainGameScript.firstBossDead == true)
+        {
+            GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
+            GameObject.Find("startBattleTrigger").SetActive(false);
+        }
+        else if (SceneManager.GetActiveScene().name == "Combat2" && mainGameScript.secondBossDead == true)
+        {
+            GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
+            GameObject.Find("startBattleTrigger").SetActive(false);
+        }
+        else if (SceneManager.GetActiveScene().name == "Combat3" && mainGameScript.thirdBossDead == true)
+        {
+            GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
+            GameObject.Find("startBattleTrigger").SetActive(false);
+        }
+
+
+        //switch cameras if needed
+        mainGameScript.SwitchToPlatformCam(0.4f);
 
         //get the current checkpoint from the main script
         currCheckpoint = mainGameScript.currCheckpoint;
@@ -47,9 +68,7 @@ public class checkPointScript : MonoBehaviour
         this.transform.rotation = currCheckpoint.transform.rotation;
 
         //MAKE THE FREELOOK CAMERA FACE FORWARD AS WELL
-
-        //switch cameras if needed
-        mainGameScript.SwitchToPlatformCam();
+        mainGameScript.CheckPointResetPlatformCam(this.transform.eulerAngles.y);
 
     }
 }

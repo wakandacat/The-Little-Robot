@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     public bool jumpState = false;
 
     //Dash vars
-    private bool canDash = true;
+    public bool canDash = true;
     private bool isDashing;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
@@ -216,11 +216,11 @@ public class PlayerController : MonoBehaviour
             if (ground.jumpState == true)
             {
                 manageFall(JfallMultiplier);
-                Debug.Log(jumpState);
+               // Debug.Log(jumpState);
             }
             if (ground.doublejumpState == true)
             {
-                Debug.Log("We are here");
+               // Debug.Log("We are here");
                 manageFall(DJfallMultiplier);
 
             }

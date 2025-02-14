@@ -1,6 +1,8 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StartEndBattleScript : MonoBehaviour
 {
@@ -11,10 +13,15 @@ public class StartEndBattleScript : MonoBehaviour
     private mainGameScript mainGameScript;
     public GameObject loadObj;
     private bool runOnce = false;
+    public CinemachineBlenderSettings enemyDeadBlend;
+    public CinemachineBlenderSettings enemyAliveBlend;
+    private CinemachineBrain camBrain;
 
     void Awake()
     {
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
+
+        camBrain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineBrain>();
     }
 
     void Update()
@@ -22,7 +29,21 @@ public class StartEndBattleScript : MonoBehaviour
         //check enemy's state here for death
         if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0 && runOnce == false)
         {
-            //Debug.Log("dead enemy");
+            if (SceneManager.GetActiveScene().name == "Combat1")
+            {
+                mainGameScript.firstBossDead = true;
+            } 
+            else if (SceneManager.GetActiveScene().name == "Combat2")
+            {
+                mainGameScript.secondBossDead = true;
+            }
+            else if (SceneManager.GetActiveScene().name == "Combat3")
+            {
+                mainGameScript.thirdBossDead = true;
+            }
+
+            camBrain.m_CustomBlends = enemyDeadBlend;
+
             //open end bridge
             endBridge.GetComponent<bridgeScript>().moveBridgeLeft();
             startBridge.GetComponent<bridgeScript>().moveBridgeRight();
@@ -32,18 +53,25 @@ public class StartEndBattleScript : MonoBehaviour
             mainGameScript.currLevelCount++;
 
             //switch cameras
-            mainGameScript.SwitchToPlatformCam();
+            mainGameScript.SwitchToPlatformCam(0.4f);
 
             runOnce = true;
+
+            Invoke("SwitchBlend", 3.0f);
         }
 
+    }
+
+    public void SwitchBlend()
+    {
+        camBrain.m_CustomBlends = enemyAliveBlend;
     }
 
     public void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.name == "playerExport")
         {
-            Debug.Log("switch to boss cam");
+            //Debug.Log("switch to boss cam");
 
             //hide the bridges
             startBridge.GetComponent<bridgeScript>().moveBridgeLeft();

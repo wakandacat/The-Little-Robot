@@ -29,7 +29,7 @@ public class unloadSceneScript : MonoBehaviour
     //unload the previous scene
     public void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport" && SceneManager.GetSceneByName(mainGameScript.currentScene).isLoaded)
+        if (collision.gameObject.tag == "Player" && SceneManager.GetSceneByName(mainGameScript.currentScene).isLoaded)
         {
             //find the door and close it 
             door = GameObject.Find("DoorGroup").transform.GetChild(mainGameScript.doorNum).gameObject;
@@ -50,7 +50,7 @@ public class unloadSceneScript : MonoBehaviour
 
     public void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
             //get rid of the trigger area so it can't be triggered again
             this.gameObject.SetActive(false);

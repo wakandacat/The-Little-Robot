@@ -14,9 +14,9 @@ public class BossEnemy : MonoBehaviour
     public float HP_Maximum = 20.0f;
     [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have.")]
     public float Energy_Maximum = 4.0f;
-    [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'LowEnergyState'.")]
+    [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'State_LowEnergy'.")]
     public float Energy_RegainedPerSecond = 0.15f;
-    [Tooltip("Amount of Energy the Boss Enemy when struck while in 'LowEnergyState'.")]
+    [Tooltip("Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy'.")]
     public float Energy_RegainedOnStrike = 0.7f;
 
     [Tooltip("Amount of time that passed between storing player position (in seconds).")]
@@ -24,8 +24,8 @@ public class BossEnemy : MonoBehaviour
     [Tooltip("Amount of time that must pass before an entry in the Player_PositionHistory list is deleted (in seconds).")]
     public float Player_PositionTrackingMaxTimeTracked = 3.0f;
 
-    [Tooltip("Amount of time that must pass when entering the 'AwakeState' before the BossEnemy can execute the selected attack.")]
-    public float AwakeState_Delay = 2.25f;
+    [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack.")]
+    public float State_Awake_Delay = 2.25f;
 
     [Tooltip("The default projectile to be used for seeking projectile-based attacks.")]
     public GameObject Attack_BasicProjectile01;
@@ -86,7 +86,7 @@ public class BossEnemy : MonoBehaviour
         // Initialize Attributes
         stateMachine = new BossStateMachine();
 
-        // Initialize Boss Enemy Attributes and Set To SleepingState
+        // Initialize Boss Enemy Attributes and Set To State_Sleeping
         resetBossEnemy();
     }
 
@@ -207,84 +207,84 @@ public class BossEnemy : MonoBehaviour
         return null;
     }
 
+    public ProjectileSpawner ReturnComponent_Spawner_Mine()
+    {
+        foreach (var Spawner in ProjectileSpawnersList)
+        {
+            if (Spawner.Spawner_ID == "Mine")
+            {
+                return Spawner;
+            }
+        }
+        return null;
+    }
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               State Transition Functions                                                                                                                                                                   * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void TransitionToSleepingState()
+    public void TransitionToState_Sleeping()
     {
-        SleepingState sleepingState = new SleepingState();
+        State_Sleeping sleepingState = new State_Sleeping();
         sleepingState.Initialize(bossAnimator, this);
         stateMachine.SetState(sleepingState);
     }
-    public void TransitionToWakingUpState()
+    public void TransitionToState_WakingUp()
     {
-        WakingUpState wakingUpState = new WakingUpState();
+        State_WakingUp wakingUpState = new State_WakingUp();
         wakingUpState.Initialize(bossAnimator, this);
         stateMachine.SetState(wakingUpState);
     }
-    public void TransitionToSelfCheckState()
+    public void TransitionToState_SelfCheck()
     {
-        SelfCheckState selfCheckState = new SelfCheckState();
+        State_SelfCheck selfCheckState = new State_SelfCheck();
         selfCheckState.Initialize(bossAnimator, this);
         stateMachine.SetState(selfCheckState);
     }
-    public void TransitionToAwakeState()
+    public void TransitionToState_Awake()
     {
-        AwakeState awakeState = new AwakeState();
+        State_Awake awakeState = new State_Awake();
         awakeState.Initialize(bossAnimator, this);
         stateMachine.SetState(awakeState);
     }
-    public void TransitionToLowEnergyState()
+    public void TransitionToState_LowEnergy()
     {
-        LowEnergyState lowEnergyState = new LowEnergyState();
+        State_LowEnergy lowEnergyState = new State_LowEnergy();
         lowEnergyState.Initialize(bossAnimator, this);
         stateMachine.SetState(lowEnergyState);
     }
-    public void TransitionToDeathState()
+    public void TransitionToState_Death()
     {
-        DeathState deathState = new DeathState();
+        State_Death deathState = new State_Death();
         deathState.Initialize(bossAnimator, this);
         stateMachine.SetState(deathState);
     }
-    public void TransitionToAttack_TestingState()
+    public void TransitionToState_Attack_Testing()
     {
-        Attack_TestingState attackTestingState = new Attack_TestingState();
+        State_Attack_Testing attackTestingState = new State_Attack_Testing();
         attackTestingState.Initialize(bossAnimator, this);
         stateMachine.SetState(attackTestingState);
     }
-    public void TransitionToAttack_SeekingProjectile01State()
+    public void TransitionToState_Attack_Bullet_TrackingCone()
     {
-        Attack_SeekingProjectile01State attackSeekingProjectile01State = new Attack_SeekingProjectile01State();
-        attackSeekingProjectile01State.Initialize(bossAnimator, this);
-        stateMachine.SetState(attackSeekingProjectile01State);
+        State_Attack_Bullet_TrackingCone attackBulletTrackingCone = new State_Attack_Bullet_TrackingCone();
+        attackBulletTrackingCone.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletTrackingCone);
     }
-    public void TransitionToAttack_SeekingProjectile02State()
+    public void TransitionToState_Attack_Bullet_RotatingWall()
     {
-        Attack_SeekingProjectile02State attackSeekingProjectile02State = new Attack_SeekingProjectile02State();
-        attackSeekingProjectile02State.Initialize(bossAnimator, this);
-        stateMachine.SetState(attackSeekingProjectile02State);
+        State_Attack_Bullet_RotatingWall attackBulletRotatingWall = new State_Attack_Bullet_RotatingWall();
+        attackBulletRotatingWall.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletRotatingWall);
     }
-    public void TransitionToAttack_SeekingProjectile03State()
+    public void TransitionToState_Attack_ArenaHazard_Mine_Random()
     {
-        Attack_SeekingProjectile03State attackSeekingProjectile03State = new Attack_SeekingProjectile03State();
-        attackSeekingProjectile03State.Initialize(bossAnimator, this);
-        stateMachine.SetState(attackSeekingProjectile03State);
+        State_Attack_ArenaHazard_Mine_Random attackArenaHazardMineRandom = new State_Attack_ArenaHazard_Mine_Random();
+        attackArenaHazardMineRandom.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackArenaHazardMineRandom);
     }
-    public void TransitionToAttack_Laser01State()
+    public void TransitionToState_Attack_Melee01()
     {
-        Attack_Laser01State attackLaser01State = new Attack_Laser01State();
-        attackLaser01State.Initialize(bossAnimator, this);
-        stateMachine.SetState(attackLaser01State);
-    }
-    public void TransitionToAttack_ArenaHazard01State()
-    {
-        Attack_ArenaHazard01State attackArenaHazard01State = new Attack_ArenaHazard01State();
-        attackArenaHazard01State.Initialize(bossAnimator, this);
-        stateMachine.SetState(attackArenaHazard01State);
-    }
-    public void TransitionToAttack_Melee01State()
-    {
-        Attack_Melee01State attackMelee01State = new Attack_Melee01State();
+        State_Attack_Melee01 attackMelee01State = new State_Attack_Melee01();
         attackMelee01State.Initialize(bossAnimator, this);
         stateMachine.SetState(attackMelee01State);
     }
@@ -295,6 +295,11 @@ public class BossEnemy : MonoBehaviour
     public float HP_ReturnCurrent()
     {
         return HP_Current;
+    }
+
+    public float HP_ReturnMax()
+    {
+        return HP_Maximum;
     }
 
     public bool HP_IsZero()
@@ -432,7 +437,7 @@ public class BossEnemy : MonoBehaviour
         HP_Current = HP_Maximum;
         Energy_Current = Energy_Maximum;
 
-        // Set To SleepingState
-        TransitionToSleepingState();
+        // Set To State_Sleeping
+        TransitionToState_Sleeping();
     }
 }

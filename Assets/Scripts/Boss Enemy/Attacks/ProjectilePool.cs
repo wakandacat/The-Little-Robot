@@ -7,7 +7,7 @@ public class ProjectilePool : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Public Fields                                                                                                                                                                                * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    [Tooltip("Projectile prefab.")]
+    [Tooltip("Projectile prefab for this pool.")]
     public GameObject Projectile_Prefab;
     [Tooltip("Number of projectiles available in pool.")]
     public int Pool_Size = 20;
@@ -27,9 +27,9 @@ public class ProjectilePool : MonoBehaviour
         // Instatiate the Pool_Projectiles queue
         for (int i = 0; i < Pool_Size; i++)
         {
-            GameObject NewProjectile = Instantiate(Projectile_Prefab);  // create new projectile game object
-            NewProjectile.SetActive(false);                             // set it to false
-            Pool_Projectiles.Enqueue(NewProjectile);                    // add it to the Pool_Projectiles queue
+            GameObject NewProjectile = Instantiate(Projectile_Prefab, transform);   // create new projectile game object, make the gameobject this script is attached to the parent
+            NewProjectile.SetActive(false);                                         // set it to false
+            Pool_Projectiles.Enqueue(NewProjectile);                                // add it to the Pool_Projectiles queue
         }
     }
     
@@ -39,6 +39,12 @@ public class ProjectilePool : MonoBehaviour
     // Returns (and takes out) the next Projectile in the Pool_Projectiles queue
     public GameObject GetNextProjectile()
     {
+        // check if queue is empty, if so return oldest projectile
+        if (Pool_Projectiles.Count == 0)
+        {
+            ReturnOldestActiveProjectileToPool();
+        }
+
         GameObject NextProjectile = Pool_Projectiles.Dequeue();     // remove new projectile from pool
         NextProjectile.SetActive(true);
         Pool_ActiveProjectiles.Add(NextProjectile);                 // add new projectile to active list
@@ -74,28 +80,32 @@ public class ProjectilePool : MonoBehaviour
         }
     }
 
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               Update Projectiles in Pool_Projectiles Queue Functions                                                                                                                                       * 
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void UpdateAllProjectileValues(float New_ProjectileSpeed, float New_ProjectileLifetime)
+    public void ReturnOldestActiveProjectileToPool()
     {
-        UpdateProjectileSpeed(New_ProjectileSpeed);
-        UpdateProjectileLifetime(New_ProjectileLifetime);
-    }
-
-    public void UpdateProjectileSpeed(float New_ProjectileSpeed)
-    {
-        foreach (GameObject projectile in Pool_Projectiles)
+        if (Pool_ActiveProjectiles.Count > 0)
         {
-            projectile.GetComponent<Projectile>().UpdateProjectileSpeed(New_ProjectileSpeed);
+            Debug.Log("ProjectilePool: Oldest Active Projectile Returned To Pool");
+            GameObject oldestProjectile = Pool_ActiveProjectiles[0];    // get the first (oldest) projectile in the list
+            ReturnProjectileToPool(oldestProjectile);                   // return it to the pool
         }
     }
 
-    public void UpdateProjectileLifetime(float New_ProjectileLifetime)
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Update Projectiles in Pool_Projectiles Queue Functions                                                                                                                                       * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void Set_All_ProjectileLifetime(float New_ProjectileLifetime)
     {
         foreach (GameObject projectile in Pool_Projectiles)
         {
-            projectile.GetComponent<Projectile>().UpdateProjectileLifetime(New_ProjectileLifetime);
+            projectile.GetComponent<Projectile>().Set_ProjectileLifetime(New_ProjectileLifetime);
+        }
+    }
+
+    public void Set_Bullet_ProjectileSpeed(float New_ProjectileSpeed)
+    {
+        foreach (GameObject projectile in Pool_Projectiles)
+        {
+            projectile.GetComponent<Projectile_Bullet>().Set_ProjectileSpeed(New_ProjectileSpeed);
         }
     }
 }

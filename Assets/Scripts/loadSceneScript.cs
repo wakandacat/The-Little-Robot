@@ -19,7 +19,7 @@ public class loadSceneScript : MonoBehaviour
     public void OnTriggerEnter(Collider collision)
     {
 
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
             //increment the scene to load
             mainGameScript.currSceneName++;
@@ -47,13 +47,13 @@ public class loadSceneScript : MonoBehaviour
 
         //set newest scene to active
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(mainGameScript.currentScene));
-       // Debug.Log("set  " + mainGameScript.currentScene + "as active");
+        // Debug.Log("set  " + mainGameScript.currentScene + "as active");
 
     }
 
     public void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
             //get rid of the trigger area so it can't be triggered again
             this.gameObject.SetActive(false);
