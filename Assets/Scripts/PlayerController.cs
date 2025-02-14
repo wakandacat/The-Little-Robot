@@ -32,8 +32,7 @@ public class PlayerController : MonoBehaviour
 
     //jump + quick drop vars
     public float jumpForce = 20.0f;
-    private float JfallMultiplier = 10.0f;
-    private float DJfallMultiplier = 15.0f;
+    private float JfallMultiplier = 8.0f;
     private float quickDropMultiplier = 20.0f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
@@ -61,12 +60,12 @@ public class PlayerController : MonoBehaviour
     private float attackCD = 2.0f;
 
     //Roll vars
-    public bool Rolling = false;
-    public int rollCounter = 0;
+    private bool Rolling = false;
+    private int rollCounter = 0;
     private float rollSpeed = 10.0f;
-    public float rollTime = 10.0f;
-    public float maxRollSpeed = 50.0f;
-    public bool rollState = false;
+    private float rollTime = 3.0f;
+    private float maxRollSpeed = 16.0f;
+    private bool rollState = false;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -131,12 +130,10 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Skip.performed += onSkip;
     }
 
-
     //open pause menu
     public void onPause(InputAction.CallbackContext context)
     {
         pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
-
     }
 
     //skip cinematic
@@ -147,44 +144,41 @@ public class PlayerController : MonoBehaviour
 
     public void findEnemy()
     {
-        enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
-       
+        //update current scene reference
+        currentScene = SceneManager.GetActiveScene();
+
+
+        if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
+        {
+            //assign current enemy
+            enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+
+            //set battle state to true
+            combatState = true;
+        }
+        else
+        {
+            combatState = false;
+        }
     }
 
     void Awake()
     {
         mainScript = worldManager.GetComponent<mainGameScript>();
+
     }
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
-
         if (mainScript.cutScenePlaying == false)
         {
+            //Find enemy 
+            findEnemy();
 
-            //update current scene reference
-            currentScene = SceneManager.GetActiveScene();
-
-
-            if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
-            {
-                //if (GameObject.FindGameObjectWithTag("Dead") == null)
-                //{
-                    //assign current enemy
-                    findEnemy();
-                //}
-
-
-                //set battle state to true
-                combatState = true;
-
-            }
-            else
-            {
-                combatState = false;
-            }
+            //updated animations
+            animationCalls();
 
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
@@ -201,9 +195,15 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
-                if (rollState == true)
+                if (rollCounter == 1)
                 {
+                    Debug.Log(rollState);
+                    roll();
                     rollTimer();
+                }
+                if (isQuickDropping == true)
+                {
+                    quickDrop();
                 }
             }
             else if (deathState == true) 
@@ -211,21 +211,7 @@ public class PlayerController : MonoBehaviour
                 ManagedeathState();
                 deathState = false;
             }
-            if (ground.jumpState == true)
-            {
-                manageFall(JfallMultiplier);
-               // Debug.Log(jumpState);
-            }
-            if (ground.doublejumpState == true)
-            {
-               // Debug.Log("We are here");
-                manageFall(DJfallMultiplier);
-
-            }
-            if (isQuickDropping == true)
-            {
-                quickDrop();
-             }
+            manageFall(JfallMultiplier);
         }
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
@@ -259,22 +245,12 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Jump-----------------------------------------------//
 
     //Basic Jump Script using rigidody forces
-    public void JumpForce()
+    public void Jump()
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         player.GetComponent<Rigidbody>().freezeRotation = true;
      
-    }
-    public void manageJump()
-    {
-        JumpForce();
-        ground.jumpState = true;
-    }
-    public void manageDoubleJump()
-    {
-        JumpForce();
-        ground.doublejumpState = true;
     }
 
     //Jump flags handler
@@ -288,7 +264,7 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.velocity.y < 0)
         {
-           rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
     }
     //Jump Logic here
@@ -299,14 +275,16 @@ public class PlayerController : MonoBehaviour
             isJumping = context.ReadValueAsButton();
             if (ground.onGround == true && jumpCounter == 0 && isJumping)
             {
-                manageJump();
+                Jump();
                 jumpCounter++;
+                ground.jumpState = true;
             }
             //Double Jump call
             if (ground.onGround == false && jumpCounter == 1 && isJumping)
             {
-                manageDoubleJump();
+                Jump();
                 jumpCounter = 0;
+                ground.doublejumpState = true;
             }
         }
     }
@@ -361,7 +339,7 @@ public class PlayerController : MonoBehaviour
         //always wait a little bit then check if isAttacking was true
         yield return new WaitForSeconds(0.2f);
 
-        if (playerAnimator.GetBool("attack1") == true)
+        if(playerAnimator.GetBool("attack1") == true)
         {
             playerAnimator.SetBool("attack1", false);
         }
@@ -397,6 +375,7 @@ public class PlayerController : MonoBehaviour
         rollCounter = 0;
         rollTime = 5.0f;
         rollState = false;
+        rollSpeed = 10.0f;
     }
     //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
     //Execute roll on button press
@@ -411,28 +390,31 @@ public class PlayerController : MonoBehaviour
             rollSpeed = maxRollSpeed;
         }
     }
+    public void roll()
+    {
+        if (rollState ==  true)
+        {
+            //animation here
+            if (rollCounter == 1)
+            {
+                moveCharacter(rollSpeed);
+            }
+            if (rollCounter == 2)
+            {
+                handleRoll();
+            }
+        }
+    }
     public void OnRoll(InputAction.CallbackContext context)
     {
         if (mainScript.cutScenePlaying == false)
         {
             Rolling = context.ReadValueAsButton();
-            //Debug.Log("Roll state = " + rollState);
-            if(Rolling == true)
+            Debug.Log("Rolling = " + Rolling);
+            if (Rolling == true)
             {
                 rollState = true;
-            }
-            if (rollState)
-            {
                 rollCounter++;
-                //animation here
-                if (rollCounter == 1)
-                {
-                    moveCharacter(rollSpeed);
-                }
-                else if (rollCounter == 2)
-                {
-                    handleRoll();
-                }
             }
         }
     }
