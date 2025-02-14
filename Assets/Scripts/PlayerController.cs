@@ -10,6 +10,9 @@ using UnityEngine.SceneManagement;
 //Might need to split up some code to different scripts 
 public class PlayerController : MonoBehaviour
 {
+    //Scene call 
+    UnityEngine.SceneManagement.Scene currentScene;
+
     //player controller reference
     PlayerControls pc;
 
@@ -39,13 +42,15 @@ public class PlayerController : MonoBehaviour
     public int jumpCounter = 0;
     private float rotationSpeed = 1.0f;
     public bool jumpState = false;
+    public bool collFungiPlat = false;
+    private bool quickDropState = false;
 
     //Dash vars
     public bool canDash = true;
     private bool isDashing;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 4.0f;
+    public float dashingCooldown = 4.0f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
@@ -60,12 +65,11 @@ public class PlayerController : MonoBehaviour
     private float attackCD = 2.0f;
 
     //Roll vars
-    private bool Rolling = false;
-    private int rollCounter = 0;
+    public bool Rolling = false;
+    public int rollCounter = 0;
     private float rollSpeed = 10.0f;
     private float rollTime = 3.0f;
     private float maxRollSpeed = 16.0f;
-    private bool rollState = false;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -79,7 +83,6 @@ public class PlayerController : MonoBehaviour
     private mainGameScript mainScript;
 
     //Death vars
-    UnityEngine.SceneManagement.Scene currentScene;
     public bool deathState = false;
 
     //canvas fade bool
@@ -88,8 +91,8 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private int damageTakenDelay = 10;
-    private bool invulnerable = false;
+    private float damageTakenDelay = 3.0f;
+    public bool invulnerable = false;
 
     //animator
     private Animator playerAnimator;
@@ -107,6 +110,7 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Enable();
 
         currentScene = SceneManager.GetActiveScene();
+        invulnerable = false;
 
         rb = player.gameObject.GetComponent<Rigidbody>();
         ground = player.GetComponent<groundCheck>();
@@ -168,19 +172,20 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
+    private void Update()
+    {
+        //Find enemy 
+        findEnemy();
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
         if (mainScript.cutScenePlaying == false)
         {
-            //Find enemy 
-            findEnemy();
-
             //updated animations
             animationCalls();
 
-            //Check if the player is dead or alive
+            //Check if the player is dead or alive and check if gravity is normal
             if (deathState == false && Physics.gravity.y <= -9.81f)
             {
                 manageHealth();
@@ -195,11 +200,10 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
+                //if roll toggled start the roll logic and the timer
                 if (rollCounter == 1)
                 {
-                    Debug.Log(rollState);
                     roll();
-                    rollTimer();
                 }
                 if (isQuickDropping == true)
                 {
@@ -335,6 +339,7 @@ public class PlayerController : MonoBehaviour
     public void handleQuickDrop()
     {
         isQuickDropping = false;
+        quickDropState = false;
     }
     //on button press call quick drop and handler
     public void OnQuickDrop(InputAction.CallbackContext context)
@@ -342,9 +347,21 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             isQuickDropping = context.ReadValueAsButton();
+            if(isQuickDropping == true)
+            {
+                quickDropState = true;
+            }
         }
     }
-
+    public void breakFungi()
+    {
+        if(collFungiPlat == true && quickDropState == true)
+        {
+            //Code to break the plat
+            //there might be an issue here with the callback but we shall see
+            handleQuickDrop();
+        }
+    }
     //-----------------------------------------------Dash-----------------------------------------------//
     //https://www.youtube.com/watch?v=vTNWUbGkZ58
     //https://discussions.unity.com/t/why-does-rigidbody-3d-not-have-a-gravity-scale/645511/2
@@ -406,7 +423,6 @@ public class PlayerController : MonoBehaviour
         Rolling = false;
         rollCounter = 0;
         rollTime = 5.0f;
-        rollState = false;
         rollSpeed = 10.0f;
     }
     //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
@@ -424,29 +440,25 @@ public class PlayerController : MonoBehaviour
     }
     public void roll()
     {
-        if (rollState ==  true)
+        //animation here
+        if (rollCounter == 1)
         {
-            //animation here
-            if (rollCounter == 1)
-            {
-                moveCharacter(rollSpeed);
-            }
-            if (rollCounter == 2)
-            {
-                handleRoll();
-            }
-        }
+            moveCharacter(rollSpeed);
+            rollTimer();
+        }  
     }
     public void OnRoll(InputAction.CallbackContext context)
     {
         if (mainScript.cutScenePlaying == false)
         {
             Rolling = context.ReadValueAsButton();
-            Debug.Log("Rolling = " + Rolling);
             if (Rolling == true)
             {
-                rollState = true;
                 rollCounter++;
+                if(rollCounter == 2)
+                {
+                    handleRoll();
+                }
             }
         }
     }
@@ -572,7 +584,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Damage Source")
+        if (other.gameObject.tag == "Damage Source")
         {
             collision = true;
         }
@@ -642,7 +654,7 @@ public class PlayerController : MonoBehaviour
     {
         fadeIn();
         canDash = true;
-        // Invoke("fadeOut", fadeDelay);
+        invulnerable = false;
     }
 
     //Needs to change to use canvas opacity
@@ -653,7 +665,6 @@ public class PlayerController : MonoBehaviour
     }
     public void fadeOut()
     {
-        //Debug.Log("yoooooooooooooo");
         fadingOut = true;
         playerCurrenthealth = playerHealth;
         checkPoint.MoveToCheckpoint();
