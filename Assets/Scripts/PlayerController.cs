@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     private float attackCD = 2.0f;
 
     //Roll vars
-    private bool Rolling = false;
+    public bool Rolling = false;
     private int rollCounter = 0;
     private float rollSpeed = 10.0f;
     private float rollTime = 3.0f;
@@ -178,7 +178,7 @@ public class PlayerController : MonoBehaviour
             findEnemy();
 
             //updated animations
-            animationCalls();
+            //animationCalls();
 
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)

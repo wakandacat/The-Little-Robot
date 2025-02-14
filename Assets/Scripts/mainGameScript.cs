@@ -68,9 +68,14 @@ public class mainGameScript : MonoBehaviour
         GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = false;
 
         //clear event selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        //set new default selected
-        EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
+        if(EventSystem.current)
+        {
+            Debug.Log("I exist");
+            EventSystem.current.SetSelectedGameObject(null);
+            //set new default selected
+            EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
+        }
+        
 
         //get teh game settings if they exist --> if gameplay started from MainMenu scene then it will exist, otherwise it wont
         if (GameObject.Find("GameSettings"))
@@ -88,6 +93,18 @@ public class mainGameScript : MonoBehaviour
 
         //callback once the scene is fully loaded
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+    }
+
+    private void Start()
+    {
+        if (EventSystem.current)
+        {
+            //Debug.Log("I exist");
+            EventSystem.current.SetSelectedGameObject(null);
+            //set new default selected
+            EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
+        }
 
     }
 
