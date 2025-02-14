@@ -33,8 +33,7 @@ public class PlayerController : MonoBehaviour
     //jump + quick drop vars
     public float jumpForce = 20.0f;
     private float JfallMultiplier = 10.0f;
-    private float DJfallMultiplier = 15.0f;
-    private float quickDropMultiplier = 20.0f;
+    private float quickDropMultiplier = 15.0f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
     public int jumpCounter = 0;
@@ -207,21 +206,11 @@ public class PlayerController : MonoBehaviour
                 ManagedeathState();
                 deathState = false;
             }
-            if (ground.jumpState == true)
-            {
-                manageFall(JfallMultiplier);
-               // Debug.Log(jumpState);
-            }
-            if (ground.doublejumpState == true)
-            {
-               // Debug.Log("We are here");
-                manageFall(DJfallMultiplier);
-
-            }
+            manageFall(JfallMultiplier);
             if (isQuickDropping == true)
             {
                 quickDrop();
-             }
+            }
         }
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
@@ -286,23 +275,13 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Jump-----------------------------------------------//
 
     //Basic Jump Script using rigidody forces
-    public void JumpForce()
+    public void Jump()
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         player.GetComponent<Rigidbody>().freezeRotation = true;
         //this does not work as intended will need to be fixed
         //playerAnimator.CrossFadeInFixedTime("jumpUp", 0.2f, 0, 0.2f);      
-    }
-    public void manageJump()
-    {
-        JumpForce();
-        ground.jumpState = true;
-    }
-    public void manageDoubleJump()
-    {
-        JumpForce();
-        ground.doublejumpState = true;
     }
 
     //Jump flags handler
@@ -316,7 +295,7 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.velocity.y < 0)
         {
-           rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
     }
     //Jump Logic here
@@ -327,14 +306,16 @@ public class PlayerController : MonoBehaviour
             isJumping = context.ReadValueAsButton();
             if (ground.onGround == true && jumpCounter == 0 && isJumping)
             {
-                manageJump();
+                Jump();
                 jumpCounter++;
+                ground.jumpState = true;
             }
             //Double Jump call
             if (ground.onGround == false && jumpCounter == 1 && isJumping)
             {
-                manageDoubleJump();
+                Jump();
                 jumpCounter = 0;
+                ground.doublejumpState = true;
             }
         }
     }
@@ -388,12 +369,6 @@ public class PlayerController : MonoBehaviour
     {
         //always wait a little bit then check if isAttacking was true
         yield return new WaitForSeconds(0.2f);
-
-        //if it's true then turn it off
-        //if (playerAnimator.GetBool("isAttacking") == true)
-        //{
-        //    playerAnimator.SetBool("isAttacking", false);
-        //}
 
         if(playerAnimator.GetBool("attack1") == true)
         {
