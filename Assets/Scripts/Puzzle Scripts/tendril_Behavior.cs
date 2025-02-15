@@ -5,18 +5,12 @@ using UnityEngine;
 public class tendril_Behavior : MonoBehaviour
 {
     private Animator m_animator;
-
+    public bool hasCollided = false;
 
     // Start is called before the first frame update
     void Start()
     {
         m_animator = this.GetComponent<Animator>();
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
 
     }
 
@@ -30,9 +24,6 @@ public class tendril_Behavior : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        //if (other.gameObject.tag == "Damage Source")
-        //{
-        //    collision = false;
-        //}
+        hasCollided = false;
     }
 }

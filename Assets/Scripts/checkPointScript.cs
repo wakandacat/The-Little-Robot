@@ -62,7 +62,7 @@ public class checkPointScript : MonoBehaviour
 
         //get the current checkpoint from the main script
         currCheckpoint = mainGameScript.currCheckpoint;
-        Debug.Log("checkpoint: " + currCheckpoint);
+        //Debug.Log("checkpoint: " + currCheckpoint);
 
         //move the player there
         this.transform.position = currCheckpoint.transform.position;

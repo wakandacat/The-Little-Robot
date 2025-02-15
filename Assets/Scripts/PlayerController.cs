@@ -102,6 +102,9 @@ public class PlayerController : MonoBehaviour
     //platforming vars
     public Vector3 platformMovement;
 
+    //health regen
+    public bool canRegen = true;
+
     void Start()
     {
         pc = new PlayerControls();
@@ -178,6 +181,9 @@ public class PlayerController : MonoBehaviour
     {
         if (mainScript.cutScenePlaying == false)
         {
+            //Debug.Log("player health is at " + playerCurrenthealth);
+           // Debug.Log("can regen " + canRegen);
+
             //Find enemy 
             findEnemy();
 
@@ -552,6 +558,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision == true)
         {
+            Debug.Log("take damage");
             playerCurrenthealth--;
             invulnerable = true;
             StartCoroutine(Immunity());
@@ -613,20 +620,27 @@ public class PlayerController : MonoBehaviour
     //Make sure to add a check if player in combat or not
     IEnumerator healthRegen()
     {
-        if (playerCurrenthealth == 1)
+        if (canRegen)
         {
-            yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth = 2;
+            if (playerCurrenthealth == 1)
+            {
+                //Debug.Log("in 1 regen");
+                yield return new WaitForSeconds(healthRegenDelay);
+                playerCurrenthealth = 2;
+            }
+            else if (playerCurrenthealth == 2)
+            {
+                //Debug.Log("in 2 regen");
+                yield return new WaitForSeconds(healthRegenDelay);
+                playerCurrenthealth = 3;
+            }
+            else if (playerCurrenthealth == 3)
+            {
+                //Debug.Log("in 3 regen");
+                playerCurrenthealth = playerHealth;
+            }
         }
-        else if (playerCurrenthealth == 2)
-        {
-            yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth = 3;
-        }
-        else if (playerCurrenthealth == 3)
-        {
-            playerCurrenthealth = playerHealth;
-        }
+        
     }
 
     //-----------------------------------------------Death State-----------------------------------------------//
@@ -634,6 +648,7 @@ public class PlayerController : MonoBehaviour
     {
         fadeIn();
         canDash = true;
+        canRegen = true;
         // Invoke("fadeOut", fadeDelay);
     }
 
