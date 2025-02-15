@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     EnemyCollision enemyCollision;
     cameraRotation rotationCam;
     checkPointScript checkPoint;
+    audioManager m_audio;
 
     //player variables
     public int playerHealth = 3;
@@ -119,6 +120,9 @@ public class PlayerController : MonoBehaviour
 
         //get animator
         playerAnimator = player.GetComponent<Animator>();
+
+        //get audio
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
 
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
@@ -436,10 +440,16 @@ public class PlayerController : MonoBehaviour
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack1", true);
 
-            Debug.Log("playerController counter 1: " + counter);
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
+                //play sfx on hit
+                m_audio.playPlayerSFX(3);
+            }
+            else
+            {
+                //play sfx
+                m_audio.playPlayerSFX(0);
             }
             isAttacking = false;        
         }
@@ -447,11 +457,17 @@ public class PlayerController : MonoBehaviour
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack2", true);
-            Debug.Log("playerController counter 2: " + counter);
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
+                //play sfx on hit
+                m_audio.playPlayerSFX(3);
+            }
+            else
+            {
+                //play sfx
+                m_audio.playPlayerSFX(1);
             }
             isAttacking = false;
         }
@@ -459,11 +475,19 @@ public class PlayerController : MonoBehaviour
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack3", true);
-            Debug.Log("playerController counter 3: " + counter);
+            
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
+                //play sfx
+                m_audio.playPlayerSFX(3);
             }
+            else
+            {
+                //play sfx
+                m_audio.playPlayerSFX(2);
+            }
+
             isAttacking = false;
         }
 

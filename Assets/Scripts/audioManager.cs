@@ -47,35 +47,15 @@ public class audioManager : MonoBehaviour
     public void playBackgroundMusic(string sceneName)
     {
         int index = 0;
-
-        switch (sceneName)
+        backgroundSource.Stop();
+        if (sceneName.Contains("Combat"))
         {
-            case "Tutorial":
-                index = 0;
-                break;
-            case "Combat1":
-                index = 1;
-                break;
-            case "Combat2":
-                index = 1;
-                break;
-            case "Combat3":
-                index = 1;
-                break;
-            case "Platform1":
-                //do nothing because it goes from tut to p1
-                //index = 0;
-                break;
-            case "Platform2":
-                index = 0;
-                break;
-            case "Platform3":
-                index = 0;
-                break;
-            default:
-                //do nothing
-                break;
 
+            index = 1;
+        }
+        else
+        {
+            index = 0;
         }
 
         //play clip
