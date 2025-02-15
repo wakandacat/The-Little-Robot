@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class player_fx_behaviors : MonoBehaviour
 {
     //This script is for animation, sound effects, and visual effects
+    /** NOTE: attack sfx, vfx, and animation calls 
+       * are in the player controller script
+       * due to callback functionality
+    **/
     //related to the player character
-
     public GameObject player;
+    private PlayerController playerScript;
 
     //animation variables
     private Animator m_animator;
@@ -19,53 +24,55 @@ public class player_fx_behaviors : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //player = this.GetComponent<GameObject>();
+        //get player controller script, needed for accessing joystick inputs
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         m_animator = this.GetComponent<Animator>();
 
-        if(player != null)
-        {
-            Debug.Log("got the " + player.name);
-        }
+
+
+        //StartCoroutine(turnOffAnim());
     }
 
     // Update is called once per frame
     void Update()
     {
-        //m_animator.CrossFadeInFixedTime("Strike", 0.2f, 0, 0.2f);
-
+        animationCalls();
     }
 
-    //public void animationCalls()
-    //{
-    //    //animation for walking
-    //    if (m_animator != null)
-    //    {
-    //        //set playback speed for animation
-    //        m_animator.SetFloat("walkSpeed", player.leftStick.magnitude);
+    
 
-    //        //if the player is moving then trigger the walk animation
-    //        if (player.leftStick.magnitude > 0.1f)
-    //        {
-    //            if (player.Rolling == true)
-    //            {
-    //                m_animator.SetBool("isRolling", true);
-    //            }
-    //            else
-    //            {
-    //                m_animator.SetBool("isRolling", false);
-    //                m_animator.SetBool("isWalking", true);
-    //            }
+    public void animationCalls()
+    {
+        //animation for walking
+        if (m_animator != null)
+        {
+            //set playback speed for animation
+            m_animator.SetFloat("walkSpeed", playerScript.leftStick.magnitude);
 
-    //        }
-    //        else
-    //        {
-    //            //end walking or rolling animations 
-    //            m_animator.SetBool("isRolling", false);
-    //            m_animator.SetBool("isWalking", false);
-    //            m_animator.SetFloat("walkSpeed", 1.25f);
-    //        }
-    //    }
+            //if the player is moving then trigger the walk animation
+            //update this code to keep player in ball if rolling
+            if (playerScript.leftStick.magnitude > 0.1f)
+            {
+                if (playerScript.Rolling == true)
+                {
+                    m_animator.SetBool("isRolling", true);
+                }
+                else
+                {
+                    m_animator.SetBool("isRolling", false);
+                    m_animator.SetBool("isWalking", true);
+                }
 
-    //}
+            }
+            else
+            {
+                //end walking or rolling animations 
+                m_animator.SetBool("isRolling", false);
+                m_animator.SetBool("isWalking", false);
+                m_animator.SetFloat("walkSpeed", 1.25f);
+            }
+        }
+
+    }
 
 }
