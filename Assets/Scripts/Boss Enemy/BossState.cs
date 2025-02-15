@@ -531,6 +531,7 @@ public class State_Death : BossState
     {
         // Programming Logic
         Debug.Log("BossEnemy: Entering State_Death");
+        bossEnemyComponent.GetComponent<CapsuleCollider>().enabled = false;
 
         // Animation Logic
         animator.SetBool("die", true);

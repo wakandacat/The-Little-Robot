@@ -79,7 +79,7 @@ public abstract class Projectile : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Destroy Functions                                                                                                                      * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
-    protected void ReturnToPool()
+    public void ReturnToPool()
     {
         Projectile_HomePool.ReturnProjectileToPool(gameObject);
     }
