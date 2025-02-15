@@ -24,10 +24,6 @@ public class platformTriggerScript : MonoBehaviour
             player.gameObject.GetComponent<PlayerController>().platformMovement = platformDelta;
 
         }
-        else if (playerOn == false && player)
-        {
-            player.gameObject.GetComponent<PlayerController>().platformMovement = Vector3.zero;
-        }
 
         lastPlatformPosition = platform.transform.position;
     }
@@ -38,7 +34,7 @@ public class platformTriggerScript : MonoBehaviour
         //fi player collided
         if (other.gameObject.name == "playerExport")
         {
-            //Debug.Log("on platform");
+            Debug.Log("on platform");
 
             player = other.gameObject;
             playerOn = true;
@@ -50,8 +46,11 @@ public class platformTriggerScript : MonoBehaviour
         //if player leaves
         if (other.gameObject.name == "playerExport")
         {
-            //Debug.Log("off platform");
+            Debug.Log("off platform");
 
+            //immediatley set player's extra velocity to 0
+            player.gameObject.GetComponent<PlayerController>().platformMovement = Vector3.zero;
+            player = null;
             playerOn = false;
         }
     }

@@ -55,6 +55,9 @@ public class mainGameScript : MonoBehaviour
     public GameObject currCheckpoint;
     public GameObject checkpointGrp;
 
+    //audio vars
+    public audioManager m_audio;
+
     void Awake()
     {
         //load the first scene in addition to the base scene
@@ -63,11 +66,7 @@ public class mainGameScript : MonoBehaviour
         //ensure time is running and we are not still paused
         Time.timeScale = 1.0f;
         GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = false;
-
-        //clear event selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        //set new default selected
-        EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
+        
 
         //get teh game settings if they exist --> if gameplay started from MainMenu scene then it will exist, otherwise it wont
         if (GameObject.Find("GameSettings"))
@@ -80,9 +79,23 @@ public class mainGameScript : MonoBehaviour
         //get the first checkpoint from the checkpoint group
         currCheckpoint = checkpointGrp.transform.GetChild(0).gameObject;
 
+        //set background music
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
+
         //callback once the scene is fully loaded
         SceneManager.sceneLoaded += OnSceneLoaded;
 
+    }
+
+    private void Start()
+    {
+        if (EventSystem.current)
+        {
+            //Debug.Log("I exist");
+            EventSystem.current.SetSelectedGameObject(null);
+            //set new default selected
+            EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -94,6 +107,9 @@ public class mainGameScript : MonoBehaviour
 
             // Remove the event listener to ensure it only runs once
             SceneManager.sceneLoaded -= OnSceneLoaded;
+
+            //call for music
+            m_audio.playBackgroundMusic(scene.name);
         }
     }
 
@@ -125,59 +141,6 @@ public class mainGameScript : MonoBehaviour
             IntroCam();
         }
 
-        //---------------BOSS CAM-------------------
-        //if (GameObject.Find("enemy" + currLevelCount) && usingBossCam == true && GameObject.FindWithTag("Player"))
-        //{
-        //    //calculate the direction from the track center to the player    
-        //    Vector3 direction = GameObject.FindWithTag("Player").transform.position - battleTrack.transform.position;
-
-        //    //calculate the angle in degrees (0 to 360) around the track center
-        //    float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
-
-        //    //ensure its positive
-        //    if (angle < 0)
-        //    {
-        //        angle = angle + 360f;
-        //    }
-        //    angle = angle - 270f;  //camera is offset by 270?
-
-        //    //normalize again
-        //    if (angle < 0)
-        //    {
-        //        angle = angle + 360f;
-        //    }
-
-        //    //map the angle to a normalized path position (0 to 1) -> we are using normalized on battleCam
-        //    float targetPathPosition = angle / 360f;
-
-        //    //get path placement
-        //    float currentPathPosition = bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition;
-        //    float shortestRoute = targetPathPosition - currentPathPosition;
-
-        //    //shortest route to avoid track look bugging at beginning of loop
-        //    if (shortestRoute > 0.5f)
-        //    {
-        //        shortestRoute -= 1f;
-        //    }
-        //    else if (shortestRoute < -0.5f)
-        //    {
-        //        shortestRoute += 1f;
-        //    }
-
-        //    //take into account the player's distance from the center enemy (closer should move the camera less quickly)
-        //    // float distanceToCenter = Vector3.Distance(GameObject.FindWithTag("Player").transform.position, GameObject.Find("enemy" + currLevelCount).transform.position);
-        //    //damping factor
-        //    // float dampingFactor = Mathf.Clamp01(distanceToCenter / 10f);
-        //    // bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += shortestRoute * Time.deltaTime * 10f * dampingFactor;
-        //    // Debug.Log(shortestRoute * Time.deltaTime * 10f * dampingFactor);
-
-        //    bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += shortestRoute * Time.deltaTime * 10f;
-        //    bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition %= 1f;
-        //    if (bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition < 0)
-        //    {
-        //        bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition += 1f;
-        //    }
-        //}
     }
 
     public void SkipIntro()

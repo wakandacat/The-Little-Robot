@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     EnemyCollision enemyCollision;
     cameraRotation rotationCam;
     checkPointScript checkPoint;
+    audioManager m_audio;
 
     //player variables
     public int playerHealth = 3;
@@ -28,12 +29,11 @@ public class PlayerController : MonoBehaviour
     private float speed = 8.0f;
     public GameObject player;
     public Rigidbody rb;
-    private Vector2 leftStick;
+    public Vector2 leftStick;
 
     //jump + quick drop vars
     public float jumpForce = 20.0f;
-    private float JfallMultiplier = 10.0f;
-    private float DJfallMultiplier = 15.0f;
+    private float JfallMultiplier = 8.0f;
     private float quickDropMultiplier = 20.0f;
     private bool isJumping = false;
     private bool isQuickDropping = false;
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
     private bool isDashing;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 4.0f;
+    private float dashingCooldown = 2.0f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private float dashUpwardForce = 10.0f;
 
     //Attack vars
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
@@ -62,11 +62,11 @@ public class PlayerController : MonoBehaviour
 
     //Roll vars
     public bool Rolling = false;
-    public int rollCounter = 0;
+    private int rollCounter = 0;
     private float rollSpeed = 10.0f;
-    public float rollTime = 10.0f;
-    public float maxRollSpeed = 50.0f;
-    public bool rollState = false;
+    private float rollTime = 3.0f;
+    private float maxRollSpeed = 16.0f;
+    private bool rollState = false;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -102,6 +102,9 @@ public class PlayerController : MonoBehaviour
     //platforming vars
     public Vector3 platformMovement;
 
+    //health regen
+    public bool canRegen = true;
+
     void Start()
     {
         pc = new PlayerControls();
@@ -121,6 +124,9 @@ public class PlayerController : MonoBehaviour
         //get animator
         playerAnimator = player.GetComponent<Animator>();
 
+        //get audio
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
+
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
@@ -131,12 +137,10 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Skip.performed += onSkip;
     }
 
-
     //open pause menu
     public void onPause(InputAction.CallbackContext context)
     {
         pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
-
     }
 
     //skip cinematic
@@ -147,46 +151,44 @@ public class PlayerController : MonoBehaviour
 
     public void findEnemy()
     {
-        enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
-       
+        //update current scene reference
+        currentScene = SceneManager.GetActiveScene();
+
+
+        if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
+        {
+            //assign current enemy
+            enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+
+            //set battle state to true
+            combatState = true;
+        }
+        else
+        {
+            combatState = false;
+        }
     }
 
     void Awake()
     {
         mainScript = worldManager.GetComponent<mainGameScript>();
+
     }
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
-
         if (mainScript.cutScenePlaying == false)
         {
+            //Debug.Log("player health is at " + playerCurrenthealth);
+           // Debug.Log("can regen " + canRegen);
+
+            //Find enemy 
+            findEnemy();
+
             //updated animations
-            animationCalls();
-
-            //update current scene reference
-            currentScene = SceneManager.GetActiveScene();
-
-
-            if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
-            {
-                //if (GameObject.FindGameObjectWithTag("Dead") == null)
-                //{
-                    //assign current enemy
-                    findEnemy();
-                //}
-
-
-                //set battle state to true
-                combatState = true;
-
-            }
-            else
-            {
-                combatState = false;
-            }
+            //animationCalls();
 
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
@@ -203,9 +205,15 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
-                if (rollState == true)
+                if (rollCounter == 1)
                 {
+                    Debug.Log(rollState);
+                    roll();
                     rollTimer();
+                }
+                if (isQuickDropping == true)
+                {
+                    quickDrop();
                 }
             }
             else if (deathState == true) 
@@ -213,56 +221,11 @@ public class PlayerController : MonoBehaviour
                 ManagedeathState();
                 deathState = false;
             }
-            if (ground.jumpState == true)
-            {
-                manageFall(JfallMultiplier);
-               // Debug.Log(jumpState);
-            }
-            if (ground.doublejumpState == true)
-            {
-               // Debug.Log("We are here");
-                manageFall(DJfallMultiplier);
-
-            }
-            if (isQuickDropping == true)
-            {
-                quickDrop();
-             }
+            manageFall(JfallMultiplier);
         }
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
-    public void animationCalls()
-    {
-        //animation for walking
-        if (playerAnimator != null)
-        {
-            //set playback speed for animation
-            playerAnimator.SetFloat("walkSpeed", leftStick.magnitude);
-
-            //if the player is moving then trigger the walk animation
-            if (leftStick.magnitude > 0.1f)
-            {
-                if (Rolling == true)
-                {
-                    playerAnimator.SetBool("isRolling", true);
-                }
-                else
-                {
-                    playerAnimator.SetBool("isRolling", false);
-                    playerAnimator.SetBool("isWalking", true);
-                }
-
-            }
-            else
-            {
-                //end walking or rolling animations 
-                playerAnimator.SetBool("isRolling", false);
-                playerAnimator.SetBool("isWalking", false);
-                playerAnimator.SetFloat("walkSpeed", 1.25f);
-            }
-        }
-
-    }
+    //moved to player_fx_behaviors script
 
     //-----------------------------------------------Move-----------------------------------------------//
     public void moveCharacter(float playerSpeed)
@@ -292,23 +255,12 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Jump-----------------------------------------------//
 
     //Basic Jump Script using rigidody forces
-    public void JumpForce()
+    public void Jump()
     {
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         player.GetComponent<Rigidbody>().freezeRotation = true;
-        //this does not work as intended will need to be fixed
-        //playerAnimator.CrossFadeInFixedTime("jumpUp", 0.2f, 0, 0.2f);      
-    }
-    public void manageJump()
-    {
-        JumpForce();
-        ground.jumpState = true;
-    }
-    public void manageDoubleJump()
-    {
-        JumpForce();
-        ground.doublejumpState = true;
+     
     }
 
     //Jump flags handler
@@ -322,7 +274,7 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.velocity.y < 0)
         {
-           rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
     }
     //Jump Logic here
@@ -333,14 +285,16 @@ public class PlayerController : MonoBehaviour
             isJumping = context.ReadValueAsButton();
             if (ground.onGround == true && jumpCounter == 0 && isJumping)
             {
-                manageJump();
+                Jump();
                 jumpCounter++;
+                ground.jumpState = true;
             }
             //Double Jump call
             if (ground.onGround == false && jumpCounter == 1 && isJumping)
             {
-                manageDoubleJump();
+                Jump();
                 jumpCounter = 0;
+                ground.doublejumpState = true;
             }
         }
     }
@@ -395,21 +349,15 @@ public class PlayerController : MonoBehaviour
         //always wait a little bit then check if isAttacking was true
         yield return new WaitForSeconds(0.2f);
 
-        //if it's true then turn it off
-        //if (playerAnimator.GetBool("isAttacking") == true)
-        //{
-        //    playerAnimator.SetBool("isAttacking", false);
-        //}
-
         if(playerAnimator.GetBool("attack1") == true)
         {
             playerAnimator.SetBool("attack1", false);
         }
-        else if(playerAnimator.GetBool("attack2") == true)
+        else if (playerAnimator.GetBool("attack2") == true)
         {
             playerAnimator.SetBool("attack2", false);
         }
-        else if(playerAnimator.GetBool("attack3") == true)
+        else if (playerAnimator.GetBool("attack3") == true)
         {
             playerAnimator.SetBool("attack3", false);
         }
@@ -437,6 +385,7 @@ public class PlayerController : MonoBehaviour
         rollCounter = 0;
         rollTime = 5.0f;
         rollState = false;
+        rollSpeed = 10.0f;
     }
     //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
     //Execute roll on button press
@@ -444,11 +393,26 @@ public class PlayerController : MonoBehaviour
     {
         rollTime -=Time.deltaTime;
         rollSpeed += Time.deltaTime;
-        Debug.Log("Roll Speed" + rollSpeed);
+        //Debug.Log("Roll Speed" + rollSpeed);
         if (rollTime < 0 || rollSpeed > maxRollSpeed)
         {
             rollTime = 0;
             rollSpeed = maxRollSpeed;
+        }
+    }
+    public void roll()
+    {
+        if (rollState ==  true)
+        {
+            //animation here
+            if (rollCounter == 1)
+            {
+                moveCharacter(rollSpeed);
+            }
+            if (rollCounter == 2)
+            {
+                handleRoll();
+            }
         }
     }
     public void OnRoll(InputAction.CallbackContext context)
@@ -456,23 +420,11 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             Rolling = context.ReadValueAsButton();
-            Debug.Log("Roll state = " + rollState);
-            if(Rolling == true)
+            Debug.Log("Rolling = " + Rolling);
+            if (Rolling == true)
             {
                 rollState = true;
-            }
-            if (rollState)
-            {
                 rollCounter++;
-                //animation here
-                if (rollCounter == 1)
-                {
-                    moveCharacter(rollSpeed);
-                }
-                else if (rollCounter == 2)
-                {
-                    handleRoll();
-                }
             }
         }
     }
@@ -488,6 +440,7 @@ public class PlayerController : MonoBehaviour
     //Check which combo state we are in and returns the animation, enemy damage
     public void attackCombo(int counter)
     {
+        //Debug.Log("playerController counter: " + counter);
         if (counter == 1)
         {
             //animation call reagrdless of if you collide 
@@ -496,8 +449,15 @@ public class PlayerController : MonoBehaviour
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
+                //play sfx on hit
+                m_audio.playPlayerSFX(3);
             }
-            //isAttacking = false;        
+            else
+            {
+                //play sfx
+                m_audio.playPlayerSFX(0);
+            }
+            isAttacking = false;        
         }
         else if (counter == 2)
         {
@@ -507,25 +467,38 @@ public class PlayerController : MonoBehaviour
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
+                //play sfx on hit
+                m_audio.playPlayerSFX(3);
             }
-            //isAttacking = false;
+            else
+            {
+                //play sfx
+                m_audio.playPlayerSFX(1);
+            }
+            isAttacking = false;
         }
         else if (counter == 3)
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack3", true);
-
+            
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
+                //play sfx
+                m_audio.playPlayerSFX(3);
             }
-            //isAttacking = false;
+            else
+            {
+                //play sfx
+                m_audio.playPlayerSFX(2);
+            }
+
+            isAttacking = false;
         }
 
         //set attacking animation back to false
-        //yield return new WaitForSeconds(0.1f);
-        //playerAnimator.SetBool("isAttacking", false);
-        //StartCoroutine(turnOffAnim());
+        StartCoroutine(turnOffAnim());
 
     }
     //Handles the combo attack flags
@@ -576,8 +549,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //set animation flag to false for the next attacking/for when not attacking
-            //playerAnimator.SetBool("isAttacking", false);
-            StartCoroutine(turnOffAnim());
+            //StartCoroutine(turnOffAnim());
             //Debug.Log("animator should be false");
         }
     }
@@ -586,6 +558,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision == true)
         {
+            Debug.Log("take damage");
             playerCurrenthealth--;
             invulnerable = true;
             StartCoroutine(Immunity());
@@ -647,20 +620,27 @@ public class PlayerController : MonoBehaviour
     //Make sure to add a check if player in combat or not
     IEnumerator healthRegen()
     {
-        if (playerCurrenthealth == 1)
+        if (canRegen)
         {
-            yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth = 2;
+            if (playerCurrenthealth == 1)
+            {
+                //Debug.Log("in 1 regen");
+                yield return new WaitForSeconds(healthRegenDelay);
+                playerCurrenthealth = 2;
+            }
+            else if (playerCurrenthealth == 2)
+            {
+                //Debug.Log("in 2 regen");
+                yield return new WaitForSeconds(healthRegenDelay);
+                playerCurrenthealth = 3;
+            }
+            else if (playerCurrenthealth == 3)
+            {
+                //Debug.Log("in 3 regen");
+                playerCurrenthealth = playerHealth;
+            }
         }
-        else if (playerCurrenthealth == 2)
-        {
-            yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth = 3;
-        }
-        else if (playerCurrenthealth == 3)
-        {
-            playerCurrenthealth = playerHealth;
-        }
+        
     }
 
     //-----------------------------------------------Death State-----------------------------------------------//
@@ -668,6 +648,7 @@ public class PlayerController : MonoBehaviour
     {
         fadeIn();
         canDash = true;
+        canRegen = true;
         // Invoke("fadeOut", fadeDelay);
     }
 

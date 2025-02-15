@@ -20,6 +20,8 @@ public class checkPointScript : MonoBehaviour
         //get the current scene
         currScene = mainGameScript.currentScene;
 
+        //stop music
+        mainGameScript.m_audio.backgroundSource.Stop();
         SceneManager.UnloadSceneAsync(currScene);
         SceneManager.LoadScene(currScene, LoadSceneMode.Additive);
 
@@ -34,6 +36,7 @@ public class checkPointScript : MonoBehaviour
 
         //set newest scene to active
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(currScene));
+        mainGameScript.m_audio.playBackgroundMusic("platform");
 
 
         //don't respawn the enemy or its triggers if the player dies after the eney is dead
@@ -59,7 +62,7 @@ public class checkPointScript : MonoBehaviour
 
         //get the current checkpoint from the main script
         currCheckpoint = mainGameScript.currCheckpoint;
-        Debug.Log("checkpoint: " + currCheckpoint);
+        //Debug.Log("checkpoint: " + currCheckpoint);
 
         //move the player there
         this.transform.position = currCheckpoint.transform.position;

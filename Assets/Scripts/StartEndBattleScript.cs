@@ -22,24 +22,30 @@ public class StartEndBattleScript : MonoBehaviour
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
 
         camBrain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CinemachineBrain>();
+
     }
+
 
     void Update()
     {
         //check enemy's state here for death
         if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0 && runOnce == false)
         {
+            
             if (SceneManager.GetActiveScene().name == "Combat1")
             {
                 mainGameScript.firstBossDead = true;
+                mainGameScript.m_audio.playBackgroundMusic("platform");
             } 
             else if (SceneManager.GetActiveScene().name == "Combat2")
             {
                 mainGameScript.secondBossDead = true;
+                mainGameScript.m_audio.playBackgroundMusic("platform");
             }
             else if (SceneManager.GetActiveScene().name == "Combat3")
             {
                 mainGameScript.thirdBossDead = true;
+                mainGameScript.m_audio.playBackgroundMusic("platform");
             }
 
             camBrain.m_CustomBlends = enemyDeadBlend;
@@ -69,7 +75,7 @@ public class StartEndBattleScript : MonoBehaviour
 
     public void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
             //Debug.Log("switch to boss cam");
 
@@ -79,12 +85,15 @@ public class StartEndBattleScript : MonoBehaviour
 
             //switch cameras
             mainGameScript.SwitchToBossCam();
+
+            //play battle music
+            mainGameScript.m_audio.playBackgroundMusic(SceneManager.GetActiveScene().name);
         }
     }
 
     public void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
             //move itself so it can't be triggered again
             Vector3 currentPosition = this.transform.position;
