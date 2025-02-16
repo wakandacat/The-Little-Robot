@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 //Might need to split up some code to different scripts 
 public class PlayerController : MonoBehaviour
 {
+    //particle system
+    public ParticleSystem attack;
     //player controller reference
     PlayerControls pc;
 
@@ -511,12 +513,14 @@ public class PlayerController : MonoBehaviour
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack1", true);
+            attack.Play();
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
+                //play vfx on hit
             }
             else
             {

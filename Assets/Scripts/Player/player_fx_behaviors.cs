@@ -54,15 +54,7 @@ public class player_fx_behaviors : MonoBehaviour
             //update this code to keep player in ball if rolling
             if (playerScript.leftStick.magnitude > 0.1f)
             {
-                /* if (playerScript.rollCounter == 1)
-                 {
-                     m_animator.SetBool("isRolling", true);
-                 }
-                 else
-                 {
-                 }*/
                 m_animator.SetBool("isWalking", true);
-
             }
             else
             {
