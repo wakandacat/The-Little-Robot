@@ -48,20 +48,20 @@ public class player_fx_behaviors : MonoBehaviour
         {
             //set playback speed for animation
             m_animator.SetFloat("walkSpeed", playerScript.leftStick.magnitude);
+            m_animator.SetFloat("rollSpeed", playerScript.leftStick.magnitude);
 
             //if the player is moving then trigger the walk animation
             //update this code to keep player in ball if rolling
             if (playerScript.leftStick.magnitude > 0.1f)
             {
-                if (playerScript.Rolling == true)
-                {
-                    m_animator.SetBool("isRolling", true);
-                }
-                else
-                {
-                    m_animator.SetBool("isRolling", false);
-                    m_animator.SetBool("isWalking", true);
-                }
+                /* if (playerScript.rollCounter == 1)
+                 {
+                     m_animator.SetBool("isRolling", true);
+                 }
+                 else
+                 {
+                 }*/
+                m_animator.SetBool("isWalking", true);
 
             }
             else
@@ -70,6 +70,16 @@ public class player_fx_behaviors : MonoBehaviour
                 m_animator.SetBool("isRolling", false);
                 m_animator.SetBool("isWalking", false);
                 m_animator.SetFloat("walkSpeed", 1.25f);
+            }
+         
+            if (playerScript.rollCounter == 1)
+            {
+                m_animator.SetBool("isRolling", true);
+            }
+            else if (playerScript.rollCounter == 0)
+            {
+                m_animator.SetBool("isRolling", false);
+
             }
         }
 

@@ -342,7 +342,7 @@ public class PlayerController : MonoBehaviour
     public IEnumerator turnOffAnim()
     {
         //always wait a little bit then check if isAttacking was true
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.15f);
 
         if(playerAnimator.GetBool("attack1") == true)
         {
@@ -381,6 +381,7 @@ public class PlayerController : MonoBehaviour
         rollTime = 5.0f;
         rollState = false;
         rollSpeed = 10.0f;
+        player.GetComponent<CapsuleCollider>().height = 2.48f;
     }
     //player presses button we play the animation and the animation plays of the player just rolling in place except he is moving but he is rolling in place
     //Execute roll on button press
@@ -400,6 +401,7 @@ public class PlayerController : MonoBehaviour
         //animation here
         if (rollCounter == 1)
         {
+            player.GetComponent<CapsuleCollider>().height = 1.07f;
             moveCharacter(rollSpeed);
             rollTimer();
         }
@@ -429,7 +431,70 @@ public class PlayerController : MonoBehaviour
     }
     //-----------------------------------------------Attack-----------------------------------------------//
     //Check which combo state we are in and returns the animation, enemy damage
-    public void attackCombo(int counter)
+    /*    public void attackCombo(int counter)
+        {
+            //Debug.Log("playerController counter: " + counter);
+            if (counter == 1)
+            {
+                //animation call reagrdless of if you collide 
+                playerAnimator.SetBool("attack1", true);
+
+                if (enemyCollision.enemyCollision == true)
+                {
+                    enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
+                    //play sfx on hit
+                    m_audio.playPlayerSFX(3);
+                }
+                else
+                {
+                    //play sfx
+                    m_audio.playPlayerSFX(0);
+                }
+                isAttacking = false;
+            }
+            else if (counter == 2)
+            {
+                //animation call reagrdless of if you collide 
+                playerAnimator.SetBool("attack2", true);
+
+                if (enemyCollision.enemyCollision == true)
+                {
+                    enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
+                    //play sfx on hit
+                    m_audio.playPlayerSFX(3);
+                    StartCoroutine(interalCooldown());
+                }
+                else
+                {
+                    //play sfx
+                    m_audio.playPlayerSFX(1);
+                }
+                isAttacking = false;
+            }
+            else if (counter == 3)
+            {
+                //animation call reagrdless of if you collide 
+                playerAnimator.SetBool("attack3", true);
+
+                if (enemyCollision.enemyCollision == true)
+                {
+                    enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
+                    //play sfx
+                    m_audio.playPlayerSFX(3);
+                }
+                else
+                {
+                    //play sfx
+                    m_audio.playPlayerSFX(2);
+                }
+                isAttacking = false;
+            }
+
+            //set attacking animation back to false
+            StartCoroutine(turnOffAnim());
+
+        }*/
+    IEnumerator attackCombo(int counter)
     {
         //Debug.Log("playerController counter: " + counter);
         if (counter == 1)
@@ -448,7 +513,8 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(0);
             }
-            isAttacking = false;        
+            isAttacking = false;
+            yield return new WaitForSeconds(5.0f);
         }
         else if (counter == 2)
         {
@@ -467,12 +533,13 @@ public class PlayerController : MonoBehaviour
                 m_audio.playPlayerSFX(1);
             }
             isAttacking = false;
+            yield return new WaitForSeconds(5.0f);
         }
         else if (counter == 3)
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack3", true);
-            
+
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
@@ -484,7 +551,6 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(2);
             }
-
             isAttacking = false;
         }
 
@@ -495,22 +561,27 @@ public class PlayerController : MonoBehaviour
     //Handles the combo attack flags
     public void handleAttack()
     {
-        attackCounter = 0;
         comboMaxTime = 5.0f;
+        isAttacking = false;
         attackState = false;
+        attackCounter = 0;
     }
     //Starts the timer and checks whether it is done or not
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
     //when we get all combos remeber to reset timer
     public void timer()
     {
-        comboMaxTime -= Time.deltaTime;
+/*        comboMaxTime -= Time.deltaTime;
         if (comboMaxTime < 0)
         {
             handleAttack();
             comboMaxTime = 0;
-        }
+        }*/
     }
+/*    IEnumerator interalCooldown()
+    {
+        yield return new WaitForSeconds(5.0f);
+    }*/
     IEnumerator attackCooldown()
     {
         yield return new WaitForSeconds(attackCD);
@@ -522,26 +593,20 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             isAttacking = context.ReadValueAsButton();
-            if (isAttacking)
+            if (isAttacking == true)
             {
-                //set animation to true, should run once per button call
-                //playerAnimator.SetBool("isAttacking", true);
-                //Debug.Log("animator should be true");
-                
                 attackState = true;
                 attackCounter++;
+                StartCoroutine(attackCombo(attackCounter));
+                /*attackCombo(attackCounter);*/
+                //StartCoroutine(interalCooldown());
 
-                attackCombo(attackCounter);
 
                 if (attackCounter == 3)
                 {
                     StartCoroutine(attackCooldown());
                 }
             }
-
-            //set animation flag to false for the next attacking/for when not attacking
-            //StartCoroutine(turnOffAnim());
-            //Debug.Log("animator should be false");
         }
     }
     //-----------------------------------------------Take Damage-----------------------------------------------//
