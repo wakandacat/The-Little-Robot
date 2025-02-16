@@ -11,7 +11,9 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     //particle system
-    public ParticleSystem attack;
+    public ParticleSystem attack_1;
+    public ParticleSystem attack_2;
+    public ParticleSystem attack_3;
     //player controller reference
     PlayerControls pc;
 
@@ -513,7 +515,7 @@ public class PlayerController : MonoBehaviour
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack1", true);
-            attack.Play();
+            attack_1.Play();
 
             if (enemyCollision.enemyCollision == true)
             {
@@ -534,6 +536,7 @@ public class PlayerController : MonoBehaviour
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack2", true);
+            attack_2.Play();
 
             if (enemyCollision.enemyCollision == true)
             {
@@ -553,6 +556,7 @@ public class PlayerController : MonoBehaviour
         {
             //animation call reagrdless of if you collide 
             playerAnimator.SetBool("attack3", true);
+            attack_3.Play();
 
             if (enemyCollision.enemyCollision == true)
             {
