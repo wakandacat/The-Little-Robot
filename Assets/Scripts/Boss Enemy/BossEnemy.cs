@@ -27,8 +27,8 @@ public class BossEnemy : MonoBehaviour
     [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack.")]
     public float State_Awake_Delay = 2.25f;
 
-    [Tooltip("The default projectile to be used for seeking projectile-based attacks.")]
-    public GameObject Attack_BasicProjectile01;
+    [Tooltip("The amount of damage that the boss enemy takes when a projectile is successfully deflected back into the boss enemy.")]
+    public float Deflection_DamageOnSuccessfulDeflect = 5.0f;
 
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -282,6 +282,12 @@ public class BossEnemy : MonoBehaviour
         attackArenaHazardMineRandom.Initialize(bossAnimator, this);
         stateMachine.SetState(attackArenaHazardMineRandom);
     }
+    public void TransitionToState_Attack_StandUpMelee()
+    {
+        State_Attack_StandUpMelee attackStandUpMelee = new State_Attack_StandUpMelee();
+        attackStandUpMelee.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackStandUpMelee);
+    }
     public void TransitionToState_Attack_Melee01()
     {
         State_Attack_Melee01 attackMelee01State = new State_Attack_Melee01();
@@ -426,6 +432,25 @@ public class BossEnemy : MonoBehaviour
 
         // Return the accumulated total score
         return totalScore;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Deflected Projectiles Functions                                                                                                                                                              * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void Deflecttion_SuccessfullyStrikedBoss(GameObject projectile)
+    {
+        projectile.GetComponent<Projectile_Bullet>().ReturnToPool();
+    }
+    
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Projectile" && collision.gameObject.GetComponent<Projectile_Bullet>() != null)
+        {
+            if(collision.gameObject.GetComponent<Projectile_Bullet>().Deflection_HasBeenDeflected() == true)
+            {
+                Deflecttion_SuccessfullyStrikedBoss(collision.gameObject);
+            }
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

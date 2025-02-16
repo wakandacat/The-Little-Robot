@@ -62,11 +62,12 @@ public class PlayerController : MonoBehaviour
 
     //Roll vars
     public bool Rolling = false;
-    private int rollCounter = 0;
+    public int rollCounter = 0;
     private float rollSpeed = 10.0f;
     private float rollTime = 3.0f;
     private float maxRollSpeed = 16.0f;
     private bool rollState = false;
+    public bool inVent = false;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -195,6 +196,7 @@ public class PlayerController : MonoBehaviour
             {
                 manageHealth();
                 moveCharacter(speed);
+                roll();
 
                 //Raycast for debugging purposes
                 Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
@@ -204,12 +206,6 @@ public class PlayerController : MonoBehaviour
                 if (attackState == true)
                 {
                     timer();
-                }
-                if (rollCounter == 1)
-                {
-                    Debug.Log(rollState);
-                    roll();
-                    rollTimer();
                 }
                 if (isQuickDropping == true)
                 {
@@ -391,7 +387,7 @@ public class PlayerController : MonoBehaviour
     //Execute roll on button press
     public void rollTimer()
     {
-        rollTime -=Time.deltaTime;
+        rollTime -= Time.deltaTime;
         rollSpeed += Time.deltaTime;
         //Debug.Log("Roll Speed" + rollSpeed);
         if (rollTime < 0 || rollSpeed > maxRollSpeed)
@@ -402,30 +398,35 @@ public class PlayerController : MonoBehaviour
     }
     public void roll()
     {
-        if (rollState ==  true)
+        //animation here
+        if (rollCounter == 1)
         {
-            //animation here
-            if (rollCounter == 1)
-            {
-                moveCharacter(rollSpeed);
-            }
-            if (rollCounter == 2)
-            {
-                handleRoll();
-            }
+            moveCharacter(rollSpeed);
+            rollTimer();
         }
     }
     public void OnRoll(InputAction.CallbackContext context)
     {
         if (mainScript.cutScenePlaying == false)
         {
-            Rolling = context.ReadValueAsButton();
-            Debug.Log("Rolling = " + Rolling);
-            if (Rolling == true)
+            if (inVent == false)
             {
-                rollState = true;
-                rollCounter++;
+                Rolling = context.ReadValueAsButton();
+                if (Rolling == true)
+                {
+                    rollCounter++;
+                    if (rollCounter == 2)
+                    {
+                        handleRoll();
+                    }
+                }
             }
+            else
+            {
+                //Debug.Log("nah we are in teh vent");
+                //make CANNOT UNROLL SOUND HERE
+            }
+           
         }
     }
     //-----------------------------------------------Deflect-----------------------------------------------//
@@ -649,6 +650,7 @@ public class PlayerController : MonoBehaviour
         fadeIn();
         canDash = true;
         canRegen = true;
+        inVent = false;
         // Invoke("fadeOut", fadeDelay);
     }
 

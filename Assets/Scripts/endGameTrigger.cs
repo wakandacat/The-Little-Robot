@@ -8,7 +8,7 @@ public class endGameTrigger : MonoBehaviour
     //unload the previous scene
     public void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
             GameObject.Find("WorldManager").GetComponent<mainGameScript>().EndGame();
         }
@@ -16,7 +16,7 @@ public class endGameTrigger : MonoBehaviour
 
     public void OnTriggerExit(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
             //get rid of the trigger area so it can't be triggered again
             this.gameObject.SetActive(false);

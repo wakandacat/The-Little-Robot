@@ -14,7 +14,9 @@ public class Projectile_Bullet : Projectile
     // *               Private Attributes                                                                                                                     * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     private Vector3 Projectile_Direction;
-    
+    private bool Projectile_IsDeflectable = false;
+    private bool Projectile_HasBeenDeflected = false;
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialization                                                                                                                         * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -25,6 +27,10 @@ public class Projectile_Bullet : Projectile
 
         // Set the target direction of the projectile
         Projectile_Direction = New_Direction.normalized;
+
+        // Reset Projectile_IsDeflectable to false
+        Projectile_IsDeflectable = false;
+        Projectile_HasBeenDeflected = false;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -55,5 +61,24 @@ public class Projectile_Bullet : Projectile
     private void MoveProjectile()
     {
         transform.position += Projectile_Direction * Projectile_Speed * Time.fixedDeltaTime;    // move towards Projectile_Direction at Projectile_Speed per second
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Deflection Functions                                                                                                                   * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    public bool Deflection_IsDeflectable()
+    {
+        return Projectile_IsDeflectable;
+    }
+
+    public bool Deflection_HasBeenDeflected()
+    {
+        return Projectile_HasBeenDeflected;
+    }
+
+    public void Deflection_Perform()
+    {
+        Projectile_Direction = -Projectile_Direction;
+        Projectile_HasBeenDeflected = true;
     }
 }

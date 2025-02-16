@@ -8,11 +8,11 @@ public class deathPitScript : MonoBehaviour
     //kill the player in death pits
     public void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
             Debug.Log("Player Died");
 
-            GameObject.Find("playerExport").GetComponent<PlayerController>().deathState = true;
+            GameObject.FindWithTag("Player").GetComponent<PlayerController>().deathState = true;
 
         }
     }
