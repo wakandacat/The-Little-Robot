@@ -32,9 +32,9 @@ public class platformTriggerScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //fi player collided
-        if (other.gameObject.name == "playerExport")
+        if (other.gameObject.tag == "Player")
         {
-            Debug.Log("on platform");
+            //Debug.Log("on platform");
 
             player = other.gameObject;
             playerOn = true;
@@ -44,9 +44,9 @@ public class platformTriggerScript : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         //if player leaves
-        if (other.gameObject.name == "playerExport")
+        if (other.gameObject.tag == "Player")
         {
-            Debug.Log("off platform");
+            //Debug.Log("off platform");
 
             //immediatley set player's extra velocity to 0
             player.gameObject.GetComponent<PlayerController>().platformMovement = Vector3.zero;

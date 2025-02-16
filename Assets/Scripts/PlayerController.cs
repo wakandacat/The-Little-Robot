@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
     private float rollTime = 3.0f;
     private float maxRollSpeed = 16.0f;
     private bool rollState = false;
+    public bool inVent = false;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -388,7 +389,7 @@ public class PlayerController : MonoBehaviour
     {
         rollTime -= Time.deltaTime;
         rollSpeed += Time.deltaTime;
-        Debug.Log("Roll Speed" + rollSpeed);
+        //Debug.Log("Roll Speed" + rollSpeed);
         if (rollTime < 0 || rollSpeed > maxRollSpeed)
         {
             rollTime = 0;
@@ -408,15 +409,24 @@ public class PlayerController : MonoBehaviour
     {
         if (mainScript.cutScenePlaying == false)
         {
-            Rolling = context.ReadValueAsButton();
-            if (Rolling == true)
+            if (inVent == false)
             {
-                rollCounter++;
-                if (rollCounter == 2)
+                Rolling = context.ReadValueAsButton();
+                if (Rolling == true)
                 {
-                    handleRoll();
+                    rollCounter++;
+                    if (rollCounter == 2)
+                    {
+                        handleRoll();
+                    }
                 }
             }
+            else
+            {
+                //Debug.Log("nah we are in teh vent");
+                //make CANNOT UNROLL SOUND HERE
+            }
+           
         }
     }
     //-----------------------------------------------Deflect-----------------------------------------------//
@@ -640,6 +650,7 @@ public class PlayerController : MonoBehaviour
         fadeIn();
         canDash = true;
         canRegen = true;
+        inVent = false;
         // Invoke("fadeOut", fadeDelay);
     }
 

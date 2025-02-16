@@ -16,7 +16,7 @@ public class setCheckpoint : MonoBehaviour
     public void OnTriggerEnter(Collider collision)
     {
 
-        if (collision.gameObject.name == "playerExport")
+        if (collision.gameObject.tag == "Player")
         {
 
             //set this as the new checkpoint
