@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
 
     //Roll vars
     public bool Rolling = false;
-    private int rollCounter = 0;
+    public int rollCounter = 0;
     private float rollSpeed = 10.0f;
     private float rollTime = 3.0f;
     private float maxRollSpeed = 16.0f;
@@ -195,6 +195,7 @@ public class PlayerController : MonoBehaviour
             {
                 manageHealth();
                 moveCharacter(speed);
+                roll();
 
                 //Raycast for debugging purposes
                 Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
@@ -204,12 +205,6 @@ public class PlayerController : MonoBehaviour
                 if (attackState == true)
                 {
                     timer();
-                }
-                if (rollCounter == 1)
-                {
-                    Debug.Log(rollState);
-                    roll();
-                    rollTimer();
                 }
                 if (isQuickDropping == true)
                 {
@@ -391,9 +386,9 @@ public class PlayerController : MonoBehaviour
     //Execute roll on button press
     public void rollTimer()
     {
-        rollTime -=Time.deltaTime;
+        rollTime -= Time.deltaTime;
         rollSpeed += Time.deltaTime;
-        //Debug.Log("Roll Speed" + rollSpeed);
+        Debug.Log("Roll Speed" + rollSpeed);
         if (rollTime < 0 || rollSpeed > maxRollSpeed)
         {
             rollTime = 0;
@@ -402,17 +397,11 @@ public class PlayerController : MonoBehaviour
     }
     public void roll()
     {
-        if (rollState ==  true)
+        //animation here
+        if (rollCounter == 1)
         {
-            //animation here
-            if (rollCounter == 1)
-            {
-                moveCharacter(rollSpeed);
-            }
-            if (rollCounter == 2)
-            {
-                handleRoll();
-            }
+            moveCharacter(rollSpeed);
+            rollTimer();
         }
     }
     public void OnRoll(InputAction.CallbackContext context)
@@ -420,11 +409,13 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             Rolling = context.ReadValueAsButton();
-            Debug.Log("Rolling = " + Rolling);
             if (Rolling == true)
             {
-                rollState = true;
                 rollCounter++;
+                if (rollCounter == 2)
+                {
+                    handleRoll();
+                }
             }
         }
     }
