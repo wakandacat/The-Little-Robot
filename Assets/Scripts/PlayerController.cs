@@ -533,7 +533,7 @@ public class PlayerController : MonoBehaviour
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
                 //play vfx on hit
-                attack_1.Play();
+                //attack_1.Play();
             }
             else
             {
@@ -554,7 +554,7 @@ public class PlayerController : MonoBehaviour
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
                 //play vfx
-                attack_2.Play();
+                //attack_2.Play();
             }
             else
             {
@@ -575,7 +575,7 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(3);
                 //play vfx
-                attack_3.Play();
+                //attack_3.Play();
             }
             else
             {

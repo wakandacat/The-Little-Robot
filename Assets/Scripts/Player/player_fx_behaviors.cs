@@ -126,6 +126,20 @@ public class player_fx_behaviors : MonoBehaviour
         {
             //landVfx.Play();
         }
+        if (playerScript.attackCounter == 1)
+        {
+            attack_1.Play();
+        }
+        if (playerScript.attackCounter == 2)
+        {
+            attack_2.Play();
+
+        }
+        if (playerScript.attackCounter == 3)
+        {
+            attack_3.Play();
+
+        }
     }
     public string getPlayerState()
     {
