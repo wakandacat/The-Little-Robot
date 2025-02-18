@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     public int jumpCounter = 0;
     private float rotationSpeed = 1.0f;
     public bool jumpState = false;
+    public bool falling = false;
 
     //Dash vars
     public bool canDash = true;
@@ -70,7 +71,7 @@ public class PlayerController : MonoBehaviour
     private float rollSpeed = 10.0f;
     private float rollTime = 3.0f;
     private float maxRollSpeed = 16.0f;
-    private bool rollState = false;
+    public bool rollState = false;
     public bool inVent = false;
 
     //Deflect vars
@@ -112,6 +113,12 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
+        //Prep vfx
+        attack_1.Stop();
+        attack_2.Stop();
+        attack_3.Stop();
+
         pc = new PlayerControls();
         pc.Gameplay.Enable();
 
@@ -127,7 +134,7 @@ public class PlayerController : MonoBehaviour
         //fadeOutPanel.SetActive(false);
 
         //get animator
-        playerAnimator = player.GetComponent<Animator>();
+        //playerAnimator = player.GetComponent<Animator>();
 
         //get audio
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -267,6 +274,7 @@ public class PlayerController : MonoBehaviour
     public void handleJump()
     {
         isJumping = false;
+        falling = false;
         jumpCounter = 0;
     }
     //Jump fallmultiplier
@@ -274,6 +282,7 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.velocity.y < 0)
         {
+            falling = true;
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
         }
     }
@@ -344,7 +353,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
-    public IEnumerator turnOffAnim()
+ /*   public IEnumerator turnOffAnim()
     {
         //always wait a little bit then check if isAttacking was true
         yield return new WaitForSeconds(0.15f);
@@ -362,7 +371,7 @@ public class PlayerController : MonoBehaviour
             playerAnimator.SetBool("attack3", false);
         }
 
-    }
+    }*/
 
     //coroutine call on button press
     public void OnDash(InputAction.CallbackContext context)
@@ -408,8 +417,10 @@ public class PlayerController : MonoBehaviour
         {
             player.GetComponent<CapsuleCollider>().height = 1.07f;
             moveCharacter(rollSpeed);
+            rollState = true;
             rollTimer();
         }
+
     }
     public void OnRoll(InputAction.CallbackContext context)
     {
@@ -514,8 +525,7 @@ public class PlayerController : MonoBehaviour
         if (counter == 1)
         {
             //animation call reagrdless of if you collide 
-            playerAnimator.SetBool("attack1", true);
-            attack_1.Play();
+            //playerAnimator.SetBool("attack1", true);
 
             if (enemyCollision.enemyCollision == true)
             {
@@ -523,6 +533,7 @@ public class PlayerController : MonoBehaviour
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
                 //play vfx on hit
+                attack_1.Play();
             }
             else
             {
@@ -535,14 +546,15 @@ public class PlayerController : MonoBehaviour
         else if (counter == 2)
         {
             //animation call reagrdless of if you collide 
-            playerAnimator.SetBool("attack2", true);
-            attack_2.Play();
+            //playerAnimator.SetBool("attack2", true);
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
+                //play vfx
+                attack_2.Play();
             }
             else
             {
@@ -555,14 +567,15 @@ public class PlayerController : MonoBehaviour
         else if (counter == 3)
         {
             //animation call reagrdless of if you collide 
-            playerAnimator.SetBool("attack3", true);
-            attack_3.Play();
+            //playerAnimator.SetBool("attack3", true);
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
                 //play sfx
                 m_audio.playPlayerSFX(3);
+                //play vfx
+                attack_3.Play();
             }
             else
             {
@@ -573,7 +586,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //set attacking animation back to false
-        StartCoroutine(turnOffAnim());
+        //StartCoroutine(turnOffAnim());
 
     }
     //Handles the combo attack flags

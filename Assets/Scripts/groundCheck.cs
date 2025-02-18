@@ -41,6 +41,7 @@ public class groundCheck : MonoBehaviour
     {
         if (collision.gameObject.tag == "ground" || collision.gameObject.tag == "crate")
         {
+            jumping.falling = false;
             jumping.handleJump();
             jumping.handleQuickDrop();
         }
