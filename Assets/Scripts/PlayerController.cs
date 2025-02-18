@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 20.0f;
     private float JfallMultiplier = 8.0f;
     private float quickDropMultiplier = 20.0f;
-    private bool isJumping = false;
+    public bool isJumping = false;
     private bool isQuickDropping = false;
     public int jumpCounter = 0;
     private float rotationSpeed = 1.0f;
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     //Dash vars
     public bool canDash = true;
-    private bool isDashing;
+    public bool isDashing = false;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 2.0f;

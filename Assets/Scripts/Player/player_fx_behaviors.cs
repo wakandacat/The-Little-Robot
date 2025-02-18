@@ -17,12 +17,15 @@ public class player_fx_behaviors : MonoBehaviour
 
     //animation variables
     private Animator m_animator;
-
     private string state = "Idle";
-
     private bool Ball_in = false;
 
     //vfx variables
+    public ParticleSystem landVfx;
+    public ParticleSystem doubleJumpVfx;
+    public ParticleSystem attack_1;
+    public ParticleSystem attack_2;
+    public ParticleSystem attack_3;
 
     //sfx variables
 
@@ -34,20 +37,23 @@ public class player_fx_behaviors : MonoBehaviour
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         m_animator = this.GetComponent<Animator>();
         state = "Idle";
+        landVfx.Stop();
+        doubleJumpVfx.Stop();
+        attack_1.Stop();
+        attack_2.Stop();
+        attack_3.Stop();
         if (m_animator == null)
         {
             Debug.Log("this is null");
         }
-
-
-
         //StartCoroutine(turnOffAnim());
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        animationCalls();
+        //animationCalls();
+        vfx_triggers();
         var currentState = getPlayerState();
         if (currentState.Equals(state))
         {
@@ -110,6 +116,17 @@ public class player_fx_behaviors : MonoBehaviour
                 Ball_in = true;
             }
         }*/
+    public void vfx_triggers()
+    {
+        if (playerScript.isJumping == true)
+        {
+            doubleJumpVfx.Play();
+        }
+        if (ground.onGround == true && playerScript.falling == true)
+        {
+            //landVfx.Play();
+        }
+    }
     public string getPlayerState()
     {
         /*        if (Ball_in == true)
@@ -134,7 +151,12 @@ public class player_fx_behaviors : MonoBehaviour
 
                             return state = "ballOut";
                         }*/
-        if (playerScript.jumpCounter == 1 || playerScript.jumpCounter == 2)
+
+        if (playerScript.leftStick.magnitude > 0.1f)
+        {
+            return "walk";
+        }
+        if (playerScript.isJumping == true)
         {
             return "jump";
         }
@@ -142,7 +164,11 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return "Falling";
         }
-        if(playerScript.attackCounter == 1)
+        if (playerScript.attackCounter == 0)
+        {
+            return "Idle";
+        }
+        if (playerScript.attackCounter == 1)
         {
             return "Attack_1";
         }
@@ -154,10 +180,9 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return "Attack_3";
         }
-        if (playerScript.leftStick.magnitude > 0.1f)
+        if (playerScript.isDashing == true)
         {
-            //Debug.Log("we are here walk");
-            return "walk";
+            return "ball_in";
         }
 
         return "Idle";
