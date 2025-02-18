@@ -8,6 +8,7 @@ public class groundCheck : MonoBehaviour
     public bool onGround = false;
     public bool jumpState = false;
     public bool doublejumpState = false;
+    public bool runOnce = false;
     PlayerController jumping;
     // Start is called before the first frame update
     void Start()
@@ -42,6 +43,7 @@ public class groundCheck : MonoBehaviour
         if (collision.gameObject.tag == "ground" || collision.gameObject.tag == "crate")
         {
             jumping.falling = false;
+            runOnce = false;
             jumping.handleJump();
             jumping.handleQuickDrop();
         }

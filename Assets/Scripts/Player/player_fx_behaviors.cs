@@ -20,7 +20,9 @@ public class player_fx_behaviors : MonoBehaviour
     private string state = "Idle";
     private bool Ball_in = false;
 
+
     //vfx variables
+    private bool runOnce = false;
     public ParticleSystem landVfx;
     public ParticleSystem doubleJumpVfx;
     public ParticleSystem attack_1;
@@ -118,13 +120,16 @@ public class player_fx_behaviors : MonoBehaviour
         }*/
     public void vfx_triggers()
     {
-        if (playerScript.isJumping == true)
+        if (playerScript.jumpCounter == 1 && runOnce == false)
         {
+            ground.runOnce = true;
             doubleJumpVfx.Play();
         }
-        if (ground.onGround == true && playerScript.falling == true)
+        if (ground.onGround == true && ground.runOnce == false )
         {
-            //landVfx.Play();
+            runOnce = false;
+            ground.runOnce = true;
+            landVfx.Play();
         }
         if (playerScript.attackCounter == 1)
         {
@@ -141,6 +146,7 @@ public class player_fx_behaviors : MonoBehaviour
 
         }
     }
+    //https://www.youtube.com/watch?v=ToGq1LCTqMw
     public string getPlayerState()
     {
         /*        if (Ball_in == true)
@@ -194,10 +200,10 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return "Attack_3";
         }
-        if (playerScript.isDashing == true)
+/*        if (playerScript.canDash == true)
         {
             return "ball_in";
-        }
+        }*/
 
         return "Idle";
     }

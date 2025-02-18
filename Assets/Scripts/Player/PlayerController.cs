@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     audioManager m_audio;
 
     //player variables
-    public int playerHealth = 3;
+    public int playerHealth = 5;
     private float playerDamage = 1.0f;
     public float playerCurrenthealth;
     private int healthRegenDelay = 10;
@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     //Dash vars
     public bool canDash = true;
-    public bool isDashing = false;
+    private bool isDashing;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 2.0f;
@@ -722,6 +722,16 @@ public class PlayerController : MonoBehaviour
                 playerCurrenthealth = 3;
             }
             else if (playerCurrenthealth == 3)
+            {
+                //Debug.Log("in 3 regen");
+                playerCurrenthealth = 4;
+            }
+            else if (playerCurrenthealth == 4)
+            {
+                //Debug.Log("in 3 regen");
+                playerCurrenthealth = 5;
+            }
+            else if (playerCurrenthealth == 5)
             {
                 //Debug.Log("in 3 regen");
                 playerCurrenthealth = playerHealth;
