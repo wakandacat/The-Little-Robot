@@ -12,6 +12,7 @@ public class player_fx_behaviors : MonoBehaviour
     **/
     //related to the player character
     public GameObject player;
+    public Rigidbody rb;
     private PlayerController playerScript;
     groundCheck ground;
 
@@ -35,6 +36,7 @@ public class player_fx_behaviors : MonoBehaviour
     void Start()
     {
         //get player controller script, needed for accessing joystick inputs
+        rb = player.GetComponent<Rigidbody>();
         ground = player.GetComponent<groundCheck>();
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         m_animator = this.GetComponent<Animator>();
@@ -111,13 +113,6 @@ public class player_fx_behaviors : MonoBehaviour
         }
         m_animator.CrossFade(this.state, 0.2f, 0);
     }
-    /*    public void setBall_in()
-        {
-            if(playerScript.rollState == true)
-            {
-                Ball_in = true;
-            }
-        }*/
     public void vfx_triggers()
     {
         if (playerScript.jumpCounter == 1 && runOnce == false)
@@ -125,7 +120,7 @@ public class player_fx_behaviors : MonoBehaviour
             ground.runOnce = true;
             doubleJumpVfx.Play();
         }
-        if (ground.onGround == true && ground.runOnce == false )
+        if (ground.onGround == true && ground.runOnce == false)
         {
             runOnce = false;
             ground.runOnce = true;
@@ -143,50 +138,37 @@ public class player_fx_behaviors : MonoBehaviour
         if (playerScript.attackCounter == 3)
         {
             attack_3.Play();
-
         }
     }
     //https://www.youtube.com/watch?v=ToGq1LCTqMw
     public string getPlayerState()
     {
-        /*        if (Ball_in == true)
-                {
-                    Debug.Log("we are here ballin");
-                    return state = "ball_in";
-                }
-                if (playerScript.rollState == true && playerScript.leftStick.magnitude > 0.1f)
-                {
-                    //Debug.Log("we are here roll");
-                    return state = "roll";
-                }
-                *//*       
-                        if (playerScript.rollCounter == 1 && playerScript.leftStick.magnitude > 0.1f)
-                        {
-                            Debug.Log("we are here roll");
-                            return state = "roll";
-                        }
-                        if (playerScript.rollCounter == 0)
-                        {
-                            Debug.Log("we are here ball out");
-
-                            return state = "ballOut";
-                        }*/
-
-        if (playerScript.leftStick.magnitude > 0.1f)
+        if ((playerScript.leftStick.magnitude > 0.1f && playerScript.isDashing == true) ||  playerScript.isDashing == true )
         {
+            return "ball_in";
+        }
+        if (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true)
+        {
+            runOnce = false;
             return "walk";
         }
+        if (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true && playerScript.rollState == true)
+        {
+            return "roll";
+        }
+
         if (playerScript.isJumping == true)
         {
             return "jump";
         }
-        if (ground.onGround == false && playerScript.falling == true)
+        if (ground.onGround == false)
         {
             return "Falling";
         }
-        if (playerScript.attackCounter == 0)
+        if (ground.onGround == true && runOnce == false)
         {
-            return "Idle";
+            runOnce = true;
+            return "Land";
         }
         if (playerScript.attackCounter == 1)
         {
@@ -200,11 +182,8 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return "Attack_3";
         }
-/*        if (playerScript.canDash == true)
-        {
-            return "ball_in";
-        }*/
 
+       
         return "Idle";
     }
 
