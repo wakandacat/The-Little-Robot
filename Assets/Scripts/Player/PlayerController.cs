@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
     public int rollCounter = 0;
     private float rollSpeed = 10.0f;
     private float rollTime = 3.0f;
-    private float maxRollSpeed = 16.0f;
+    private float maxRollSpeed = 14.0f;
     public bool rollState = false;
     public bool inVent = false;
 
