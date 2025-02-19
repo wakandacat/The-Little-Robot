@@ -144,12 +144,11 @@ public class player_fx_behaviors : MonoBehaviour
     public string getPlayerState()
     {
         //Roll State
-        if (playerScript.leftStick.magnitude >= 0.1f && playerScript.rollCounter == 1)
+        if (playerScript.leftStick.magnitude >= 0.1f && playerScript.rollCounter == 1 || (playerScript.leftStick.magnitude == 0.0f && playerScript.rollCounter == 1))
         {
             m_animator.SetFloat("rollSpeed", playerScript.leftStick.magnitude);
             return "roll";
         }
-
         //Dash State
         if ((playerScript.leftStick.magnitude > 0.1f && playerScript.isDashing == true) || playerScript.isDashing == true)
         {
@@ -187,7 +186,13 @@ public class player_fx_behaviors : MonoBehaviour
         if (playerScript.attackCounter == 3)
         {
             return "Attack_3";
-        }    
+        }
+        //unroll when done with roll
+        if (playerScript.rollCounter == 0)
+        {
+            m_animator.SetFloat("rollSpeed", 1);
+            return "Idle";
+        }
         return "Idle";
     }
 
