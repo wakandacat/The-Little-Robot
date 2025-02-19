@@ -143,20 +143,25 @@ public class player_fx_behaviors : MonoBehaviour
     //https://www.youtube.com/watch?v=ToGq1LCTqMw
     public string getPlayerState()
     {
-        if ((playerScript.leftStick.magnitude > 0.1f && playerScript.isDashing == true) ||  playerScript.isDashing == true )
+        //Roll State
+        if (playerScript.leftStick.magnitude >= 0.1f && playerScript.rollCounter == 1)
+        {
+            m_animator.SetFloat("rollSpeed", playerScript.leftStick.magnitude);
+            return "roll";
+        }
+
+        //Dash State
+        if ((playerScript.leftStick.magnitude > 0.1f && playerScript.isDashing == true) || playerScript.isDashing == true)
         {
             return "ball_in";
         }
+        //Walk State
         if (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true)
         {
             runOnce = false;
             return "walk";
         }
-        if (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true && playerScript.rollState == true)
-        {
-            return "roll";
-        }
-
+        //Jump State
         if (playerScript.isJumping == true)
         {
             return "jump";
@@ -170,6 +175,7 @@ public class player_fx_behaviors : MonoBehaviour
             runOnce = true;
             return "Land";
         }
+        //Attack State
         if (playerScript.attackCounter == 1)
         {
             return "Attack_1";
@@ -181,9 +187,7 @@ public class player_fx_behaviors : MonoBehaviour
         if (playerScript.attackCounter == 3)
         {
             return "Attack_3";
-        }
-
-       
+        }    
         return "Idle";
     }
 
