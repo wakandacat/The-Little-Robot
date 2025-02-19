@@ -24,12 +24,13 @@ public class player_fx_behaviors : MonoBehaviour
 
     //vfx variables
     private bool runOnce = false;
+    private bool runVFXOnce = false;
     public ParticleSystem landVfx;
     public ParticleSystem doubleJumpVfx;
     public ParticleSystem attack_1;
     public ParticleSystem attack_2;
     public ParticleSystem attack_3;
-
+    public ParticleSystem takeDamage;
     //sfx variables
 
     // Start is called before the first frame update
@@ -46,6 +47,7 @@ public class player_fx_behaviors : MonoBehaviour
         attack_1.Stop();
         attack_2.Stop();
         attack_3.Stop();
+        takeDamage.Stop();
         if (m_animator == null)
         {
             Debug.Log("this is null");
@@ -104,6 +106,11 @@ public class player_fx_behaviors : MonoBehaviour
         }
 
     }*/
+    IEnumerator playVfxOnce()
+    {
+        yield return new WaitForSeconds(0.1f);
+        runVFXOnce = false;
+    }
     public void animationCalls()
     {
         var currentState = getPlayerState();
@@ -126,23 +133,46 @@ public class player_fx_behaviors : MonoBehaviour
             ground.runOnce = true;
             landVfx.Play();
         }
-        if (playerScript.attackCounter == 1)
+        if (playerScript.attackCounter == 1 && runVFXOnce == false)
         {
+            runVFXOnce = true;
             attack_1.Play();
+            StartCoroutine(playVfxOnce());
         }
-        if (playerScript.attackCounter == 2)
+        if (playerScript.attackCounter == 2 && runVFXOnce == false)
         {
+            runVFXOnce = false;
             attack_2.Play();
+            StartCoroutine(playVfxOnce());
 
         }
-        if (playerScript.attackCounter == 3)
+        if (playerScript.attackCounter == 3 && runVFXOnce == false)
         {
+            runVFXOnce = true;
             attack_3.Play();
+            StartCoroutine(playVfxOnce());
+        }
+        if(playerScript.collision == true)
+        {
+            takeDamage.Play();
         }
     }
     //https://www.youtube.com/watch?v=ToGq1LCTqMw
     public string getPlayerState()
     {
+        //Attack State
+        if (playerScript.attackCounter == 1)
+        {
+            return "Attack_1";
+        }
+        if (playerScript.attackCounter == 2)
+        {
+            return "Attack_2";
+        }
+        if (playerScript.attackCounter == 3)
+        {
+            return "Attack_3";
+        }
         //Roll State
         if (playerScript.leftStick.magnitude >= 0.1f && playerScript.rollCounter == 1 || (playerScript.leftStick.magnitude == 0.0f && playerScript.rollCounter == 1))
         {
@@ -173,19 +203,6 @@ public class player_fx_behaviors : MonoBehaviour
         {
             runOnce = true;
             return "Land";
-        }
-        //Attack State
-        if (playerScript.attackCounter == 1)
-        {
-            return "Attack_1";
-        }
-        if (playerScript.attackCounter == 2)
-        {
-            return "Attack_2";
-        }
-        if (playerScript.attackCounter == 3)
-        {
-            return "Attack_3";
         }
         //unroll when done with roll
         if (playerScript.rollCounter == 0)
