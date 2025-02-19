@@ -11,7 +11,7 @@ public class audioManager : MonoBehaviour
 
     //audio clip array
     public AudioClip[] backgroundClips;
-    public AudioClip[] playerSFXClips; //spin1, spin2, spin3, hitenemey, gothitbyenemy, 
+    public AudioClip[] playerSFXClips; //spin1, spin2, spin3, hit enemey, took damage from enemy, jump,dbl jump, dash, error
     public AudioClip[] enemySFXClips; //downed, dead
 
     //audio sources
