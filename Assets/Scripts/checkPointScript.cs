@@ -11,6 +11,7 @@ public class checkPointScript : MonoBehaviour
     private string currScene;
     private GameObject currCheckpoint;
     private mainGameScript mainGameScript;
+    player_fx_behaviors fxBehave;
 
     //move the player back to the correct checkpoint
     public void MoveToCheckpoint()
@@ -19,6 +20,9 @@ public class checkPointScript : MonoBehaviour
 
         //get the current scene
         currScene = mainGameScript.currentScene;
+
+        //load fx script
+        fxBehave = this.GetComponent<player_fx_behaviors>();
 
         //stop music
         mainGameScript.m_audio.backgroundSource.Stop();
@@ -66,6 +70,9 @@ public class checkPointScript : MonoBehaviour
 
         //move the player there
         this.transform.position = currCheckpoint.transform.position;
+
+        //restart sound coroutine
+        fxBehave.StartCoroutine(fxBehave.walkSFX());
 
         //rotate them to face forward
         this.transform.rotation = currCheckpoint.transform.rotation;

@@ -111,6 +111,9 @@ public class PlayerController : MonoBehaviour
     //health regen
     public bool canRegen = true;
 
+    //sound stuff
+    player_fx_behaviors fxBehave;
+
     void Start()
     {
         //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
@@ -138,6 +141,7 @@ public class PlayerController : MonoBehaviour
 
         //get audio
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
+        fxBehave = player.GetComponent<player_fx_behaviors>();
 
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
@@ -198,9 +202,6 @@ public class PlayerController : MonoBehaviour
 
             //Find enemy 
             findEnemy();
-
-            //updated animations
-            //animationCalls();
 
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
@@ -295,6 +296,7 @@ public class PlayerController : MonoBehaviour
             if (ground.onGround == true && jumpCounter == 0 && isJumping)
             {
                 Jump();
+                m_audio.playPlayerSFX(5);
                 jumpCounter++;
                 ground.jumpState = true;
             }
@@ -302,6 +304,7 @@ public class PlayerController : MonoBehaviour
             if (ground.onGround == false && jumpCounter == 1 && isJumping)
             {
                 Jump();
+                m_audio.playPlayerSFX(6);
                 jumpCounter = 0;
                 ground.doublejumpState = true;
             }
@@ -347,31 +350,13 @@ public class PlayerController : MonoBehaviour
         Vector3 forceToApply = orientation.forward * dashingPower;
         rb.freezeRotation = true;
         rb.AddForce(forceToApply, ForceMode.Impulse);
+        m_audio.playPlayerSFX(7); //play dash audio
         yield return new WaitForSeconds(dashingTime);
         gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
- /*   public IEnumerator turnOffAnim()
-    {
-        //always wait a little bit then check if isAttacking was true
-        yield return new WaitForSeconds(0.15f);
-
-        if(playerAnimator.GetBool("attack1") == true)
-        {
-            playerAnimator.SetBool("attack1", false);
-        }
-        else if (playerAnimator.GetBool("attack2") == true)
-        {
-            playerAnimator.SetBool("attack2", false);
-        }
-        else if (playerAnimator.GetBool("attack3") == true)
-        {
-            playerAnimator.SetBool("attack3", false);
-        }
-
-    }*/
 
     //coroutine call on button press
     public void OnDash(InputAction.CallbackContext context)
@@ -442,6 +427,7 @@ public class PlayerController : MonoBehaviour
             {
                 //Debug.Log("nah we are in teh vent");
                 //make CANNOT UNROLL SOUND HERE
+                m_audio.playPlayerSFX(8);
             }
            
         }
@@ -455,70 +441,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     //-----------------------------------------------Attack-----------------------------------------------//
-    //Check which combo state we are in and returns the animation, enemy damage
-    /*    public void attackCombo(int counter)
-        {
-            //Debug.Log("playerController counter: " + counter);
-            if (counter == 1)
-            {
-                //animation call reagrdless of if you collide 
-                playerAnimator.SetBool("attack1", true);
-
-                if (enemyCollision.enemyCollision == true)
-                {
-                    enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
-                    //play sfx on hit
-                    m_audio.playPlayerSFX(3);
-                }
-                else
-                {
-                    //play sfx
-                    m_audio.playPlayerSFX(0);
-                }
-                isAttacking = false;
-            }
-            else if (counter == 2)
-            {
-                //animation call reagrdless of if you collide 
-                playerAnimator.SetBool("attack2", true);
-
-                if (enemyCollision.enemyCollision == true)
-                {
-                    enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
-                    //play sfx on hit
-                    m_audio.playPlayerSFX(3);
-                    StartCoroutine(interalCooldown());
-                }
-                else
-                {
-                    //play sfx
-                    m_audio.playPlayerSFX(1);
-                }
-                isAttacking = false;
-            }
-            else if (counter == 3)
-            {
-                //animation call reagrdless of if you collide 
-                playerAnimator.SetBool("attack3", true);
-
-                if (enemyCollision.enemyCollision == true)
-                {
-                    enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
-                    //play sfx
-                    m_audio.playPlayerSFX(3);
-                }
-                else
-                {
-                    //play sfx
-                    m_audio.playPlayerSFX(2);
-                }
-                isAttacking = false;
-            }
-
-            //set attacking animation back to false
-            StartCoroutine(turnOffAnim());
-
-        }*/
+    
     IEnumerator attackCombo(int counter)
     {
         //Debug.Log("playerController counter: " + counter);
@@ -585,8 +508,6 @@ public class PlayerController : MonoBehaviour
             isAttacking = false;
         }
 
-        //set attacking animation back to false
-        //StartCoroutine(turnOffAnim());
 
     }
     //Handles the combo attack flags
@@ -645,7 +566,8 @@ public class PlayerController : MonoBehaviour
     {
         if (collision == true)
         {
-            //Debug.Log("take damage");
+            Debug.Log("take damage");
+            //m_audio.playPlayerSFX(4); //should have if here to check for if hit by fungus or projectile bc diff sounds
             playerCurrenthealth--;
             invulnerable = true;
             StartCoroutine(Immunity());
@@ -660,8 +582,19 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.tag == "Damage Source")
         {
-            collision = true;
+            collision = true; //need to update to look for projectile tag - LINA HEREEEEEEE
         }
+
+        //sfx call based on what hit you
+        if(other.gameObject.name.Contains("fungus"))
+        {
+            //m_audio.playPlayerSFX(8); //doesn't work atm, things will need unique name checks bc not all are called fungus
+        }
+        else if (other.gameObject.name.Contains("Projectile"))
+        {
+            m_audio.playPlayerSFX(4);
+        }
+
     }
 
     public void OnTriggerExit(Collider other)
@@ -747,6 +680,7 @@ public class PlayerController : MonoBehaviour
         canDash = true;
         canRegen = true;
         inVent = false;
+        fxBehave.StopCoroutine(fxBehave.walkSFX());
         // Invoke("fadeOut", fadeDelay);
     }
 

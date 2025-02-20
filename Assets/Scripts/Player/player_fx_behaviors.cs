@@ -31,7 +31,9 @@ public class player_fx_behaviors : MonoBehaviour
     public ParticleSystem attack_2;
     public ParticleSystem attack_3;
     public ParticleSystem takeDamage;
+
     //sfx variables
+    public audioManager m_audio;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +43,9 @@ public class player_fx_behaviors : MonoBehaviour
         ground = player.GetComponent<groundCheck>();
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         m_animator = this.GetComponent<Animator>();
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
+
+        //animation
         state = "Idle";
         landVfx.Stop();
         doubleJumpVfx.Stop();
@@ -52,12 +57,14 @@ public class player_fx_behaviors : MonoBehaviour
         {
             Debug.Log("this is null");
         }
+
+        //sfx
+        StartCoroutine(walkSFX());
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        //animationCalls();
         vfx_triggers();
         var currentState = getPlayerState();
         if (currentState.Equals(state))
@@ -84,6 +91,7 @@ public class player_fx_behaviors : MonoBehaviour
             runOnce = false;
             ground.runOnce = true;
             landVfx.Play();
+            m_audio.playPlayerSFX(9);
         }
         if (playerScript.attackCounter == 1 && runVFXOnce == false)
         {
@@ -104,7 +112,7 @@ public class player_fx_behaviors : MonoBehaviour
             attack_3.Play();
             StartCoroutine(playVfxOnce());
         }
-        if(playerScript.collision == true)
+        if (playerScript.collision == true)
         {
             takeDamage.Play();
         }
@@ -165,4 +173,25 @@ public class player_fx_behaviors : MonoBehaviour
         return "Idle";
     }
 
+    public IEnumerator walkSFX()
+    {
+
+        //for as long as player is using joystick
+        while (true)
+        {
+            //if(playerScript.Rolling != true)
+            if(playerScript.leftStick.magnitude >= 0.1 && ground.onGround == true && playerScript.Rolling != true)
+            {
+                //m_audio.walkSource.PlayOneShot(m_audio.walkSource.clip);
+                m_audio.walkSource.Play();
+            }
+            else
+            {
+                m_audio.walkSource.Stop();
+            }
+
+            yield return new WaitForSeconds(0.2f);
+        }
+        
+    }
 }
