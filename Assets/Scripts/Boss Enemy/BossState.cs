@@ -61,7 +61,7 @@ public class State_Sleeping : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Sleeping");
+        //Debug.Log("BossEnemy: Entering State_Sleeping");
 
         // Animation Logic
 
@@ -71,7 +71,7 @@ public class State_Sleeping : BossState
     public override void Update()
     {
         // Programming Logic
-        //Debug.Log("update logic :3");
+        ////Debug.Log("update logic :3");
 
         // Animation Logic
 
@@ -128,7 +128,7 @@ public class State_WakingUp : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_WakingUp");
+        //Debug.Log("BossEnemy: Entering State_WakingUp");
 
         // Animation Logic
         animator.SetBool("woken", true);
@@ -191,7 +191,7 @@ public class State_SelfCheck : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_SelfCheck");
+        //Debug.Log("BossEnemy: Entering State_SelfCheck");
 
         // Animation Logic
         animator.SetBool("toIdle", true);
@@ -270,8 +270,8 @@ public class State_Awake : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Awake");
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Entering State_Awake");
+        ////Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
         enterStateTimeStamp = Time.time;
 
         // INSERT: attack selection logic
@@ -449,8 +449,8 @@ public class State_LowEnergy : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_LowEnergy");
-        Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
+        //Debug.Log("BossEnemy: Entering State_LowEnergy");
+        //Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
         //bossEnemyComponent.HP_TurnInvulnerabilityOff();
 
@@ -513,7 +513,7 @@ public class State_LowEnergy : BossState
     {
         // Programming Logic
         //bossEnemyComponent.HP_TurnInvulnerabilityOn();
-        Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
+        //Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
         // Animation Logic
         animator.SetBool("downed", false);
@@ -529,7 +529,7 @@ public class State_Death : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Death");
+        //Debug.Log("BossEnemy: Entering State_Death");
         bossEnemyComponent.GetComponent<CapsuleCollider>().enabled = false;
 
         // Animation Logic
@@ -550,7 +550,7 @@ public class State_Death : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        //Debug.Log("debug text hehe :3");
+        ////Debug.Log("debug text hehe :3");
 
         // Animation Logic
 
@@ -647,7 +647,7 @@ public class State_Attack_Testing : BossState
     public override void Enter()
     {
         // Debugging
-        Debug.Log("BossEnemy: Entering State_Attack_Testing");
+        //Debug.Log("BossEnemy: Entering State_Attack_Testing");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
@@ -676,11 +676,11 @@ public class State_Attack_Testing : BossState
         // Attack is still occuring
         if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
         {
-            //Debug.Log("BossEnemy: Spawner Is Active");
+            ////Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
-                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
                 SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
                 SpawnerComponent_Bullet.PostAttackLogic();
@@ -689,7 +689,7 @@ public class State_Attack_Testing : BossState
         // Attack has finished
         else
         {
-            Debug.Log("BossEnemy: Attack Completed");
+            //Debug.Log("BossEnemy: Attack Completed");
             Attack_Completed = true;
         }
 
@@ -803,7 +803,7 @@ public class State_Attack_Bullet_TrackingCone : BossState
     public override void Enter()
     {
         // Debugging
-        Debug.Log("BossEnemy: Entering State_Attack_Bullet_TrackingCone");
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_TrackingCone");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
@@ -832,11 +832,11 @@ public class State_Attack_Bullet_TrackingCone : BossState
         // Attack is still occuring
         if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
         {
-            //Debug.Log("BossEnemy: Spawner Is Active");
+            ////Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
-                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
 
                 // On first shot, miss player
@@ -865,7 +865,7 @@ public class State_Attack_Bullet_TrackingCone : BossState
         // Attack has finished
         else
         {
-            Debug.Log("BossEnemy: Attack Completed");
+            //Debug.Log("BossEnemy: Attack Completed");
             Attack_Completed = true;
         }
 
@@ -978,7 +978,7 @@ public class State_Attack_Bullet_RotatingWall : BossState
     public override void Enter()
     {
         // Debugging
-        Debug.Log("BossEnemy: Entering State_Attack_Bullet_RotatingWall");
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_RotatingWall");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
@@ -1007,11 +1007,11 @@ public class State_Attack_Bullet_RotatingWall : BossState
         // Attack is still occuring
         if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
         {
-            //Debug.Log("BossEnemy: Spawner Is Active");
+            ////Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
-                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
 
                 // On first shot, miss player
@@ -1049,7 +1049,7 @@ public class State_Attack_Bullet_RotatingWall : BossState
         // Attack has finished
         else
         {
-            Debug.Log("BossEnemy: Attack Completed");
+            //Debug.Log("BossEnemy: Attack Completed");
             Attack_Completed = true;
         }
 
@@ -1161,7 +1161,7 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
     public override void Enter()
     {
         // Debugging
-        Debug.Log("BossEnemy: Entering State_Attack_ArenaHazard_Mine_Random");
+        //Debug.Log("BossEnemy: Entering State_Attack_ArenaHazard_Mine_Random");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
@@ -1189,11 +1189,11 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
         // Attack is still occuring
         if (SpawnerComponent_Mine.ReturnSpawnerActive() == true)
         {
-            //Debug.Log("BossEnemy: Spawner Is Active");
+            ////Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Mine.IsSpawnerReadyToFire() == true)
             {
-                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Mine.PreAttackLogic();
                 Spawner_Rotation_Y = Random.Range(0f, 360f);
                 SpawnerComponent_Mine.Update_FirePointRotation(null, Spawner_Rotation_Y, null);
@@ -1205,7 +1205,7 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
         // Attack has finished
         else
         {
-            Debug.Log("BossEnemy: Attack Completed");
+            //Debug.Log("BossEnemy: Attack Completed");
             Attack_Completed = true;
         }
 
@@ -1280,7 +1280,7 @@ public class State_Attack_StandUpMelee : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Attack_StandUpMelee");
+        //Debug.Log("BossEnemy: Entering State_Attack_StandUpMelee");
         // Attack Setup Logic
         Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
 
@@ -1416,9 +1416,9 @@ public class State_Attack_Melee01 : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Attack_Melee01");
+        //Debug.Log("BossEnemy: Entering State_Attack_Melee01");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        ////Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Attack Setup Logic
         Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");

@@ -335,7 +335,7 @@ public class BossEnemy : MonoBehaviour
         {
             HP_Current -= damageAmount;
             Energy_Current += Energy_RegainedOnStrike;
-            Debug.Log("BossEnemy: " + damageAmount + " Damage Taken | HP = " + HP_Current);
+            //Debug.Log("BossEnemy: " + damageAmount + " Damage Taken | HP = " + HP_Current);
         }
     }
 
