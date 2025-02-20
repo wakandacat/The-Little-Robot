@@ -13,11 +13,11 @@ public class BossEnemy : MonoBehaviour
     [Tooltip("Maximum HP that the Boss Enemy can have.")]
     public float HP_Maximum = 20.0f;
     [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have.")]
-    public float Energy_Maximum = 4.0f;
+    public float Energy_Maximum = 3.0f;
     [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'State_LowEnergy'.")]
     public float Energy_RegainedPerSecond = 0.15f;
     [Tooltip("Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy'.")]
-    public float Energy_RegainedOnStrike = 0.7f;
+    public float Energy_RegainedOnStrike = 0.4f;
 
     [Tooltip("Amount of time that passed between storing player position (in seconds).")]
     public float Player_PositionTrackingTimeInterval = 0.02f;
@@ -25,7 +25,7 @@ public class BossEnemy : MonoBehaviour
     public float Player_PositionTrackingMaxTimeTracked = 3.0f;
 
     [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack.")]
-    public float State_Awake_Delay = 2.25f;
+    public float State_Awake_Delay = 4.0f;
 
     [Tooltip("The amount of damage that the boss enemy takes when a projectile is successfully deflected back into the boss enemy.")]
     public float Deflection_DamageOnSuccessfulDeflect = 5.0f;

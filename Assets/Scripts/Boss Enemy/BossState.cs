@@ -295,17 +295,16 @@ public class State_Awake : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (delayFinished == false) // check if the delay has been completed
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (delayFinished == false) // check if the delay has been completed
         {
             if (Time.time - enterStateTimeStamp >= bossEnemyComponent.State_Awake_Delay) // if not, check if the duration of the delay has been exceeded
             {
                 delayFinished = true; // if so, set delay to have been completed
             }
-        }
-
-        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
-        {
-            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
         }
         else if (delayFinished == true)  // check if the delay has been completed and the attack has been chosen
         {
@@ -759,12 +758,12 @@ public class State_Attack_Bullet_TrackingCone : BossState
     public static float Player_MaxDistance = 50.0f;
 
     // Spawner Values
-    private float Attack_FireRate = 0.5f;
+    private float Attack_FireRate = 0.75f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 10;
+    private int Attack_Count = 15;
     private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
-    private float Attack_TrackSpeed = 60.0f;
+    private float Attack_TrackSpeed = 80.0f;
     private float Attack_ProjectileSpeed = 15.0f;
     private float Attack_ProjectileLifetime = 10.0f;
 
@@ -774,10 +773,10 @@ public class State_Attack_Bullet_TrackingCone : BossState
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
     private int Attack_ProjectileCount = 10;
-    private float Attack_AngleOfSpread = 45.0f;
+    private float Attack_AngleOfSpread = 60.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
-    private float Attack_MaxHeight = 2.5f;
+    private float Attack_MaxHeight = 3.5f;
 
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
@@ -811,12 +810,12 @@ public class State_Attack_Bullet_TrackingCone : BossState
 
         // Spawner Logic
         SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
-        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -839,7 +838,27 @@ public class State_Attack_Bullet_TrackingCone : BossState
             {
                 //Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+
+                // On first shot, miss player
+                if (SpawnerComponent_Bullet.IsSpawnerRemainingAttackCountEqualToValue(Attack_Count) == true)
+                {
+                    SpawnerComponent_Bullet.UpdateSpawner_Tracking(false, false, 0);
+
+                    // Rotate spawner to face away from player by random ammount between 90 - 270 degrees
+                    float randomRotation = Random.Range(90.0f, 270.0001f);
+                    Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, randomRotation, 0.0f, true, false);
+
+                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    SpawnerComponent_Bullet.UpdateSpawner_Tracking(Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+                }
+
+                // Otherwise track and shoot player
+                else
+                {
+                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                }
+                
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
         }
@@ -918,7 +937,7 @@ public class State_Attack_Bullet_RotatingWall : BossState
     private int Attack_Count = 40;
     private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
-    private float Attack_TrackSpeed = 40.0f;
+    private float Attack_TrackSpeed = 60.0f;
     private float Attack_ProjectileSpeed = 30.0f;
     private float Attack_ProjectileLifetime = 10.0f;
     private float Spawner_Rotation_Y = 0.0f;
@@ -966,12 +985,12 @@ public class State_Attack_Bullet_RotatingWall : BossState
 
         // Spawner Logic
         SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
-        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -994,7 +1013,36 @@ public class State_Attack_Bullet_RotatingWall : BossState
             {
                 //Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+
+                // On first shot, miss player
+                if (SpawnerComponent_Bullet.IsSpawnerRemainingAttackCountEqualToValue(Attack_Count) == true)
+                {
+                    SpawnerComponent_Bullet.UpdateSpawner_Tracking(false, false, 0);
+
+                    // Rotate spawner to face away from player by random ammount (either -30 or 30 degrees)
+                    float randomRotation = 0.0f;
+                    int randomInt = Random.Range(0, 2);
+                    if (randomInt == 0)
+                    {
+                        randomRotation = 30.0f;
+                    }
+                    else
+                    {
+                        randomRotation = -30.0f;
+                    }
+                    Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, randomRotation, 0.0f, true, false);
+
+                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    SpawnerComponent_Bullet.UpdateSpawner_Tracking(Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+                }
+
+                // Otherwise track and shoot player
+                else
+                {
+                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                }
+
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
         }
@@ -1244,8 +1292,6 @@ public class State_Attack_StandUpMelee : BossState
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
-        SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();
-        Attack_LaserContactObject_collider.isTrigger = true;
         Attack_ColliderSphere.tag = "Damage Source";
         Attack_ColliderSphere.transform.position = bossEnemyComponent.returnBossEnemyPosition();
         Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
@@ -1273,8 +1319,10 @@ public class State_Attack_StandUpMelee : BossState
         {
             if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
             {
-                Attack_IsColliderSphereScaleOut = true;                                         // if so, update Attack_IsColliderSphereScaleOut to true
-                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;    // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
+                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
+                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
+                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
             }
         }
 

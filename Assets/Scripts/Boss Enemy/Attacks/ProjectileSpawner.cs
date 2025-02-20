@@ -159,6 +159,30 @@ public class ProjectileSpawner : MonoBehaviour
         Spawner_FirePoint.transform.rotation = Quaternion.Euler(newX, newY, newZ);
     }
 
+    // Update fire point rotation to face a target with additional rotation offsets
+    public void Update_FirePointRotation_FaceTarget(Vector3 target, float additionalRotationHorizontal, float additionalRotationVertical, bool rotateHorizontally, bool rotateVertically)
+    {
+        if (target == null) return;
+
+        // get direction vector from fire point to target
+        Vector3 directionToTarget = target - Spawner_FirePoint.transform.position;
+
+        // determine target rotation
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+
+        // extract Euler angles
+        Vector3 targetEuler = targetRotation.eulerAngles;
+        Vector3 currentEuler = Spawner_FirePoint.transform.eulerAngles;
+
+        // apply rotation restrictions and additional rotation offsets
+        float newX = rotateVertically ? targetEuler.x + additionalRotationVertical : currentEuler.x;
+        float newY = rotateHorizontally ? targetEuler.y + additionalRotationHorizontal : currentEuler.y;
+        float newZ = currentEuler.z; // keep z-axis value the same
+
+        // apply new rotation
+        Spawner_FirePoint.transform.rotation = Quaternion.Euler(newX, newY, newZ);
+    }
+
     public void Reset_FirePointPositionToGameObject()
     {
         Update_FirePointPosition(Spawner_FirePoint_GameObject.transform.position);
@@ -266,6 +290,19 @@ public class ProjectileSpawner : MonoBehaviour
             }
         }
         return false;
+    }
+
+    // returns true if this is the first shot that the spawner is going to take (value == to Spawner_RemainingAttackCount)
+    public bool IsSpawnerRemainingAttackCountEqualToValue(int value)
+    {
+        if (value == Spawner_RemainingAttackCount)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     // This should be run before an attack occurs to ensure that the next fire time is being set properly

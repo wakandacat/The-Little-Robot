@@ -1387,12 +1387,11 @@ MonoBehaviour:
   HP_Maximum: 40
   Energy_Maximum: 3
   Energy_RegainedPerSecond: 0.15
-  Energy_RegainedOnStrike: 0.7
+  Energy_RegainedOnStrike: 0.4
   Player_PositionTrackingTimeInterval: 0.02
   Player_PositionTrackingMaxTimeTracked: 3
-  State_Awake_Delay: 2.25
-  Attack_BasicProjectile01: {fileID: 6745135230358999026, guid: 77ec102bea06b4441a0c3e3e93f81cb1,
-    type: 3}
+  State_Awake_Delay: 4
+  Deflection_DamageOnSuccessfulDeflect: 5
 --- !u!114 &549276119542833208
 MonoBehaviour:
   m_ObjectHideFlags: 0
