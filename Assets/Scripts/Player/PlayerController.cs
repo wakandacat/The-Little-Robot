@@ -645,7 +645,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision == true)
         {
-            Debug.Log("take damage");
+            //Debug.Log("take damage");
             playerCurrenthealth--;
             invulnerable = true;
             StartCoroutine(Immunity());

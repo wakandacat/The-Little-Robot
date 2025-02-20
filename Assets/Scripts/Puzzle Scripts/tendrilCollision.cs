@@ -18,7 +18,7 @@ public class tendrilCollision : MonoBehaviour
         if (collision.gameObject.tag == "Player" && transform.root.gameObject.GetComponent<tendril_Behavior>().hasCollided == false)
         {
             transform.root.gameObject.GetComponent<tendril_Behavior>().hasCollided = true;
-            Debug.Log("hit by tendril");
+            //Debug.Log("hit by tendril");
             player.collision = true;
             player.takeDamage();
 
