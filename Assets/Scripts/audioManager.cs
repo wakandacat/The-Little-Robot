@@ -17,6 +17,7 @@ public class audioManager : MonoBehaviour
     //audio sources
     public AudioSource backgroundSource; //used for environment music
     public AudioSource playerSource;     //used for player sfx
+    public AudioSource walkSource;       //used exclusively for player walking
     public AudioSource enemySource;      //used for enemy sfx
 
     private void Awake()
@@ -60,7 +61,7 @@ public class audioManager : MonoBehaviour
 
         //play clip
         backgroundSource.clip = backgroundClips[index];          //load sfx clip based on array index
-        backgroundSource.PlayOneShot(backgroundClips[index]);
+        backgroundSource.Play();
     }
 
     //loads audio source for player based on the index and plays

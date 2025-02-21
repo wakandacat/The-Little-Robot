@@ -61,7 +61,7 @@ public class State_Sleeping : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Sleeping");
+        //Debug.Log("BossEnemy: Entering State_Sleeping");
 
         // Animation Logic
 
@@ -71,7 +71,7 @@ public class State_Sleeping : BossState
     public override void Update()
     {
         // Programming Logic
-        //Debug.Log("update logic :3");
+        ////Debug.Log("update logic :3");
 
         // Animation Logic
 
@@ -128,7 +128,7 @@ public class State_WakingUp : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_WakingUp");
+        //Debug.Log("BossEnemy: Entering State_WakingUp");
 
         // Animation Logic
         animator.SetBool("woken", true);
@@ -191,7 +191,7 @@ public class State_SelfCheck : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_SelfCheck");
+        //Debug.Log("BossEnemy: Entering State_SelfCheck");
 
         // Animation Logic
         animator.SetBool("toIdle", true);
@@ -270,8 +270,8 @@ public class State_Awake : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Awake");
-        Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Entering State_Awake");
+        ////Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
         enterStateTimeStamp = Time.time;
 
         // INSERT: attack selection logic
@@ -295,17 +295,16 @@ public class State_Awake : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (delayFinished == false) // check if the delay has been completed
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (delayFinished == false) // check if the delay has been completed
         {
             if (Time.time - enterStateTimeStamp >= bossEnemyComponent.State_Awake_Delay) // if not, check if the duration of the delay has been exceeded
             {
                 delayFinished = true; // if so, set delay to have been completed
             }
-        }
-
-        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
-        {
-            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
         }
         else if (delayFinished == true)  // check if the delay has been completed and the attack has been chosen
         {
@@ -450,8 +449,8 @@ public class State_LowEnergy : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_LowEnergy");
-        Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
+        //Debug.Log("BossEnemy: Entering State_LowEnergy");
+        //Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
         //bossEnemyComponent.HP_TurnInvulnerabilityOff();
 
@@ -514,7 +513,7 @@ public class State_LowEnergy : BossState
     {
         // Programming Logic
         //bossEnemyComponent.HP_TurnInvulnerabilityOn();
-        Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
+        //Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
         // Animation Logic
         animator.SetBool("downed", false);
@@ -530,7 +529,7 @@ public class State_Death : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Death");
+        //Debug.Log("BossEnemy: Entering State_Death");
         bossEnemyComponent.GetComponent<CapsuleCollider>().enabled = false;
 
         // Animation Logic
@@ -551,7 +550,7 @@ public class State_Death : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        //Debug.Log("debug text hehe :3");
+        ////Debug.Log("debug text hehe :3");
 
         // Animation Logic
 
@@ -648,7 +647,7 @@ public class State_Attack_Testing : BossState
     public override void Enter()
     {
         // Debugging
-        Debug.Log("BossEnemy: Entering State_Attack_Testing");
+        //Debug.Log("BossEnemy: Entering State_Attack_Testing");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
@@ -677,11 +676,11 @@ public class State_Attack_Testing : BossState
         // Attack is still occuring
         if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
         {
-            //Debug.Log("BossEnemy: Spawner Is Active");
+            ////Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
-                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
                 SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
                 SpawnerComponent_Bullet.PostAttackLogic();
@@ -690,7 +689,7 @@ public class State_Attack_Testing : BossState
         // Attack has finished
         else
         {
-            Debug.Log("BossEnemy: Attack Completed");
+            //Debug.Log("BossEnemy: Attack Completed");
             Attack_Completed = true;
         }
 
@@ -759,12 +758,12 @@ public class State_Attack_Bullet_TrackingCone : BossState
     public static float Player_MaxDistance = 50.0f;
 
     // Spawner Values
-    private float Attack_FireRate = 0.5f;
+    private float Attack_FireRate = 0.75f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 10;
+    private int Attack_Count = 15;
     private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
-    private float Attack_TrackSpeed = 60.0f;
+    private float Attack_TrackSpeed = 80.0f;
     private float Attack_ProjectileSpeed = 15.0f;
     private float Attack_ProjectileLifetime = 10.0f;
 
@@ -774,10 +773,10 @@ public class State_Attack_Bullet_TrackingCone : BossState
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
     private int Attack_ProjectileCount = 10;
-    private float Attack_AngleOfSpread = 45.0f;
+    private float Attack_AngleOfSpread = 60.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
-    private float Attack_MaxHeight = 2.5f;
+    private float Attack_MaxHeight = 3.5f;
 
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
@@ -804,19 +803,19 @@ public class State_Attack_Bullet_TrackingCone : BossState
     public override void Enter()
     {
         // Debugging
-        Debug.Log("BossEnemy: Entering State_Attack_Bullet_TrackingCone");
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_TrackingCone");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
 
         // Spawner Logic
         SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
-        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -833,20 +832,40 @@ public class State_Attack_Bullet_TrackingCone : BossState
         // Attack is still occuring
         if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
         {
-            //Debug.Log("BossEnemy: Spawner Is Active");
+            ////Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
-                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+
+                // On first shot, miss player
+                if (SpawnerComponent_Bullet.IsSpawnerRemainingAttackCountEqualToValue(Attack_Count) == true)
+                {
+                    SpawnerComponent_Bullet.UpdateSpawner_Tracking(false, false, 0);
+
+                    // Rotate spawner to face away from player by random ammount between 90 - 270 degrees
+                    float randomRotation = Random.Range(90.0f, 270.0001f);
+                    Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, randomRotation, 0.0f, true, false);
+
+                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    SpawnerComponent_Bullet.UpdateSpawner_Tracking(Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+                }
+
+                // Otherwise track and shoot player
+                else
+                {
+                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                }
+                
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
         }
         // Attack has finished
         else
         {
-            Debug.Log("BossEnemy: Attack Completed");
+            //Debug.Log("BossEnemy: Attack Completed");
             Attack_Completed = true;
         }
 
@@ -918,7 +937,7 @@ public class State_Attack_Bullet_RotatingWall : BossState
     private int Attack_Count = 40;
     private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
-    private float Attack_TrackSpeed = 40.0f;
+    private float Attack_TrackSpeed = 60.0f;
     private float Attack_ProjectileSpeed = 30.0f;
     private float Attack_ProjectileLifetime = 10.0f;
     private float Spawner_Rotation_Y = 0.0f;
@@ -959,19 +978,19 @@ public class State_Attack_Bullet_RotatingWall : BossState
     public override void Enter()
     {
         // Debugging
-        Debug.Log("BossEnemy: Entering State_Attack_Bullet_RotatingWall");
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_RotatingWall");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
 
         // Spawner Logic
         SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
-        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -988,20 +1007,49 @@ public class State_Attack_Bullet_RotatingWall : BossState
         // Attack is still occuring
         if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
         {
-            //Debug.Log("BossEnemy: Spawner Is Active");
+            ////Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
-                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+
+                // On first shot, miss player
+                if (SpawnerComponent_Bullet.IsSpawnerRemainingAttackCountEqualToValue(Attack_Count) == true)
+                {
+                    SpawnerComponent_Bullet.UpdateSpawner_Tracking(false, false, 0);
+
+                    // Rotate spawner to face away from player by random ammount (either -30 or 30 degrees)
+                    float randomRotation = 0.0f;
+                    int randomInt = Random.Range(0, 2);
+                    if (randomInt == 0)
+                    {
+                        randomRotation = 30.0f;
+                    }
+                    else
+                    {
+                        randomRotation = -30.0f;
+                    }
+                    Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, randomRotation, 0.0f, true, false);
+
+                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    SpawnerComponent_Bullet.UpdateSpawner_Tracking(Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+                }
+
+                // Otherwise track and shoot player
+                else
+                {
+                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                }
+
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
         }
         // Attack has finished
         else
         {
-            Debug.Log("BossEnemy: Attack Completed");
+            //Debug.Log("BossEnemy: Attack Completed");
             Attack_Completed = true;
         }
 
@@ -1113,7 +1161,7 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
     public override void Enter()
     {
         // Debugging
-        Debug.Log("BossEnemy: Entering State_Attack_ArenaHazard_Mine_Random");
+        //Debug.Log("BossEnemy: Entering State_Attack_ArenaHazard_Mine_Random");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
@@ -1141,11 +1189,11 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
         // Attack is still occuring
         if (SpawnerComponent_Mine.ReturnSpawnerActive() == true)
         {
-            //Debug.Log("BossEnemy: Spawner Is Active");
+            ////Debug.Log("BossEnemy: Spawner Is Active");
             // Spawner is ready for next projectile fire
             if (SpawnerComponent_Mine.IsSpawnerReadyToFire() == true)
             {
-                //Debug.Log("BossEnemy: Spawner Ready To Fire");
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Mine.PreAttackLogic();
                 Spawner_Rotation_Y = Random.Range(0f, 360f);
                 SpawnerComponent_Mine.Update_FirePointRotation(null, Spawner_Rotation_Y, null);
@@ -1157,7 +1205,7 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
         // Attack has finished
         else
         {
-            Debug.Log("BossEnemy: Attack Completed");
+            //Debug.Log("BossEnemy: Attack Completed");
             Attack_Completed = true;
         }
 
@@ -1232,7 +1280,7 @@ public class State_Attack_StandUpMelee : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Attack_StandUpMelee");
+        //Debug.Log("BossEnemy: Entering State_Attack_StandUpMelee");
         // Attack Setup Logic
         Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
 
@@ -1244,8 +1292,6 @@ public class State_Attack_StandUpMelee : BossState
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
-        SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();
-        Attack_LaserContactObject_collider.isTrigger = true;
         Attack_ColliderSphere.tag = "Damage Source";
         Attack_ColliderSphere.transform.position = bossEnemyComponent.returnBossEnemyPosition();
         Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
@@ -1273,8 +1319,10 @@ public class State_Attack_StandUpMelee : BossState
         {
             if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
             {
-                Attack_IsColliderSphereScaleOut = true;                                         // if so, update Attack_IsColliderSphereScaleOut to true
-                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;    // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
+                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
+                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
+                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
             }
         }
 
@@ -1368,9 +1416,9 @@ public class State_Attack_Melee01 : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Attack_Melee01");
+        //Debug.Log("BossEnemy: Entering State_Attack_Melee01");
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        //Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
+        ////Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
 
         // Attack Setup Logic
         Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");

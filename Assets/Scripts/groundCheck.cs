@@ -10,6 +10,7 @@ public class groundCheck : MonoBehaviour
     public bool doublejumpState = false;
     public bool runOnce = false;
     PlayerController jumping;
+    public bool sfxRunOnce = false;
     // Start is called before the first frame update
     void Start()
     {
