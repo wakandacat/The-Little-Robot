@@ -652,7 +652,7 @@ public class PlayerController : MonoBehaviour
         inVent = false;
         fxBehave.StopCoroutine(fxBehave.walkSFX());
         fxBehave.takeDamage.Stop();
-        StopCoroutine(cooldown());
+        //StopCoroutine(cooldown());
 
         // Invoke("fadeOut", fadeDelay);
     }
@@ -661,7 +661,8 @@ public class PlayerController : MonoBehaviour
     public void fadeIn()
     {
         fadingIn = true;
-        gameObject.SetActive(false);
+        StartCoroutine(cooldown());
+        //gameObject.SetActive(false);
     }
     public void fadeOut()
     {
@@ -669,7 +670,7 @@ public class PlayerController : MonoBehaviour
         fadingOut = true;
         playerCurrenthealth = playerHealth;
         checkPoint.MoveToCheckpoint();
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
     }
 
     //Destroy inputs if not used
