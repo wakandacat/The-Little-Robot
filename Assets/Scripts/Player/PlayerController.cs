@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
-    private float attackCD = 2.0f;
+    private float attackCD = 0.2f;
 
     //Roll vars
     public bool Rolling = false;
@@ -95,8 +95,6 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private int damageTakenDelay = 10;
-    private bool invulnerable = false;
 
     //animator
     private Animator playerAnimator;
@@ -113,6 +111,7 @@ public class PlayerController : MonoBehaviour
 
     //sound stuff
     player_fx_behaviors fxBehave;
+    public bool runTakeDamageOnce = false;
 
     void Start()
     {
@@ -442,21 +441,15 @@ public class PlayerController : MonoBehaviour
     }
     //-----------------------------------------------Attack-----------------------------------------------//
     
-    IEnumerator attackCombo(int counter)
+    public void attackCombo(int counter)
     {
-        //Debug.Log("playerController counter: " + counter);
         if (counter == 1)
         {
-            //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("attack1", true);
-
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
-                //play vfx on hit
-                //attack_1.Play();
             }
             else
             {
@@ -464,12 +457,9 @@ public class PlayerController : MonoBehaviour
                 m_audio.playPlayerSFX(0);
             }
             isAttacking = false;
-            yield return new WaitForSeconds(5.0f);
         }
         else if (counter == 2)
         {
-            //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("attack2", true);
 
             if (enemyCollision.enemyCollision == true)
             {
@@ -477,7 +467,6 @@ public class PlayerController : MonoBehaviour
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
                 //play vfx
-                //attack_2.Play();
             }
             else
             {
@@ -485,12 +474,9 @@ public class PlayerController : MonoBehaviour
                 m_audio.playPlayerSFX(1);
             }
             isAttacking = false;
-            yield return new WaitForSeconds(5.0f);
         }
         else if (counter == 3)
         {
-            //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("attack3", true);
 
             if (enemyCollision.enemyCollision == true)
             {
@@ -498,7 +484,6 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(3);
                 //play vfx
-                //attack_3.Play();
             }
             else
             {
@@ -523,21 +508,12 @@ public class PlayerController : MonoBehaviour
     //when we get all combos remeber to reset timer
     public void timer()
     {
-/*        comboMaxTime -= Time.deltaTime;
+        comboMaxTime -= Time.deltaTime;
         if (comboMaxTime < 0)
         {
             handleAttack();
             comboMaxTime = 0;
-        }*/
-    }
-/*    IEnumerator interalCooldown()
-    {
-        yield return new WaitForSeconds(5.0f);
-    }*/
-    IEnumerator attackCooldown()
-    {
-        yield return new WaitForSeconds(attackCD);
-        handleAttack();
+        }
     }
     //Call the relevant methods on button press or presses
     public void OnAttack(InputAction.CallbackContext context)
@@ -549,14 +525,10 @@ public class PlayerController : MonoBehaviour
             {
                 attackState = true;
                 attackCounter++;
-                StartCoroutine(attackCombo(attackCounter));
-                /*attackCombo(attackCounter);*/
-                //StartCoroutine(interalCooldown());
-
-
+                attackCombo(attackCounter);
                 if (attackCounter == 3)
                 {
-                    StartCoroutine(attackCooldown());
+                    handleAttack();
                 }
             }
         }
@@ -568,9 +540,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("take damage");
             //m_audio.playPlayerSFX(4); //should have if here to check for if hit by fungus or projectile bc diff sounds
-            playerCurrenthealth--;
-            invulnerable = true;
-            StartCoroutine(Immunity());
+            Debug.Log("Payer current health" + playerCurrenthealth);
             if (playerCurrenthealth < 0)
             {
                 playerCurrenthealth = 0;
@@ -580,13 +550,14 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Damage Source")
+        if(other.gameObject.tag == "Projectile")
         {
-            collision = true; //need to update to look for projectile tag - LINA HEREEEEEEE
+            collision = true;
+            playerCurrenthealth -= 1;
         }
 
         //sfx call based on what hit you
-        if(other.gameObject.name.Contains("fungus"))
+        if (other.gameObject.name.Contains("fungus"))
         {
             //m_audio.playPlayerSFX(8); //doesn't work atm, things will need unique name checks bc not all are called fungus
         }
@@ -594,27 +565,17 @@ public class PlayerController : MonoBehaviour
         {
             m_audio.playPlayerSFX(4);
         }
-
     }
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Damage Source")
+        if (other.gameObject.tag == "Projectile")
         {
             collision = false;
+            runTakeDamageOnce = false;
         }
     }
 
-    IEnumerator Immunity()
-    {
-        if (invulnerable == true || enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0)
-        {
-            collision = false;
-            yield return new WaitForSeconds(damageTakenDelay);
-            invulnerable = false;
-        }
-
-    }
     //-----------------------------------------------Health Regen-----------------------------------------------//
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
@@ -644,30 +605,23 @@ public class PlayerController : MonoBehaviour
         {
             if (playerCurrenthealth == 1)
             {
-                //Debug.Log("in 1 regen");
                 yield return new WaitForSeconds(healthRegenDelay);
                 playerCurrenthealth = 2;
             }
             else if (playerCurrenthealth == 2)
             {
-                //Debug.Log("in 2 regen");
                 yield return new WaitForSeconds(healthRegenDelay);
                 playerCurrenthealth = 3;
             }
             else if (playerCurrenthealth == 3)
             {
-                //Debug.Log("in 3 regen");
+                yield return new WaitForSeconds(healthRegenDelay);
                 playerCurrenthealth = 4;
             }
             else if (playerCurrenthealth == 4)
             {
-                //Debug.Log("in 3 regen");
+                yield return new WaitForSeconds(healthRegenDelay);
                 playerCurrenthealth = 5;
-            }
-            else if (playerCurrenthealth == 5)
-            {
-                //Debug.Log("in 3 regen");
-                playerCurrenthealth = playerHealth;
             }
         }
         
@@ -681,6 +635,7 @@ public class PlayerController : MonoBehaviour
         canRegen = true;
         inVent = false;
         fxBehave.StopCoroutine(fxBehave.walkSFX());
+        fxBehave.takeDamage.Stop();
         // Invoke("fadeOut", fadeDelay);
     }
 
