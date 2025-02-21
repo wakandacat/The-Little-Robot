@@ -15,7 +15,9 @@ public class BossWakeupTrigger : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Object References ----------------------------------------------------------------------------------------------------------
     GameObject playerGameObject;
+    private GameObject enemy;
     BossEnemy bossEnemyScriptComponent;
+    Animator m_animator;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Start Function                                                                                                                                                                               * 
@@ -26,6 +28,9 @@ public class BossWakeupTrigger : MonoBehaviour
         // Set Object References
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
         bossEnemyScriptComponent = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
+        m_animator = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<Animator>();
+        enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,6 +39,11 @@ public class BossWakeupTrigger : MonoBehaviour
         {
             Debug.Log("Player Entered Boss Wakeup Trigger");
             bossEnemyScriptComponent.Player_EnteredWakeupTrigger();
+            m_animator.SetBool("woken", true);
+            Debug.Log("start ON");
+            //turn on light/trigger intensity change
+            enemy.GetComponent<boss_fx_behaviors>().StartCoroutine(enemy.GetComponent<boss_fx_behaviors>().turnOnEyes());
+
         }
     }
 }

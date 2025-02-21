@@ -1296,6 +1296,7 @@ GameObject:
   - component: {fileID: 2936292769534952151}
   - component: {fileID: 1678662097781468975}
   - component: {fileID: 8323335645418170101}
+  - component: {fileID: 5976677503317517514}
   m_Layer: 0
   m_Name: BossEnemy_2.0
   m_TagString: Boss Enemy
@@ -1495,6 +1496,23 @@ CapsuleCollider:
   m_Height: 12.651627
   m_Direction: 1
   m_Center: {x: 0, y: 5.024992, z: -0.00000333786}
+--- !u!114 &5976677503317517514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952657259235817682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c2927bc32ebb9f4584f65b94c93ca34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eyes:
+  - {fileID: 142773594799444639}
+  - {fileID: 5108890084946397189}
+  - {fileID: 2908544458661666768}
+  - {fileID: 2418988797183703098}
 --- !u!1 &958215156052150977
 GameObject:
   m_ObjectHideFlags: 0
@@ -3351,7 +3369,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.8352942, g: 0.19215688, b: 0.20000002, a: 1}
-  m_Intensity: 0.05
+  m_Intensity: 0
   m_Range: 0.261463
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4242,7 +4260,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.8352942, g: 0.19215688, b: 0.20000002, a: 1}
-  m_Intensity: 0.25
+  m_Intensity: 0
   m_Range: 0.9654721
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -5557,7 +5575,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.8352942, g: 0.19215688, b: 0.20000002, a: 1}
-  m_Intensity: 0.05
+  m_Intensity: 0
   m_Range: 0.261463
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -5994,7 +6012,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.8352942, g: 0.19215688, b: 0.20000002, a: 1}
-  m_Intensity: 0.05
+  m_Intensity: 0
   m_Range: 0.20626563
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

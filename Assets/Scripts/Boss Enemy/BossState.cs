@@ -21,6 +21,7 @@ public abstract class BossState
     // Object References ----------------------------------------------------------------------------------------------------------
     protected BossEnemy bossEnemyComponent;                 // the BossEnemy.cs script attached to the Boss Enemy
     protected Animator animator;                            // will be set to whatever animator is being used for Boss Enemy
+    protected boss_fx_behaviors fxBehave = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<boss_fx_behaviors>();
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialize Function                                                                                                                                                                          * 
@@ -131,8 +132,7 @@ public class State_WakingUp : BossState
         //Debug.Log("BossEnemy: Entering State_WakingUp");
 
         // Animation Logic
-        animator.SetBool("woken", true);
-
+        fxBehave.StopCoroutine(fxBehave.turnOnEyes());
     }
 
     // Called once per frame
@@ -178,6 +178,7 @@ public class State_WakingUp : BossState
         // Programming Logic
 
         // Animation Logic
+        
 
     }
 }
@@ -534,6 +535,10 @@ public class State_Death : BossState
 
         // Animation Logic
         animator.SetBool("die", true);
+        animator.SetBool("woken", false);
+
+        //turn off eyes on death
+        fxBehave.StartCoroutine(fxBehave.turnOffEyes());
 
     }
 
