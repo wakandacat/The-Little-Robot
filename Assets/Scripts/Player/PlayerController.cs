@@ -63,7 +63,9 @@ public class PlayerController : MonoBehaviour
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
-    private float attackCD = 0.1f;
+    private float attackCD = 0.3f;
+    public bool runAttack = false;
+    public bool runAttackAnim = false;
 
     //Roll vars
     public bool Rolling = false;
@@ -207,6 +209,7 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
+
                 if (isQuickDropping == true)
                 {
                     quickDrop();
@@ -444,6 +447,8 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(0);
             }
+            runAttack = false;
+            runAttackAnim = false;
             isAttacking = false;
         }
         else if (counter == 2)
@@ -454,13 +459,14 @@ public class PlayerController : MonoBehaviour
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
-                //play vfx
             }
             else
             {
                 //play sfx
                 m_audio.playPlayerSFX(1);
             }
+            runAttack = false;
+            runAttackAnim = false;
             isAttacking = false;
         }
         else if (counter == 3)
@@ -478,6 +484,8 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(2);
             }
+            runAttack = false;
+            runAttackAnim = false;
             isAttacking = false;
         }
 
@@ -490,7 +498,9 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         attackState = false;
         attackCounter = 0;
-        attackCD = 0.1f;
+        attackCD = 0.3f;
+        runAttack = false;
+        runAttackAnim = false;
     }
     //Starts the timer and checks whether it is done or not
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
@@ -506,12 +516,20 @@ public class PlayerController : MonoBehaviour
     }
     public void attackCooldown()
     {
+        Debug.Log("we are here");
         attackCD -= Time.deltaTime;
         if(attackCD < 0)
         {
-            handleAttack();
             attackCD = 0;
+            Debug.Log("we are here 2");
+            handleAttack();
+            Debug.Log("attackCounter" + attackCounter);
         }
+    }
+    IEnumerator cooldown()
+    {
+        yield return new WaitForSeconds(attackCD);
+        handleAttack();
     }
     //Call the relevant methods on button press or presses
     public void OnAttack(InputAction.CallbackContext context)
@@ -526,7 +544,7 @@ public class PlayerController : MonoBehaviour
                 attackCombo(attackCounter);
                 if (attackCounter == 3)
                 {
-                    attackCooldown();                
+                    StartCoroutine(cooldown());
                 }
             }
         }
@@ -536,9 +554,9 @@ public class PlayerController : MonoBehaviour
     {
         if (collision == true)
         {
-            Debug.Log("take damage");
+            //Debug.Log("take damage");
             //m_audio.playPlayerSFX(4); //should have if here to check for if hit by fungus or projectile bc diff sounds
-            Debug.Log("Payer current health" + playerCurrenthealth);
+            //Debug.Log("Payer current health" + playerCurrenthealth);
             if (playerCurrenthealth < 0)
             {
                 playerCurrenthealth = 0;
@@ -634,6 +652,8 @@ public class PlayerController : MonoBehaviour
         inVent = false;
         fxBehave.StopCoroutine(fxBehave.walkSFX());
         fxBehave.takeDamage.Stop();
+        StopCoroutine(cooldown());
+
         // Invoke("fadeOut", fadeDelay);
     }
 

@@ -19,12 +19,10 @@ public class player_fx_behaviors : MonoBehaviour
     //animation variables
     private Animator m_animator;
     private string state = "Idle";
-    private bool Ball_in = false;
 
 
     //vfx variables
     private bool runOnce = false;
-    private bool runVFXOnce = false;
     public ParticleSystem landVfx;
     public ParticleSystem doubleJumpVfx;
     public ParticleSystem attack_1;
@@ -89,16 +87,19 @@ public class player_fx_behaviors : MonoBehaviour
             landVfx.Play();
             m_audio.playPlayerSFX(9);
         }
-        if (playerScript.attackCounter == 1 )
+        if (playerScript.attackCounter == 1 && playerScript.runAttack == false)
         {
+            playerScript.runAttack = true;
             attack_1.Play();
         }
-        if (playerScript.attackCounter == 2 )
+        if (playerScript.attackCounter == 2 && playerScript.runAttack == false)
         {
+            playerScript.runAttack = true;
             attack_2.Play();
         }
-        if (playerScript.attackCounter == 3 )
+        if (playerScript.attackCounter == 3 && playerScript.runAttack == false)
         {
+            playerScript.runAttack = true;
             attack_3.Play();
         }
         if (playerScript.collision == true && playerScript.runTakeDamageOnce == false)
