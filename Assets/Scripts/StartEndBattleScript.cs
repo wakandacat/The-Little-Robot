@@ -60,6 +60,7 @@ public class StartEndBattleScript : MonoBehaviour
 
             //switch cameras
             mainGameScript.SwitchToPlatformCam(0.4f);
+            enemy.GetComponent<boss_fx_behaviors>().StopCoroutine(enemy.GetComponent<boss_fx_behaviors>().turnOffEyes());
 
             runOnce = true;
 

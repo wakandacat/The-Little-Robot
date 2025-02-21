@@ -29,7 +29,7 @@ public class Player_UI : MonoBehaviour
     {
         Health_Bar_display();
         dash_Bar();
-
+        StartCoroutine(refillBar());
     }
 
     public void Health_Bar_display()
@@ -100,6 +100,15 @@ public class Player_UI : MonoBehaviour
         {
             dashBar.fillAmount = 1;
         }
+    }
 
+    IEnumerator refillBar()
+    {
+        yield return new WaitForSeconds(.1f);
+        while (Health.canDash == false)
+        {
+            dashBar.fillAmount += Time.deltaTime * 0.01f;
+            yield return new WaitForSeconds(.01f);
+        }
     }
 }

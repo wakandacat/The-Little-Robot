@@ -19,12 +19,10 @@ public class player_fx_behaviors : MonoBehaviour
     //animation variables
     private Animator m_animator;
     private string state = "Idle";
-    private bool Ball_in = false;
 
 
     //vfx variables
     private bool runOnce = false;
-    private bool runVFXOnce = false;
     public ParticleSystem landVfx;
     public ParticleSystem doubleJumpVfx;
     public ParticleSystem attack_1;
@@ -74,11 +72,7 @@ public class player_fx_behaviors : MonoBehaviour
         state = currentState;
         m_animator.CrossFade(state, 0.1f, 0);
     }
-    IEnumerator playVfxOnce()
-    {
-        yield return new WaitForSeconds(0.1f);
-        runVFXOnce = false;
-    }
+    //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
     public void vfx_triggers()
     {
         if (playerScript.jumpCounter == 1 && runOnce == false)
@@ -93,27 +87,24 @@ public class player_fx_behaviors : MonoBehaviour
             landVfx.Play();
             m_audio.playPlayerSFX(9);
         }
-        if (playerScript.attackCounter == 1 && runVFXOnce == false)
+        if (playerScript.attackCounter == 1 && playerScript.runAttack == false)
         {
-            runVFXOnce = true;
+            playerScript.runAttack = true;
             attack_1.Play();
-            StartCoroutine(playVfxOnce());
         }
-        if (playerScript.attackCounter == 2 && runVFXOnce == false)
+        if (playerScript.attackCounter == 2 && playerScript.runAttack == false)
         {
-            runVFXOnce = false;
+            playerScript.runAttack = true;
             attack_2.Play();
-            StartCoroutine(playVfxOnce());
-
         }
-        if (playerScript.attackCounter == 3 && runVFXOnce == false)
+        if (playerScript.attackCounter == 3 && playerScript.runAttack == false)
         {
-            runVFXOnce = true;
+            playerScript.runAttack = true;
             attack_3.Play();
-            StartCoroutine(playVfxOnce());
         }
-        if (playerScript.collision == true)
+        if (playerScript.collision == true && playerScript.runTakeDamageOnce == false)
         {
+            playerScript.runTakeDamageOnce = true;
             takeDamage.Play();
         }
     }

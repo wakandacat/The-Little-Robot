@@ -63,7 +63,9 @@ public class PlayerController : MonoBehaviour
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
-    private float attackCD = 2.0f;
+    private float attackCD = 0.3f;
+    public bool runAttack = false;
+    public bool runAttackAnim = false;
 
     //Roll vars
     public bool Rolling = false;
@@ -95,8 +97,6 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private int damageTakenDelay = 10;
-    private bool invulnerable = false;
 
     //animator
     private Animator playerAnimator;
@@ -113,15 +113,10 @@ public class PlayerController : MonoBehaviour
 
     //sound stuff
     player_fx_behaviors fxBehave;
+    public bool runTakeDamageOnce = false;
 
     void Start()
     {
-        //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
-        //Prep vfx
-        attack_1.Stop();
-        attack_2.Stop();
-        attack_3.Stop();
-
         pc = new PlayerControls();
         pc.Gameplay.Enable();
 
@@ -135,9 +130,6 @@ public class PlayerController : MonoBehaviour
 
         playerCurrenthealth = playerHealth;
         //fadeOutPanel.SetActive(false);
-
-        //get animator
-        //playerAnimator = player.GetComponent<Animator>();
 
         //get audio
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -197,8 +189,6 @@ public class PlayerController : MonoBehaviour
     {
         if (mainScript.cutScenePlaying == false)
         {
-            //Debug.Log("player health is at " + playerCurrenthealth);
-           // Debug.Log("can regen " + canRegen);
 
             //Find enemy 
             findEnemy();
@@ -219,6 +209,7 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
+
                 if (isQuickDropping == true)
                 {
                     quickDrop();
@@ -388,7 +379,6 @@ public class PlayerController : MonoBehaviour
     {
         rollTime -= Time.deltaTime;
         rollSpeed += Time.deltaTime;
-        //Debug.Log("Roll Speed" + rollSpeed);
         if (rollTime < 0 || rollSpeed > maxRollSpeed)
         {
             rollTime = 0;
@@ -442,55 +432,45 @@ public class PlayerController : MonoBehaviour
     }
     //-----------------------------------------------Attack-----------------------------------------------//
     
-    IEnumerator attackCombo(int counter)
+    public void attackCombo(int counter)
     {
-        //Debug.Log("playerController counter: " + counter);
         if (counter == 1)
         {
-            //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("attack1", true);
-
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
-                //play vfx on hit
-                //attack_1.Play();
             }
             else
             {
                 //play sfx
                 m_audio.playPlayerSFX(0);
             }
+            runAttack = false;
+            runAttackAnim = false;
             isAttacking = false;
-            yield return new WaitForSeconds(5.0f);
         }
         else if (counter == 2)
         {
-            //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("attack2", true);
 
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
                 //play sfx on hit
                 m_audio.playPlayerSFX(3);
-                //play vfx
-                //attack_2.Play();
             }
             else
             {
                 //play sfx
                 m_audio.playPlayerSFX(1);
             }
+            runAttack = false;
+            runAttackAnim = false;
             isAttacking = false;
-            yield return new WaitForSeconds(5.0f);
         }
         else if (counter == 3)
         {
-            //animation call reagrdless of if you collide 
-            //playerAnimator.SetBool("attack3", true);
 
             if (enemyCollision.enemyCollision == true)
             {
@@ -498,13 +478,14 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(3);
                 //play vfx
-                //attack_3.Play();
             }
             else
             {
                 //play sfx
                 m_audio.playPlayerSFX(2);
             }
+            runAttack = false;
+            runAttackAnim = false;
             isAttacking = false;
         }
 
@@ -517,24 +498,35 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         attackState = false;
         attackCounter = 0;
+        attackCD = 0.3f;
+        runAttack = false;
+        runAttackAnim = false;
     }
     //Starts the timer and checks whether it is done or not
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
     //when we get all combos remeber to reset timer
     public void timer()
     {
-/*        comboMaxTime -= Time.deltaTime;
+        comboMaxTime -= Time.deltaTime;
         if (comboMaxTime < 0)
         {
             handleAttack();
             comboMaxTime = 0;
-        }*/
+        }
     }
-/*    IEnumerator interalCooldown()
+    public void attackCooldown()
     {
-        yield return new WaitForSeconds(5.0f);
-    }*/
-    IEnumerator attackCooldown()
+        Debug.Log("we are here");
+        attackCD -= Time.deltaTime;
+        if(attackCD < 0)
+        {
+            attackCD = 0;
+            Debug.Log("we are here 2");
+            handleAttack();
+            Debug.Log("attackCounter" + attackCounter);
+        }
+    }
+    IEnumerator cooldown()
     {
         yield return new WaitForSeconds(attackCD);
         handleAttack();
@@ -549,14 +541,10 @@ public class PlayerController : MonoBehaviour
             {
                 attackState = true;
                 attackCounter++;
-                StartCoroutine(attackCombo(attackCounter));
-                /*attackCombo(attackCounter);*/
-                //StartCoroutine(interalCooldown());
-
-
+                attackCombo(attackCounter);
                 if (attackCounter == 3)
                 {
-                    StartCoroutine(attackCooldown());
+                    StartCoroutine(cooldown());
                 }
             }
         }
@@ -566,11 +554,9 @@ public class PlayerController : MonoBehaviour
     {
         if (collision == true)
         {
-            Debug.Log("take damage");
+            //Debug.Log("take damage");
             //m_audio.playPlayerSFX(4); //should have if here to check for if hit by fungus or projectile bc diff sounds
-            playerCurrenthealth--;
-            invulnerable = true;
-            StartCoroutine(Immunity());
+            //Debug.Log("Payer current health" + playerCurrenthealth);
             if (playerCurrenthealth < 0)
             {
                 playerCurrenthealth = 0;
@@ -580,13 +566,14 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Damage Source")
+        if(other.gameObject.tag == "Projectile")
         {
-            collision = true; //need to update to look for projectile tag - LINA HEREEEEEEE
+            collision = true;
+            playerCurrenthealth -= 1;
         }
 
         //sfx call based on what hit you
-        if(other.gameObject.name.Contains("fungus"))
+        if (other.gameObject.name.Contains("fungus"))
         {
             //m_audio.playPlayerSFX(8); //doesn't work atm, things will need unique name checks bc not all are called fungus
         }
@@ -594,27 +581,17 @@ public class PlayerController : MonoBehaviour
         {
             m_audio.playPlayerSFX(4);
         }
-
     }
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Damage Source")
+        if (other.gameObject.tag == "Projectile")
         {
             collision = false;
+            runTakeDamageOnce = false;
         }
     }
 
-    IEnumerator Immunity()
-    {
-        if (invulnerable == true || enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0)
-        {
-            collision = false;
-            yield return new WaitForSeconds(damageTakenDelay);
-            invulnerable = false;
-        }
-
-    }
     //-----------------------------------------------Health Regen-----------------------------------------------//
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
@@ -644,30 +621,23 @@ public class PlayerController : MonoBehaviour
         {
             if (playerCurrenthealth == 1)
             {
-                //Debug.Log("in 1 regen");
                 yield return new WaitForSeconds(healthRegenDelay);
                 playerCurrenthealth = 2;
             }
             else if (playerCurrenthealth == 2)
             {
-                //Debug.Log("in 2 regen");
                 yield return new WaitForSeconds(healthRegenDelay);
                 playerCurrenthealth = 3;
             }
             else if (playerCurrenthealth == 3)
             {
-                //Debug.Log("in 3 regen");
+                yield return new WaitForSeconds(healthRegenDelay);
                 playerCurrenthealth = 4;
             }
             else if (playerCurrenthealth == 4)
             {
-                //Debug.Log("in 3 regen");
+                yield return new WaitForSeconds(healthRegenDelay);
                 playerCurrenthealth = 5;
-            }
-            else if (playerCurrenthealth == 5)
-            {
-                //Debug.Log("in 3 regen");
-                playerCurrenthealth = playerHealth;
             }
         }
         
@@ -681,6 +651,9 @@ public class PlayerController : MonoBehaviour
         canRegen = true;
         inVent = false;
         fxBehave.StopCoroutine(fxBehave.walkSFX());
+        fxBehave.takeDamage.Stop();
+        //StopCoroutine(cooldown());
+
         // Invoke("fadeOut", fadeDelay);
     }
 
@@ -688,7 +661,8 @@ public class PlayerController : MonoBehaviour
     public void fadeIn()
     {
         fadingIn = true;
-        gameObject.SetActive(false);
+        StartCoroutine(cooldown());
+        //gameObject.SetActive(false);
     }
     public void fadeOut()
     {
@@ -696,7 +670,7 @@ public class PlayerController : MonoBehaviour
         fadingOut = true;
         playerCurrenthealth = playerHealth;
         checkPoint.MoveToCheckpoint();
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
     }
 
     //Destroy inputs if not used
