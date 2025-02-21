@@ -510,8 +510,11 @@ public class PlayerController : MonoBehaviour
         comboMaxTime -= Time.deltaTime;
         if (comboMaxTime < 0)
         {
-            handleAttack();
             comboMaxTime = 0;
+            if(comboMaxTime == 0)
+            {
+                handleAttack();
+            }
         }
     }
     public void attackCooldown()
@@ -661,7 +664,6 @@ public class PlayerController : MonoBehaviour
     public void fadeIn()
     {
         fadingIn = true;
-        StartCoroutine(cooldown());
         //gameObject.SetActive(false);
     }
     public void fadeOut()
