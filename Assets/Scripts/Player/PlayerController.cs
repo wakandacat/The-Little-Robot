@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
-    private float attackCD = 0.2f;
+    private float attackCD = 0.1f;
 
     //Roll vars
     public bool Rolling = false;
@@ -115,12 +115,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
-        //Prep vfx
-        attack_1.Stop();
-        attack_2.Stop();
-        attack_3.Stop();
-
         pc = new PlayerControls();
         pc.Gameplay.Enable();
 
@@ -134,9 +128,6 @@ public class PlayerController : MonoBehaviour
 
         playerCurrenthealth = playerHealth;
         //fadeOutPanel.SetActive(false);
-
-        //get animator
-        //playerAnimator = player.GetComponent<Animator>();
 
         //get audio
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -196,8 +187,6 @@ public class PlayerController : MonoBehaviour
     {
         if (mainScript.cutScenePlaying == false)
         {
-            //Debug.Log("player health is at " + playerCurrenthealth);
-           // Debug.Log("can regen " + canRegen);
 
             //Find enemy 
             findEnemy();
@@ -387,7 +376,6 @@ public class PlayerController : MonoBehaviour
     {
         rollTime -= Time.deltaTime;
         rollSpeed += Time.deltaTime;
-        //Debug.Log("Roll Speed" + rollSpeed);
         if (rollTime < 0 || rollSpeed > maxRollSpeed)
         {
             rollTime = 0;
@@ -502,6 +490,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         attackState = false;
         attackCounter = 0;
+        attackCD = 0.1f;
     }
     //Starts the timer and checks whether it is done or not
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
@@ -513,6 +502,15 @@ public class PlayerController : MonoBehaviour
         {
             handleAttack();
             comboMaxTime = 0;
+        }
+    }
+    public void attackCooldown()
+    {
+        attackCD -= Time.deltaTime;
+        if(attackCD < 0)
+        {
+            handleAttack();
+            attackCD = 0;
         }
     }
     //Call the relevant methods on button press or presses
@@ -528,7 +526,7 @@ public class PlayerController : MonoBehaviour
                 attackCombo(attackCounter);
                 if (attackCounter == 3)
                 {
-                    handleAttack();
+                    attackCooldown();                
                 }
             }
         }
