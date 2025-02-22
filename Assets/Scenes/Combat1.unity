@@ -690,7 +690,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &652126205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1258,7 +1258,7 @@ GameObject:
   - component: {fileID: 1273655806}
   m_Layer: 0
   m_Name: startBattleTrigger
-  m_TagString: Untagged
+  m_TagString: startEndTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1317,6 +1317,8 @@ MonoBehaviour:
   loadObj: {fileID: 79837012}
   enemyDeadBlend: {fileID: 11400000, guid: f907d759d6fe9c84695b5dc1632ec066, type: 2}
   enemyAliveBlend: {fileID: 11400000, guid: c51409daebca028459882353d8bc13d9, type: 2}
+  showUI: 0
+  enemyUI: {fileID: 652126204}
 --- !u!114 &1273655806
 MonoBehaviour:
   m_ObjectHideFlags: 0
