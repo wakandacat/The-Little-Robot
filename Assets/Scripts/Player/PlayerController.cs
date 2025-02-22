@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
-    private float attackCD = 0.3f;
+    private float attackCD = 1.0f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
 
@@ -565,7 +565,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Projectile")
+        if(other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source")
         {
             collision = true;
             playerCurrenthealth -= 1;
