@@ -69,6 +69,10 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return;
         }
+        if(currentState == "roll")
+        {
+            currentState = "roll";
+        }
         state = currentState;
         m_animator.CrossFade(state, 0.1f, 0);
     }
