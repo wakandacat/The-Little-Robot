@@ -10,10 +10,6 @@ using UnityEngine.SceneManagement;
 //Might need to split up some code to different scripts 
 public class PlayerController : MonoBehaviour
 {
-    //particle system
-    public ParticleSystem attack_1;
-    public ParticleSystem attack_2;
-    public ParticleSystem attack_3;
     //player controller reference
     PlayerControls pc;
 
@@ -72,7 +68,7 @@ public class PlayerController : MonoBehaviour
     public int rollCounter = 0;
     private float rollSpeed = 10.0f;
     private float rollTime = 3.0f;
-    private float maxRollSpeed = 14.0f;
+    private float maxRollSpeed = 12.0f;
     public bool rollState = false;
     public bool inVent = false;
 
