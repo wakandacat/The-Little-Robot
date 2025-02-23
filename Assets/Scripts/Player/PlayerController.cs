@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
     //Game Vars
     public string[] Combatscenes = new[] { "Combat1", "Combat2", "Combat3" };
     private GameObject enemy;
+    private GameObject projectile;
 
     //platforming vars
     public Vector3 platformMovement;
@@ -164,6 +165,16 @@ public class PlayerController : MonoBehaviour
         {
             //assign current enemy
             enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+            projectile = GameObject.Find("Projectile_Bullet(Clone)");
+            if(projectile == null)
+            {
+                Debug.Log("Not found");
+                deflectState = false;
+            }
+            else
+            {
+                Debug.Log("Found");
+            }
 
             //set battle state to true
             combatState = true;
@@ -448,12 +459,12 @@ public class PlayerController : MonoBehaviour
     }
     public void deflectstate()
     {
-        if (collision == true && deflectState == true && enemy.GetComponent<Projectile_Bullet>().Deflection_IsDeflectable() == true)
+        if (collision == true && deflectState == true && projectile.GetComponent<Projectile_Bullet>().Deflection_IsDeflectable() == true)
         {
             Debug.Log("Here1");
-            enemy.GetComponent<Projectile_Bullet>().Deflection_Perform();
+            projectile.GetComponent<Projectile_Bullet>().Deflection_Perform();
             Debug.Log("Here2");
-            if (enemy.GetComponent<Projectile_Bullet>().Deflection_HasBeenDeflected() == true)
+            if (projectile.GetComponent<Projectile_Bullet>().Deflection_HasBeenDeflected() == true)
             {
                 Debug.Log("Here3");
                 handleDeflect();
@@ -606,7 +617,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || other.gameObject.GetComponent<Projectile_Bullet>() != null)
+        if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || (other.gameObject.tag == "Projectile" && other.gameObject.GetComponent<Projectile_Bullet>()!=null))
         {
             collision = true;
             playerCurrenthealth -= 1;
