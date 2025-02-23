@@ -206,6 +206,10 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
+                if(deflectState == true)
+                {
+                    deflectstate();
+                }
 
                 if (isQuickDropping == true)
                 {
@@ -436,14 +440,18 @@ public class PlayerController : MonoBehaviour
     {
         deflectState = false;
         Deflecting = false;
+        Debug.Log("Here");
     }
     public void deflectstate()
     {
-        if (collision == true && deflectState == true && enemy.gameObject.GetComponent<Projectile_Bullet>().Deflection_IsDeflectable() == true)
+        if (collision == true && deflectState == true && enemy.GetComponent<Projectile_Bullet>().Deflection_IsDeflectable() == true)
         {
-            enemy.gameObject.GetComponent<Projectile_Bullet>().Deflection_Perform();
-            if(enemy.gameObject.GetComponent<Projectile_Bullet>().Deflection_HasBeenDeflected() == true)
+            Debug.Log("Here1");
+            enemy.GetComponent<Projectile_Bullet>().Deflection_Perform();
+            Debug.Log("Here2");
+            if (enemy.GetComponent<Projectile_Bullet>().Deflection_HasBeenDeflected() == true)
             {
+                Debug.Log("Here3");
                 handleDeflect();
             }
         }
@@ -606,11 +614,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Projectile")
-        {
-            collision = false;
-            runTakeDamageOnce = false;
-        }
+        collision = false;
+        runTakeDamageOnce = false;
+
     }
 
     //-----------------------------------------------Health Regen-----------------------------------------------//
