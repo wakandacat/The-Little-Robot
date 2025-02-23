@@ -42,7 +42,6 @@ public class checkPointScript : MonoBehaviour
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(currScene));
         mainGameScript.m_audio.playBackgroundMusic("platform");
 
-
         //don't respawn the enemy or its triggers if the player dies after the eney is dead
         if (SceneManager.GetActiveScene().name == "Combat1" && mainGameScript.firstBossDead == true)
         {
@@ -73,6 +72,9 @@ public class checkPointScript : MonoBehaviour
 
         //restart sound coroutine
         fxBehave.StartCoroutine(fxBehave.walkSFX());
+
+        //restart pre battle enemy sfx if respawned
+        mainGameScript.m_audio.playEnemySFX(0); //start whirring if in a combat scene
 
         //rotate them to face forward
         this.transform.rotation = currCheckpoint.transform.rotation;

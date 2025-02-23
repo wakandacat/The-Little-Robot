@@ -20,6 +20,9 @@ public class audioManager : MonoBehaviour
     public AudioSource walkSource;       //used exclusively for player walking
     public AudioSource enemySource;      //used for enemy sfx
 
+    //get enemy
+    BossEnemy enemy;
+
     private void Awake()
     {
         //if instance doesn't exist, fill with this one else destroy the existing version
@@ -75,8 +78,42 @@ public class audioManager : MonoBehaviour
     //loads audio source for enemy based on the index and plays
     public void playEnemySFX(int i)
     {
-        //set sfx
-        enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
-        enemySource.PlayOneShot(enemySFXClips[i]);    //play clip
+        //if in combat
+        if (SceneManager.GetActiveScene().name.Contains("Combat"))
+        {
+            Debug.Log("in combat scene");
+            //find + assign enemy
+            enemy = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
+
+            //if enemy is awake
+            if(enemy.Player_ReturnPlayerTriggeredBossWakeup() == true)
+            {
+                Debug.Log("boss was woken");
+                //special case for downed
+                if (enemy.GetComponent<BossEnemy>().returnCurrentEnergy() <= 0)
+                {
+                    Debug.Log("in downed");
+                    //set sfx
+                    enemySource.clip = enemySFXClips[i];
+                    enemySource.PlayDelayed(0.4f);
+                }
+                else
+                {
+                    Debug.Log("everything else");
+                    //set sfx
+                    enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
+                    enemySource.PlayOneShot(enemySFXClips[i]);    //play clip
+                }
+            }
+            else
+            {
+                Debug.Log("play whirring");
+                //set sfx
+                enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
+                enemySource.Play();
+            }
+           
+        }
+
     }
 }

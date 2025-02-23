@@ -29,6 +29,7 @@ public class player_fx_behaviors : MonoBehaviour
     public ParticleSystem attack_2;
     public ParticleSystem attack_3;
     public ParticleSystem takeDamage;
+    public int attackCounter = 0;
 
     //sfx variables
     public audioManager m_audio;
@@ -65,12 +66,21 @@ public class player_fx_behaviors : MonoBehaviour
     {
         vfx_triggers();
         var currentState = getPlayerState();
-        if (currentState.Equals(state))
+        if(state == "Falling" && ground.onGround == true)
+        {
+            m_audio.playPlayerSFX(9);
+        }
+        else if(currentState.Equals(state))
         {
             return;
         }
+        if(currentState == "roll")
+        {
+            currentState = "roll";
+        }
         state = currentState;
         m_animator.CrossFade(state, 0.1f, 0);
+
     }
     //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
     public void vfx_triggers()
@@ -85,7 +95,7 @@ public class player_fx_behaviors : MonoBehaviour
             runOnce = false;
             ground.runOnce = true;
             landVfx.Play();
-            m_audio.playPlayerSFX(9);
+            //m_audio.playPlayerSFX(9); //land sfx
         }
         if (playerScript.attackCounter == 1 && playerScript.runAttack == false)
         {
@@ -108,19 +118,21 @@ public class player_fx_behaviors : MonoBehaviour
             takeDamage.Play();
         }
     }
+
     //https://www.youtube.com/watch?v=ToGq1LCTqMw
     public string getPlayerState()
     {
+        attackCounter = playerScript.attackCounter;
         //Attack State
-        if (playerScript.attackCounter == 1)
+        if (attackCounter == 1)
         {
             return "Attack_1";
         }
-        if (playerScript.attackCounter == 2)
+        if (attackCounter == 2)
         {
             return "Attack_2";
         }
-        if (playerScript.attackCounter == 3)
+        if (attackCounter == 3)
         {
             return "Attack_3";
         }

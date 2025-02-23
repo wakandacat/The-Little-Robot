@@ -16,6 +16,7 @@ public class StartEndBattleScript : MonoBehaviour
     public CinemachineBlenderSettings enemyDeadBlend;
     public CinemachineBlenderSettings enemyAliveBlend;
     private CinemachineBrain camBrain;
+    public GameObject enemyUI;
 
     void Awake()
     {
@@ -65,6 +66,8 @@ public class StartEndBattleScript : MonoBehaviour
             runOnce = true;
 
             Invoke("SwitchBlend", 3.0f);
+
+            enemyUI.SetActive(false);
         }
 
     }
@@ -89,6 +92,10 @@ public class StartEndBattleScript : MonoBehaviour
 
             //play battle music
             mainGameScript.m_audio.playBackgroundMusic(SceneManager.GetActiveScene().name);
+
+            //Bool to show the enemy UI
+
+            enemyUI.SetActive(true);
         }
     }
 
