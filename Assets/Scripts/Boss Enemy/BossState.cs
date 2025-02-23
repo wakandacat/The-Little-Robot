@@ -22,6 +22,7 @@ public abstract class BossState
     protected BossEnemy bossEnemyComponent;                 // the BossEnemy.cs script attached to the Boss Enemy
     protected Animator animator;                            // will be set to whatever animator is being used for Boss Enemy
     protected boss_fx_behaviors fxBehave = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<boss_fx_behaviors>();
+    protected audioManager m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialize Function                                                                                                                                                                          * 
@@ -85,7 +86,6 @@ public class State_Sleeping : BossState
         if (bossEnemyComponent.Player_ReturnPlayerTriggeredBossWakeup() == true)   // check if the player has triggered the Boss Wakeup Trigger
         {
             bossEnemyComponent.TransitionToState_WakingUp();                 // if so, transition to waking up state
-            //animator.SetBool("woken", true);
         }
 
         // Animation Logic
@@ -131,8 +131,10 @@ public class State_WakingUp : BossState
         // Programming Logic
         //Debug.Log("BossEnemy: Entering State_WakingUp");
 
-        // Animation Logic
+        // FX Logic
         fxBehave.StopCoroutine(fxBehave.turnOnEyes());
+        m_audio.playEnemySFX(1);
+
     }
 
     // Called once per frame
@@ -455,9 +457,14 @@ public class State_LowEnergy : BossState
 
         //bossEnemyComponent.HP_TurnInvulnerabilityOff();
 
-        // Animation Logic
+        // FX Logic
         animator.SetBool("downed", true);
         animator.SetBool("inAttack", false);
+        m_audio.playEnemySFX(2);
+        for (int i = 0; i < fxBehave.eyes.Length; i++)
+        {
+            fxBehave.eyes[i].intensity = 0.01f;
+        }
 
     }
 
@@ -516,8 +523,9 @@ public class State_LowEnergy : BossState
         //bossEnemyComponent.HP_TurnInvulnerabilityOn();
         //Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
-        // Animation Logic
+        // FX Logic
         animator.SetBool("downed", false);
+        fxBehave.StartCoroutine(fxBehave.turnOnEyes());
     }
 }
 
@@ -533,9 +541,10 @@ public class State_Death : BossState
         //Debug.Log("BossEnemy: Entering State_Death");
         bossEnemyComponent.GetComponent<CapsuleCollider>().enabled = false;
 
-        // Animation Logic
+        // FX Logic
         animator.SetBool("die", true);
         animator.SetBool("woken", false);
+        m_audio.playEnemySFX(3);
 
         //turn off eyes on death
         fxBehave.StartCoroutine(fxBehave.turnOffEyes());

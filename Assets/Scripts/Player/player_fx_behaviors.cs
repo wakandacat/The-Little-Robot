@@ -66,7 +66,11 @@ public class player_fx_behaviors : MonoBehaviour
     {
         vfx_triggers();
         var currentState = getPlayerState();
-        if (currentState.Equals(state))
+        if(state == "Falling" && ground.onGround == true)
+        {
+            m_audio.playPlayerSFX(9);
+        }
+        else if(currentState.Equals(state))
         {
             return;
         }
@@ -76,6 +80,7 @@ public class player_fx_behaviors : MonoBehaviour
         }
         state = currentState;
         m_animator.CrossFade(state, 0.1f, 0);
+
     }
     //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
     public void vfx_triggers()
@@ -90,7 +95,7 @@ public class player_fx_behaviors : MonoBehaviour
             runOnce = false;
             ground.runOnce = true;
             landVfx.Play();
-            m_audio.playPlayerSFX(9);
+            //m_audio.playPlayerSFX(9); //land sfx
         }
         if (playerScript.attackCounter == 1 && playerScript.runAttack == false)
         {
