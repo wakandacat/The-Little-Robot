@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 5.0f;
-    private float attackCD = 1.0f;
+    private float attackCD = 2.0f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
 
@@ -361,6 +361,10 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(Dash());
             }
+            else if(Dashing == true && canDash == false)
+            {
+                m_audio.playPlayerSFX(8);
+            }
         }
     }
     //-----------------------------------------------Roll-----------------------------------------------//
@@ -524,7 +528,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         attackState = false;
         attackCounter = 0;
-        attackCD = 0.3f;
+        //attackCD = 1.0f;
         runAttack = false;
         runAttackAnim = false;
     }
