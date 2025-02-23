@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
 
     //Deflect vars
     private bool Deflecting = false;
+    public bool deflectState = false;
 
     //pause vars
     public bool isPaused = false;
@@ -211,7 +212,7 @@ public class PlayerController : MonoBehaviour
                     quickDrop();
                 }
             }
-            else if (deathState == true) 
+            else if (deathState == true)
             {
                 ManagedeathState();
                 deathState = false;
@@ -243,7 +244,7 @@ public class PlayerController : MonoBehaviour
 
         //Move player using the rigid body
         rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed + platformMovement);
-       
+
 
     }
 
@@ -255,7 +256,7 @@ public class PlayerController : MonoBehaviour
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         player.GetComponent<Rigidbody>().freezeRotation = true;
-     
+
     }
 
     //Jump flags handler
@@ -415,7 +416,7 @@ public class PlayerController : MonoBehaviour
                 //make CANNOT UNROLL SOUND HERE
                 m_audio.playPlayerSFX(8);
             }
-           
+
         }
     }
     //-----------------------------------------------Deflect-----------------------------------------------//
@@ -424,10 +425,31 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             Deflecting = context.ReadValueAsButton();
+            if (Deflecting == true)
+            {
+                deflectState = true;
+                Debug.Log("deflectState" + deflectState);
+            }
+        }
+    }
+    public void handleDeflect()
+    {
+        deflectState = false;
+        Deflecting = false;
+    }
+    public void deflectstate()
+    {
+        if (collision == true && deflectState == true && enemy.gameObject.GetComponent<Projectile_Bullet>().Deflection_IsDeflectable() == true)
+        {
+            enemy.gameObject.GetComponent<Projectile_Bullet>().Deflection_Perform();
+            if(enemy.gameObject.GetComponent<Projectile_Bullet>().Projectile_HasBeenDeflected == true)
+            {
+                handleDeflect();
+            }
         }
     }
     //-----------------------------------------------Attack-----------------------------------------------//
-    
+
     public void attackCombo(int counter)
     {
         if (counter == 1)
@@ -507,7 +529,7 @@ public class PlayerController : MonoBehaviour
         if (comboMaxTime < 0)
         {
             comboMaxTime = 0;
-            if(comboMaxTime == 0)
+            if (comboMaxTime == 0)
             {
                 handleAttack();
             }
@@ -517,7 +539,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("we are here");
         attackCD -= Time.deltaTime;
-        if(attackCD < 0)
+        if (attackCD < 0)
         {
             attackCD = 0;
             Debug.Log("we are here 2");
@@ -565,7 +587,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source")
+        if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || other.gameObject.GetComponent<Projectile_Bullet>() != null)
         {
             collision = true;
             playerCurrenthealth -= 1;

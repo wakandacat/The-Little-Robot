@@ -15,7 +15,7 @@ public class Projectile_Bullet : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     private Vector3 Projectile_Direction;
     private bool Projectile_IsDeflectable = false;
-    private bool Projectile_HasBeenDeflected = false;
+    public bool Projectile_HasBeenDeflected = false;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialization                                                                                                                         * 
