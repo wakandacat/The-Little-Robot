@@ -442,7 +442,7 @@ public class PlayerController : MonoBehaviour
         if (collision == true && deflectState == true && enemy.gameObject.GetComponent<Projectile_Bullet>().Deflection_IsDeflectable() == true)
         {
             enemy.gameObject.GetComponent<Projectile_Bullet>().Deflection_Perform();
-            if(enemy.gameObject.GetComponent<Projectile_Bullet>().Projectile_HasBeenDeflected == true)
+            if(enemy.gameObject.GetComponent<Projectile_Bullet>().Deflection_HasBeenDeflected() == true)
             {
                 handleDeflect();
             }
