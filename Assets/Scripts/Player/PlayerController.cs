@@ -533,6 +533,12 @@ public class PlayerController : MonoBehaviour
     //when we get all combos remeber to reset timer
     public void timer()
     {
+        //comboMaxTime -= Time.deltaTime;
+        //if (comboMaxTime < 0)
+        //{
+        //    handleAttack();
+        //    comboMaxTime = 0;
+        //}
         comboMaxTime -= Time.deltaTime;
         if (comboMaxTime < 0)
         {
@@ -543,6 +549,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
     public void attackCooldown()
     {
         Debug.Log("we are here");

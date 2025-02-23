@@ -37,10 +37,10 @@ public class BossWakeupTrigger : MonoBehaviour
     {
         if (other.gameObject ==  playerGameObject)
         {
-            Debug.Log("Player Entered Boss Wakeup Trigger");
+            //Debug.Log("Player Entered Boss Wakeup Trigger");
             bossEnemyScriptComponent.Player_EnteredWakeupTrigger();
             m_animator.SetBool("woken", true);
-            Debug.Log("start ON");
+            //Debug.Log("start ON");
             //turn on light/trigger intensity change
             enemy.GetComponent<boss_fx_behaviors>().StartCoroutine(enemy.GetComponent<boss_fx_behaviors>().turnOnEyes());
 

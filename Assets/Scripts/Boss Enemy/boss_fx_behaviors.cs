@@ -25,12 +25,12 @@ public class boss_fx_behaviors : MonoBehaviour
     {
 
         //for as long as player is using joystick
-        while (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() >= 35)
+        while (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() > 0 && enemy.GetComponent<BossEnemy>().returnCurrentEnergy() > 0)
         {
             //for each eye
             for (int i = 0; i < eyes.Length; i++)
             {
-                Debug.Log("turning it on ");
+                //Debug.Log("turning it on ");
                 if (i != 4)
                 {
                     if(eyes[i].intensity <= 0.05f)
@@ -52,14 +52,7 @@ public class boss_fx_behaviors : MonoBehaviour
         }
 
     }
-    //public void turnOffEyes()
-    //{
-    //    for (int i = 0; i < eyes.Length; i++)
-    //    {
-    //        Debug.Log("should be turning it off " + i);
-    //        eyes[i].intensity = 0.00f;           
-    //    }
-    //}
+
     public IEnumerator turnOffEyes()
     {
 
