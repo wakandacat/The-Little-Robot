@@ -590,6 +590,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5591425553899949880, guid: e52380416573f524c81b75bc3a303c81,
+        type: 3}
+      propertyPath: HP_Maximum
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 6964902034644943479, guid: e52380416573f524c81b75bc3a303c81,
         type: 3}
       propertyPath: Spawner_ProjectilePool
@@ -743,7 +748,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &652126205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1370,7 +1375,6 @@ MonoBehaviour:
   loadObj: {fileID: 79837012}
   enemyDeadBlend: {fileID: 11400000, guid: f907d759d6fe9c84695b5dc1632ec066, type: 2}
   enemyAliveBlend: {fileID: 11400000, guid: c51409daebca028459882353d8bc13d9, type: 2}
-  showUI: 0
   enemyUI: {fileID: 652126204}
 --- !u!114 &1273655806
 MonoBehaviour:
