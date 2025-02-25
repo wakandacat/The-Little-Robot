@@ -50,7 +50,7 @@ public class teleport : MonoBehaviour
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("Combat1"));
 
         // Move the player to the checkpoint
-        GameObject player = GameObject.Find("playerExport");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         if (player != null)
         {

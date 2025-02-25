@@ -5,6 +5,7 @@ using Cinemachine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class mainGameScript : MonoBehaviour
 {
@@ -30,8 +31,12 @@ public class mainGameScript : MonoBehaviour
     public CinemachineVirtualCamera introCam;
     bool introPlayed = false;
     private float camPos = 0;
-    public float introCamSpeed = 0.003f;
+    public float introCamSpeed = 1f;
     private float camStillTimer = 0f;
+    public CinemachineVirtualCamera securityCam;
+    public GameObject securityCanvas;
+    public GameObject playerUICanvas;
+    public GameObject introCutCanvas;
 
     //cutscenes
     public bool cutScenePlaying = true; //toggle for when menus open or cutscenes
@@ -64,6 +69,9 @@ public class mainGameScript : MonoBehaviour
 
     void Awake()
     {
+
+       // DisableMouse(); //UNCOMMENT THIS FOR THE BUILD
+
         //load the first scene in addition to the base scene
         SceneManager.LoadScene("Tutorial", LoadSceneMode.Additive);
 
@@ -147,6 +155,13 @@ public class mainGameScript : MonoBehaviour
 
     }
 
+    public void DisableMouse()
+    {
+        Cursor.lockState = CursorLockMode.Locked; 
+        Cursor.visible = false;
+        Mouse.current.MakeCurrent(); 
+        InputSystem.DisableDevice(Mouse.current); 
+    }
     public void SkipIntro()
     {
         cutScenePlaying = false;
@@ -186,13 +201,25 @@ public class mainGameScript : MonoBehaviour
 
     public void SwitchToPlatformCam(float yaxis)
     {
+        //onyl runs after intro cam
+        if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
+        {
+            platformCam.Priority = introCam.Priority + 1;
+            introCam.Priority = 10;
+            securityCam.Priority = 10;
+        } 
+        else //runs every other time
+        {
+            platformCam.Priority = bossCam.Priority + 1;
+        }
+
         //maybe a slightly better transition idk
         if (SceneManager.GetActiveScene().name.Contains("Combat"))
         {
             platformCam.m_XAxis.Value = bossCam.transform.rotation.x;
         }
         //Debug.Log("platform cam");
-        platformCam.Priority = bossCam.Priority + 1;
+
         platformCam.m_YAxis.Value = yaxis; //position up teh spine axis
 
         usingBossCam = false;
@@ -213,41 +240,67 @@ public class mainGameScript : MonoBehaviour
             {
                 if (introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 1 && introPlayed == false)
                 {
-                  //  Debug.Log("intro cinematic finished");
+                    Debug.Log("intro cinematic finished");
                     SwitchToPlatformCam(0.2f);
                     introPlayed = true;
                     cutScenePlaying = false;
                     camStillTimer = 0;
+                    playerPointLight.GetComponent<Light>().intensity = 0.1f;
+                    playerSpotLight.GetComponent<Light>().intensity = 4.0f;
+                    playerUICanvas.SetActive(true);
+                    securityCanvas.SetActive(false);
+                    introCutCanvas.SetActive(false);
                 }
                 else
                 {
                     camStillTimer = camStillTimer + Time.deltaTime; //increment the cutscene timer
 
                     //wait a few seconds at the beginning before starting the movement
-                    if (camStillTimer >= 2.0f)
+                    if (camStillTimer >= 3.0f)
                     {
-                        //move the camera along the dolly track
-                        camPos += Mathf.Lerp(0, 1, introCamSpeed);
-                        introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
+                        //switch to introcam
+                        introCam.Priority = securityCam.Priority + 1;
+                        securityCanvas.SetActive(false);
+                        introCutCanvas.SetActive(true);
 
-                        //turn on the robot's eye
-                        if (playerPointLight.GetComponent<Light>().intensity < 0.1f)
+                        //turn off black canvas cut
+                        if (camStillTimer >= 3.3f)
                         {
-                            playerPointLight.GetComponent<Light>().intensity += introCamSpeed;
+                            introCutCanvas.SetActive(false);
                         }
 
-                        //turn on the robot's eye
-                        if (playerSpotLight.GetComponent<Light>().intensity < 4.0f)
+                        if (camStillTimer >= 5.0f)
                         {
-                            playerSpotLight.GetComponent<Light>().intensity += (introCamSpeed * 10);
-                        }
+                            //start adjusting the fov
+                            if (introCam.m_Lens.FieldOfView > 70)
+                            {
+                                introCam.m_Lens.FieldOfView = Mathf.Lerp(100f, 70f, (camStillTimer - 5f) / 7.0f);
+                            }
+
+                            //move the camera along the dolly track
+                            camPos += Mathf.Lerp(0, 1, introCamSpeed);
+                            introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
+                            if (camStillTimer >= 6.0f)
+                            {
+                                //turn on the robot's eye
+                                if (playerPointLight.GetComponent<Light>().intensity < 0.1f)
+                                {
+                                    playerPointLight.GetComponent<Light>().intensity += (introCamSpeed / 10);
+                                }
+
+                                //turn on the robot's eye
+                                if (playerSpotLight.GetComponent<Light>().intensity < 4.0f)
+                                {
+                                    playerSpotLight.GetComponent<Light>().intensity += (introCamSpeed * 10);
+                                }
+                            }
+
+                        }                                
+                      
                     } 
-                    else //otherwise adjust the fov
+                    else 
                     {
-                        if (introCam.m_Lens.FieldOfView > 70) 
-                        {
-                            introCam.m_Lens.FieldOfView = Mathf.Lerp(100f, 70f, camStillTimer * 0.5f); 
-                        }
+                      //start at security cam
                     }
                 }
             }
@@ -261,6 +314,9 @@ public class mainGameScript : MonoBehaviour
             cutScenePlaying = false;
             playerPointLight.GetComponent<Light>().intensity = 0.1f;
             playerSpotLight.GetComponent<Light>().intensity = 4.0f;
+            playerUICanvas.SetActive(true);
+            securityCanvas.SetActive(false);
+            introCutCanvas.SetActive(false);
 
         }
     }
