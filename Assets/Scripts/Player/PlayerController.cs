@@ -89,8 +89,9 @@ public class PlayerController : MonoBehaviour
     public bool deathState = false;
 
     //canvas fade bool
-    public bool fadingIn = false;
-    public bool fadingOut = false;
+    public bool isFading = false; //only allow 1 fade at a time
+    public GameObject deathCanvas;
+    //private Coroutine fadeCoroutine = null;
 
     //Player taken damage vars
     public bool collision = false;
@@ -695,30 +696,29 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Death State-----------------------------------------------//
     public void ManagedeathState()
     {
-        fadeIn();
+        
+        fxBehave.StopCoroutine(fxBehave.walkSFX());
+        fxBehave.takeDamage.Stop();
+
+        if (isFading) //start only if no fade is in progress
+        {
+           // Debug.Log("still in previous fading");
+            deathCanvas.GetComponent<FadeOut>().ResetCanvas();
+        }
+
+        FadeSequence();
+        
+    }
+
+    private void FadeSequence()
+    {
+        isFading = true;  //check if we are already fading
+        deathCanvas.GetComponent<FadeOut>().fadingIn = true;
+
+        //reset player vars
         canDash = true;
         canRegen = true;
         inVent = false;
-        fxBehave.StopCoroutine(fxBehave.walkSFX());
-        fxBehave.takeDamage.Stop();
-        //StopCoroutine(cooldown());
-
-        // Invoke("fadeOut", fadeDelay);
-    }
-
-    //Needs to change to use canvas opacity
-    public void fadeIn()
-    {
-        fadingIn = true;
-        //gameObject.SetActive(false);
-    }
-    public void fadeOut()
-    {
-        //Debug.Log("yoooooooooooooo");
-        fadingOut = true;
-        playerCurrenthealth = playerHealth;
-        checkPoint.MoveToCheckpoint();
-        //gameObject.SetActive(true);
     }
 
     //Destroy inputs if not used
@@ -731,6 +731,6 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Roll.performed -= OnRoll;
         pc.Gameplay.Deflect.performed -= OnDeflect;
         pc.Gameplay.Pause.performed -= onPause;
-        pc.Gameplay.Pause.performed -= onSkip;
+        pc.Gameplay.Skip.performed -= onSkip;
     }
 }

@@ -21,9 +21,6 @@ public class checkPointScript : MonoBehaviour
         //get the current scene
         currScene = mainGameScript.currentScene;
 
-        //load fx script
-        fxBehave = this.GetComponent<player_fx_behaviors>();
-
         //stop music
         mainGameScript.m_audio.backgroundSource.Stop();
         SceneManager.UnloadSceneAsync(currScene);
@@ -65,11 +62,13 @@ public class checkPointScript : MonoBehaviour
 
         //get the current checkpoint from the main script
         currCheckpoint = mainGameScript.currCheckpoint;
-        //Debug.Log("checkpoint: " + currCheckpoint);
+        Debug.Log("running onscene loaded in checkpoint method");
 
         //move the player there
         this.transform.position = currCheckpoint.transform.position;
 
+        //load fx script
+        fxBehave = this.GetComponent<player_fx_behaviors>();
         //restart sound coroutine
         fxBehave.StartCoroutine(fxBehave.walkSFX());
 

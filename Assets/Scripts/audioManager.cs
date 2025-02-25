@@ -81,25 +81,25 @@ public class audioManager : MonoBehaviour
         //if in combat
         if (SceneManager.GetActiveScene().name.Contains("Combat"))
         {
-            Debug.Log("in combat scene");
+            //Debug.Log("in combat scene");
             //find + assign enemy
             enemy = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
 
             //if enemy is awake
             if(enemy.Player_ReturnPlayerTriggeredBossWakeup() == true)
             {
-                Debug.Log("boss was woken");
+                //Debug.Log("boss was woken");
                 //special case for downed
                 if (enemy.GetComponent<BossEnemy>().returnCurrentEnergy() <= 0)
                 {
-                    Debug.Log("in downed");
+                    //Debug.Log("in downed");
                     //set sfx
                     enemySource.clip = enemySFXClips[i];
                     enemySource.PlayDelayed(0.4f);
                 }
                 else
                 {
-                    Debug.Log("everything else");
+                    //Debug.Log("everything else");
                     //set sfx
                     enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
                     enemySource.PlayOneShot(enemySFXClips[i]);    //play clip
@@ -107,7 +107,7 @@ public class audioManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("play whirring");
+                //Debug.Log("play whirring");
                 //set sfx
                 enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
                 enemySource.Play();
