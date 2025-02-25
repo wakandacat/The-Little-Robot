@@ -10,7 +10,7 @@ public class deathPitScript : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Debug.Log("Player Died");
+           // Debug.Log("Player Died");
 
             GameObject.FindWithTag("Player").GetComponent<PlayerController>().deathState = true;
 

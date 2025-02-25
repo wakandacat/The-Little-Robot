@@ -36,6 +36,10 @@ public class mainGameScript : MonoBehaviour
     //cutscenes
     public bool cutScenePlaying = true; //toggle for when menus open or cutscenes
 
+    //player eye lights
+    public GameObject playerSpotLight; //full intensity = 4
+    public GameObject playerPointLight; //full intensity = 0.1
+
     //enemy
     private GameObject enemy;
     public bool firstBossDead = false;
@@ -146,7 +150,6 @@ public class mainGameScript : MonoBehaviour
     public void SkipIntro()
     {
         cutScenePlaying = false;
-
     }
 
     public void EndGame()
@@ -218,13 +221,26 @@ public class mainGameScript : MonoBehaviour
                 }
                 else
                 {
-                    camStillTimer = camStillTimer + Time.deltaTime;
+                    camStillTimer = camStillTimer + Time.deltaTime; //increment the cutscene timer
 
                     //wait a few seconds at the beginning before starting the movement
                     if (camStillTimer >= 2.0f)
                     {
+                        //move the camera along the dolly track
                         camPos += Mathf.Lerp(0, 1, introCamSpeed);
                         introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
+
+                        //turn on the robot's eye
+                        if (playerPointLight.GetComponent<Light>().intensity < 0.1f)
+                        {
+                            playerPointLight.GetComponent<Light>().intensity += introCamSpeed;
+                        }
+
+                        //turn on the robot's eye
+                        if (playerSpotLight.GetComponent<Light>().intensity < 4.0f)
+                        {
+                            playerSpotLight.GetComponent<Light>().intensity += (introCamSpeed * 10);
+                        }
                     } 
                     else //otherwise adjust the fov
                     {
@@ -236,12 +252,16 @@ public class mainGameScript : MonoBehaviour
                 }
             }
         }
+        //user skipped cutscene with skip button
         else if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false || cutScenePlaying == false)
         {
             //Debug.Log("intro cinematic finished");
             SwitchToPlatformCam(0.2f);
             introPlayed = true;
             cutScenePlaying = false;
+            playerPointLight.GetComponent<Light>().intensity = 0.1f;
+            playerSpotLight.GetComponent<Light>().intensity = 4.0f;
+
         }
     }
 
