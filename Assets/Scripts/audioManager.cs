@@ -83,35 +83,38 @@ public class audioManager : MonoBehaviour
         {
             //Debug.Log("in combat scene");
             //find + assign enemy
-            enemy = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
-
-            //if enemy is awake
-            if(enemy.Player_ReturnPlayerTriggeredBossWakeup() == true)
+            if (GameObject.FindGameObjectWithTag("Boss Enemy"))
             {
-                //Debug.Log("boss was woken");
-                //special case for downed
-                if (enemy.GetComponent<BossEnemy>().returnCurrentEnergy() <= 0)
+                enemy = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
+
+                //if enemy is awake
+                if (enemy.Player_ReturnPlayerTriggeredBossWakeup() == true)
                 {
-                    //Debug.Log("in downed");
-                    //set sfx
-                    enemySource.clip = enemySFXClips[i];
-                    enemySource.PlayDelayed(0.4f);
+                    //Debug.Log("boss was woken");
+                    //special case for downed
+                    if (enemy.GetComponent<BossEnemy>().returnCurrentEnergy() <= 0)
+                    {
+                        //Debug.Log("in downed");
+                        //set sfx
+                        enemySource.clip = enemySFXClips[i];
+                        enemySource.PlayDelayed(0.4f);
+                    }
+                    else
+                    {
+                        //Debug.Log("everything else");
+                        //set sfx
+                        enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
+                        enemySource.PlayOneShot(enemySFXClips[i]);    //play clip
+                    }
                 }
                 else
                 {
-                    //Debug.Log("everything else");
+                    //Debug.Log("play whirring");
                     //set sfx
                     enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
-                    enemySource.PlayOneShot(enemySFXClips[i]);    //play clip
+                    enemySource.Play();
                 }
-            }
-            else
-            {
-                //Debug.Log("play whirring");
-                //set sfx
-                enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
-                enemySource.Play();
-            }
+            }         
            
         }
 

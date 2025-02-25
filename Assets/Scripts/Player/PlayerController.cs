@@ -86,11 +86,11 @@ public class PlayerController : MonoBehaviour
     //Death vars
     UnityEngine.SceneManagement.Scene currentScene;
     public bool deathState = false;
+    public bool diedOnce = false;
 
     //canvas fade bool
     public bool isFading = false; //only allow 1 fade at a time
     public GameObject deathCanvas;
-    //private Coroutine fadeCoroutine = null;
 
     //Player taken damage vars
     public bool collision = false;
@@ -212,10 +212,11 @@ public class PlayerController : MonoBehaviour
                     quickDrop();
                 }
             }
-            else if (deathState == true) 
+            else if (deathState == true && diedOnce == false) 
             {
                 ManagedeathState();
-                deathState = false;
+                diedOnce = true;
+
             }
             manageFall(JfallMultiplier);
         }
@@ -612,9 +613,10 @@ public class PlayerController : MonoBehaviour
             takeDamage();
         }
 
-        if (playerCurrenthealth == 0)
+        if (playerCurrenthealth == 0 && deathState == false)
         {
             deathState = true;
+           // Debug.Log("am dead");
         }
         else if (playerCurrenthealth < playerHealth)
         {
@@ -657,7 +659,7 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Death State-----------------------------------------------//
     public void ManagedeathState()
     {
-        
+        //Debug.Log("manage death");
         fxBehave.StopCoroutine(fxBehave.walkSFX());
         fxBehave.takeDamage.Stop();
 
@@ -673,8 +675,9 @@ public class PlayerController : MonoBehaviour
 
     private void FadeSequence()
     {
-        isFading = true;  //check if we are already fading
-        deathCanvas.GetComponent<FadeOut>().fadingIn = true;
+       // Debug.Log("fadeSequence");
+        isFading = true;  //we are now fading
+        deathCanvas.GetComponent<FadeOut>().fadingIn = true; // this will run FadeOut script and call MoveToCheckpoint()
 
         //reset player vars
         canDash = true;
