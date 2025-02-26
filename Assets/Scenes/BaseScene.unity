@@ -21479,6 +21479,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsMenu: {fileID: 1080852937}
+  inputActions: {fileID: -944628639613478452, guid: 1581a36de764daf4aa92927f2ae20555,
+    type: 3}
   currLevelCount: 1
   maxLevelCount: 3
   nextScene: Platform1
@@ -33675,14 +33677,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe882260363ec7498ffff5b53fda534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  world: {fileID: 504155886}
   pauseMenu: {fileID: 1414176718}
-  controlMenu: {fileID: 1075800262}
+  currentMenu: {fileID: 1075800262}
   settingsMenu: {fileID: 1080852937}
   pauseFirstButton: {fileID: 853539434}
+  pauseSecondButton: {fileID: 399683847}
+  pauseThirdButton: {fileID: 910095292}
   controlsFirstButton: {fileID: 1080742148}
   settingsFirstButton: {fileID: 1899317527}
-  inputActions: {fileID: -944628639613478452, guid: 1581a36de764daf4aa92927f2ae20555,
-    type: 3}
   freeCam: {fileID: 1278439295}
 --- !u!114 &1075800264
 MonoBehaviour:
@@ -33864,8 +33867,8 @@ MonoBehaviour:
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 1999030445}
-    m_SelectOnRight: {fileID: 1999030445}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.58431375, g: 0.08235294, b: 0.08627451, a: 1}
@@ -34012,14 +34015,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe882260363ec7498ffff5b53fda534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  world: {fileID: 504155886}
   pauseMenu: {fileID: 1414176718}
-  controlMenu: {fileID: 1080852937}
+  currentMenu: {fileID: 1080852937}
   settingsMenu: {fileID: 1080852937}
   pauseFirstButton: {fileID: 853539434}
+  pauseSecondButton: {fileID: 399683847}
+  pauseThirdButton: {fileID: 910095292}
   controlsFirstButton: {fileID: 1899317527}
   settingsFirstButton: {fileID: 1899317527}
-  inputActions: {fileID: -944628639613478452, guid: 1581a36de764daf4aa92927f2ae20555,
-    type: 3}
   freeCam: {fileID: 1278439295}
 --- !u!114 &1080852940
 MonoBehaviour:
@@ -49325,7 +49329,7 @@ VideoPlayer:
   m_RenderMode: 2
   m_AspectRatio: 2
   m_DataSource: 0
-  m_TimeUpdateMode: 2
+  m_TimeUpdateMode: 1
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
   m_TargetAudioSources:
@@ -55498,14 +55502,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe882260363ec7498ffff5b53fda534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  world: {fileID: 504155886}
   pauseMenu: {fileID: 1414176718}
-  controlMenu: {fileID: 1587605163}
+  currentMenu: {fileID: 1587605163}
   settingsMenu: {fileID: 1080852937}
   pauseFirstButton: {fileID: 853539434}
+  pauseSecondButton: {fileID: 399683847}
+  pauseThirdButton: {fileID: 910095292}
   controlsFirstButton: {fileID: 1080742148}
   settingsFirstButton: {fileID: 1899317527}
-  inputActions: {fileID: -944628639613478452, guid: 1581a36de764daf4aa92927f2ae20555,
-    type: 3}
   freeCam: {fileID: 1278439295}
 --- !u!114 &1414176725
 MonoBehaviour:
@@ -55947,7 +55952,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1532575415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56360,14 +56365,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe882260363ec7498ffff5b53fda534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  world: {fileID: 504155886}
   pauseMenu: {fileID: 1414176718}
-  controlMenu: {fileID: 1587605163}
+  currentMenu: {fileID: 1587605163}
   settingsMenu: {fileID: 1080852937}
   pauseFirstButton: {fileID: 853539434}
+  pauseSecondButton: {fileID: 399683847}
+  pauseThirdButton: {fileID: 910095292}
   controlsFirstButton: {fileID: 1080742148}
   settingsFirstButton: {fileID: 1899317527}
-  inputActions: {fileID: -944628639613478452, guid: 1581a36de764daf4aa92927f2ae20555,
-    type: 3}
   freeCam: {fileID: 1278439295}
 --- !u!114 &1587605170
 MonoBehaviour:
@@ -56580,9 +56586,9 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 997432834}
-    m_SelectOnDown: {fileID: 1532575415}
+    m_SelectOnDown: {fileID: 1899317528}
     m_SelectOnLeft: {fileID: 1899317528}
-    m_SelectOnRight: {fileID: 1532575415}
+    m_SelectOnRight: {fileID: 1899317528}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.61960787, g: 0.078431375, b: 0.078431375, a: 1}
@@ -58355,10 +58361,10 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 997432834}
+    m_SelectOnUp: {fileID: 1624276358}
     m_SelectOnDown: {fileID: 997432834}
-    m_SelectOnLeft: {fileID: 1532575415}
-    m_SelectOnRight: {fileID: 1532575415}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.74509805, g: 0.09019608, b: 0.09411765, a: 1}
@@ -59077,7 +59083,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1999030444
 RectTransform:
   m_ObjectHideFlags: 0
@@ -59490,27 +59496,27 @@ MonoBehaviour:
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_PointAction: {fileID: -1578625373382192368, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_MoveAction: {fileID: -2034495282414154547, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_SubmitAction: {fileID: 5874054911042590821, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_CancelAction: {fileID: -787530390121469431, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_LeftClickAction: {fileID: 1665625466592753179, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_MiddleClickAction: {fileID: -9112884217474082508, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_RightClickAction: {fileID: -1660317285887821551, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_ScrollWheelAction: {fileID: 7488491219432996761, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_TrackedDevicePositionAction: {fileID: -5980472318239366909, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_TrackedDeviceOrientationAction: {fileID: -9110036673628293794, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0

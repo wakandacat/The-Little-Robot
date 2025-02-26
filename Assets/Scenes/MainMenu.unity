@@ -531,27 +531,27 @@ MonoBehaviour:
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_PointAction: {fileID: -1578625373382192368, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_MoveAction: {fileID: -2034495282414154547, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_SubmitAction: {fileID: 5874054911042590821, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_CancelAction: {fileID: -787530390121469431, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_LeftClickAction: {fileID: 1665625466592753179, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_MiddleClickAction: {fileID: -9112884217474082508, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_RightClickAction: {fileID: -1660317285887821551, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_ScrollWheelAction: {fileID: 7488491219432996761, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_TrackedDevicePositionAction: {fileID: -5980472318239366909, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  m_TrackedDeviceOrientationAction: {fileID: -9110036673628293794, guid: 1581a36de764daf4aa92927f2ae20555,
     type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
@@ -681,6 +681,8 @@ MonoBehaviour:
   controlMenu: {fileID: 631191696}
   settingsMenu: {fileID: 935917711}
   mainFirstButton: {fileID: 1327597196}
+  mainSecondButton: {fileID: 933287805}
+  mainThirdButton: {fileID: 938560188}
   controlsFirstButton: {fileID: 900021603}
   settingsFirstButton: {fileID: 727322500}
   gameSettings: {fileID: 775384774}
@@ -2169,7 +2171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &534306917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2486,6 +2488,8 @@ MonoBehaviour:
   controlMenu: {fileID: 631191696}
   settingsMenu: {fileID: 935917711}
   mainFirstButton: {fileID: 1327597196}
+  mainSecondButton: {fileID: 933287805}
+  mainThirdButton: {fileID: 938560188}
   controlsFirstButton: {fileID: 900021603}
   settingsFirstButton: {fileID: 727322500}
   gameSettings: {fileID: 775384774}
@@ -2782,10 +2786,10 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 293414591}
+    m_SelectOnUp: {fileID: 1399493532}
     m_SelectOnDown: {fileID: 293414591}
-    m_SelectOnLeft: {fileID: 534306917}
-    m_SelectOnRight: {fileID: 534306917}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.74509805, g: 0.09019608, b: 0.09411765, a: 1}
@@ -3545,8 +3549,8 @@ MonoBehaviour:
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 1433495638}
-    m_SelectOnRight: {fileID: 1433495638}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.7137255, g: 0.078431375, b: 0.078431375, a: 1}
@@ -3949,6 +3953,8 @@ MonoBehaviour:
   controlMenu: {fileID: 631191696}
   settingsMenu: {fileID: 935917711}
   mainFirstButton: {fileID: 1327597196}
+  mainSecondButton: {fileID: 933287805}
+  mainThirdButton: {fileID: 938560188}
   controlsFirstButton: {fileID: 900021603}
   settingsFirstButton: {fileID: 727322500}
   gameSettings: {fileID: 775384774}
@@ -4983,9 +4989,9 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 293414591}
-    m_SelectOnDown: {fileID: 534306917}
+    m_SelectOnDown: {fileID: 727322501}
     m_SelectOnLeft: {fileID: 727322501}
-    m_SelectOnRight: {fileID: 534306917}
+    m_SelectOnRight: {fileID: 727322501}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0.74509805, g: 0.09019608, b: 0.09411765, a: 1}
@@ -5109,7 +5115,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1433495637
 RectTransform:
   m_ObjectHideFlags: 0

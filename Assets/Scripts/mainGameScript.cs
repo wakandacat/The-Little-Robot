@@ -6,12 +6,16 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class mainGameScript : MonoBehaviour
 {
     //main game settings from main menu
     private GameObject gameSettings;
     public GameObject settingsMenu;
+
+    //input system
+    public InputActionAsset inputActions;
 
     //global scene vars
     public int currLevelCount = 1;
@@ -103,7 +107,6 @@ public class mainGameScript : MonoBehaviour
     {
         if (EventSystem.current)
         {
-            //Debug.Log("I exist");
             EventSystem.current.SetSelectedGameObject(null);
             //set new default selected
             EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
