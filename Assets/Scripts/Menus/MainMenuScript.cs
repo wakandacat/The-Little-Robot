@@ -4,10 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class MainMenuScript : MonoBehaviour
 {
     //main menu references: https://www.youtube.com/watch?v=zc8ac_qUXQY and https://www.youtube.com/watch?v=SXBgBmUcTe0&t=1s
+
+    //input system
+    public PlayerControls pc;
 
     //public canvas objects
     public GameObject mainMenu;
@@ -16,6 +20,12 @@ public class MainMenuScript : MonoBehaviour
 
     //menu items for event system
     public GameObject mainFirstButton;
+    public GameObject mainSecondButton;
+    public GameObject mainThirdButton;
+
+    private static GameObject lastMainButton; //static
+
+
     public GameObject controlsFirstButton;
     public GameObject settingsFirstButton;
 
@@ -24,10 +34,30 @@ public class MainMenuScript : MonoBehaviour
 
     void Awake()
     {
+        
+        pc = new PlayerControls(); 
+        pc.UI.Enable(); //set up input system
+
         //clear event selected object
         EventSystem.current.SetSelectedGameObject(null);
         //set new default selected
         EventSystem.current.SetSelectedGameObject(mainFirstButton);
+
+        pc.UI.Cancel.performed += GoBack;
+    }
+
+
+    //B button pressed in menus
+    public void GoBack(InputAction.CallbackContext context)
+    {
+
+        //if the main menu is not active
+        if (mainMenu.activeSelf == false)
+        {
+            //return to the menu
+            BackToMainMenu();
+        }
+
     }
 
     //play button
@@ -46,6 +76,7 @@ public class MainMenuScript : MonoBehaviour
     //view the control menu
     public void GoToControls()
     {
+        lastMainButton = mainThirdButton;
 
         mainMenu.SetActive(false);
         settingsMenu.SetActive(false);
@@ -61,6 +92,7 @@ public class MainMenuScript : MonoBehaviour
     //view the settings menu
     public void GoToSettings()
     {
+        lastMainButton = mainSecondButton;
 
         mainMenu.SetActive(false);
         controlMenu.SetActive(false);
@@ -97,8 +129,12 @@ public class MainMenuScript : MonoBehaviour
         //clear event selected object
         EventSystem.current.SetSelectedGameObject(null);
         //set new default selected
-        EventSystem.current.SetSelectedGameObject(mainFirstButton);
+        EventSystem.current.SetSelectedGameObject(lastMainButton);
 
     }
 
+    private void OnDestroy()
+    {
+        pc.UI.Cancel.performed -= GoBack;
+    }
 }

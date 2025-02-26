@@ -8,7 +8,7 @@ public class destroyItem : MonoBehaviour
     private void OnTriggerEnter(Collider collider)
     {
        // Debug.Log("destroyed");
-        if(collider.gameObject.tag != "Player" && collider.gameObject.tag != "ground")
+        if(collider.gameObject.tag == "crate")
         {
             Destroy(collider.gameObject);
 
