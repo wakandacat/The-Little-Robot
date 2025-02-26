@@ -39,21 +39,24 @@ public class checkPointScript : MonoBehaviour
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(currScene));
         mainGameScript.m_audio.playBackgroundMusic("platform");
 
-        //don't respawn the enemy or its triggers if the player dies after the eney is dead
+        //don't respawn the enemy or its triggers if the player dies after the enemy is dead, but keep the light on
         if (SceneManager.GetActiveScene().name == "Combat1" && mainGameScript.firstBossDead == true)
         {
             GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
             GameObject.Find("startBattleTrigger").SetActive(false);
+            GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
         }
         else if (SceneManager.GetActiveScene().name == "Combat2" && mainGameScript.secondBossDead == true)
         {
             GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
             GameObject.Find("startBattleTrigger").SetActive(false);
+            GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
         }
         else if (SceneManager.GetActiveScene().name == "Combat3" && mainGameScript.thirdBossDead == true)
         {
             GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
             GameObject.Find("startBattleTrigger").SetActive(false);
+            GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
         }
 
 
@@ -62,7 +65,7 @@ public class checkPointScript : MonoBehaviour
 
         //get the current checkpoint from the main script
         currCheckpoint = mainGameScript.currCheckpoint;
-        Debug.Log("running onscene loaded in checkpoint method");
+        //Debug.Log("running onscene loaded in checkpoint method");
 
         //move the player there
         this.transform.position = currCheckpoint.transform.position;

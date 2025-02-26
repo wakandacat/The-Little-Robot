@@ -22,9 +22,8 @@ public class tendrilCollision : MonoBehaviour
         {
             transform.root.gameObject.GetComponent<tendril_Behavior>().hasCollided = true;
             m_audio.playPlayerSFX(10);
-            //Debug.Log("hit by tendril");
             player.collision = true;
-            player.takeDamage();
+            player.playerCurrenthealth -= 1;
 
         }
     }
@@ -33,9 +32,7 @@ public class tendrilCollision : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            //Debug.Log("no longer hit by tendril");
             player.collision = false;
-
         }
     }
 }

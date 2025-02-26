@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class FadeOut : MonoBehaviour
 {
@@ -27,15 +28,19 @@ public class FadeOut : MonoBehaviour
         {
             if (fadingIn)
             {
+               // Debug.Log("fading in the panel");
                 fadeOutPanel.alpha += fadeDelay * Time.deltaTime;
                 if (fadeOutPanel.alpha >= 1) // fully faded in
                 {
                     fadeOutPanel.alpha = 1; // stops at 1
                     fadingIn = false;
 
+                   // Debug.Log("move player");
                     //move player
                     playerController.playerCurrenthealth = playerController.playerHealth;
                     player.GetComponent<checkPointScript>().MoveToCheckpoint();
+                    playerController.deathState = false;
+                    playerController.diedOnce = false;
 
                     fadingOut = true; //wait a frame
                 }
