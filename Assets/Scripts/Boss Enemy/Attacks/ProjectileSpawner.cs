@@ -94,6 +94,11 @@ public class ProjectileSpawner : MonoBehaviour
         UpdateSpawner_Tracking(New_SpawnerTrackingHorizontal, New_SpawnerTrackingVertical, New_TrackingSpeed);
     }
 
+    public void UpdateSpawner_FireRate(float New_SpawnerFireRate)
+    {
+        Spawner_FireRate = New_SpawnerFireRate;
+    }
+
     // Updates Spawner_NextFireTime to equal the current time plus (1.0f / Spawner_FireRate)
     public void UpdateSpawner_NextFireTime()
     {
@@ -204,6 +209,11 @@ public class ProjectileSpawner : MonoBehaviour
     public void Set_Bullet_ProjectileSpeed(float New_ProjectileSpeed)
     {
         Spawner_ProjectilePool.Set_Bullet_ProjectileSpeed(New_ProjectileSpeed);
+    }
+
+    public void Set_Bullet_ProjectileDeflectable(bool New_DeflectableStaus)
+    {
+        Spawner_ProjectilePool.Set_Bullet_ProjectileDeflectable(New_DeflectableStaus);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -342,12 +352,12 @@ public class ProjectileSpawner : MonoBehaviour
     // *               Spawner BULLET Projectiles Functions                                                                                                                                                         * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Fires a single projectile towards where the spawner is pointing
-    public void Spawner_Bullet_SingleShot()
+    public void Spawner_Bullet_SingleShot(bool New_DeflectableStaus)
     {
         GameObject NewProjectile = Spawner_ProjectilePool.GetNextProjectile();
         NewProjectile.transform.position = Spawner_FirePoint.position;
         NewProjectile.transform.rotation = Spawner_FirePoint.rotation;
-        NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, Spawner_FirePoint.forward);
+        NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, Spawner_FirePoint.forward, New_DeflectableStaus);
     }
 
     // Fires Projectiles_Count projectiles spread over AngleOfSpread
@@ -363,7 +373,7 @@ public class ProjectileSpawner : MonoBehaviour
             GameObject NewProjectile = Spawner_ProjectilePool.GetNextProjectile();
             NewProjectile.transform.position = Spawner_FirePoint.position;
             NewProjectile.transform.rotation = New_Rotation;
-            NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, New_Rotation * Vector3.forward);
+            NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, New_Rotation * Vector3.forward, false);
         }
     }
 
@@ -390,7 +400,7 @@ public class ProjectileSpawner : MonoBehaviour
 
                 Vector3 direction = New_Rotation * Vector3.forward;
 
-                NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, direction);
+                NewProjectile.GetComponent<Projectile_Bullet>().Initialize_Bullet(Spawner_ProjectilePool, direction, false);
             }
         }
     }

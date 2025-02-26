@@ -1384,11 +1384,10 @@ MonoBehaviour:
   Energy_Maximum: 5
   Energy_RegainedPerSecond: 0.5
   Energy_RegainedOnStrike: 1
+  State_Awake_Delay: 4
   Player_PositionTrackingTimeInterval: 0.02
   Player_PositionTrackingMaxTimeTracked: 3
-  AwakeState_Delay: 3
-  Attack_BasicProjectile01: {fileID: 6745135230358999026, guid: ccb06d8ade8264744a78094086a672a9,
-    type: 3}
+  Deflection_DamageOnSuccessfulDeflect: 5
 --- !u!54 &2808467725153756840
 Rigidbody:
   m_ObjectHideFlags: 0

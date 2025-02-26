@@ -21,7 +21,7 @@ public class EnemyUI : MonoBehaviour
     }
     public void decrementBar()
     {
-        var maxenemyHealth = enemy.GetComponent<BossEnemy>().HP_Maximum;
+        var maxenemyHealth = enemy.GetComponent<BossEnemy>().HP_ReturnMax();
         var enemyCurrentHealth = enemy.GetComponent<BossEnemy>().HP_ReturnCurrent();
 
         enemyHealthBar.fillAmount = (enemyCurrentHealth / maxenemyHealth);
