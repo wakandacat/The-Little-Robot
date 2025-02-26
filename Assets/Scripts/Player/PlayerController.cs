@@ -680,37 +680,42 @@ public class PlayerController : MonoBehaviour
         {
             if ((combatState == false) && (deathState == false))
             {
+                if(collision == false)
+                {
+                    StartCoroutine(healthRegen());
+                }
+                else
+                {
+                    StopCoroutine(healthRegen());
 
-                StartCoroutine(healthRegen());
+                }
             }
         }
     }
     //Make sure to add a check if player in combat or not
     IEnumerator healthRegen()
     {
-        if (canRegen)
+        if (playerCurrenthealth == 1)
         {
-            if (playerCurrenthealth == 1)
-            {
-                yield return new WaitForSeconds(healthRegenDelay);
-                playerCurrenthealth = 2;
-            }
-            else if (playerCurrenthealth == 2)
-            {
-                yield return new WaitForSeconds(healthRegenDelay);
-                playerCurrenthealth = 3;
-            }
-            else if (playerCurrenthealth == 3)
-            {
-                yield return new WaitForSeconds(healthRegenDelay);
-                playerCurrenthealth = 4;
-            }
-            else if (playerCurrenthealth == 4)
-            {
-                yield return new WaitForSeconds(healthRegenDelay);
-                playerCurrenthealth = 5;
-            }
+            yield return new WaitForSeconds(healthRegenDelay);
+            playerCurrenthealth = 2;
         }
+        else if (playerCurrenthealth == 2)
+        {
+            yield return new WaitForSeconds(healthRegenDelay);
+            playerCurrenthealth = 3;
+        }
+        else if (playerCurrenthealth == 3)
+        {
+            yield return new WaitForSeconds(healthRegenDelay);
+            playerCurrenthealth = 4;
+        }
+        else if (playerCurrenthealth == 4)
+        {
+            yield return new WaitForSeconds(healthRegenDelay);
+            playerCurrenthealth = 5;
+        }
+
         
     }
 
