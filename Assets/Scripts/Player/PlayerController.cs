@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -129,7 +130,6 @@ public class PlayerController : MonoBehaviour
         checkPoint = player.GetComponent<checkPointScript>();
 
         playerCurrenthealth = playerHealth;
-        //fadeOutPanel.SetActive(false);
 
         //get audio
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -143,12 +143,65 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Deflect.performed += OnDeflect;
         pc.Gameplay.Pause.performed += onPause;
         pc.Gameplay.Skip.performed += onSkip;
+        pc.UI.UnPause.performed += onUnPause;
+        pc.UI.Cancel.performed += GoBackPause;
+    }
+
+    public void SwitchActionMap(string mapToSwitch)
+    {
+        //disable everything
+        pc.Gameplay.Disable();
+        pc.UI.Disable(); 
+
+        // Enable the requested action map
+        if (mapToSwitch == "Gameplay") 
+        {  
+            pc.Gameplay.Enable(); 
+        }
+        else if (mapToSwitch == "UI")
+        {
+            pc.UI.Enable();
+        }
     }
 
     //open pause menu
     public void onPause(InputAction.CallbackContext context)
     {
-        pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
+
+        //if we are currently unpaused
+        if (GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false)
+        {
+            SwitchActionMap("UI");
+            pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
+
+        }     
+    }
+
+    //B button pressed in menus
+    public void GoBackPause(InputAction.CallbackContext context)
+    {
+        if (GameObject.FindWithTag("Player"))
+        {
+            //if we are currently paused
+            if (GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == true)
+            {
+                pauseMenu.GetComponent<PauseMenuScript>().backButton();
+
+            }
+        }  
+    }
+
+    //unpause --> from ui input action system
+    public void onUnPause(InputAction.CallbackContext context)
+    {
+
+        //if we are currently paused
+        if (GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == true)
+        {
+            SwitchActionMap("Gameplay");
+            pauseMenu.GetComponent<PauseMenuScript>().UnPause();
+
+        }
     }
 
     //skip cinematic
@@ -757,5 +810,7 @@ public class PlayerController : MonoBehaviour
         pc.Gameplay.Deflect.performed -= OnDeflect;
         pc.Gameplay.Pause.performed -= onPause;
         pc.Gameplay.Skip.performed -= onSkip;
+        pc.UI.UnPause.performed -= onUnPause;
+        pc.UI.Cancel.performed -= GoBackPause;
     }
 }

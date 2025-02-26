@@ -10,20 +10,22 @@ using UnityEngine.UI;
 public class PauseMenuScript : MonoBehaviour
 {
 
+    public GameObject world;
+
     //public canvas objects
     public GameObject pauseMenu;
-    public GameObject controlMenu;
+    public GameObject currentMenu;
     public GameObject settingsMenu;
 
     //menu items for event system
     public GameObject pauseFirstButton;
+    public GameObject pauseSecondButton;
+    public GameObject pauseThirdButton;
+
+    private static GameObject lastPauseButton; //static so all instance of class have the same one
+
     public GameObject controlsFirstButton;
     public GameObject settingsFirstButton;
-
-    //input system
-    public InputActionAsset inputActions;
-    private InputActionMap playerControls;
-    private InputActionMap menuControls;
 
     //freelook cam
     public CinemachineFreeLook freeCam;
@@ -34,65 +36,53 @@ public class PauseMenuScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         //set new default selected
         EventSystem.current.SetSelectedGameObject(pauseFirstButton);
-    }
-
-    private void FindSchemas()
-    {
-        //find the input schemas
-        playerControls = inputActions.FindActionMap("Gameplay");
-        menuControls = inputActions.FindActionMap("UI");
+      
     }
 
     //pause the game
     public void PauseGame()
     {
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().SwitchActionMap("UI");
 
-        FindSchemas();
+        //pause the game
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0.0f;
+        GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = true;
 
-        //if we are currently unpaused
-        if (GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false)
+        //clear event selected object
+        EventSystem.current.SetSelectedGameObject(null);
+        //set new default selected
+        EventSystem.current.SetSelectedGameObject(pauseFirstButton);
+    }
+
+    public void UnPause()
+    {
+        //unpause the game
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1.0f;
+        GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = false;
+    }
+
+    public void backButton()
+    {
+        //if the main pause menu is not active
+        if (pauseMenu.activeSelf == false)
         {
-
-            //switch input systems so they don't overlap
-            playerControls.Disable();
-            menuControls.Enable();
-
-            //pause the game
-            pauseMenu.SetActive(true);
-            Time.timeScale = 0.0f;
-            GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = true;
-
-            //clear event selected object
-            EventSystem.current.SetSelectedGameObject(null);
-            //set new default selected
-            EventSystem.current.SetSelectedGameObject(pauseFirstButton);
-        }
-        else //if we are currently paused
-        {
-
-            //switch schemas
-            playerControls.Enable();
-            menuControls.Disable();
-
-            //unpause the game
-            pauseMenu.SetActive(false);
-            Time.timeScale = 1.0f;
-            GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = false;
+            //return to the menu
+            BackToPauseMenu();
         }
     }
 
     //continue button
     public void ContinueGame()
     {
-        FindSchemas();
-        
+
         //switch schemas
-        playerControls.Enable();
-        menuControls.Disable();
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().SwitchActionMap("Gameplay");
 
         //unpause the game
         pauseMenu.SetActive(false);
-        controlMenu.SetActive(false);
+        currentMenu.SetActive(false);
         Time.timeScale = 1.0f;
         GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = false;
 
@@ -102,8 +92,10 @@ public class PauseMenuScript : MonoBehaviour
     //view the control menu
     public void GoToControls()
     {
+        lastPauseButton = pauseThirdButton;
+
         pauseMenu.SetActive(false);
-        controlMenu.SetActive(true);
+        currentMenu.SetActive(true);
 
         //clear event selected object
         EventSystem.current.SetSelectedGameObject(null);
@@ -113,26 +105,30 @@ public class PauseMenuScript : MonoBehaviour
 
     //view the pause menu
     public void BackToPauseMenu()
-    {
+    {     
         pauseMenu.SetActive(true);
-        controlMenu.SetActive(false);
+        currentMenu.SetActive(false);
+        settingsMenu.SetActive(false);
 
         //clear event selected object
         EventSystem.current.SetSelectedGameObject(null);
         //set new default selected
-        EventSystem.current.SetSelectedGameObject(pauseFirstButton);
+        EventSystem.current.SetSelectedGameObject(lastPauseButton);
     }
 
     //view the main menu
     public void BackToMainMenu()
     {
         Time.timeScale = 1.0f;
+        lastPauseButton = null;
         SceneManager.LoadScene("MainMenu");
     }
 
     //view the settings menu
     public void GoToSettings()
     {
+        lastPauseButton = pauseSecondButton;
+
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(true);
 
