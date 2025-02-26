@@ -679,9 +679,9 @@ public class State_Awake : BossState
         }
 
         // DEBUGGING (MUST BE REMOVED):
-        //Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
-        //Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
-        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
+        Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
+        Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
+        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
 
         //State_Attack_Bullet_TrackingCone_Easy
         //State_Attack_Bullet_SlowFiringShot_Easy
@@ -2287,7 +2287,6 @@ public class State_Attack_StandUpMelee : BossState
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
-        Attack_ColliderSphere.tag = "Damage Source";
         Attack_ColliderSphere.transform.position = bossEnemyComponent.returnBossEnemyPosition();
         Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
         Attack_ColliderSphere.transform.SetParent(Attack_GameObjectParent.transform);
@@ -2317,6 +2316,7 @@ public class State_Attack_StandUpMelee : BossState
                 Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
                 SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
                 Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
+                Attack_ColliderSphere.tag = "Damage Source";
                 Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
             }
         }
@@ -2411,10 +2411,7 @@ public class State_Attack_Melee01 : BossState
     public override void Enter()
     {
         // Programming Logic
-        //Debug.Log("BossEnemy: Entering State_Attack_Melee01");
-        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost);
-        ////Debug.Log("BossEnemy: Current Energy = " + bossEnemyComponent.returnCurrentEnergy());
-
+        //Debug.Log("BossEnemy: Entering State_Attack_StandUpMelee");
         // Attack Setup Logic
         Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
 
@@ -2426,9 +2423,6 @@ public class State_Attack_Melee01 : BossState
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
-        SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();
-        Attack_LaserContactObject_collider.isTrigger = true;
-        Attack_ColliderSphere.tag = "Damage Source";
         Attack_ColliderSphere.transform.position = bossEnemyComponent.returnBossEnemyPosition();
         Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
         Attack_ColliderSphere.transform.SetParent(Attack_GameObjectParent.transform);
@@ -2455,8 +2449,11 @@ public class State_Attack_Melee01 : BossState
         {
             if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
             {
-                Attack_IsColliderSphereScaleOut = true;                                         // if so, update Attack_IsColliderSphereScaleOut to true
-                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;    // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
+                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
+                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
+                Attack_ColliderSphere.tag = "Damage Source";
+                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
             }
         }
 
