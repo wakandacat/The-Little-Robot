@@ -392,6 +392,7 @@ public class BossEnemy : MonoBehaviour
 
     public void HP_TakeDamage(float damageAmount)
     {
+        Debug.Log("Boss Enemy: HP_TakeDamage() Performed");
         //if (!HP_ReturnInvulnerabilityStatus())
         //{
         //    HP_Current -= damageAmount;
@@ -399,11 +400,11 @@ public class BossEnemy : MonoBehaviour
         //    //Debug.Log("BossEnemy: " + damageAmount + " Damage Taken | HP = " + HP_Current);
         //}
         HP_Current -= damageAmount;
+        VFX_DamageTaken();
         // if state
         if (stateMachine.returnCurrentState() is State_LowEnergy)
         {
             Energy_Current += Energy_RegainedOnStrike;
-            VFX_DamageTaken();
         }
     }
 
@@ -428,6 +429,7 @@ public class BossEnemy : MonoBehaviour
     // run when taking damage
     public void VFX_DamageTaken()
     {
+        Debug.Log("Boss Enemy: VFX_DamageTaken() Performed");
         if (HP_ReturnCurrentAsPercentage() > 75)
         {
             VFX_DamageSparks_PlayRandom(1);
@@ -448,6 +450,7 @@ public class BossEnemy : MonoBehaviour
 
     public void VFX_DamageSparks_PlayRandom(int numSparks)
     {
+        Debug.Log("Boss Enemy: VFX_DamageSparks_PlayRandom() Performed");
         GameObject Sparks_Parent = transform.Find("OnHit_VFX")?.gameObject;
         int Sparks_NumberOfNodes = Sparks_Parent.transform.childCount;
         for (int i = numSparks; i > 0; i--)
