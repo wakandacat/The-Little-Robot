@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     public bool isDashing = false;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 2.0f;
+    private float dashingCooldown = 1.75f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
