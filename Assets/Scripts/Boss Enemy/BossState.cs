@@ -679,9 +679,9 @@ public class State_Awake : BossState
         }
 
         // DEBUGGING (MUST BE REMOVED):
-        Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
-        Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
-        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
+        //Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
+        //Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
 
         //State_Attack_Bullet_TrackingCone_Easy
         //State_Attack_Bullet_SlowFiringShot_Easy
@@ -1036,7 +1036,7 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
     // Spawner Values
     private float Attack_FireRate = 0.5f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 12;
+    private int Attack_Count = 7;
     private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 80.0f;
