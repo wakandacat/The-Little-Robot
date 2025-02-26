@@ -58,8 +58,8 @@ public class PlayerController : MonoBehaviour
     public bool isAttacking = false;
     private bool attackState = false;
     public int attackCounter = 0;
-    private float comboMaxTime = 5.0f;
-    private float attackCD = 2.0f;
+    private float comboMaxTime = 2.0f;
+    private float attackCD = 1.5f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
 
@@ -95,6 +95,7 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
+    private float immunityTime = 3.0f;
 
     //animator
     private Animator playerAnimator;
@@ -617,12 +618,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    IEnumerator Immunity()
+    {
+        Debug.Log("Hello");
+        Physics.IgnoreLayerCollision(7, 6, true);
+        yield return new WaitForSeconds(immunityTime);
+        Debug.Log("Hello 2");
+
+        Physics.IgnoreLayerCollision(7, 6, false);
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || (other.gameObject.tag == "Projectile" && other.gameObject.GetComponent<Projectile_Bullet>()!=null))
         {
             collision = true;
             playerCurrenthealth -= 1;
+
         }
 
         //sfx call based on what hit you
@@ -640,13 +652,20 @@ public class PlayerController : MonoBehaviour
     {
         collision = false;
         runTakeDamageOnce = false;
-
     }
 
     //-----------------------------------------------Health Regen-----------------------------------------------//
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
+        if (collision == true)
+        {
+            StartCoroutine(Immunity());
+        }
+        else
+        {
+            StopCoroutine(Immunity());
+        }
         if (combatState == true)
         {
             takeDamage();
