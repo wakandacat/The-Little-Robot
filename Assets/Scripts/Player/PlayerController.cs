@@ -58,8 +58,8 @@ public class PlayerController : MonoBehaviour
     public bool isAttacking = false;
     private bool attackState = false;
     public int attackCounter = 0;
-    private float comboMaxTime = 2.0f;
-    private float attackCD = 1.5f;
+    private float comboMaxTime = 1.5f;
+    private float attackCD = 1.0f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
 
@@ -684,7 +684,7 @@ public class PlayerController : MonoBehaviour
                 {
                     StartCoroutine(healthRegen());
                 }
-                else
+                else if(collision == true || playerCurrenthealth == playerHealth)
                 {
                     StopCoroutine(healthRegen());
 
@@ -715,8 +715,6 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(healthRegenDelay);
             playerCurrenthealth = 5;
         }
-
-        
     }
 
     //-----------------------------------------------Death State-----------------------------------------------//
