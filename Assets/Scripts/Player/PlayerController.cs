@@ -59,8 +59,8 @@ public class PlayerController : MonoBehaviour
     public bool isAttacking = false;
     private bool attackState = false;
     public int attackCounter = 0;
-    private float comboMaxTime = 5.0f;
-    private float attackCD = 2.0f;
+    private float comboMaxTime = 2.0f;
+    private float attackCD = 1.5f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
 
@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
 
     //Deflect vars
     private bool Deflecting = false;
+    public bool deflectState = false;
 
     //pause vars
     public bool isPaused = false;
@@ -95,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
+    private float immunityTime = 3.0f;
 
     //animator
     private Animator playerAnimator;
@@ -102,6 +104,7 @@ public class PlayerController : MonoBehaviour
     //Game Vars
     public string[] Combatscenes = new[] { "Combat1", "Combat2", "Combat3" };
     private GameObject enemy;
+    private GameObject projectile;
 
     //platforming vars
     public Vector3 platformMovement;
@@ -217,6 +220,16 @@ public class PlayerController : MonoBehaviour
         {
             //assign current enemy
             enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+            projectile = GameObject.Find("Projectile_Bullet(Clone)");
+            if(projectile == null)
+            {
+                Debug.Log("Not found");
+                deflectState = false;
+            }
+            else
+            {
+                Debug.Log("Found");
+            }
 
             //set battle state to true
             combatState = true;
@@ -259,6 +272,10 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
+                if(deflectState == true)
+                {
+                    deflectstate();
+                }
 
                 if (isQuickDropping == true)
                 {
@@ -298,7 +315,7 @@ public class PlayerController : MonoBehaviour
 
         //Move player using the rigid body
         rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed + platformMovement);
-       
+
 
     }
 
@@ -310,7 +327,7 @@ public class PlayerController : MonoBehaviour
         player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<Rigidbody>().velocity.x, 0f, player.GetComponent<Rigidbody>().velocity.z);
         player.GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         player.GetComponent<Rigidbody>().freezeRotation = true;
-     
+
     }
 
     //Jump flags handler
@@ -474,7 +491,7 @@ public class PlayerController : MonoBehaviour
                 //make CANNOT UNROLL SOUND HERE
                 m_audio.playPlayerSFX(8);
             }
-           
+
         }
     }
     //-----------------------------------------------Deflect-----------------------------------------------//
@@ -483,10 +500,35 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             Deflecting = context.ReadValueAsButton();
+            if (Deflecting == true)
+            {
+                deflectState = true;
+                Debug.Log("deflectState" + deflectState);
+            }
+        }
+    }
+    public void handleDeflect()
+    {
+        deflectState = false;
+        Deflecting = false;
+        Debug.Log("Here");
+    }
+    public void deflectstate()
+    {
+        if (collision == true && deflectState == true && projectile.GetComponent<Projectile_Bullet>().Deflection_IsDeflectable() == true)
+        {
+            Debug.Log("Here1");
+            projectile.GetComponent<Projectile_Bullet>().Deflection_Perform();
+            Debug.Log("Here2");
+            if (projectile.GetComponent<Projectile_Bullet>().Deflection_HasBeenDeflected() == true)
+            {
+                Debug.Log("Here3");
+                handleDeflect();
+            }
         }
     }
     //-----------------------------------------------Attack-----------------------------------------------//
-    
+
     public void attackCombo(int counter)
     {
         if (counter == 1)
@@ -572,7 +614,7 @@ public class PlayerController : MonoBehaviour
         if (comboMaxTime < 0)
         {
             comboMaxTime = 0;
-            if(comboMaxTime == 0)
+            if (comboMaxTime == 0)
             {
                 handleAttack();
             }
@@ -583,7 +625,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("we are here");
         attackCD -= Time.deltaTime;
-        if(attackCD < 0)
+        if (attackCD < 0)
         {
             attackCD = 0;
             Debug.Log("we are here 2");
@@ -629,12 +671,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    IEnumerator Immunity()
+    {
+        Debug.Log("Hello");
+        Physics.IgnoreLayerCollision(7, 6, true);
+        yield return new WaitForSeconds(immunityTime);
+        Debug.Log("Hello 2");
+
+        Physics.IgnoreLayerCollision(7, 6, false);
+    }
+
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source")
+        if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || (other.gameObject.tag == "Projectile" && other.gameObject.GetComponent<Projectile_Bullet>()!=null))
         {
             collision = true;
             playerCurrenthealth -= 1;
+
         }
 
         //sfx call based on what hit you
@@ -650,17 +703,22 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Projectile")
-        {
-            collision = false;
-            runTakeDamageOnce = false;
-        }
+        collision = false;
+        runTakeDamageOnce = false;
     }
 
     //-----------------------------------------------Health Regen-----------------------------------------------//
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
+        if (collision == true)
+        {
+            StartCoroutine(Immunity());
+        }
+        else
+        {
+            StopCoroutine(Immunity());
+        }
         if (combatState == true)
         {
             takeDamage();
