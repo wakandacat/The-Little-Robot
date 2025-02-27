@@ -550,7 +550,7 @@ MonoBehaviour:
   loadObj: {fileID: 1418914664}
   enemyDeadBlend: {fileID: 11400000, guid: f907d759d6fe9c84695b5dc1632ec066, type: 2}
   enemyAliveBlend: {fileID: 11400000, guid: c51409daebca028459882353d8bc13d9, type: 2}
-  enemyUI: {fileID: 0}
+  enemyUI: {fileID: 32334855}
   proceedLight: {fileID: 602000745}
 --- !u!65 &622251581
 BoxCollider:
@@ -614,7 +614,7 @@ PrefabInstance:
     - target: {fileID: 1790235215717638030, guid: e52380416573f524c81b75bc3a303c81,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -58.67
+      value: -59.19
       objectReference: {fileID: 0}
     - target: {fileID: 1790235215717638030, guid: e52380416573f524c81b75bc3a303c81,
         type: 3}
@@ -656,6 +656,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6407149229446419360, guid: e52380416573f524c81b75bc3a303c81,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 24ec11e662cba0a479786dc3262824c2, type: 2}
     - target: {fileID: 6964902034644943479, guid: e52380416573f524c81b75bc3a303c81,
         type: 3}
       propertyPath: Spawner_ProjectilePool
@@ -1822,8 +1827,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 23.800568, y: 5.9624023, z: 12.300049}
-  m_Center: {x: -153.7484, y: 571.7566, z: 883.6781}
+  m_Size: {x: 4.1782837, y: 5.7349854, z: 11.427368}
+  m_Center: {x: -149.90335, y: 571.6429, z: 883.24176}
 --- !u!4 &1870788948
 Transform:
   m_ObjectHideFlags: 0
