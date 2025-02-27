@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private float playerDamage = 1.0f;
     public float playerCurrenthealth;
     private float healthRegenDelay = 5.0f;
+    private float regenTimer = 0.0f;
     public bool combatState = false;
     private float speed = 8.0f;
     public GameObject player;
@@ -719,6 +720,7 @@ public class PlayerController : MonoBehaviour
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
+        healthRegen();
         if (collision == true && combatState == true && deathState == false)
         {
             StartCoroutine(Immunity());
@@ -740,19 +742,20 @@ public class PlayerController : MonoBehaviour
 
     }
     //Make sure to add a check if player in combat or not
-    IEnumerator healthRegen()
+    public void  healthRegen()
     {
-        Debug.Log("regen done");
         if (canRegen == false || playerCurrenthealth == playerHealth)
         {
             Debug.Log("regen stopped");
         }
         else if (canRegen == true && (playerCurrenthealth < playerHealth) && combatState == false && deathState == false)
         {
-            Debug.Log("regen in 5");
-            yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth++;
-            Debug.Log("regen started");
+            regenTimer += Time.deltaTime;
+            if (healthRegenDelay <= regenTimer)
+            {
+                playerCurrenthealth++;
+                regenTimer = 0.0f;
+            }
 
         }
 
