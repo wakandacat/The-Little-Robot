@@ -718,7 +718,7 @@ public class PlayerController : MonoBehaviour
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
-        if (collision == true)
+        if (combatState == true && collision == true)
         {
             StartCoroutine(Immunity());
         }
