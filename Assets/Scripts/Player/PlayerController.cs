@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private float immunityTime = 1.0f;
+    private float immunityTime = 1.75f;
 
     //animator
     private Animator playerAnimator;
@@ -721,6 +721,7 @@ public class PlayerController : MonoBehaviour
     public void manageHealth()
     {
         healthRegen();
+
         if (collision == true && combatState == true && deathState == false)
         {
             StartCoroutine(Immunity());
