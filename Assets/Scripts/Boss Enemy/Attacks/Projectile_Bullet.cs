@@ -9,6 +9,7 @@ public class Projectile_Bullet : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     [Tooltip("Speed at which the projectile moves in Projectile_Direction.")]
     public float Projectile_Speed = 10f;
+    public float Projectile_Deflected_SpeedMultiplier = 1.5f;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Private Attributes                                                                                                                     * 
@@ -20,7 +21,7 @@ public class Projectile_Bullet : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialization                                                                                                                         * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
-    public void Initialize_Bullet(ProjectilePool Projectile_Pool, Vector3 New_Direction)
+    public void Initialize_Bullet(ProjectilePool Projectile_Pool, Vector3 New_Direction, bool New_DeflectableStaus)
     {
         // Run base Initialize() function
         Initialize(Projectile_Pool);
@@ -29,7 +30,15 @@ public class Projectile_Bullet : Projectile
         Projectile_Direction = New_Direction.normalized;
 
         // Reset Projectile_IsDeflectable to false
-        Projectile_IsDeflectable = false;
+        Projectile_IsDeflectable = New_DeflectableStaus;
+        if (Projectile_IsDeflectable)
+        {
+            Animation_UpdateMaterialColor(Color.yellow);
+        }
+        else
+        {
+            Animation_ResetMaterialColor();
+        }
         Projectile_HasBeenDeflected = false;
     }
 
@@ -39,6 +48,11 @@ public class Projectile_Bullet : Projectile
     public void Set_ProjectileSpeed(float New_ProjectileSpeed)
     {
         Projectile_Speed = New_ProjectileSpeed;
+    }
+
+    public void Set_ProjectileDeflectable(bool New_DeflectableStaus)
+    {
+        Projectile_IsDeflectable = New_DeflectableStaus;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,7 +74,14 @@ public class Projectile_Bullet : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     private void MoveProjectile()
     {
-        transform.position += Projectile_Direction * Projectile_Speed * Time.fixedDeltaTime;    // move towards Projectile_Direction at Projectile_Speed per second
+        if (Deflection_HasBeenDeflected() == true)
+        {
+            transform.position += Projectile_Direction * Projectile_Speed * Time.fixedDeltaTime * Projectile_Deflected_SpeedMultiplier;    // move towards Projectile_Direction at Projectile_Speed * Projectile_Deflected_SpeedMultiplier per second
+        }
+        else
+        {
+            transform.position += Projectile_Direction * Projectile_Speed * Time.fixedDeltaTime;    // move towards Projectile_Direction at Projectile_Speed per second
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -80,5 +101,6 @@ public class Projectile_Bullet : Projectile
     {
         Projectile_Direction = -Projectile_Direction;
         Projectile_HasBeenDeflected = true;
+        Debug.Log("Projectile_Bullet: Deflection Has Occured!");
     }
 }

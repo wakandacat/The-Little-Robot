@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using UnityEditor.SearchService;
+
 //using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BossEnemy : MonoBehaviour
 {
@@ -10,22 +14,43 @@ public class BossEnemy : MonoBehaviour
     // *               Public Fields                                                                                                                                                                                * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Debug Values ---------------------------------------------------------------------------------------------------------------
-    [Tooltip("Maximum HP that the Boss Enemy can have.")]
-    public float HP_Maximum = 20.0f;
-    [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have.")]
-    public float Energy_Maximum = 3.0f;
-    [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'State_LowEnergy'.")]
-    public float Energy_RegainedPerSecond = 0.15f;
-    [Tooltip("Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy'.")]
-    public float Energy_RegainedOnStrike = 0.4f;
+    [Tooltip("Maximum HP that the Boss Enemy can have (first combat iteration).")]
+    public float HP_Maximum_1 = 50.0f;
+    [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have (first combat iteration).")]
+    public float Energy_Maximum_1 = 3.0f;
+    [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'State_LowEnergy' (first combat iteration).")]
+    public float Energy_RegainedPerSecond_1 = 0.15f;
+    [Tooltip("Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy' (first combat iteration).")]
+    public float Energy_RegainedOnStrike_1 = 0.4f;
+    [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack (first combat iteration).")]
+    public float State_Awake_Delay_1 = 4.0f;
+
+    [Tooltip("Maximum HP that the Boss Enemy can have (second combat iteration).")]
+    public float HP_Maximum_2 = 50.0f;
+    [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have (second combat iteration).")]
+    public float Energy_Maximum_2 = 3.0f;
+    [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'State_LowEnergy' (second combat iteration).")]
+    public float Energy_RegainedPerSecond_2 = 0.15f;
+    [Tooltip("Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy' (second combat iteration).")]
+    public float Energy_RegainedOnStrike_2 = 0.4f;
+    [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack (second combat iteration).")]
+    public float State_Awake_Delay_2 = 4.0f;
+
+    [Tooltip("Maximum HP that the Boss Enemy can have (first combat iteration).")]
+    public float HP_Maximum_3 = 50.0f;
+    [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have (first combat iteration).")]
+    public float Energy_Maximum_3 = 3.0f;
+    [Tooltip("Amount of Energy the Boss Enemy regains over the course of a third while in 'State_LowEnergy' (first combat iteration).")]
+    public float Energy_RegainedPerSecond_3 = 0.15f;
+    [Tooltip("Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy' (first combat iteration).")]
+    public float Energy_RegainedOnStrike_3 = 0.4f;
+    [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack (first combat iteration).")]
+    public float State_Awake_Delay_3 = 4.0f;
 
     [Tooltip("Amount of time that passed between storing player position (in seconds).")]
     public float Player_PositionTrackingTimeInterval = 0.02f;
     [Tooltip("Amount of time that must pass before an entry in the Player_PositionHistory list is deleted (in seconds).")]
     public float Player_PositionTrackingMaxTimeTracked = 3.0f;
-
-    [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack.")]
-    public float State_Awake_Delay = 4.0f;
 
     [Tooltip("The amount of damage that the boss enemy takes when a projectile is successfully deflected back into the boss enemy.")]
     public float Deflection_DamageOnSuccessfulDeflect = 5.0f;
@@ -37,7 +62,12 @@ public class BossEnemy : MonoBehaviour
     // Boss Enemy Attributes ------------------------------------------------------------------------------------------------------
     private float HP_Current;
     private float Energy_Current;
-    private bool HP_BossInvulnerable = false; //changed from default true (isn't currently utilized, the functionality for if enemy can take damage is hardcoded into HP_TakeDamage()
+    //private bool HP_BossInvulnerable = false; //changed from default true (isn't currently utilized, the functionality for if enemy can take damage is hardcoded into HP_TakeDamage()
+    private float HP_Maximum;                    // Maximum HP that the Boss Enemy can have
+    private float Energy_Maximum;                // Maximum Energy (cost of attacks) that the Boss Enemy can have
+    private float Energy_RegainedPerSecond;      // Amount of Energy the Boss Enemy regains over the course of a second while in 'State_LowEnergy'
+    private float Energy_RegainedOnStrike;       // Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy'
+    private float State_Awake_Delay;             // Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack
 
     // Object References ----------------------------------------------------------------------------------------------------------
     private Animator bossAnimator;
@@ -258,21 +288,51 @@ public class BossEnemy : MonoBehaviour
         deathState.Initialize(bossAnimator, this);
         stateMachine.SetState(deathState);
     }
-    public void TransitionToState_Attack_Testing()
+    public void TransitionToState_Attack_Bullet_SlowFiringShot_Easy()
     {
-        State_Attack_Testing attackTestingState = new State_Attack_Testing();
-        attackTestingState.Initialize(bossAnimator, this);
-        stateMachine.SetState(attackTestingState);
+        State_Attack_Bullet_SlowFiringShot_Easy attackBulletSlowFiringShot = new State_Attack_Bullet_SlowFiringShot_Easy();
+        attackBulletSlowFiringShot.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletSlowFiringShot);
     }
-    public void TransitionToState_Attack_Bullet_TrackingCone()
+    public void TransitionToState_Attack_Bullet_SlowFiringShot_Hard()
     {
-        State_Attack_Bullet_TrackingCone attackBulletTrackingCone = new State_Attack_Bullet_TrackingCone();
+        State_Attack_Bullet_SlowFiringShot_Hard attackBulletSlowFiringShot = new State_Attack_Bullet_SlowFiringShot_Hard();
+        attackBulletSlowFiringShot.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletSlowFiringShot);
+    }
+    public void TransitionToState_Attack_Bullet_TrackingCone_Easy()
+    {
+        State_Attack_Bullet_TrackingCone_Easy attackBulletTrackingCone = new State_Attack_Bullet_TrackingCone_Easy();
         attackBulletTrackingCone.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletTrackingCone);
     }
-    public void TransitionToState_Attack_Bullet_RotatingWall()
+    public void TransitionToState_Attack_Bullet_TrackingCone_Hard()
     {
-        State_Attack_Bullet_RotatingWall attackBulletRotatingWall = new State_Attack_Bullet_RotatingWall();
+        State_Attack_Bullet_TrackingCone_Hard attackBulletTrackingCone = new State_Attack_Bullet_TrackingCone_Hard();
+        attackBulletTrackingCone.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletTrackingCone);
+    }
+    public void TransitionToState_Attack_Bullet_TrackingWall_Easy()
+    {
+        State_Attack_Bullet_TrackingWall_Easy attackBulletTrackingWall = new State_Attack_Bullet_TrackingWall_Easy();
+        attackBulletTrackingWall.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletTrackingWall);
+    }
+    public void TransitionToState_Attack_Bullet_TrackingWall_Hard()
+    {
+        State_Attack_Bullet_TrackingWall_Hard attackBulletTrackingWall = new State_Attack_Bullet_TrackingWall_Hard();
+        attackBulletTrackingWall.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletTrackingWall);
+    }
+    public void TransitionToState_Attack_Bullet_RotatingWall_Easy()
+    {
+        State_Attack_Bullet_RotatingWall_Easy attackBulletRotatingWall = new State_Attack_Bullet_RotatingWall_Easy();
+        attackBulletRotatingWall.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletRotatingWall);
+    }
+    public void TransitionToState_Attack_Bullet_RotatingWall_Hard()
+    {
+        State_Attack_Bullet_RotatingWall_Hard attackBulletRotatingWall = new State_Attack_Bullet_RotatingWall_Hard();
         attackBulletRotatingWall.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletRotatingWall);
     }
@@ -308,6 +368,11 @@ public class BossEnemy : MonoBehaviour
         return HP_Maximum;
     }
 
+    public float HP_ReturnCurrentAsPercentage()
+    {
+        return (HP_ReturnCurrent() / HP_ReturnMax()) * 100f;
+    }
+
     public bool HP_IsZero()
     {
         if (HP_Current <= 0.0f)
@@ -327,31 +392,74 @@ public class BossEnemy : MonoBehaviour
 
     public void HP_TakeDamage(float damageAmount)
     {
-        //if (damageAmount < 0)
+        //Debug.Log("Boss Enemy: HP_TakeDamage() Performed");
+        //if (!HP_ReturnInvulnerabilityStatus())
         //{
-        //    damageAmount *= -1.0f;
+        //    HP_Current -= damageAmount;
+        //    Energy_Current += Energy_RegainedOnStrike;
+        //    //Debug.Log("BossEnemy: " + damageAmount + " Damage Taken | HP = " + HP_Current);
         //}
-        if (!HP_ReturnInvulnerabilityStatus())
+        HP_Current -= damageAmount;
+        VFX_DamageTaken();
+        // if state
+        if (stateMachine.returnCurrentState() is State_LowEnergy)
         {
-            HP_Current -= damageAmount;
             Energy_Current += Energy_RegainedOnStrike;
-            //Debug.Log("BossEnemy: " + damageAmount + " Damage Taken | HP = " + HP_Current);
         }
     }
 
-    public void HP_TurnInvulnerabilityOn()
+    //public void HP_TurnInvulnerabilityOn()
+    //{
+    //    HP_BossInvulnerable = true;
+    //}
+
+    //public void HP_TurnInvulnerabilityOff()
+    //{
+    //    HP_BossInvulnerable = false;
+    //}
+
+    //public bool HP_ReturnInvulnerabilityStatus()
+    //{
+    //    return HP_BossInvulnerable;
+    //}
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               VFX Functions                                                                                                                                                                                * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // run when taking damage
+    public void VFX_DamageTaken()
     {
-        HP_BossInvulnerable = true;
+        //Debug.Log("Boss Enemy: VFX_DamageTaken() Performed");
+        if (HP_ReturnCurrentAsPercentage() > 75)
+        {
+            VFX_DamageSparks_PlayRandom(1);
+        }
+        else if (HP_ReturnCurrentAsPercentage() > 50)
+        {
+            VFX_DamageSparks_PlayRandom(2);
+        }
+        else if (HP_ReturnCurrentAsPercentage() > 25)
+        {
+            VFX_DamageSparks_PlayRandom(3);
+        }
+        else if (HP_ReturnCurrentAsPercentage() > 0)
+        {
+            VFX_DamageSparks_PlayRandom(4);
+        }
     }
 
-    public void HP_TurnInvulnerabilityOff()
+    public void VFX_DamageSparks_PlayRandom(int numSparks)
     {
-        HP_BossInvulnerable = false;
-    }
-
-    public bool HP_ReturnInvulnerabilityStatus()
-    {
-        return HP_BossInvulnerable;
+        //Debug.Log("Boss Enemy: VFX_DamageSparks_PlayRandom() Performed");
+        GameObject Sparks_Parent = transform.Find("root/jnt_rotBase/OnHit_VFX")?.gameObject;
+        int Sparks_NumberOfNodes = Sparks_Parent.transform.childCount;
+        for (int i = numSparks; i > 0; i--)
+        {
+            int Sparks_SelectedNumber = UnityEngine.Random.Range(1, Sparks_NumberOfNodes + 1);
+            GameObject Sparks_SelectedGameObject = Sparks_Parent.transform.Find("Spark_Node_" + Sparks_SelectedNumber)?.gameObject;
+            ParticleSystem Sparks_SelectedParticleSystem = Sparks_SelectedGameObject.GetComponent<ParticleSystem>();
+            Sparks_SelectedParticleSystem.Play();
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -374,6 +482,11 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
+    public float Energy_ReturnMaximum()
+    {
+        return Energy_Maximum;
+    }
+
     public void updateCurrentEnergy(float newEnergyCurrent)
     {
         Energy_Current = newEnergyCurrent;
@@ -391,6 +504,35 @@ public class BossEnemy : MonoBehaviour
     public Vector3 returnBossEnemyPosition()
     {
         return transform.position;
+    }
+
+    public float returnStateAwakeDelay()
+    {
+        return State_Awake_Delay;
+    }
+
+    public int returnBossEnemyEncounterIteration()
+    {
+        int sceneCount = SceneManager.sceneCount;
+        for (int i = 0; i < sceneCount; i++)
+        {
+            UnityEngine.SceneManagement.Scene scene = SceneManager.GetSceneAt(i);
+            //Debug.Log("Loaded scene: " + scene.name);
+            if (scene.name == "Combat1")
+            {
+                return 1;
+            }
+            if (scene.name == "Combat2")
+            {
+                return 2;
+            }
+            if (scene.name == "Combat3")
+            {
+                return 3;
+            }
+        }
+        Debug.Log("BossEnemy: NO COMBAT SCENE LOADED");
+        return 0;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -458,6 +600,31 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void resetBossEnemy()
     {
+        if (returnBossEnemyEncounterIteration() == 1)
+        {
+            HP_Maximum = HP_Maximum_1;
+            Energy_Maximum = Energy_Maximum_1;
+            Energy_RegainedPerSecond = Energy_RegainedPerSecond_1;
+            Energy_RegainedOnStrike = Energy_RegainedOnStrike_1;
+            State_Awake_Delay = State_Awake_Delay_1;
+        }
+        if (returnBossEnemyEncounterIteration() == 2)
+        {
+            HP_Maximum = HP_Maximum_2;
+            Energy_Maximum = Energy_Maximum_2;
+            Energy_RegainedPerSecond = Energy_RegainedPerSecond_2;
+            Energy_RegainedOnStrike = Energy_RegainedOnStrike_2;
+            State_Awake_Delay = State_Awake_Delay_2;
+        }
+        if (returnBossEnemyEncounterIteration() == 3)
+        {
+            HP_Maximum = HP_Maximum_3;
+            Energy_Maximum = Energy_Maximum_3;
+            Energy_RegainedPerSecond = Energy_RegainedPerSecond_3;
+            Energy_RegainedOnStrike = Energy_RegainedOnStrike_3;
+            State_Awake_Delay = State_Awake_Delay_3;
+        }
+
         // Initialize Boss Enemy Attributes
         HP_Current = HP_Maximum;
         Energy_Current = Energy_Maximum;

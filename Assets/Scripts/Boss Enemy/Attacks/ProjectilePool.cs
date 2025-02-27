@@ -108,4 +108,12 @@ public class ProjectilePool : MonoBehaviour
             projectile.GetComponent<Projectile_Bullet>().Set_ProjectileSpeed(New_ProjectileSpeed);
         }
     }
+
+    public void Set_Bullet_ProjectileDeflectable(bool New_DeflectableStaus)
+    {
+        foreach (GameObject projectile in Pool_Projectiles)
+        {
+            projectile.GetComponent<Projectile_Bullet>().Set_ProjectileDeflectable(New_DeflectableStaus);
+        }
+    }
 }

@@ -52,6 +52,7 @@ public class audioManager : MonoBehaviour
     {
         int index = 0;
         backgroundSource.Stop();
+
         if (sceneName.Contains("Combat"))
         {
 
