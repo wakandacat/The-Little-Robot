@@ -88,12 +88,12 @@ public class audioManager : MonoBehaviour
             {
                 enemy = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
 
-                //if enemy is awake
-                if (enemy.Player_ReturnPlayerTriggeredBossWakeup() == true)
+                //if enemy is awake + alive
+                if (enemy.Player_ReturnPlayerTriggeredBossWakeup() == true && enemy.HP_ReturnCurrent() > 0)
                 {
                     //Debug.Log("boss was woken");
-                    //special case for downed
-                    if (enemy.GetComponent<BossEnemy>().returnCurrentEnergy() <= 0)
+                    //special case for downed + they're alive
+                    if (enemy.GetComponent<BossEnemy>().returnCurrentEnergy() <= 0 && enemy.HP_ReturnCurrent() > 0)
                     {
                         //Debug.Log("in downed");
                         //set sfx
@@ -108,7 +108,12 @@ public class audioManager : MonoBehaviour
                         enemySource.PlayOneShot(enemySFXClips[i]);    //play clip
                     }
                 }
-                else
+                else if (enemy.Player_ReturnPlayerTriggeredBossWakeup() == true && enemy.HP_ReturnCurrent() <= 0) //was woken but is now dead
+                {
+                    enemySource.clip = enemySFXClips[3];          //load sfx clip based on array index
+                    enemySource.PlayOneShot(enemySFXClips[3]);    //play clip
+                }
+                else //combat hasn't started
                 {
                     //Debug.Log("play whirring");
                     //set sfx
