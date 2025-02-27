@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     //player controller reference
     PlayerControls pc;
 
+    public float inputDeadZone;
+
     //External Script declarations
     groundCheck ground;
     EnemyCollision enemyCollision;
@@ -302,6 +304,11 @@ public class PlayerController : MonoBehaviour
 
         leftStick = pc.Gameplay.Walk.ReadValue<Vector2>();
         Vector3 movementInput = new Vector3(leftStick.x, 0f, leftStick.y);
+
+        if (leftStick.magnitude < inputDeadZone)
+        {
+            leftStick = Vector2.zero;
+        }
 
         Vector3 cameraRelativeMovement = rotationCam.convertToCamSpace(movementInput);
         //player rotation

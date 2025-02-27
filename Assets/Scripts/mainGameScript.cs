@@ -44,6 +44,8 @@ public class mainGameScript : MonoBehaviour
 
     //cutscenes
     public bool cutScenePlaying = true; //toggle for when menus open or cutscenes
+    public GameObject introStatic;
+    public GameObject mainAudioMan;
 
     //player eye lights
     public GameObject playerSpotLight; //full intensity = 4
@@ -235,6 +237,7 @@ public class mainGameScript : MonoBehaviour
         platformCam.m_YAxis.Value = 0.4f; //position up teh spine axis
     }
 
+    //intro cutscene
     public void IntroCam()
     {
         if (cutScenePlaying) //left button on controller to skip cutscenes
@@ -253,10 +256,22 @@ public class mainGameScript : MonoBehaviour
                     playerUICanvas.SetActive(true);
                     securityCanvas.SetActive(false);
                     introCutCanvas.SetActive(false);
+                    introStatic.SetActive(false);
+                    mainAudioMan.GetComponent<audioManager>().playerSource.enabled = true; //once cutscene is done, turn on teh player sound effects
                 }
                 else
                 {
                     camStillTimer = camStillTimer + Time.deltaTime; //increment the cutscene timer
+
+                    //hide intro load
+                    if (camStillTimer <= 0.2f)
+                    {
+                        introCutCanvas.SetActive(true);
+                    }
+                    else
+                    {
+                        introCutCanvas.SetActive(false);
+                    }
 
                     //wait a few seconds at the beginning before starting the movement
                     if (camStillTimer >= 3.0f)
@@ -265,6 +280,9 @@ public class mainGameScript : MonoBehaviour
                         introCam.Priority = securityCam.Priority + 1;
                         securityCanvas.SetActive(false);
                         introCutCanvas.SetActive(true);
+
+                        //stop the static noise
+                        introStatic.SetActive(false);
 
                         //turn off black canvas cut
                         if (camStillTimer >= 3.3f)
@@ -320,6 +338,8 @@ public class mainGameScript : MonoBehaviour
             playerUICanvas.SetActive(true);
             securityCanvas.SetActive(false);
             introCutCanvas.SetActive(false);
+            introStatic.SetActive(false);
+            mainAudioMan.GetComponent<audioManager>().playerSource.enabled = true; //once cutscene is done, turn on teh player sound effects
 
         }
     }
