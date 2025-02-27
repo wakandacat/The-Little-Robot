@@ -34,7 +34,7 @@ public class MainMenuScript : MonoBehaviour
 
     void Awake()
     {
-        
+        DisableMouse();
         pc = new PlayerControls(); 
         pc.UI.Enable(); //set up input system
 
@@ -131,6 +131,13 @@ public class MainMenuScript : MonoBehaviour
         //set new default selected
         EventSystem.current.SetSelectedGameObject(lastMainButton);
 
+    }
+    public void DisableMouse()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Mouse.current.MakeCurrent();
+        InputSystem.DisableDevice(Mouse.current);
     }
 
     private void OnDestroy()

@@ -5,11 +5,11 @@ using UnityEngine;
 public class endGameTrigger : MonoBehaviour
 {
 
-    private player_fx_behaviors m_audio;
+    private audioManager m_audio;
 
     private void Start()
     {
-        m_audio = GameObject.FindGameObjectWithTag("Player").GetComponent<player_fx_behaviors>();
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
     }
 
     //unload the previous scene
@@ -17,7 +17,7 @@ public class endGameTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            m_audio.StopCoroutine(m_audio.walkSFX()); // kill the player sounds
+            m_audio.GetComponent<audioManager>().walkSource.enabled = false; // kill the player sounds
             GameObject.Find("WorldManager").GetComponent<mainGameScript>().EndGame();
         }
     }

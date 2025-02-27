@@ -76,7 +76,7 @@ public class mainGameScript : MonoBehaviour
     void Awake()
     {
 
-       // DisableMouse(); //UNCOMMENT THIS FOR THE BUILD
+        DisableMouse(); //UNCOMMENT THIS FOR THE BUILD
 
         //load the first scene in addition to the base scene
         SceneManager.LoadScene("Tutorial", LoadSceneMode.Additive);
