@@ -749,9 +749,9 @@ public class State_Awake : BossState
         }
 
         // DEBUGGING (MUST BE REMOVED):
-        Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
-        Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
-        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
+        //Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
+        //Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
 
         //State_Attack_Bullet_TrackingCone_Easy
         //State_Attack_Bullet_SlowFiringShot_Easy
