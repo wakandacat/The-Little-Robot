@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0, g: 0, b: 0, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: bc9ecc83071e7904a83a8258f60cbfa5, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -1167,6 +1167,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 21805209806653810, guid: 25f46a3b4ce2a0a47adaa4d96760c512,
+        type: 3}
+      propertyPath: Pool_Size
+      value: 250
+      objectReference: {fileID: 0}
     - target: {fileID: 4876844408558623229, guid: 25f46a3b4ce2a0a47adaa4d96760c512,
         type: 3}
       propertyPath: m_Name
@@ -1918,6 +1923,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5591425553899949880, guid: e52380416573f524c81b75bc3a303c81,
+        type: 3}
+      propertyPath: HP_Maximum_1
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5591425553899949880, guid: e52380416573f524c81b75bc3a303c81,
+        type: 3}
+      propertyPath: HP_Maximum_2
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5591425553899949880, guid: e52380416573f524c81b75bc3a303c81,
+        type: 3}
+      propertyPath: HP_Maximum_3
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6407149229446419360, guid: e52380416573f524c81b75bc3a303c81,
         type: 3}

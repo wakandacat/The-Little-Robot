@@ -1302,6 +1302,8 @@ public class State_Attack_Bullet_SlowFiringShot_Easy : BossState
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
 
+        SpawnerComponent_Bullet.Reset_FirePointRotationToGameObject();
+
         // Animation Logic
         animator.SetBool("inAttack", false);
 
@@ -1465,6 +1467,8 @@ public class State_Attack_Bullet_SlowFiringShot_Hard : BossState
     {
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        SpawnerComponent_Bullet.Reset_FirePointRotationToGameObject();
 
         // Animation Logic
         animator.SetBool("inAttack", false);
@@ -1831,11 +1835,12 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
     private int Attack_ProjectileCount = 10;
+    private int Attack_ProjectileCount_ALT = 11;
     private float Attack_AngleOfSpread = 60.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
     private float Attack_MaxHeight = 3.5f;
-
+    private bool Attack_Alt = false;
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -1914,7 +1919,16 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
                 // Otherwise track and shoot player
                 else
                 {
-                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    if (Attack_Alt == false)
+                    {
+                        Attack_Alt = true;
+                        SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    }
+                    else
+                    {
+                        Attack_Alt = false;
+                        SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount_ALT, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    }
                 }
                 
                 SpawnerComponent_Bullet.PostAttackLogic();
@@ -2005,10 +2019,12 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
     private int Attack_ProjectileCount = 20;
+    private int Attack_ProjectileCount_ALT = 21;
     private float Attack_AngleOfSpread = 90.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
     private float Attack_MaxHeight = 3.5f;
+    private bool Attack_Alt = false;
 
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
@@ -2088,7 +2104,16 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
                 // Otherwise track and shoot player
                 else
                 {
-                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    if (Attack_Alt == false)
+                    {
+                        Attack_Alt = true;
+                        SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    }
+                    else
+                    {
+                        Attack_Alt = false;
+                        SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount_ALT, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                    }
                 }
 
                 SpawnerComponent_Bullet.PostAttackLogic();
