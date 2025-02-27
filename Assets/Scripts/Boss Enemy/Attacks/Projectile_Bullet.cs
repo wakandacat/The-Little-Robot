@@ -33,11 +33,11 @@ public class Projectile_Bullet : Projectile
         Projectile_IsDeflectable = New_DeflectableStaus;
         if (Projectile_IsDeflectable)
         {
-            Animation_UpdateMaterialColor(Color.yellow);
+            //Animation_UpdateMaterialColor(Color.yellow);
         }
         else
         {
-            Animation_ResetMaterialColor();
+            //Animation_ResetMaterialColor();
         }
         Projectile_HasBeenDeflected = false;
     }
