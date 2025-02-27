@@ -27,7 +27,8 @@ public class PlayerController : MonoBehaviour
     public int playerHealth = 5;
     private float playerDamage = 1.0f;
     public float playerCurrenthealth;
-    private int healthRegenDelay = 10;
+    private float healthRegenDelay = 5.0f;
+    private float regenTimer = 0.0f;
     public bool combatState = false;
     private float speed = 8.0f;
     public GameObject player;
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
     public bool isDashing = false;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 2.0f;
+    private float dashingCooldown = 1.75f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
@@ -61,8 +62,8 @@ public class PlayerController : MonoBehaviour
     public bool isAttacking = false;
     private bool attackState = false;
     public int attackCounter = 0;
-    private float comboMaxTime = 2.0f;
-    private float attackCD = 1.5f;
+    private float comboMaxTime = 1.5f;
+    private float attackCD = 1.75f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
 
@@ -98,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private float immunityTime = 3.0f;
+    private float immunityTime = 1.75f;
 
     //animator
     private Animator playerAnimator;
@@ -137,6 +138,7 @@ public class PlayerController : MonoBehaviour
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
         fxBehave = player.GetComponent<player_fx_behaviors>();
 
+
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
@@ -153,12 +155,12 @@ public class PlayerController : MonoBehaviour
     {
         //disable everything
         pc.Gameplay.Disable();
-        pc.UI.Disable(); 
+        pc.UI.Disable();
 
         // Enable the requested action map
-        if (mapToSwitch == "Gameplay") 
-        {  
-            pc.Gameplay.Enable(); 
+        if (mapToSwitch == "Gameplay")
+        {
+            pc.Gameplay.Enable();
         }
         else if (mapToSwitch == "UI")
         {
@@ -176,7 +178,7 @@ public class PlayerController : MonoBehaviour
             SwitchActionMap("UI");
             pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
 
-        }     
+        }
     }
 
     //B button pressed in menus
@@ -190,7 +192,7 @@ public class PlayerController : MonoBehaviour
                 pauseMenu.GetComponent<PauseMenuScript>().backButton();
 
             }
-        }  
+        }
     }
 
     //unpause --> from ui input action system
@@ -223,7 +225,7 @@ public class PlayerController : MonoBehaviour
             //assign current enemy
             enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
             projectile = GameObject.Find("Projectile_Bullet(Clone)");
-            if(projectile == null)
+            if (projectile == null)
             {
                 Debug.Log("Not found");
                 deflectState = false;
@@ -274,7 +276,7 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
-                if(deflectState == true)
+                if (deflectState == true)
                 {
                     deflectstate();
                 }
@@ -284,7 +286,7 @@ public class PlayerController : MonoBehaviour
                     quickDrop();
                 }
             }
-            else if (deathState == true && diedOnce == false) 
+            else if (deathState == true && diedOnce == false)
             {
                 ManagedeathState();
                 diedOnce = true;
@@ -435,7 +437,7 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(Dash());
             }
-            else if(Dashing == true && canDash == false)
+            else if (Dashing == true && canDash == false)
             {
                 m_audio.playPlayerSFX(8);
             }
@@ -677,7 +679,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
+    //https://www.youtube.com/watch?v=YSzmCf_L2cE
     IEnumerator Immunity()
     {
         Debug.Log("Hello");
@@ -690,7 +692,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || (other.gameObject.tag == "Projectile" && other.gameObject.GetComponent<Projectile_Bullet>()!=null))
+        if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || (other.gameObject.tag == "Projectile" && other.gameObject.GetComponent<Projectile_Bullet>() != null))
         {
             collision = true;
             playerCurrenthealth -= 1;
@@ -718,7 +720,9 @@ public class PlayerController : MonoBehaviour
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
-        if (collision == true)
+        healthRegen();
+
+        if (collision == true && combatState == true && deathState == false)
         {
             StartCoroutine(Immunity());
         }
@@ -734,44 +738,28 @@ public class PlayerController : MonoBehaviour
         if (playerCurrenthealth == 0 && deathState == false)
         {
             deathState = true;
-           // Debug.Log("am dead");
+            // Debug.Log("am dead");
         }
-        else if (playerCurrenthealth < playerHealth)
-        {
-            if ((combatState == false) && (deathState == false))
-            {
 
-                StartCoroutine(healthRegen());
-            }
-        }
     }
     //Make sure to add a check if player in combat or not
-    IEnumerator healthRegen()
+    public void  healthRegen()
     {
-        if (canRegen)
+        if (canRegen == false || playerCurrenthealth == playerHealth)
         {
-            if (playerCurrenthealth == 1)
-            {
-                yield return new WaitForSeconds(healthRegenDelay);
-                playerCurrenthealth = 2;
-            }
-            else if (playerCurrenthealth == 2)
-            {
-                yield return new WaitForSeconds(healthRegenDelay);
-                playerCurrenthealth = 3;
-            }
-            else if (playerCurrenthealth == 3)
-            {
-                yield return new WaitForSeconds(healthRegenDelay);
-                playerCurrenthealth = 4;
-            }
-            else if (playerCurrenthealth == 4)
-            {
-                yield return new WaitForSeconds(healthRegenDelay);
-                playerCurrenthealth = 5;
-            }
+            Debug.Log("regen stopped");
         }
-        
+        else if (canRegen == true && (playerCurrenthealth < playerHealth) && combatState == false && deathState == false)
+        {
+            regenTimer += Time.deltaTime;
+            if (healthRegenDelay <= regenTimer)
+            {
+                playerCurrenthealth++;
+                regenTimer = 0.0f;
+            }
+
+        }
+
     }
 
     //-----------------------------------------------Death State-----------------------------------------------//

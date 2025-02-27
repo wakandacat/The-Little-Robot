@@ -137,16 +137,16 @@ public class ProjectileSpawner : MonoBehaviour
     // update position for the fire point with optional positional values (pass 'null' to not change a value when calling)
     public void Update_FirePointPosition(float? x = null, float? y = null, float? z = null)
     {
-        // get the current position
-        Vector3 currentPosition = Spawner_FirePoint.transform.position;
+        // get the current local position
+        Vector3 currentPosition = Spawner_FirePoint.transform.localPosition;
 
         // update the position only if the value is provided
         float newX = x.HasValue ? x.Value : currentPosition.x;
         float newY = y.HasValue ? y.Value : currentPosition.y;
         float newZ = z.HasValue ? z.Value : currentPosition.z;
 
-        // apply the updated position
-        Spawner_FirePoint.transform.position = new Vector3(newX, newY, newZ);
+        // apply the updated position in local space
+        Spawner_FirePoint.transform.localPosition = new Vector3(newX, newY, newZ);
     }
 
     // update rotation for the fire point with optional rotation values (pass 'null' to keep a value unchanged)
@@ -414,14 +414,22 @@ public class ProjectileSpawner : MonoBehaviour
         // Get the next available mine from the projectile pool
         GameObject NewMine = Spawner_ProjectilePool.GetNextProjectile();
 
-        // Set spawn position and target position
-        Vector3 spawnPosition = Spawner_FirePoint.position;
-        Vector3 forwardDirection = Spawner_FirePoint.forward;
-        Vector3 targetPosition = spawnPosition + forwardDirection * Toss_Distance;
-        targetPosition.y = 0;
+        // Ensure the mine is not parented to avoid unintended movement
+        NewMine.transform.SetParent(null, true); // true preserves world position
 
-        // Activate and initialize the mine
-        NewMine.transform.position = spawnPosition;
+        // Compute target position in local space
+        Vector3 localOffset = Vector3.forward * Toss_Distance;
+
+        // Convert local offset to world space
+        Vector3 targetPosition = Spawner_FirePoint.TransformPoint(localOffset);
+
+        // Maintain the original height of Spawner_FirePoint
+        targetPosition.y = Spawner_FirePoint.position.y - 7.5f; // DEBUGGING TO FORCE TO LAND ON GROUND SHOULD BE UPDATED
+
+        // Set mine's position explicitly in world space
+        NewMine.transform.position = Spawner_FirePoint.position;
+
+        // Initialize the mine
         NewMine.GetComponent<Projectile_Mine>().Initialize_Mine(Spawner_ProjectilePool, targetPosition, Arc_Height, Arc_Duration);
     }
 }

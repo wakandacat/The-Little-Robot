@@ -26,26 +26,26 @@ public class BossEnemy : MonoBehaviour
     public float State_Awake_Delay_1 = 4.0f;
 
     [Tooltip("Maximum HP that the Boss Enemy can have (second combat iteration).")]
-    public float HP_Maximum_2 = 50.0f;
+    public float HP_Maximum_2 = 75.0f;
     [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have (second combat iteration).")]
-    public float Energy_Maximum_2 = 3.0f;
+    public float Energy_Maximum_2 = 4.0f;
     [Tooltip("Amount of Energy the Boss Enemy regains over the course of a second while in 'State_LowEnergy' (second combat iteration).")]
     public float Energy_RegainedPerSecond_2 = 0.15f;
     [Tooltip("Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy' (second combat iteration).")]
     public float Energy_RegainedOnStrike_2 = 0.4f;
     [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack (second combat iteration).")]
-    public float State_Awake_Delay_2 = 4.0f;
+    public float State_Awake_Delay_2 = 3.0f;
 
     [Tooltip("Maximum HP that the Boss Enemy can have (first combat iteration).")]
-    public float HP_Maximum_3 = 50.0f;
+    public float HP_Maximum_3 = 100.0f;
     [Tooltip("Maximum Energy (cost of attacks) that the Boss Enemy can have (first combat iteration).")]
-    public float Energy_Maximum_3 = 3.0f;
+    public float Energy_Maximum_3 = 5.0f;
     [Tooltip("Amount of Energy the Boss Enemy regains over the course of a third while in 'State_LowEnergy' (first combat iteration).")]
     public float Energy_RegainedPerSecond_3 = 0.15f;
     [Tooltip("Amount of Energy the Boss Enemy when struck while in 'State_LowEnergy' (first combat iteration).")]
     public float Energy_RegainedOnStrike_3 = 0.4f;
     [Tooltip("Amount of time that must pass when entering the 'State_Awake' before the BossEnemy can execute the selected attack (first combat iteration).")]
-    public float State_Awake_Delay_3 = 4.0f;
+    public float State_Awake_Delay_3 = 2.0f;
 
     [Tooltip("Amount of time that passed between storing player position (in seconds).")]
     public float Player_PositionTrackingTimeInterval = 0.02f;
