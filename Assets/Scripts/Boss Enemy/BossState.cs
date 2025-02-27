@@ -522,14 +522,13 @@ public class State_Awake : BossState
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     // Define a delegate that matches the signature of a function to later call
     public delegate void MyFunctionDelegate();
+    string Attack_BestName = null;
+    float Attack_BestScore = 0.0f;
+    MyFunctionDelegate Attack_TransitionToExecute = null;
 
     // Determines which Attack_State to enter based on player information (attack_states must be manually added here)
     public void Attack_Selection_1()
     {
-        string Attack_BestName = null;
-        float Attack_BestScore = 0.0f;
-        MyFunctionDelegate Attack_TransitionToExecute = null;
-
         // Determine Best Choice -----------------------------------------------------------------------------------*
         for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
         {
@@ -549,22 +548,7 @@ public class State_Awake : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Easy;
                 }
             }
-            // State_Attack_Bullet_SlowFiringShot_Hard -----------------------
-            if (State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
-            {
-                Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
-                Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
-                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
-            }
-            else if (State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
-            {
-                if (Random.Range(0, 2) == 0)
-                {
-                    Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
-                    Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
-                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
-                }
-            }
+
             // State_Attack_Bullet_RapidFireShot_Easy -----------------------
             if (State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -581,22 +565,7 @@ public class State_Awake : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Easy;
                 }
             }
-            // State_Attack_Bullet_RapidFireShot_Hard -----------------------
-            if (State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
-            {
-                Attack_BestName = State_Attack_Bullet_RapidFireShot_Hard.Attack_Name;
-                Attack_BestScore = State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent);
-                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Hard;
-            }
-            else if (State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
-            {
-                if (Random.Range(0, 2) == 0)
-                {
-                    Attack_BestName = State_Attack_Bullet_RapidFireShot_Hard.Attack_Name;
-                    Attack_BestScore = State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent);
-                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Hard;
-                }
-            }
+
             // State_Attack_Bullet_TrackingCone_Easy -----------------------
             if (State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -613,6 +582,7 @@ public class State_Awake : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Easy;
                 }
             }
+
             // State_Attack_Bullet_TrackingWall_Easy -----------------------
             if (State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -629,22 +599,7 @@ public class State_Awake : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Easy;
                 }
             }
-            // State_Attack_Bullet_TrackingWall_Hard -----------------------
-            if (State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
-            {
-                Attack_BestName = State_Attack_Bullet_TrackingWall_Hard.Attack_Name;
-                Attack_BestScore = State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent);
-                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Hard;
-            }
-            else if (State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
-            {
-                if (Random.Range(0, 2) == 0)
-                {
-                    Attack_BestName = State_Attack_Bullet_TrackingWall_Hard.Attack_Name;
-                    Attack_BestScore = State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent);
-                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Hard;
-                }
-            }
+
             // State_Attack_Bullet_RotatingWall_Easy -----------------------
             if (State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -661,22 +616,7 @@ public class State_Awake : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Easy;
                 }
             }
-            // State_Attack_Bullet_RotatingWall_Hard -----------------------
-            if (State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
-            {
-                Attack_BestName = State_Attack_Bullet_RotatingWall_Hard.Attack_Name;
-                Attack_BestScore = State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent);
-                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Hard;
-            }
-            else if (State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
-            {
-                if (Random.Range(0, 2) == 0)
-                {
-                    Attack_BestName = State_Attack_Bullet_RotatingWall_Hard.Attack_Name;
-                    Attack_BestScore = State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent);
-                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Hard;
-                }
-            }
+
             // State_Attack_Bullet_JumpRope_Easy -----------------------
             if (State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -693,38 +633,7 @@ public class State_Awake : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
                 }
             }
-            // State_Attack_Bullet_JumpRope_Hard -----------------------
-            if (State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
-            {
-                Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
-                Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
-                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
-            }
-            else if (State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
-            {
-                if (Random.Range(0, 2) == 0)
-                {
-                    Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
-                    Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
-                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
-                }
-            }
-            // TransitionToState_Attack_ArenaHazard_Mine_Random -------
-            if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) > Attack_BestScore)
-            {
-                Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
-                Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
-                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
-            }
-            else if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) == Attack_BestScore)
-            {
-                if (Random.Range(0, 2) == 0)
-                {
-                    Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
-                    Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
-                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
-                }
-            }
+
             // State_Attack_Melee01 -----------------------------------
             if (State_Attack_Melee01.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -742,19 +651,11 @@ public class State_Awake : BossState
                 }
             }
         }
-        // If No Attack Selected, Choose Default -------------------------------------------------------------------*
-        if (Attack_BestName == null)
-        {
-            // put default attack here for backup selection
-        }
 
         // DEBUGGING (MUST BE REMOVED):
-        //Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
-        //Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
-        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
-
-        //State_Attack_Bullet_TrackingCone_Easy
-        //State_Attack_Bullet_SlowFiringShot_Easy
+        //Attack_BestName = State_Attack_Bullet_SlowFiringShot_Easy.Attack_Name;
+        //Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Easy.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Easy;
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
         Attack_TransitionToExecute();
@@ -762,12 +663,491 @@ public class State_Awake : BossState
 
     public void Attack_Selection_2()
     {
+        // Determine Best Choice -----------------------------------------------------------------------------------*
+        for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
+        {
+            // 1 / 3 chance for hard attack
+            if (Random.Range(0, 3) == 0) {
+                // State_Attack_Bullet_SlowFiringShot_Hard -----------------------
+                if (State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
+                }
+                else if (State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
+                    }
+                }
 
+                // State_Attack_Bullet_RapidFireShot_Hard -----------------------
+                if (State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_RapidFireShot_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Hard;
+                }
+                else if (State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_RapidFireShot_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Hard;
+                    }
+                }
+
+                // State_Attack_Bullet_TrackingCone_Hard -----------------------
+                if (State_Attack_Bullet_TrackingCone_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_TrackingCone_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_TrackingCone_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Hard;
+                }
+                else if (State_Attack_Bullet_TrackingCone_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_TrackingCone_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_TrackingCone_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Hard;
+                    }
+                }
+
+                // State_Attack_Bullet_TrackingWall_Hard -----------------------
+                if (State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_TrackingWall_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Hard;
+                }
+                else if (State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_TrackingWall_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Hard;
+                    }
+                }
+
+                // State_Attack_Bullet_RotatingWall_Hard -----------------------
+                if (State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_RotatingWall_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Hard;
+                }
+                else if (State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_RotatingWall_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Hard;
+                    }
+                }
+
+                // State_Attack_Bullet_JumpRope_Hard -----------------------
+                if (State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
+                }
+                else if (State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
+                    }
+                }
+            }
+
+            // otherwise use easy attack
+            else
+            {
+                // State_Attack_Bullet_RapidFireShot_Easy -----------------------
+                if (State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_RapidFireShot_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Easy;
+                }
+                else if (State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_RapidFireShot_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Easy;
+                    }
+                }
+
+                // State_Attack_Bullet_TrackingCone_Easy -----------------------
+                if (State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_TrackingCone_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Easy;
+                }
+                else if (State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_TrackingCone_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Easy;
+                    }
+                }
+
+                // State_Attack_Bullet_TrackingWall_Easy -----------------------
+                if (State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_TrackingWall_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Easy;
+                }
+                else if (State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_TrackingWall_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Easy;
+                    }
+                }
+
+                // State_Attack_Bullet_RotatingWall_Easy -----------------------
+                if (State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_RotatingWall_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Easy;
+                }
+                else if (State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_RotatingWall_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Easy;
+                    }
+                }
+
+                // State_Attack_Bullet_JumpRope_Easy -----------------------
+                if (State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_JumpRope_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
+                }
+                else if (State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_JumpRope_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
+                    }
+                }
+            }
+
+            // always check mine or melee
+            // TransitionToState_Attack_ArenaHazard_Mine_Random -------
+            if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
+                Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
+            }
+            else if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
+                    Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
+                }
+            }
+
+            // State_Attack_Melee01 -----------------------------------
+            if (State_Attack_Melee01.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_Melee01.Attack_Name;
+                Attack_BestScore = State_Attack_Melee01.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Melee01;
+            }
+            else if (State_Attack_Melee01.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_Melee01.Attack_Name;
+                    Attack_BestScore = State_Attack_Melee01.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Melee01;
+                }
+            }
+        }
+
+        // DEBUGGING (MUST BE REMOVED):
+        //Attack_BestName = State_Attack_Bullet_SlowFiringShot_Easy.Attack_Name;
+        //Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Easy.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Easy;
+
+        // Transition to Best Choice -------------------------------------------------------------------------------*
+        Attack_TransitionToExecute();
     }
 
     public void Attack_Selection_3()
     {
+        // Determine Best Choice -----------------------------------------------------------------------------------*
+        for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
+        {
+            // 70% chance for hard attack
+            if (Random.Range(0, 10) <= 6)
+            {
+                // State_Attack_Bullet_SlowFiringShot_Hard -----------------------
+                if (State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
+                }
+                else if (State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_SlowFiringShot_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
+                    }
+                }
 
+                // State_Attack_Bullet_RapidFireShot_Hard -----------------------
+                if (State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_RapidFireShot_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Hard;
+                }
+                else if (State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_RapidFireShot_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Hard;
+                    }
+                }
+
+                // State_Attack_Bullet_TrackingCone_Hard -----------------------
+                if (State_Attack_Bullet_TrackingCone_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_TrackingCone_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_TrackingCone_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Hard;
+                }
+                else if (State_Attack_Bullet_TrackingCone_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_TrackingCone_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_TrackingCone_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Hard;
+                    }
+                }
+
+                // State_Attack_Bullet_TrackingWall_Hard -----------------------
+                if (State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_TrackingWall_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Hard;
+                }
+                else if (State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_TrackingWall_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Hard;
+                    }
+                }
+
+                // State_Attack_Bullet_RotatingWall_Hard -----------------------
+                if (State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_RotatingWall_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Hard;
+                }
+                else if (State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_RotatingWall_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_RotatingWall_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Hard;
+                    }
+                }
+
+                // State_Attack_Bullet_JumpRope_Hard -----------------------
+                if (State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
+                }
+                else if (State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
+                    }
+                }
+            }
+
+            // otherwise use easy attack
+            else
+            {
+                // State_Attack_Bullet_RapidFireShot_Easy -----------------------
+                if (State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_RapidFireShot_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Easy;
+                }
+                else if (State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_RapidFireShot_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Easy;
+                    }
+                }
+
+                // State_Attack_Bullet_TrackingCone_Easy -----------------------
+                if (State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_TrackingCone_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Easy;
+                }
+                else if (State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_TrackingCone_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Easy;
+                    }
+                }
+
+                // State_Attack_Bullet_TrackingWall_Easy -----------------------
+                if (State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_TrackingWall_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Easy;
+                }
+                else if (State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_TrackingWall_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Easy;
+                    }
+                }
+
+                // State_Attack_Bullet_RotatingWall_Easy -----------------------
+                if (State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_RotatingWall_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Easy;
+                }
+                else if (State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_RotatingWall_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_RotatingWall_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Easy;
+                    }
+                }
+
+                // State_Attack_Bullet_JumpRope_Easy -----------------------
+                if (State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+                {
+                    Attack_BestName = State_Attack_Bullet_JumpRope_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
+                }
+                else if (State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Attack_BestName = State_Attack_Bullet_JumpRope_Easy.Attack_Name;
+                        Attack_BestScore = State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent);
+                        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
+                    }
+                }
+            }
+
+            // always check mine or melee
+            // TransitionToState_Attack_ArenaHazard_Mine_Random -------
+            if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
+                Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
+            }
+            else if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
+                    Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
+                }
+            }
+
+            // State_Attack_Melee01 -----------------------------------
+            if (State_Attack_Melee01.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_Melee01.Attack_Name;
+                Attack_BestScore = State_Attack_Melee01.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Melee01;
+            }
+            else if (State_Attack_Melee01.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_Melee01.Attack_Name;
+                    Attack_BestScore = State_Attack_Melee01.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Melee01;
+                }
+            }
+        }
+
+        // DEBUGGING (MUST BE REMOVED):
+        //Attack_BestName = State_Attack_Bullet_SlowFiringShot_Easy.Attack_Name;
+        //Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Easy.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Easy;
+
+        // Transition to Best Choice -------------------------------------------------------------------------------*
+        Attack_TransitionToExecute();
     }
 }
 
@@ -1493,7 +1873,7 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -1667,7 +2047,7 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -1853,7 +2233,7 @@ public class State_Attack_Bullet_TrackingWall_Easy : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2032,7 +2412,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2216,7 +2596,7 @@ public class State_Attack_Bullet_RotatingWall_Easy : BossState
 
         float randomRotation = Random.Range(0.0f, 360.0f);
         SpawnerComponent_Bullet.Update_FirePointRotation(null, randomRotation, null);
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2395,7 +2775,7 @@ public class State_Attack_Bullet_RotatingWall_Hard : BossState
 
         float randomRotation = Random.Range(0.0f, 360.0f);
         SpawnerComponent_Bullet.Update_FirePointRotation(null, randomRotation, null);
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2570,7 +2950,7 @@ public class State_Attack_Bullet_JumpRope_Easy : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2728,7 +3108,7 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2866,7 +3246,7 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
             score -= 1.0f;
         }
         // Check Attack_HistoryList ------------------*
-        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+        score += (bossEnemyComponent.returnAttackHistoryScore(Attack_Name) * 2);
         return score;
     }
 
@@ -3112,7 +3492,7 @@ public class State_Attack_Melee01 : BossState
         // Check distance ----------------------------*
         if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
         {
-            score += 2.0f;
+            score += 1.5f;
         }
         else
         {
