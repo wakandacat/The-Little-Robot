@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 1.5f;
-    private float attackCD = 1.0f;
+    private float attackCD = 1.75f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
 
@@ -718,7 +718,7 @@ public class PlayerController : MonoBehaviour
     //https://www.youtube.com/watch?v=uGDOiq1c7Yc
     public void manageHealth()
     {
-        if (combatState == true && collision == true)
+        if (collision == true && combatState == true && deathState == false)
         {
             StartCoroutine(Immunity());
         }
