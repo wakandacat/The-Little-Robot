@@ -17,7 +17,7 @@ public class endGameTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            m_audio.StopCoroutine(m_audio.walkSFX()); // kill the player sounds
+            m_audio.GetComponent<audioManager>().walkSource.enabled = false; // kill the player sounds
             GameObject.Find("WorldManager").GetComponent<mainGameScript>().EndGame();
         }
     }
