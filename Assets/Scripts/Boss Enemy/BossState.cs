@@ -358,6 +358,12 @@ public class State_Death : BossState
         //Debug.Log("BossEnemy: Entering State_Death");
         bossEnemyComponent.GetComponent<CapsuleCollider>().enabled = false;
 
+        // Disbable Projectiles
+        ProjectileSpawner SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+        ProjectileSpawner SpawnerComponent_Mine = bossEnemyComponent.ReturnComponent_Spawner_Mine();
+        SpawnerComponent_Mine.ReturnAllProjectilesToPool();
+
         // FX Logic
         animator.SetBool("die", true);
         animator.SetBool("woken", false);
@@ -559,6 +565,38 @@ public class State_Awake : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
                 }
             }
+            // State_Attack_Bullet_RapidFireShot_Easy -----------------------
+            if (State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_Bullet_RapidFireShot_Easy.Attack_Name;
+                Attack_BestScore = State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Easy;
+            }
+            else if (State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_Bullet_RapidFireShot_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RapidFireShot_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Easy;
+                }
+            }
+            // State_Attack_Bullet_RapidFireShot_Hard -----------------------
+            if (State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_Bullet_RapidFireShot_Hard.Attack_Name;
+                Attack_BestScore = State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Hard;
+            }
+            else if (State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_Bullet_RapidFireShot_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_RapidFireShot_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RapidFireShot_Hard;
+                }
+            }
             // State_Attack_Bullet_TrackingCone_Easy -----------------------
             if (State_Attack_Bullet_TrackingCone_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -639,6 +677,38 @@ public class State_Awake : BossState
                     Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Hard;
                 }
             }
+            // State_Attack_Bullet_JumpRope_Easy -----------------------
+            if (State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_Bullet_JumpRope_Easy.Attack_Name;
+                Attack_BestScore = State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
+            }
+            else if (State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_Bullet_JumpRope_Easy.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
+                }
+            }
+            // State_Attack_Bullet_JumpRope_Hard -----------------------
+            if (State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent) > Attack_BestScore)
+            {
+                Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
+                Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
+                Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
+            }
+            else if (State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent) == Attack_BestScore)
+            {
+                if (Random.Range(0, 2) == 0)
+                {
+                    Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
+                    Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
+                    Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
+                }
+            }
             // TransitionToState_Attack_ArenaHazard_Mine_Random -------
             if (State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -679,9 +749,9 @@ public class State_Awake : BossState
         }
 
         // DEBUGGING (MUST BE REMOVED):
-        //Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
-        //Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
-        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
+        //Attack_BestName = State_Attack_Bullet_JumpRope_Hard.Attack_Name;
+        //Attack_BestScore = State_Attack_Bullet_JumpRope_Hard.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Hard;
 
         //State_Attack_Bullet_TrackingCone_Easy
         //State_Attack_Bullet_SlowFiringShot_Easy
@@ -793,7 +863,7 @@ public class State_Attack_Bullet_SlowFiringShot_Easy : BossState
                 ////Debug.Log("BossEnemy: Spawner Ready To Fire");
                 SpawnerComponent_Bullet.PreAttackLogic();
 
-                Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                Vector3 playerPos = bossEnemyComponent.Player_EstimateFuturePosition(0.5f);
                 SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
                 SpawnerComponent_Bullet.Spawner_Bullet_SingleShot(true);
 
@@ -864,7 +934,7 @@ public class State_Attack_Bullet_SlowFiringShot_Hard : BossState
     private bool Attack_Completed = false;
 
     // Attack_State Selection Properties
-    public static string Attack_Name = "State_Attack_Bullet_SlowFiringShot_Easy";
+    public static string Attack_Name = "State_Attack_Bullet_SlowFiringShot_Hard";
     public static float Energy_Cost = 1.0f;
     public static float Player_MinDistance = 10.0f;
     public static float Player_MaxDistance = 50.0f;
@@ -911,7 +981,7 @@ public class State_Attack_Bullet_SlowFiringShot_Hard : BossState
     public override void Enter()
     {
         // Debugging
-        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_SlowFiringShot_Easy");
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_SlowFiringShot_Hard");
 
         // Boss Enemy Logic
         bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
@@ -957,9 +1027,341 @@ public class State_Attack_Bullet_SlowFiringShot_Hard : BossState
                 Attack_Current_ProjectileSpeed = Mathf.Clamp(Attack_Current_ProjectileSpeed, Attack_Starting_ProjectileSpeed, Attack_Final_ProjectileSpeed);
                 SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_Current_ProjectileSpeed);
 
-                Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                Vector3 playerPos = bossEnemyComponent.Player_EstimateFuturePosition(0.5f);
                 SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
                 SpawnerComponent_Bullet.Spawner_Bullet_SingleShot(true);
+
+                SpawnerComponent_Bullet.PostAttackLogic();
+            }
+        }
+        // Attack has finished
+        else
+        {
+            //Debug.Log("BossEnemy: Attack Completed");
+            Attack_Completed = true;
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame - after update
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToState_SelfCheck();
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Animation Logic
+        animator.SetBool("inAttack", false);
+
+    }
+}
+
+public class State_Attack_Bullet_RapidFireShot_Easy : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "State_Attack_Bullet_RapidFireShot_Easy";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 50.0f;
+
+    // Spawner Values
+    private float Attack_FireRate = 2.0f;
+    private float Attack_FireRateDelay = 1f;
+    private int Attack_Count = 24;
+    private bool Attack_TrackHorizontal = false;
+    private bool Attack_TrackVertical = false;
+    private float Attack_TrackSpeed = 0.0f;
+    private float Attack_ProjectileSpeed = 30.0f;
+    private float Attack_ProjectileLifetime = 10.0f;
+
+    // Attack Spawner
+    private ProjectileSpawner SpawnerComponent_Bullet;
+
+    // Attack Values
+    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    private int Attack_ProjectileCount = 3;
+    private float Attack_AngleOfSpread = 10.0f;
+    private int Attack_ProjectileVerticalCount = 3;
+    private float Attack_MinHeight = 0.0f;
+    private float Attack_MaxHeight = 3.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Debugging
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_RapidFireShot_Easy");
+
+        // Boss Enemy Logic
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+        // Spawner Logic
+        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+        SpawnerComponent_Bullet.Reset_FirePointPositionToGameObject();
+        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+        // Animation Logic
+        animator.SetBool("inAttack", true);
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Spawner Logic
+        // Attack is still occuring
+        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+        {
+            //Debug.Log("BossEnemy: Spawner Is Active");
+            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+            {
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
+                SpawnerComponent_Bullet.PreAttackLogic();
+
+                Vector3 playerPos;
+                if (bossEnemyComponent.Player_GetDistanceFromXSecondsAgo(1.0f) < 5.0f)
+                {
+                    playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
+                }
+                else
+                {
+                    playerPos = bossEnemyComponent.Player_EstimateFuturePosition(1.0f);
+                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
+                }
+
+                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+
+                SpawnerComponent_Bullet.PostAttackLogic();
+            }
+        }
+        // Attack has finished
+        else
+        {
+            //Debug.Log("BossEnemy: Attack Completed");
+            Attack_Completed = true;
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame - after update
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToState_SelfCheck();
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Animation Logic
+        animator.SetBool("inAttack", false);
+
+    }
+}
+
+public class State_Attack_Bullet_RapidFireShot_Hard : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "State_Attack_Bullet_RapidFireShot_Easy";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 50.0f;
+
+    // Spawner Values
+    private float Attack_FireRate = 4.0f;
+    private float Attack_FireRateDelay = 1f;
+    private int Attack_Count = 48;
+    private bool Attack_TrackHorizontal = false;
+    private bool Attack_TrackVertical = false;
+    private float Attack_TrackSpeed = 0.0f;
+    private float Attack_ProjectileSpeed = 30.0f;
+    private float Attack_ProjectileLifetime = 10.0f;
+
+    // Attack Spawner
+    private ProjectileSpawner SpawnerComponent_Bullet;
+
+    // Attack Values
+    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    private int Attack_ProjectileCount = 3;
+    private float Attack_AngleOfSpread = 10.0f;
+    private int Attack_ProjectileVerticalCount = 3;
+    private float Attack_MinHeight = 0.0f;
+    private float Attack_MaxHeight = 3.0f;
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Debugging
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_RapidFireShot_Easy");
+
+        // Boss Enemy Logic
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+        // Spawner Logic
+        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+        SpawnerComponent_Bullet.Reset_FirePointPositionToGameObject();
+        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+        // Animation Logic
+        animator.SetBool("inAttack", true);
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Spawner Logic
+        // Attack is still occuring
+        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+        {
+            //Debug.Log("BossEnemy: Spawner Is Active");
+            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+            {
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
+                SpawnerComponent_Bullet.PreAttackLogic();
+
+                Vector3 playerPos;
+                if (bossEnemyComponent.Player_GetDistanceFromXSecondsAgo(1.0f) < 5.0f)
+                {
+                    playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
+                }
+                else
+                {
+                    playerPos = bossEnemyComponent.Player_EstimateFuturePosition(0.75f);
+                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
+                }
+
+                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
 
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
@@ -2037,6 +2439,322 @@ public class State_Attack_Bullet_RotatingWall_Hard : BossState
                     // rotate 90 degrees
                     SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, 90.0f, 0));
                 }
+
+                SpawnerComponent_Bullet.PostAttackLogic();
+            }
+        }
+        // Attack has finished
+        else
+        {
+            //Debug.Log("BossEnemy: Attack Completed");
+            Attack_Completed = true;
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame - after update
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToState_SelfCheck();
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Animation Logic
+        animator.SetBool("inAttack", false);
+
+    }
+}
+
+public class State_Attack_Bullet_JumpRope_Easy : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "State_Attack_Bullet_JumpRope_Easy";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 50.0f;
+
+    // Spawner Values
+    private float Attack_FireRate = 0.5f;
+    private float Attack_FireRateDelay = 1f;
+    private int Attack_Count = 7;
+    private bool Attack_TrackHorizontal = false;
+    private bool Attack_TrackVertical = false;
+    private float Attack_TrackSpeed = 0.0f;
+    private float Attack_ProjectileSpeed = 12.0f;
+    private float Attack_ProjectileLifetime = 10.0f;
+
+    // Attack Spawner
+    private ProjectileSpawner SpawnerComponent_Bullet;
+
+    // Attack Values
+    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    private int Attack_ProjectileCount = 100;
+    private float Attack_AngleOfSpread = 360.0f;
+    private int Attack_ProjectileVerticalCount = 1;
+    private float Attack_MinHeight = 0.5f;
+    private float Attack_MaxHeight = 0.5f;
+
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Debugging
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_JumpRope_Easy");
+
+        // Boss Enemy Logic
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+        // Spawner Logic
+        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+        // Animation Logic
+        animator.SetBool("inAttack", true);
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Spawner Logic
+        // Attack is still occuring
+        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+        {
+            ////Debug.Log("BossEnemy: Spawner Is Active");
+            // Spawner is ready for next projectile fire
+            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+            {
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
+                SpawnerComponent_Bullet.PreAttackLogic();
+
+                float randomDegree = Random.Range(0.0f, 360.0f);
+                SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, randomDegree, 0));
+                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+
+                SpawnerComponent_Bullet.PostAttackLogic();
+            }
+        }
+        // Attack has finished
+        else
+        {
+            //Debug.Log("BossEnemy: Attack Completed");
+            Attack_Completed = true;
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called once per frame - after update
+    public override void CheckTransition()
+    {
+        // Programming Logic
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
+        {
+            bossEnemyComponent.TransitionToState_SelfCheck();
+        }
+
+        // Animation Logic
+
+    }
+
+    // Called at fixed intervals (used for physics updates)
+    public override void FixedUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called after all other update functions
+    public override void LateUpdate()
+    {
+        // Programming Logic
+
+        // Animation Logic
+
+    }
+
+    // Called when the state machine transitions out of this state
+    public override void Exit()
+    {
+        // Programming Logic
+        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+        // Animation Logic
+        animator.SetBool("inAttack", false);
+
+    }
+}
+
+public class State_Attack_Bullet_JumpRope_Hard : BossState
+{
+    // Private Attributes
+    private bool Attack_Completed = false;
+
+    // Attack_State Selection Properties
+    public static string Attack_Name = "State_Attack_Bullet_JumpRope_Easy";
+    public static float Energy_Cost = 1.0f;
+    public static float Player_MinDistance = 10.0f;
+    public static float Player_MaxDistance = 50.0f;
+
+    // Spawner Values
+    private float Attack_FireRate = 1.75f;
+    private float Attack_FireRateDelay = 1f;
+    private int Attack_Count = 24;
+    private bool Attack_TrackHorizontal = false;
+    private bool Attack_TrackVertical = false;
+    private float Attack_TrackSpeed = 0.0f;
+    private float Attack_ProjectileSpeed = 20.0f;
+    private float Attack_ProjectileLifetime = 10.0f;
+
+    // Attack Spawner
+    private ProjectileSpawner SpawnerComponent_Bullet;
+
+    // Attack Values
+    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+    private int Attack_ProjectileCount = 100;
+    private float Attack_AngleOfSpread = 360.0f;
+    private int Attack_ProjectileVerticalCount = 1;
+    private float Attack_MinHeight = 0.5f;
+    private float Attack_MaxHeight = 0.5f;
+
+
+    public static float CalculateScore(BossEnemy bossEnemyComponent)
+    {
+        float score = 0.0f;
+
+        // Check distance ----------------------------*
+        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+        {
+            score += 1.0f;
+        }
+        else
+        {
+            score -= 1.0f;
+        }
+
+        // Check Attack_HistoryList ------------------*
+        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+        return score;
+    }
+
+    // Called when the state machine transitions to this state
+    public override void Enter()
+    {
+        // Debugging
+        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_JumpRope_Easy");
+
+        // Boss Enemy Logic
+        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+        // Spawner Logic
+        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.0f, null);
+        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+        // Animation Logic
+        animator.SetBool("inAttack", true);
+
+    }
+
+    // Called once per frame
+    public override void Update()
+    {
+        // Programming Logic
+
+        // Spawner Logic
+        // Attack is still occuring
+        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+        {
+            ////Debug.Log("BossEnemy: Spawner Is Active");
+            // Spawner is ready for next projectile fire
+            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+            {
+                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
+                SpawnerComponent_Bullet.PreAttackLogic();
+
+                float randomDegree = Random.Range(0.0f, 360.0f);
+                SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, randomDegree, 0));
+                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
 
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
