@@ -643,8 +643,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 7.621275, y: 101.12749, z: 13.996169}
-  m_Center: {x: 86.21155, y: -19.627892, z: -19.93814}
+  m_Size: {x: 9.713835, y: 101.12749, z: 13.3038}
+  m_Center: {x: 87.25783, y: -19.627892, z: -19.591951}
 --- !u!65 &90949746
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3232,6 +3232,11 @@ PrefabInstance:
         type: 3}
       propertyPath: VelocityModule.enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 246891091464162014, guid: 210b9d74da0fa2c44b6142fc7d1e1906,
+        type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
       objectReference: {fileID: 0}
     - target: {fileID: 246891091464162014, guid: 210b9d74da0fa2c44b6142fc7d1e1906,
         type: 3}
