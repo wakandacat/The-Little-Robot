@@ -5,11 +5,11 @@ using UnityEngine;
 public class endGameTrigger : MonoBehaviour
 {
 
-    private player_fx_behaviors m_audio;
+    private audioManager m_audio;
 
     private void Start()
     {
-        m_audio = GameObject.FindGameObjectWithTag("Player").GetComponent<player_fx_behaviors>();
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
     }
 
     //unload the previous scene
