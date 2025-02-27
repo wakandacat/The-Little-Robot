@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private float immunityTime = 2.0f;
+    private float immunityTime = 1.0f;
 
     //animator
     private Animator playerAnimator;
