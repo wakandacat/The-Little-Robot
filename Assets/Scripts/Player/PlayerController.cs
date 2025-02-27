@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     public int playerHealth = 5;
     private float playerDamage = 1.0f;
     public float playerCurrenthealth;
-    private int healthRegenDelay = 10;
+    private float healthRegenDelay = 5.0f;
     public bool combatState = false;
     private float speed = 8.0f;
     public GameObject player;
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private float immunityTime = 3.0f;
+    private float immunityTime = 2.0f;
 
     //animator
     private Animator playerAnimator;
@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
         fxBehave = player.GetComponent<player_fx_behaviors>();
 
+
         pc.Gameplay.Jump.performed += OnJump;
         pc.Gameplay.QuickDrop.performed += OnQuickDrop;
         pc.Gameplay.Dash.performed += OnDash;
@@ -153,12 +154,12 @@ public class PlayerController : MonoBehaviour
     {
         //disable everything
         pc.Gameplay.Disable();
-        pc.UI.Disable(); 
+        pc.UI.Disable();
 
         // Enable the requested action map
-        if (mapToSwitch == "Gameplay") 
-        {  
-            pc.Gameplay.Enable(); 
+        if (mapToSwitch == "Gameplay")
+        {
+            pc.Gameplay.Enable();
         }
         else if (mapToSwitch == "UI")
         {
@@ -176,7 +177,7 @@ public class PlayerController : MonoBehaviour
             SwitchActionMap("UI");
             pauseMenu.GetComponent<PauseMenuScript>().PauseGame();
 
-        }     
+        }
     }
 
     //B button pressed in menus
@@ -190,7 +191,7 @@ public class PlayerController : MonoBehaviour
                 pauseMenu.GetComponent<PauseMenuScript>().backButton();
 
             }
-        }  
+        }
     }
 
     //unpause --> from ui input action system
@@ -223,7 +224,7 @@ public class PlayerController : MonoBehaviour
             //assign current enemy
             enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
             projectile = GameObject.Find("Projectile_Bullet(Clone)");
-            if(projectile == null)
+            if (projectile == null)
             {
                 Debug.Log("Not found");
                 deflectState = false;
@@ -274,7 +275,7 @@ public class PlayerController : MonoBehaviour
                 {
                     timer();
                 }
-                if(deflectState == true)
+                if (deflectState == true)
                 {
                     deflectstate();
                 }
@@ -284,7 +285,7 @@ public class PlayerController : MonoBehaviour
                     quickDrop();
                 }
             }
-            else if (deathState == true && diedOnce == false) 
+            else if (deathState == true && diedOnce == false)
             {
                 ManagedeathState();
                 diedOnce = true;
@@ -435,7 +436,7 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(Dash());
             }
-            else if(Dashing == true && canDash == false)
+            else if (Dashing == true && canDash == false)
             {
                 m_audio.playPlayerSFX(8);
             }
@@ -690,7 +691,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || (other.gameObject.tag == "Projectile" && other.gameObject.GetComponent<Projectile_Bullet>()!=null))
+        if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source" || (other.gameObject.tag == "Projectile" && other.gameObject.GetComponent<Projectile_Bullet>() != null))
         {
             collision = true;
             playerCurrenthealth -= 1;
@@ -734,47 +735,27 @@ public class PlayerController : MonoBehaviour
         if (playerCurrenthealth == 0 && deathState == false)
         {
             deathState = true;
-           // Debug.Log("am dead");
+            // Debug.Log("am dead");
         }
-        else if (playerCurrenthealth < playerHealth)
-        {
-            if ((combatState == false) && (deathState == false))
-            {
-                if(collision == false)
-                {
-                    StartCoroutine(healthRegen());
-                }
-                else if(collision == true || playerCurrenthealth == playerHealth)
-                {
-                    StopCoroutine(healthRegen());
 
-                }
-            }
-        }
     }
     //Make sure to add a check if player in combat or not
     IEnumerator healthRegen()
     {
-        if (playerCurrenthealth == 1)
+        Debug.Log("regen done");
+        if (canRegen == false || playerCurrenthealth == playerHealth)
         {
-            yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth = 2;
+            Debug.Log("regen stopped");
         }
-        else if (playerCurrenthealth == 2)
+        else if (canRegen == true && (playerCurrenthealth < playerHealth) && combatState == false && deathState == false)
         {
+            Debug.Log("regen in 5");
             yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth = 3;
+            playerCurrenthealth++;
+            Debug.Log("regen started");
+
         }
-        else if (playerCurrenthealth == 3)
-        {
-            yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth = 4;
-        }
-        else if (playerCurrenthealth == 4)
-        {
-            yield return new WaitForSeconds(healthRegenDelay);
-            playerCurrenthealth = 5;
-        }
+
     }
 
     //-----------------------------------------------Death State-----------------------------------------------//
