@@ -12,8 +12,8 @@ Material:
   m_Parent: {fileID: 2100000, guid: fb8584253d5f0fa40bd5e4bd20eb0345, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _METALLICSPECGLOSSMAP
   - _NORMALMAP
-  - _SPECULAR_SETUP
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -27,19 +27,22 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: e0d233cdaeaf6774d829ee8bcd2819c1, type: 3}
+        m_Texture: {fileID: 2800000, guid: b3616b2f40b9ba043bd6cf42147e33a6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 43f6bca9c0f207542882d50d9747255f, type: 3}
+        m_Texture: {fileID: 2800000, guid: fb0a14a94a9d6f649af94ea4dbfafbd5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e0d233cdaeaf6774d829ee8bcd2819c1, type: 3}
+        m_Texture: {fileID: 2800000, guid: b3616b2f40b9ba043bd6cf42147e33a6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _BumpScale: 1
+    - _Smoothness: 0.46
+    - _WorkflowMode: 1
     m_Colors: []
   m_BuildTextureStacks: []
 --- !u!114 &2601624331450854461

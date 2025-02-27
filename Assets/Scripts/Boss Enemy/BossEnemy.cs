@@ -98,7 +98,7 @@ public class BossEnemy : MonoBehaviour
 
     // Attack_State History -------------------------------------------------------------------------------------------------------
     private List<string> Attack_HistoryList = new List<string>();
-    private int Attack_HistoryLength = 3;
+    private int Attack_HistoryLength = 5;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Start Function                                                                                                                                                                               * 
@@ -205,6 +205,61 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
+    // Returns the magnitude of positional movement between where the player was X seconds ago and now
+    public float Player_GetDistanceFromXSecondsAgo(float secondsAgo)
+    {
+        if (Player_PositionHistory.Count == 0)
+        {
+            return 0f; // No history, so no movement
+        }
+
+        // Get the position from X seconds ago
+        Vector3 pastPosition = Player_ReturnPositionFromXSecondsAgo(secondsAgo);
+
+        // Get the player's current position
+        Vector3 currentPosition = Player_PositionHistory[Player_PositionHistory.Count - 1].Item1;
+
+        // Return the magnitude (distance) between the two positions
+        return Vector3.Distance(currentPosition, pastPosition);
+    }
+
+    // Returns the estimated position of the player X seconds into the future based on the previous movement history of the player
+    public Vector3 Player_EstimateFuturePosition(float secondsIntoFuture)
+    {
+        if (Player_PositionHistory.Count < 2)
+        {
+            return Player_PositionHistory.Count > 0 ? Player_PositionHistory[Player_PositionHistory.Count - 1].Item1 : transform.position;
+        }
+
+        int sampleCount = Mathf.Min(25, Player_PositionHistory.Count - 1); // Use up to 25 recent samples
+        Vector3 weightedVelocity = Vector3.zero;
+        float totalWeight = 0f;
+        int lastIndex = Player_PositionHistory.Count - 1; // Get last index
+
+        for (int i = 0; i < sampleCount; i++)
+        {
+            var current = Player_PositionHistory[lastIndex - i];
+            var previous = Player_PositionHistory[lastIndex - (i + 1)];
+
+            Vector3 segmentVelocity = (current.Item1 - previous.Item1) / (current.Item2 - previous.Item2);
+            float weight = 1f / (i + 1); // Newer samples have more weight
+
+            weightedVelocity += segmentVelocity * weight;
+            totalWeight += weight;
+        }
+
+        if (totalWeight > 0)
+        {
+            weightedVelocity /= totalWeight; // Normalize weighted velocity
+        }
+
+        weightedVelocity *= 0.75f; // Reduce influence of sudden changes
+
+        // Predict future position
+        Vector3 futurePosition = Player_PositionHistory[lastIndex].Item1 + weightedVelocity * secondsIntoFuture;
+        return futurePosition;
+    }
+
     // Returns a quaternion pointing towards the position of the player from positionToCheckFrom
     public Quaternion Player_ReturnDirectionOfPlayer(Vector3 positionToCheckFrom)
     {
@@ -300,6 +355,18 @@ public class BossEnemy : MonoBehaviour
         attackBulletSlowFiringShot.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletSlowFiringShot);
     }
+    public void TransitionToState_Attack_Bullet_RapidFireShot_Easy()
+    {
+        State_Attack_Bullet_RapidFireShot_Easy attackBulletRapidFireShot = new State_Attack_Bullet_RapidFireShot_Easy();
+        attackBulletRapidFireShot.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletRapidFireShot);
+    }
+    public void TransitionToState_Attack_Bullet_RapidFireShot_Hard()
+    {
+        State_Attack_Bullet_RapidFireShot_Hard attackBulletRapidFireShot = new State_Attack_Bullet_RapidFireShot_Hard();
+        attackBulletRapidFireShot.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletRapidFireShot);
+    }
     public void TransitionToState_Attack_Bullet_TrackingCone_Easy()
     {
         State_Attack_Bullet_TrackingCone_Easy attackBulletTrackingCone = new State_Attack_Bullet_TrackingCone_Easy();
@@ -335,6 +402,18 @@ public class BossEnemy : MonoBehaviour
         State_Attack_Bullet_RotatingWall_Hard attackBulletRotatingWall = new State_Attack_Bullet_RotatingWall_Hard();
         attackBulletRotatingWall.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletRotatingWall);
+    }
+    public void TransitionToState_Attack_Bullet_JumpRope_Easy()
+    {
+        State_Attack_Bullet_JumpRope_Easy attackBulletJumpRope = new State_Attack_Bullet_JumpRope_Easy();
+        attackBulletJumpRope.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletJumpRope);
+    }
+    public void TransitionToState_Attack_Bullet_JumpRope_Hard()
+    {
+        State_Attack_Bullet_JumpRope_Hard attackBulletJumpRope = new State_Attack_Bullet_JumpRope_Hard();
+        attackBulletJumpRope.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletJumpRope);
     }
     public void TransitionToState_Attack_ArenaHazard_Mine_Random()
     {
