@@ -6,10 +6,12 @@ public class endGameTrigger : MonoBehaviour
 {
 
     private audioManager m_audio;
+    player_fx_behaviors fxBehave;
 
     private void Start()
     {
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
+        fxBehave = GameObject.FindWithTag("Player").GetComponent<player_fx_behaviors>();
     }
 
     //unload the previous scene
@@ -17,7 +19,12 @@ public class endGameTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            m_audio.GetComponent<audioManager>().walkSource.enabled = false; // kill the player sounds
+            m_audio.walkSource.loop = false; //turn off looping before killing coroutine
+            if (fxBehave.walkCoroutine != null)
+            {
+                fxBehave.StopCoroutine(fxBehave.walkCoroutine);
+                fxBehave.walkCoroutine = null; // Clear reference after stopping
+            }
             GameObject.Find("WorldManager").GetComponent<mainGameScript>().EndGame();
         }
     }

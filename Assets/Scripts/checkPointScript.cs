@@ -45,20 +45,30 @@ public class checkPointScript : MonoBehaviour
             GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
             GameObject.Find("startBattleTrigger").SetActive(false);
             GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
+            mainGameScript.m_audio.enemyWhirringSource.enabled = false; //don't play whirring if enemy is dead
         }
         else if (SceneManager.GetActiveScene().name == "Combat2" && mainGameScript.secondBossDead == true)
         {
             GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
             GameObject.Find("startBattleTrigger").SetActive(false);
             GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
+            mainGameScript.m_audio.enemyWhirringSource.enabled = false; //don't play whirring if enemy is dead
         }
         else if (SceneManager.GetActiveScene().name == "Combat3" && mainGameScript.thirdBossDead == true)
         {
             GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
             GameObject.Find("startBattleTrigger").SetActive(false);
             GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
+            mainGameScript.m_audio.enemyWhirringSource.enabled = false; //don't play whirring if enemy is dead
         }
 
+        //if (SceneManager.GetActiveScene().name.Contains("Combat"))
+        //{
+        //    if(mainGameScript.firstBossDead == false || mainGameScript.secondBossDead == false || mainGameScript.thirdBossDead == false)
+        //    {
+        //        mainGameScript.m_audio.enemyWhirringSource.enabled = true; //play whirring if enemy is dead
+        //    }
+        //}
 
         //switch cameras if needed
         mainGameScript.SwitchToPlatformCam(0.4f);
@@ -73,10 +83,11 @@ public class checkPointScript : MonoBehaviour
         //load fx script
         fxBehave = this.GetComponent<player_fx_behaviors>();
         //restart sound coroutine
-        fxBehave.StartCoroutine(fxBehave.walkSFX());
+        fxBehave.walkCoroutine = fxBehave.StartCoroutine(fxBehave.walkSFX());
 
         //restart pre battle enemy sfx if respawned
-        mainGameScript.m_audio.playEnemySFX(0); //start whirring if in a combat scene
+        //mainGameScript.m_audio.playEnemySFX(0); //start whirring if in a combat scene
+        //mainGameScript.m_audio.enemyWhirringSource.enabled = true;
 
         //rotate them to face forward
         this.transform.rotation = currCheckpoint.transform.rotation;

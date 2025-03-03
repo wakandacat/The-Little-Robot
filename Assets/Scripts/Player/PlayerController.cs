@@ -766,7 +766,13 @@ public class PlayerController : MonoBehaviour
     public void ManagedeathState()
     {
         //Debug.Log("manage death");
-        fxBehave.StopCoroutine(fxBehave.walkSFX());
+        //fxBehave.StopCoroutine(fxBehave.walkSFX());
+        //fxBehave.StopCoroutine(fxBehave.walkCoroutine);
+        if (fxBehave.walkCoroutine != null)
+        {
+            fxBehave.StopCoroutine(fxBehave.walkCoroutine);
+            fxBehave.walkCoroutine = null; // Clear reference after stopping
+        }
         fxBehave.takeDamage.Stop();
 
         if (isFading) //start only if no fade is in progress

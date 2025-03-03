@@ -7,6 +7,8 @@ public class boss_fx_behaviors : MonoBehaviour
     audioManager m_audio;
     private GameObject enemy;
     public Light[] eyes;
+    public Coroutine eyesOnCoroutine;
+    public Coroutine eyesOffCoroutine;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +26,7 @@ public class boss_fx_behaviors : MonoBehaviour
     public IEnumerator turnOnEyes()
     {
 
-        //for as long as player is using joystick
+        //for as long as enemy is alive and not in downed state
         while (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() > 0 && enemy.GetComponent<BossEnemy>().returnCurrentEnergy() > 0)
         {
             //for each eye
@@ -56,7 +58,7 @@ public class boss_fx_behaviors : MonoBehaviour
     public IEnumerator turnOffEyes()
     {
 
-        //for as long as player is using joystick
+        //for as long as enemy is dead
         while (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0)
         {
             //for each eye

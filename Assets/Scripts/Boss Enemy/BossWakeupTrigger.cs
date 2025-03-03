@@ -18,6 +18,8 @@ public class BossWakeupTrigger : MonoBehaviour
     private GameObject enemy;
     BossEnemy bossEnemyScriptComponent;
     Animator m_animator;
+    boss_fx_behaviors fxBehave;
+    audioManager m_audio;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Start Function                                                                                                                                                                               * 
@@ -30,6 +32,8 @@ public class BossWakeupTrigger : MonoBehaviour
         bossEnemyScriptComponent = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
         m_animator = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<Animator>();
         enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+        fxBehave = enemy.GetComponent<boss_fx_behaviors>();
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
 
     }
 
@@ -40,10 +44,9 @@ public class BossWakeupTrigger : MonoBehaviour
             //Debug.Log("Player Entered Boss Wakeup Trigger");
             bossEnemyScriptComponent.Player_EnteredWakeupTrigger();
             m_animator.SetBool("woken", true);
-            //Debug.Log("start ON");
-            //turn on light/trigger intensity change
-            enemy.GetComponent<boss_fx_behaviors>().StartCoroutine(enemy.GetComponent<boss_fx_behaviors>().turnOnEyes());
-
+            //turn on enemy eyes
+            fxBehave.eyesOnCoroutine = StartCoroutine(fxBehave.turnOnEyes());
+            m_audio.enemyWhirringSource.enabled = false; //turn off whirring when battle begins
         }
     }
 }

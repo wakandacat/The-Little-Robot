@@ -37,7 +37,12 @@ public class unloadSceneScript : MonoBehaviour
             mainGameScript.doorNum++;
 
             Invoke(nameof(UnloadScene), door.GetComponent<doorScript>().timeToOpen + door.GetComponent<doorScript>().delay); //may not be perfect but good enough for now
-            mainGameScript.m_audio.playEnemySFX(0);
+            //mainGameScript.m_audio.playEnemySFX(0);
+            //mainGameScript.m_audio.enemyWhirringSource.enabled = true;
+            if (SceneManager.GetActiveScene().name.Contains("Combat"))
+            {
+                mainGameScript.m_audio.enemyWhirringSource.enabled = true; //ginette
+            }
         }
     }
 

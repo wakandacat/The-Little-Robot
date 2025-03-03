@@ -49,8 +49,6 @@ public class loadSceneScript : MonoBehaviour
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(mainGameScript.currentScene));
         // Debug.Log("set  " + mainGameScript.currentScene + "as active");
 
-        
-
     }
 
     public void OnTriggerExit(Collider collision)

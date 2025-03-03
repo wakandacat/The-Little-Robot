@@ -19,6 +19,7 @@ public class audioManager : MonoBehaviour
     public AudioSource playerSource;     //used for player sfx
     public AudioSource walkSource;       //used exclusively for player walking
     public AudioSource enemySource;      //used for enemy sfx
+    public AudioSource enemyWhirringSource;      //used for enemy pre-battle sfx
 
     //get enemy
     BossEnemy enemy;
@@ -57,10 +58,31 @@ public class audioManager : MonoBehaviour
         {
 
             index = 1;
+            //on detection of combat scene and the enemy exists but hasn't been woken yet, make whirring sound
+            //if(GameObject.FindGameObjectWithTag("Boss Enemy"))
+            //{
+            //    enemy = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
+            //    Debug.Log(enemy.Player_ReturnPlayerTriggeredBossWakeup());
+            //    if (enemy.Player_ReturnPlayerTriggeredBossWakeup() == false)
+            //    {
+            //        enemyWhirringSource.enabled = true;
+            //    }
+            //}
+            
         }
         else
         {
             index = 0;
+            //on detection of enemy existing but hasn't been woken yet, make whirring sound
+            if (GameObject.FindGameObjectWithTag("Boss Enemy"))
+            {
+                enemy = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
+                //Debug.Log(enemy.Player_ReturnPlayerTriggeredBossWakeup());
+                if (enemy.Player_ReturnPlayerTriggeredBossWakeup() == false)
+                {
+                    enemyWhirringSource.enabled = true;
+                }
+            }
         }
 
         //play clip
@@ -108,18 +130,24 @@ public class audioManager : MonoBehaviour
                         enemySource.PlayOneShot(enemySFXClips[i]);    //play clip
                     }
                 }
-                else if (enemy.Player_ReturnPlayerTriggeredBossWakeup() == true && enemy.HP_ReturnCurrent() <= 0) //was woken but is now dead
+                else
                 {
-                    enemySource.clip = enemySFXClips[3];          //load sfx clip based on array index
-                    enemySource.PlayOneShot(enemySFXClips[3]);    //play clip
-                }
-                else //combat hasn't started
-                {
-                    //Debug.Log("play whirring");
                     //set sfx
                     enemySource.clip = enemySFXClips[i];          //load sfx clip based on array index
-                    enemySource.Play();
+                    enemySource.PlayOneShot(enemySFXClips[i]);    //play clip
                 }
+                //else if (enemy.Player_ReturnPlayerTriggeredBossWakeup() == true && enemy.HP_ReturnCurrent() <= 0) //was woken but is now dead
+                //{
+                //    enemySource.clip = enemySFXClips[3];          //load sfx clip based on array index
+                //    enemySource.PlayOneShot(enemySFXClips[3]);    //play clip
+                //}
+                //else //combat hasn't started
+                //{
+                //    //Debug.Log("play whirring");
+                //    //set sfx
+                //    enemyWhirringSource.clip = enemySFXClips[i];          //load sfx clip based on array index
+                //    enemySource.Play();
+                //}
             }         
            
         }

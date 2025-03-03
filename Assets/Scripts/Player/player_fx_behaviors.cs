@@ -33,6 +33,7 @@ public class player_fx_behaviors : MonoBehaviour
 
     //sfx variables
     public audioManager m_audio;
+    public Coroutine walkCoroutine;
 
     // Start is called before the first frame update
     void Start()
@@ -58,7 +59,7 @@ public class player_fx_behaviors : MonoBehaviour
         }
 
         //sfx
-        StartCoroutine(walkSFX());
+        walkCoroutine = StartCoroutine(walkSFX());
     }
 
     // Update is called once per frame

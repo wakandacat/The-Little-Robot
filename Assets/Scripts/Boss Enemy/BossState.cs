@@ -132,8 +132,13 @@ public class State_WakingUp : BossState
         //Debug.Log("BossEnemy: Entering State_WakingUp");
 
         // FX Logic
-        fxBehave.StopCoroutine(fxBehave.turnOnEyes());
-        m_audio.playEnemySFX(1);
+        //this results in coroutine error cannot continue
+        //if (fxBehave.eyesOnCoroutine != null)
+        //{
+        //    fxBehave.StopCoroutine(fxBehave.eyesOnCoroutine);
+        //    fxBehave.eyesOnCoroutine = null; // Clear reference after stopping
+        //}
+        m_audio.playEnemySFX(0);
 
     }
 
@@ -277,7 +282,7 @@ public class State_LowEnergy : BossState
         // FX Logic
         animator.SetBool("downed", true);
         animator.SetBool("inAttack", false);
-        m_audio.playEnemySFX(2);
+        m_audio.playEnemySFX(1);
         for (int i = 0; i < fxBehave.eyes.Length; i++)
         {
             fxBehave.eyes[i].intensity = 0.01f;
@@ -342,7 +347,7 @@ public class State_LowEnergy : BossState
 
         // FX Logic
         animator.SetBool("downed", false);
-        fxBehave.StartCoroutine(fxBehave.turnOnEyes());
+        fxBehave.eyesOnCoroutine = fxBehave.StartCoroutine(fxBehave.turnOnEyes());
     }
 }
 
@@ -367,10 +372,11 @@ public class State_Death : BossState
         // FX Logic
         animator.SetBool("die", true);
         animator.SetBool("woken", false);
-        m_audio.playEnemySFX(3);
+        m_audio.playEnemySFX(2);
 
         //turn off eyes on death
-        fxBehave.StartCoroutine(fxBehave.turnOffEyes());
+        fxBehave.eyesOffCoroutine = fxBehave.StartCoroutine(fxBehave.turnOffEyes());
+        //fxBehave.StartCoroutine(fxBehave.turnOffEyes());
 
     }
 
