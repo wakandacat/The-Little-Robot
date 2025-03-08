@@ -21,6 +21,7 @@ public abstract class Projectile : MonoBehaviour
     private Coroutine Coroutine_ReturnProjectileToPool;
 
     private Color Animation_OriginalMaterialColor;
+    private Material Animation_OriginalMaterial;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Start Function                                                                                                                                                                               * 
@@ -30,6 +31,7 @@ public abstract class Projectile : MonoBehaviour
     {
         // Set Object References
         Animation_OriginalMaterialColor = GetComponent<Renderer>().material.color;
+        Animation_OriginalMaterial = GetComponent<Renderer>().material;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -102,6 +104,23 @@ public abstract class Projectile : MonoBehaviour
         if (renderer != null)
         {
             renderer.material.color = Animation_OriginalMaterialColor;
+        }
+    }
+    protected void Animation_UpdateMaterial(Material newMaterial)
+    {
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        if (renderer != null && newMaterial != null)
+        {
+            renderer.material = newMaterial;
+        }
+    }
+
+    protected void Animation_ResetMaterial()
+    {
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        if (renderer != null)
+        {
+            renderer.material = Animation_OriginalMaterial;
         }
     }
 }

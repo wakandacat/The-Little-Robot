@@ -17,6 +17,8 @@ public class Projectile_Mine : Projectile
     public Collider Mine_DetectionCollider;
     [Tooltip("The GameObject used for the explosion.")]
     public GameObject Mine_ExplosionGameObject;
+    [Tooltip("The Material applied when the bomb is armed.")]
+    public Material Mine_ArmedMaterial;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Private Attributes                                                                                                                     * 
@@ -186,11 +188,11 @@ public class Projectile_Mine : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     private void Animation_Reset()
     {
-        Animation_ResetMaterialColor();
+        Animation_ResetMaterial();
     }
 
     private void Animation_Armed()
     {
-        Animation_UpdateMaterialColor(Color.red);
+        Animation_UpdateMaterial(Mine_ArmedMaterial);
     }
 }

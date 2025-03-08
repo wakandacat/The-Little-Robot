@@ -659,9 +659,9 @@ public class State_Awake : BossState
         }
 
         // DEBUGGING (MUST BE REMOVED):
-        //Attack_BestName = State_Attack_Bullet_SlowFiringShot_Easy.Attack_Name;
-        //Attack_BestScore = State_Attack_Bullet_SlowFiringShot_Easy.CalculateScore(bossEnemyComponent);
-        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Easy;
+        //Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
+        //Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
         Attack_TransitionToExecute();
