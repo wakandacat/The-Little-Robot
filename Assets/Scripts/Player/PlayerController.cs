@@ -749,7 +749,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("regen stopped");
         }
-        else if (canRegen == true && (playerCurrenthealth < playerHealth) && combatState == false && deathState == false)
+        else if (canRegen == true && (playerCurrenthealth < playerHealth) && deathState == false)
         {
             regenTimer += Time.deltaTime;
             if (healthRegenDelay <= regenTimer)
