@@ -747,7 +747,7 @@ public class PlayerController : MonoBehaviour
     {
         if (canRegen == false || playerCurrenthealth == playerHealth)
         {
-            Debug.Log("regen stopped");
+            //Debug.Log("regen stopped");
         }
         else if (canRegen == true && (playerCurrenthealth < playerHealth) && deathState == false)
         {
