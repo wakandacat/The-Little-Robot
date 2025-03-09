@@ -6,6 +6,7 @@ public class GameSettings : MonoBehaviour
 {
     //add all the settings from main menu here that should be carried over to the BaseScene
     public float freelookSens = 0.5f;
+    public float gameVolume = 0.5f;
 
     void Awake()
     {

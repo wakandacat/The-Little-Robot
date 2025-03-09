@@ -30,6 +30,8 @@ public class PauseMenuScript : MonoBehaviour
     //freelook cam
     public CinemachineFreeLook freeCam;
 
+    public GameObject introAudio;
+
     void Awake()
     {
         //clear event selected object
@@ -53,12 +55,21 @@ public class PauseMenuScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         //set new default selected
         EventSystem.current.SetSelectedGameObject(pauseFirstButton);
+
+        //during cutscene
+        if (introAudio.activeSelf == true)
+        {
+            //pause the static sound
+            introAudio.GetComponent<AudioSource>().Pause();
+        }
     }
 
     public void UnPause()
     {
         //unpause the game
         pauseMenu.SetActive(false);
+        currentMenu.SetActive(false);
+        settingsMenu.SetActive(false);
         Time.timeScale = 1.0f;
         GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = false;
     }
@@ -158,6 +169,19 @@ public class PauseMenuScript : MonoBehaviour
     {
         freeCam.m_XAxis.m_MaxSpeed = 150; //middle is 150
         freeCam.m_YAxis.m_MaxSpeed = 2; //middle is 2
-        settingsMenu.GetComponentInChildren<Slider>().value = 0.5f;
+        settingsMenu.GetComponentsInChildren<Slider>()[0].value = 0.5f;
+    }
+
+    //adjust the camera sensitivity
+    public void AdjustVolume(float vol)
+    {
+        AudioListener.volume = vol * 2; //default vol is 1 (0.5 on slider)
+    }
+
+    //reset the camera sensitivity
+    public void ResetVolume()
+    {
+        AudioListener.volume = 1f;
+        settingsMenu.GetComponentsInChildren<Slider>()[1].value = 0.5f;
     }
 }
