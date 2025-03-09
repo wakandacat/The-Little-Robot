@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 1.5f;
-    private float attackCD = 1.75f;
+    private float attackCD = 0.5f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
 
