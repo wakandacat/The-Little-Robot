@@ -227,12 +227,12 @@ public class PlayerController : MonoBehaviour
             projectile = GameObject.Find("Projectile_Bullet(Clone)");
             if (projectile == null)
             {
-                Debug.Log("Not found");
+                //Debug.Log("Not found");
                 deflectState = false;
             }
             else
             {
-                Debug.Log("Found");
+                //Debug.Log("Found");
             }
 
             //set battle state to true
@@ -682,10 +682,10 @@ public class PlayerController : MonoBehaviour
     //https://www.youtube.com/watch?v=YSzmCf_L2cE
     IEnumerator Immunity()
     {
-        Debug.Log("Hello");
+        //Debug.Log("Hello");
         Physics.IgnoreLayerCollision(7, 6, true);
         yield return new WaitForSeconds(immunityTime);
-        Debug.Log("Hello 2");
+        //Debug.Log("Hello 2");
 
         Physics.IgnoreLayerCollision(7, 6, false);
     }
@@ -747,9 +747,9 @@ public class PlayerController : MonoBehaviour
     {
         if (canRegen == false || playerCurrenthealth == playerHealth)
         {
-            Debug.Log("regen stopped");
+            //Debug.Log("regen stopped");
         }
-        else if (canRegen == true && (playerCurrenthealth < playerHealth) && combatState == false && deathState == false)
+        else if (canRegen == true && (playerCurrenthealth < playerHealth) && deathState == false)
         {
             regenTimer += Time.deltaTime;
             if (healthRegenDelay <= regenTimer)
