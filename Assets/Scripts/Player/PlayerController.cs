@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private float rotationSpeed = 1.0f;
     public bool jumpState = false;
     public bool falling = false;
+    public bool collisionPostule = false;
 
     //Dash vars
     public bool canDash = true;
@@ -402,6 +403,13 @@ public class PlayerController : MonoBehaviour
             isQuickDropping = context.ReadValueAsButton();
         }
     }
+    public void breakPlatform()
+    {
+        if(isQuickDropping == true && collisionPostule== true)
+        {
+            Debug.Log("broken");
+        }
+    }
 
     //-----------------------------------------------Dash-----------------------------------------------//
     //https://www.youtube.com/watch?v=vTNWUbGkZ58
@@ -697,6 +705,11 @@ public class PlayerController : MonoBehaviour
             collision = true;
             playerCurrenthealth -= 1;
 
+        }
+        if(other.gameObject.tag == "postule")
+        {
+            collisionPostule = true;
+            Debug.Log("touchign postules");
         }
 
         //sfx call based on what hit you
