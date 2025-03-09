@@ -114,8 +114,22 @@ public class MainMenuScript : MonoBehaviour
     //reset the camera sensitivity
     public void ResetCamSens()
     {
-        settingsMenu.GetComponentInChildren<Slider>().value = 0.5f;
+        settingsMenu.GetComponentsInChildren<Slider>()[0].value = 0.5f;
         gameSettings.GetComponent<GameSettings>().freelookSens = 0.5f;
+    }
+
+    //adjust the camera sensitivity
+    public void AdjustVolume(float vol)
+    {
+        AudioListener.volume = vol * 2; //main menu audiolistener is seperate so chnage it as well
+        gameSettings.GetComponent<GameSettings>().gameVolume = vol; //default vol is 1 (0.5 on slider)
+    }
+
+    //reset the camera sensitivity
+    public void ResetVolume()
+    {
+        settingsMenu.GetComponentsInChildren<Slider>()[1].value = 0.5f;
+        gameSettings.GetComponent<GameSettings>().gameVolume = 0.5f;
     }
 
     //view the main menu

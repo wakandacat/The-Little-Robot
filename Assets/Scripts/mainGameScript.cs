@@ -35,7 +35,7 @@ public class mainGameScript : MonoBehaviour
     public CinemachineVirtualCamera introCam;
     bool introPlayed = false;
     private float camPos = 0;
-    public float introCamSpeed = 1f;
+    public float introCamSpeed;
     private float camStillTimer = 0f;
     public CinemachineVirtualCamera securityCam;
     public GameObject securityCanvas;
@@ -76,7 +76,7 @@ public class mainGameScript : MonoBehaviour
     void Awake()
     {
 
-        DisableMouse(); //UNCOMMENT THIS FOR THE BUILD
+        DisableMouse(); 
 
         //load the first scene in addition to the base scene
         SceneManager.LoadScene("Tutorial", LoadSceneMode.Additive);
@@ -138,14 +138,20 @@ public class mainGameScript : MonoBehaviour
             //set the initial freelook sensitivity from main menu
             platformCam.m_XAxis.m_MaxSpeed = 300 * gameSettings.GetComponent<GameSettings>().freelookSens; //middle is 150
             platformCam.m_YAxis.m_MaxSpeed = 4 * gameSettings.GetComponent<GameSettings>().freelookSens; //middle is 2
-            settingsMenu.GetComponentInChildren<Slider>().value = gameSettings.GetComponent<GameSettings>().freelookSens;
+            settingsMenu.GetComponentsInChildren<Slider>()[0].value = gameSettings.GetComponent<GameSettings>().freelookSens;
+
+            AudioListener.volume = gameSettings.GetComponent<GameSettings>().gameVolume * 2;
+            settingsMenu.GetComponentsInChildren<Slider>()[1].value = gameSettings.GetComponent<GameSettings>().gameVolume;
         } 
         else
         {
             //set the defaul freelook sensitivity if gamesettings not chosen
             platformCam.m_XAxis.m_MaxSpeed = 300 * 0.5f; //middle is 150
             platformCam.m_YAxis.m_MaxSpeed = 4 * 0.5f; //middle is 2
-            settingsMenu.GetComponentInChildren<Slider>().value = 0.5f;
+            settingsMenu.GetComponentsInChildren<Slider>()[0].value = 0.5f;
+
+            AudioListener.volume = 1f;
+            settingsMenu.GetComponentsInChildren<Slider>()[1].value = 0.5f;
         }
     }
 
@@ -244,6 +250,11 @@ public class mainGameScript : MonoBehaviour
         {
             if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
             {
+                if (introStatic.GetComponent<AudioSource>().isPlaying == false)
+                {
+                    introStatic.GetComponent<AudioSource>().Play(); //ensure the static sound is playing
+                }
+
                 if (introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 1 && introPlayed == false)
                 {
                     Debug.Log("intro cinematic finished");
@@ -274,7 +285,7 @@ public class mainGameScript : MonoBehaviour
                     }
 
                     //wait a few seconds at the beginning before starting the movement
-                    if (camStillTimer >= 3.0f)
+                    if (camStillTimer >= 5.0f)
                     {
                         //switch to introcam
                         introCam.Priority = securityCam.Priority + 1;
@@ -285,23 +296,18 @@ public class mainGameScript : MonoBehaviour
                         introStatic.SetActive(false);
 
                         //turn off black canvas cut
-                        if (camStillTimer >= 3.3f)
+                        if (camStillTimer >= 5.3f)
                         {
                             introCutCanvas.SetActive(false);
                         }
 
-                        if (camStillTimer >= 5.0f)
+                        if (camStillTimer >= 6.5f)
                         {
-                            //start adjusting the fov
-                            if (introCam.m_Lens.FieldOfView > 70)
-                            {
-                                introCam.m_Lens.FieldOfView = Mathf.Lerp(100f, 70f, (camStillTimer - 5f) / 7.0f);
-                            }
 
                             //move the camera along the dolly track
                             camPos += Mathf.Lerp(0, 1, introCamSpeed);
                             introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
-                            if (camStillTimer >= 6.0f)
+                            if (camStillTimer >= 8.5f)
                             {
                                 //turn on the robot's eye
                                 if (playerPointLight.GetComponent<Light>().intensity < 0.1f)
@@ -324,7 +330,7 @@ public class mainGameScript : MonoBehaviour
                       //start at security cam
                     }
                 }
-            }
+            } 
         }
         //user skipped cutscene with skip button
         else if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false || cutScenePlaying == false)

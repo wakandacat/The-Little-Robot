@@ -804,6 +804,8 @@ public class PlayerController : MonoBehaviour
         isFading = true;  //we are now fading
         deathCanvas.GetComponent<FadeOut>().fadingIn = true; // this will run FadeOut script and call MoveToCheckpoint()
 
+        SwitchActionMap("Gameplay");
+
         //reset player vars
         canDash = true;
         canRegen = true;
