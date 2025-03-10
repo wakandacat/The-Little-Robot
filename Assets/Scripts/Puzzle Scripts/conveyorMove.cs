@@ -13,13 +13,21 @@ public class conveyorMove : MonoBehaviour
     public Vector3 direction;
     public Vector3 xVel;
 
+    private Material material;
+
     private void Awake()
     {
         movingObjects = new List<GameObject>();
+
+        material = GetComponent<MeshRenderer>().material;
     }
 
     void FixedUpdate()
     {
+
+        //move the material on the conveyor (x, y, z)
+        material.mainTextureOffset -= new Vector2(0, 1) * (speed/1000) * Time.deltaTime;
+
         //for each object on the conveyor, add a force to it
         for (int i = 0; i < movingObjects.Count; i++)
         {
