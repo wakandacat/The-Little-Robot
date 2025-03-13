@@ -40,12 +40,15 @@ public class PlayerController : MonoBehaviour
     private float JfallMultiplier = 8.0f;
     private float quickDropMultiplier = 20.0f;
     public bool isJumping = false;
-    private bool isQuickDropping = false;
+    public bool isQuickDropping = false;
+    public bool quickDropState = false;
     public int jumpCounter = 0;
     private float rotationSpeed = 1.0f;
     public bool jumpState = false;
     public bool falling = false;
-    public bool collisionPostule = false;
+    private bool collisionPostule = false;
+    private float quickDropTime = 0.0f;
+    private float quickDropDelay = 1.0f;
 
     //Dash vars
     public bool canDash = true;
@@ -298,6 +301,7 @@ public class PlayerController : MonoBehaviour
             }
             manageFall(JfallMultiplier);
         }
+        Debug.Log("quickDrop state" + quickDropState);
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
     //moved to player_fx_behaviors script
@@ -404,13 +408,16 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             isQuickDropping = context.ReadValueAsButton();
+            quickDropState = true;
         }
     }
-    public void breakPlatform()
+    public void quickDropStatetimer()
     {
-        if(isQuickDropping == true && collisionPostule== true)
+        quickDropTime += Time.deltaTime;
+        if (quickDropDelay <= quickDropTime)
         {
-            Debug.Log("broken");
+            quickDropState = false;
+            quickDropTime = 0.0f;
         }
     }
 

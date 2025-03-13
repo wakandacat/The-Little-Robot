@@ -124,14 +124,28 @@ public class player_fx_behaviors : MonoBehaviour
     public string getPlayerState()
     {
         attackCounter = playerScript.attackCounter;
+
         //Attack State
         if (attackCounter == 1)
         {
             return "Attack_1";
         }
+        if (attackCounter == 1 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
+        {
+            return "walk";
+        }
+
+        if (attackCounter == 2 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
+        {
+            return "walk";
+        }
         if (attackCounter == 2)
         {
             return "Attack_2";
+        }
+        if (attackCounter == 3 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
+        {
+            return "walk";
         }
         if (attackCounter == 3)
         {

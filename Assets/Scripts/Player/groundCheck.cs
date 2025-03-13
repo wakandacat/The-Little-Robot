@@ -36,6 +36,7 @@ public class groundCheck : MonoBehaviour
         if (collision.gameObject.tag == "ground" || collision.gameObject.tag == "crate")
         {
             onGround = true;
+            jumping.quickDropStatetimer();
         }
 
     }
@@ -47,17 +48,14 @@ public class groundCheck : MonoBehaviour
             runOnce = false;
             jumping.handleJump();
             jumping.handleQuickDrop();
+
         }
 
     }
 
-    public void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "ground" || collision.gameObject.tag == "crate")
-        {
-            onGround = false;
-        }
+    public void OnCollisionExit(Collision collision) { 
 
+        onGround = false;
     }
 
 
