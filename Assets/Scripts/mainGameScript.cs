@@ -178,6 +178,21 @@ public class mainGameScript : MonoBehaviour
         cutScenePlaying = false;
     }
 
+    public void IntroDoneResets()
+    {
+        //Debug.Log("intro cinematic finished");
+        SwitchToPlatformCam(0.2f);
+        introPlayed = true;
+        cutScenePlaying = false;
+        playerPointLight.GetComponent<Light>().intensity = 0.1f;
+        playerSpotLight.GetComponent<Light>().intensity = 4.0f;
+        playerUICanvas.SetActive(true);
+        securityCanvas.SetActive(false);
+        introCutCanvas.SetActive(false);
+        introStatic.SetActive(false);
+        mainAudioMan.GetComponent<audioManager>().playerSource.enabled = true; //once cutscene is done, turn on teh player sound effects
+    }
+
     public void EndGame()
     {
        // Debug.Log("Thanks for playing!");
@@ -257,18 +272,7 @@ public class mainGameScript : MonoBehaviour
 
                 if (introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 1 && introPlayed == false)
                 {
-                    Debug.Log("intro cinematic finished");
-                    SwitchToPlatformCam(0.2f);
-                    introPlayed = true;
-                    cutScenePlaying = false;
-                    camStillTimer = 0;
-                    playerPointLight.GetComponent<Light>().intensity = 0.1f;
-                    playerSpotLight.GetComponent<Light>().intensity = 4.0f;
-                    playerUICanvas.SetActive(true);
-                    securityCanvas.SetActive(false);
-                    introCutCanvas.SetActive(false);
-                    introStatic.SetActive(false);
-                    mainAudioMan.GetComponent<audioManager>().playerSource.enabled = true; //once cutscene is done, turn on teh player sound effects
+                    IntroDoneResets();
                 }
                 else
                 {
@@ -335,17 +339,7 @@ public class mainGameScript : MonoBehaviour
         //user skipped cutscene with skip button
         else if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false || cutScenePlaying == false)
         {
-            //Debug.Log("intro cinematic finished");
-            SwitchToPlatformCam(0.2f);
-            introPlayed = true;
-            cutScenePlaying = false;
-            playerPointLight.GetComponent<Light>().intensity = 0.1f;
-            playerSpotLight.GetComponent<Light>().intensity = 4.0f;
-            playerUICanvas.SetActive(true);
-            securityCanvas.SetActive(false);
-            introCutCanvas.SetActive(false);
-            introStatic.SetActive(false);
-            mainAudioMan.GetComponent<audioManager>().playerSource.enabled = true; //once cutscene is done, turn on teh player sound effects
+            IntroDoneResets();
 
         }
     }
