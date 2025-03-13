@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     private static float globalGravity = -9.81f;
     public Transform orientation;
     private float dashUpwardForce = 10.0f;
+    public Coroutine dashAction;
 
     //Attack vars
     public bool isAttacking = false;
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
     private float attackCD = 0.5f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
+    public Coroutine attackCooldown;
 
     //Roll vars
     public bool Rolling = false;
@@ -100,7 +102,8 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private float immunityTime = 1.75f;
+    private float immunityTime = 2.0f;
+    public Coroutine immunity;
 
     //animator
     private Animator playerAnimator;
@@ -443,7 +446,7 @@ public class PlayerController : MonoBehaviour
             Dashing = context.ReadValueAsButton();
             if (Dashing == true && canDash == true)
             {
-                StartCoroutine(Dash());
+                dashAction = StartCoroutine(Dash());
             }
             else if (Dashing == true && canDash == false)
             {
@@ -638,7 +641,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void attackCooldown()
+/*    public void attackCooldown()
     {
         Debug.Log("we are here");
         attackCD -= Time.deltaTime;
@@ -649,8 +652,8 @@ public class PlayerController : MonoBehaviour
             handleAttack();
             Debug.Log("attackCounter" + attackCounter);
         }
-    }
-    IEnumerator cooldown()
+    }*/
+    public IEnumerator cooldown()
     {
         yield return new WaitForSeconds(attackCD);
         handleAttack();
@@ -668,7 +671,7 @@ public class PlayerController : MonoBehaviour
                 attackCombo(attackCounter);
                 if (attackCounter == 3)
                 {
-                    StartCoroutine(cooldown());
+                    attackCooldown = StartCoroutine(cooldown());
                 }
             }
         }
@@ -688,7 +691,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     //https://www.youtube.com/watch?v=YSzmCf_L2cE
-    IEnumerator Immunity()
+    public IEnumerator Immunity()
     {
         //Debug.Log("Hello");
         Physics.IgnoreLayerCollision(7, 6, true);
@@ -737,11 +740,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision == true && combatState == true && deathState == false)
         {
-            StartCoroutine(Immunity());
-        }
-        else
-        {
-            StopCoroutine(Immunity());
+            immunity = StartCoroutine(Immunity());
         }
         if (combatState == true)
         {
