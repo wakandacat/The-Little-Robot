@@ -5,40 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class teleport : MonoBehaviour
 {
-    private GameObject worldManager;
-    private GameObject door;
 
-    void Awake()
+    private int door;
+    private string checkpointName;
+    private string sceneName;
+
+    private audioManager AudioManager;
+    private GameObject player;
+
+    private void Awake()
     {
-        worldManager = GameObject.Find("WorldManager");
-    }
+        Debug.Log("USE KEYPAD FOR DEV TELEPORT: 1 = Platform1, 2 = Combat1, 3 = Platform2, 4 = Combat2, 5 = Platform3, 6 = Combat3, 7 = EndScene");
 
-    //to teleport directly to the combat area
-    public void OnTriggerEnter(Collider collision)
-    {
-        if (collision.gameObject.name == "playerExport")
-        {
+        AudioManager = GameObject.Find("AudioManager").GetComponent<audioManager>();
 
-            //set the current scene to be combat then move the player to that checkpoint
-            worldManager.GetComponent<mainGameScript>().currSceneName = 2;
-            worldManager.GetComponent<mainGameScript>().currentScene = "Combat1";
-
-            //unload the previous scenes
-            if (SceneManager.GetSceneByName("Tutorial").isLoaded)
-            {
-                SceneManager.UnloadSceneAsync("Tutorial");
-            };
-            if (SceneManager.GetSceneByName("Platform1").isLoaded)
-            {
-                SceneManager.UnloadSceneAsync("Platform1");
-            };
-
-
-            SceneManager.LoadSceneAsync("Combat1", LoadSceneMode.Additive);
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
-
-        }
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     //wait till its loaded to set as active
@@ -47,22 +28,258 @@ public class teleport : MonoBehaviour
         //unregister the sceneLoaded event
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Combat1"));
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
 
-        // Move the player to the checkpoint
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        //move the player to the checkpoint
 
         if (player != null)
         {
-            GameObject checkpt = GameObject.Find("checkPointC1");
-            worldManager.GetComponent<mainGameScript>().currCheckpoint = checkpt;
+            GameObject checkpt = GameObject.Find(checkpointName);
+            this.GetComponent<mainGameScript>().currCheckpoint = checkpt;
 
             player.GetComponent<checkPointScript>().MoveToCheckpoint();
         }
 
-        //update the door number
-        door = GameObject.Find("DoorGroup").transform.GetChild(worldManager.GetComponent<mainGameScript>().doorNum).gameObject;
-        worldManager.GetComponent<mainGameScript>().doorNum = 2;
+        //endscene does not have a next door to open
+        if (sceneName != "EndScene")
+        {
+            //update the door number
+            this.GetComponent<mainGameScript>().doorNum = door;
+        }
 
+    }
+
+    //dev tool teleport to any scene
+    public void Update()
+    {
+        //platform 1
+        if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            //Debug.Log("1 pressed");
+
+            if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
+            {
+                this.GetComponent<mainGameScript>().IntroDoneResets();
+            }
+
+            //set the current scene to be combat then move the player to that checkpoint
+            this.GetComponent<mainGameScript>().currSceneName = 1;
+            this.GetComponent<mainGameScript>().currentScene = "Platform1";
+
+            //set the variables to be used in the sceneLoaded callback
+            door = 1;
+            checkpointName = "checkPointP1";
+            sceneName = "Platform1";
+
+            //unload all scenes
+            UnloadEverything();
+
+            SceneManager.LoadSceneAsync("Platform1", LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+
+        } 
+        //combat 1
+        else if (Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+           // Debug.Log("2 pressed");
+
+            if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
+            {
+                this.GetComponent<mainGameScript>().IntroDoneResets();
+            }
+
+            //set the current scene to be combat then move the player to that checkpoint
+            this.GetComponent<mainGameScript>().currSceneName = 2;
+            this.GetComponent<mainGameScript>().currentScene = "Combat1";
+
+            //set the variables to be used in the sceneLoaded callback
+            door = 2;
+            checkpointName = "checkPointC1";
+            sceneName = "Combat1";
+
+            //unload all scenes
+            UnloadEverything();
+
+            SceneManager.LoadSceneAsync("Combat1", LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        //platform 2
+        else if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            //Debug.Log("3 pressed");
+
+            if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
+            {
+                this.GetComponent<mainGameScript>().IntroDoneResets();
+            }
+
+            //set the current scene to be combat then move the player to that checkpoint
+            this.GetComponent<mainGameScript>().currSceneName = 3;
+            this.GetComponent<mainGameScript>().currentScene = "Platform2";
+
+            //set the variables to be used in the sceneLoaded callback
+            door = 3;
+            checkpointName = "checkPointP2";
+            sceneName = "Platform2";
+
+            //unload all scenes
+            UnloadEverything();
+
+            SceneManager.LoadSceneAsync("Platform2", LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        //combat 2
+        else if (Input.GetKeyDown(KeyCode.Keypad4) || Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            //Debug.Log("4 pressed");
+
+            if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
+            {
+                this.GetComponent<mainGameScript>().IntroDoneResets();
+            }
+
+            //set the current scene to be combat then move the player to that checkpoint
+            this.GetComponent<mainGameScript>().currSceneName = 4;
+            this.GetComponent<mainGameScript>().currentScene = "Combat2";
+
+            //set the variables to be used in the sceneLoaded callback
+            door = 4;
+            checkpointName = "checkPointC2";
+            sceneName = "Combat2";
+
+            //unload all scenes
+            UnloadEverything();
+
+            SceneManager.LoadSceneAsync("Combat2", LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        //platform 3
+        else if (Input.GetKeyDown(KeyCode.Keypad5) || Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            //Debug.Log("5 pressed");
+
+            if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
+            {
+                this.GetComponent<mainGameScript>().IntroDoneResets();
+            }
+
+            //set the current scene to be combat then move the player to that checkpoint
+            this.GetComponent<mainGameScript>().currSceneName = 5;
+            this.GetComponent<mainGameScript>().currentScene = "Platform3";
+
+            //set the variables to be used in the sceneLoaded callback
+            door = 5;
+            checkpointName = "checkPointP3";
+            sceneName = "Platform3";
+
+            //unload all scenes
+            UnloadEverything();
+
+            SceneManager.LoadSceneAsync("Platform3", LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        //combat 3
+        else if (Input.GetKeyDown(KeyCode.Keypad6) || Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            //Debug.Log("6 pressed");
+
+            if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
+            {
+                this.GetComponent<mainGameScript>().IntroDoneResets();
+            }
+
+            //set the current scene to be combat then move the player to that checkpoint
+            this.GetComponent<mainGameScript>().currSceneName = 6;
+            this.GetComponent<mainGameScript>().currentScene = "Combat3";
+
+            //set the variables to be used in the sceneLoaded callback
+            door = 6;
+            checkpointName = "checkPointC3";
+            sceneName = "Combat3";
+
+            //unload all scenes
+            UnloadEverything();
+
+            SceneManager.LoadSceneAsync("Combat3", LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        //endscene
+        else if (Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            //Debug.Log("7 pressed");
+
+            if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
+            {
+                this.GetComponent<mainGameScript>().IntroDoneResets();
+            }
+
+            //set the current scene to be combat then move the player to that checkpoint
+            this.GetComponent<mainGameScript>().currSceneName = 7;
+            this.GetComponent<mainGameScript>().currentScene = "EndScene";
+
+            //set the variables to be used in the sceneLoaded callback
+            door = 7;
+            checkpointName = "checkPointEndScene";
+            sceneName = "EndScene";
+
+            //unload all scenes
+            UnloadEverything();
+
+            SceneManager.LoadSceneAsync("EndScene", LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        else 
+        {
+            //do nothing
+        }
+
+    }
+
+    public void UnloadEverything()
+    {
+        //turn off sounds here
+        AudioManager.enemyWhirringSource.enabled = false;
+        player.GetComponent<player_fx_behaviors>().StopCoroutine(player.GetComponent<player_fx_behaviors>().walkCoroutine);
+
+        //unload the previous scenes
+        if (SceneManager.GetSceneByName("Tutorial").isLoaded)
+        {
+            SceneManager.UnloadSceneAsync("Tutorial");
+        };
+        if (SceneManager.GetSceneByName("Platform1").isLoaded)
+        {
+            SceneManager.UnloadSceneAsync("Platform1");
+        };
+        if (SceneManager.GetSceneByName("Combat1").isLoaded)
+        {
+            SceneManager.UnloadSceneAsync("Combat1");
+        };
+        if (SceneManager.GetSceneByName("Platform2").isLoaded)
+        {
+            SceneManager.UnloadSceneAsync("Platform2");
+        };
+        if (SceneManager.GetSceneByName("Combat2").isLoaded)
+        {
+            SceneManager.UnloadSceneAsync("Combat2");
+        };
+        if (SceneManager.GetSceneByName("Platform3").isLoaded)
+        {
+            SceneManager.UnloadSceneAsync("Platform3");
+        };
+        if (SceneManager.GetSceneByName("Combat3").isLoaded)
+        {
+            SceneManager.UnloadSceneAsync("Combat3");
+        };
+        if (SceneManager.GetSceneByName("EndScene").isLoaded)
+        {
+            SceneManager.UnloadSceneAsync("EndScene");
+        };
     }
 }
