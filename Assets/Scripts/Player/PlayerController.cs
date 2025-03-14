@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     public bool isDashing = false;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 1.75f;
+    public float dashingCooldown = 1.75f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
@@ -301,7 +301,7 @@ public class PlayerController : MonoBehaviour
             }
             manageFall(JfallMultiplier);
         }
-        Debug.Log("quickDrop state" + quickDropState);
+        //Debug.Log("quickDrop state" + quickDropState);
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
     //moved to player_fx_behaviors script

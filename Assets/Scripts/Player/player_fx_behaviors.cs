@@ -35,6 +35,10 @@ public class player_fx_behaviors : MonoBehaviour
     public audioManager m_audio;
     public Coroutine walkCoroutine;
 
+    //haptics variables
+    Gamepad pad;
+    private Coroutine stopRumbleCoroutine;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,12 +64,14 @@ public class player_fx_behaviors : MonoBehaviour
 
         //sfx
         walkCoroutine = StartCoroutine(walkSFX());
+        Rumble(0f, 0f, 0f);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         vfx_triggers();
+        RumbleConditions();
         var currentState = getPlayerState();
         if(state == "Falling" && ground.onGround == true)
         {
@@ -82,6 +88,48 @@ public class player_fx_behaviors : MonoBehaviour
         state = currentState;
         m_animator.CrossFade(state, 0.1f, 0);
 
+    }
+
+    //https://www.youtube.com/watch?v=SmmBC-yCJ28
+    //https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/Gamepad.html
+    public void Rumble(float low, float high, float duration)
+    {
+        pad = Gamepad.current;
+        if (pad != null)
+        {
+            pad.SetMotorSpeeds(low, high);
+        }
+        stopRumbleCoroutine = StartCoroutine(stopRumble(duration));
+    }
+    public IEnumerator stopRumble(float duration)
+    {
+        float elapsedTime = 0.0f;
+        while(elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        pad.SetMotorSpeeds(0f, 0f);
+    }
+    public void RumbleConditions()
+    {
+        if(playerScript.attackCounter == 1)
+        {
+            Rumble(0.25f, 0.25f, 1f);
+        }
+        if (playerScript.attackCounter == 2)
+        {
+            Rumble(0.25f, 0.25f, 1f);
+        }
+        if (playerScript.attackCounter == 3)
+        {
+            Rumble(0.75f, 1f, 1f);
+        }
+        if (ground.onGround == true && ground.runRumbleOnce == false)
+        {
+            ground.runRumbleOnce = true;
+            Rumble(0.25f, 0.75f, 0.25f);
+        }
     }
     //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
     public void vfx_triggers()
@@ -130,23 +178,23 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return "Attack_1";
         }
-        if (attackCounter == 1 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
+/*        if (attackCounter == 1 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
         {
             return "walk";
-        }
+        }*/
 
-        if (attackCounter == 2 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
+/*        if (attackCounter == 2 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
         {
             return "walk";
-        }
+        }*/
         if (attackCounter == 2)
         {
             return "Attack_2";
         }
-        if (attackCounter == 3 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
+/*        if (attackCounter == 3 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
         {
             return "walk";
-        }
+        }*/
         if (attackCounter == 3)
         {
             return "Attack_3";
