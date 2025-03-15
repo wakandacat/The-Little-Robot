@@ -40,7 +40,21 @@ public class loadSceneScript : MonoBehaviour
 
         //find the door and open it 
         door = GameObject.Find("DoorGroup").transform.GetChild(mainGameScript.doorNum).gameObject;
-        door.GetComponent<doorScript>().openDoor();
+
+        if (door.transform.childCount > 1)
+        {
+            if (door.transform.GetChild(0).GetComponent<doorScript>().isFungus == false)
+            {
+                door.transform.GetChild(0).GetComponent<doorScript>().openDoor();
+            }
+        }
+        else
+        {
+            if (door.GetComponent<doorScript>().isFungus == false)
+            {
+                door.GetComponent<doorScript>().openDoor();
+            }
+        }
 
         //remove to enusre it only runs once
         SceneManager.sceneLoaded -= OnSceneLoaded;

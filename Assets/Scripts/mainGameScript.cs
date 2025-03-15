@@ -211,11 +211,10 @@ public class mainGameScript : MonoBehaviour
     public void SwitchToBossCam()
     {
         //Debug.Log("battle cam");
-        // enemy = GameObject.Find("enemy" + currLevelCount);
         enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
 
         //move the track to teh enemy's position
-        Vector3 bossPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 10, enemy.transform.position.z);
+        Vector3 bossPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 13, enemy.transform.position.z);
         battleTrack.transform.position = bossPos;
         bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0;
 
@@ -239,13 +238,6 @@ public class mainGameScript : MonoBehaviour
             platformCam.Priority = bossCam.Priority + 1;
         }
 
-        //maybe a slightly better transition idk
-        if (SceneManager.GetActiveScene().name.Contains("Combat"))
-        {
-            platformCam.m_XAxis.Value = bossCam.transform.rotation.x;
-        }
-        //Debug.Log("platform cam");
-
         platformCam.m_YAxis.Value = yaxis; //position up teh spine axis
 
         usingBossCam = false;
@@ -253,6 +245,7 @@ public class mainGameScript : MonoBehaviour
 
     public void CheckPointResetPlatformCam(float rotation)
     {
+        Debug.Log("shjkhfjkghjk");
         platformCam.m_XAxis.Value = rotation;
         platformCam.ForceCameraPosition(transform.position, Quaternion.Euler(0, rotation, 0)); //force freelook to have player's rotation
         platformCam.m_YAxis.Value = 0.4f; //position up teh spine axis

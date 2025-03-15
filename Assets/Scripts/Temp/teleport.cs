@@ -7,6 +7,7 @@ public class teleport : MonoBehaviour
 {
 
     private int door;
+    public GameObject doorGrp;
     private string checkpointName;
     private string sceneName;
 
@@ -247,6 +248,31 @@ public class teleport : MonoBehaviour
         //turn off sounds here
         AudioManager.enemyWhirringSource.enabled = false;
         player.GetComponent<player_fx_behaviors>().StopCoroutine(player.GetComponent<player_fx_behaviors>().walkCoroutine);
+
+        //close all the doors
+        for (int i = 0; i < doorGrp.transform.childCount; i++)
+        {
+            GameObject child = doorGrp.transform.GetChild(i).gameObject;
+
+            //if the child has fungus, ensure it is reloaded
+            if (child.transform.childCount > 1)
+            {
+                if (child.transform.GetChild(0).GetComponent<doorScript>().doorOpen == true)
+                {
+                    child.transform.GetChild(0).GetComponent<doorScript>().closeDoor();
+                }
+                child.transform.GetChild(1).gameObject.SetActive(true);
+                child.transform.GetChild(2).gameObject.SetActive(false);
+            }
+            else
+            {
+                if (child.GetComponent<doorScript>().doorOpen == true)
+                {
+                    child.GetComponent<doorScript>().closeDoor();
+                }
+            }
+            
+        }
 
         //unload the previous scenes
         if (SceneManager.GetSceneByName("Tutorial").isLoaded)
