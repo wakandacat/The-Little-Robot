@@ -71,14 +71,13 @@ MonoBehaviour:
   endBridge: {fileID: 5550029949958322068}
   enemy: {fileID: 0}
   loadObj: {fileID: 7329486958961536612}
-  enemyDeadBlend: {fileID: 11400000, guid: f907d759d6fe9c84695b5dc1632ec066, type: 2}
-  enemyAliveBlend: {fileID: 11400000, guid: c51409daebca028459882353d8bc13d9, type: 2}
   enemyUI: {fileID: 7044708724259088203}
   proceedLight: {fileID: 3451834859409325827}
   proceedSound: {fileID: 5578755256020664820}
   delay: 0.3
   middlePlatform: {fileID: 5161243539328316743}
   battleCam: {fileID: 0}
+  lookAtWhenDead: {fileID: 0}
 --- !u!114 &5662874601901236045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,10 +210,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 200
-  m_Range: 170
-  m_SpotAngle: 149.05981
-  m_InnerSpotAngle: 80.98135
+  m_Intensity: 400
+  m_Range: 200
+  m_SpotAngle: 168.9487
+  m_InnerSpotAngle: 100.87024
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
