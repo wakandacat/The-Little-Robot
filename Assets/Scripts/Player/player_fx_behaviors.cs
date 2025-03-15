@@ -71,7 +71,7 @@ public class player_fx_behaviors : MonoBehaviour
     void FixedUpdate()
     {
         vfx_triggers();
-        RumbleConditions();
+        //RumbleConditions();
         var currentState = getPlayerState();
         if(state == "Falling" && ground.onGround == true)
         {

@@ -20,7 +20,7 @@ public class StartEndBattleScript : MonoBehaviour
    // public CinemachineBlenderSettings enemyAliveBlend;
     private CinemachineBrain camBrain;
     public GameObject enemyUI;
-    public Light proceedLight;
+    public GameObject proceedLight;
     public AudioSource proceedSound;
 
     private float timer = 0;
@@ -33,6 +33,8 @@ public class StartEndBattleScript : MonoBehaviour
 
     public GameObject battleCam;
     public GameObject lookAtWhenDead;
+    public SpriteRenderer scientists;
+    private Color m_color;
 
     void Awake()
     {
@@ -180,7 +182,9 @@ public class StartEndBattleScript : MonoBehaviour
         startBridge.GetComponent<bridgeScript>().moveBridgeRight();
 
         //turn on exit light
-        proceedLight.intensity = 3;
+        proceedLight.SetActive(true);
+        m_color = new Color(255.0f, 255.0f, 255.0f, 0.25f);
+        scientists.color = m_color;
         proceedSound.Play();
     }
 
@@ -208,7 +212,9 @@ public class StartEndBattleScript : MonoBehaviour
     {
         enemy.SetActive(false);
         loadObj.SetActive(true);
-        proceedLight.intensity = 3;
+        proceedLight.SetActive(true);
+        m_color = new Color(255.0f, 255.0f, 255.0f, 0.25f);
+        scientists.color = m_color;
         this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + 100f, this.gameObject.transform.position.z);
         middlePlatform.SetActive(false);
     }
