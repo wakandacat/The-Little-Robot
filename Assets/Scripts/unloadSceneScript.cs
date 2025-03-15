@@ -33,10 +33,20 @@ public class unloadSceneScript : MonoBehaviour
         {
             //find the door and close it 
             door = GameObject.Find("DoorGroup").transform.GetChild(mainGameScript.doorNum).gameObject;
-            door.GetComponent<doorScript>().closeDoor();
+
+            if (door.transform.childCount > 1)
+            {
+                door.transform.GetChild(0).GetComponent<doorScript>().closeDoor();
+                Invoke(nameof(UnloadScene), door.transform.GetChild(0).GetComponent<doorScript>().timeToOpen + door.transform.GetChild(0).GetComponent<doorScript>().delay); //may not be perfect but good enough for now
+            }
+            else
+            {
+                door.GetComponent<doorScript>().closeDoor();
+                Invoke(nameof(UnloadScene), door.GetComponent<doorScript>().timeToOpen + door.GetComponent<doorScript>().delay); //may not be perfect but good enough for now
+            }
+
             mainGameScript.doorNum++;
 
-            Invoke(nameof(UnloadScene), door.GetComponent<doorScript>().timeToOpen + door.GetComponent<doorScript>().delay); //may not be perfect but good enough for now
             //mainGameScript.m_audio.playEnemySFX(0);
             //mainGameScript.m_audio.enemyWhirringSource.enabled = true;
             if (SceneManager.GetActiveScene().name.Contains("Combat"))
