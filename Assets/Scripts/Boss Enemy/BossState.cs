@@ -85,7 +85,7 @@ public class State_Sleeping : BossState
         // Programming Logic
         if (bossEnemyComponent.Player_ReturnPlayerTriggeredBossWakeup() == true)   // check if the player has triggered the Boss Wakeup Trigger
         {
-            bossEnemyComponent.TransitionToState_WakingUp();                 // if so, transition to waking up state
+            bossEnemyComponent.TransitionToState_WakingUp();                   // if so, transition to waking up state
         }
 
         // Animation Logic
@@ -476,7 +476,7 @@ public class State_Awake : BossState
                 delayFinished = true; // if so, set delay to have been completed
             }
         }
-        else if (delayFinished == true)  // check if the delay has been completed and the attack has been chosen
+        else if (delayFinished == true && bossEnemyComponent.AreAllPoolsFinishedFilling() == true)  // check if the delay has been completed and the projectile pools are filled
         {
             if (bossEnemyComponent.returnBossEnemyEncounterIteration() == 1)
             {

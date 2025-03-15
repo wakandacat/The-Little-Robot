@@ -304,6 +304,18 @@ public class BossEnemy : MonoBehaviour
         return null;
     }
 
+    public bool AreAllPoolsFinishedFilling()
+    {
+        foreach (ProjectileSpawner spawner in ProjectileSpawnersList)
+        {
+            if (spawner == null || !spawner.IsPoolFinishedFilling())
+            {
+                return false; // if any spawner's pool are not ready, return false
+            }
+        }
+        return true; // all spawners have their pools ready
+    }
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               State Transition Functions                                                                                                                                                                   * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

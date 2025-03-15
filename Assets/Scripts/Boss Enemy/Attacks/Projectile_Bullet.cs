@@ -23,9 +23,6 @@ public class Projectile_Bullet : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     public void Initialize_Bullet(ProjectilePool Projectile_Pool, Vector3 New_Direction, bool New_DeflectableStaus)
     {
-        // Run base Initialize() function
-        Initialize(Projectile_Pool);
-
         // Set the target direction of the projectile
         Projectile_Direction = New_Direction.normalized;
 
@@ -40,6 +37,9 @@ public class Projectile_Bullet : Projectile
             //Animation_ResetMaterialColor();
         }
         Projectile_HasBeenDeflected = false;
+
+        // Run base Initialize() function
+        Initialize(Projectile_Pool);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
