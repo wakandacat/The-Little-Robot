@@ -23,6 +23,8 @@ public abstract class Projectile : MonoBehaviour
     private Color Animation_OriginalMaterialColor;
     private Material Animation_OriginalMaterial;
 
+    private float Projectile_FireTime;
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Start Function                                                                                                                                                                               * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -40,11 +42,15 @@ public abstract class Projectile : MonoBehaviour
     // Initializes the Projectile Game Object
     protected void Initialize(ProjectilePool Projectile_Pool)
     {
+        this.gameObject.SetActive(true);
+
         // Stop previous coroutine if active
         if (Coroutine_ReturnProjectileToPool != null)
         {
             StopCoroutine(Coroutine_ReturnProjectileToPool);
         }
+
+        Projectile_FireTime = Time.time; // get the current time when the projectile is initialized (fired)
 
         Coroutine_ReturnProjectileToPool = StartCoroutine(AutoReturnToPool());
 
@@ -62,11 +68,18 @@ public abstract class Projectile : MonoBehaviour
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
-    // *               Projectile Value Update Functions                                                                                                      * 
+    // *               Projectile Value Get/Set Functions                                                                                                     * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     public void Set_ProjectileLifetime(float New_ProjectileLifetime)
     {
         Projectile_Lifetime = New_ProjectileLifetime;
+    }
+
+    // Function to get the percentage of lifetime completed (0.0f - 1.0f)
+    public float Get_ProjectileLifetime_AsPercentage()
+    {
+        if (Projectile_Lifetime <= 0) return 0f; // prevent division by zero
+        return Mathf.Clamp01((Time.time - Projectile_FireTime) / Projectile_Lifetime);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------

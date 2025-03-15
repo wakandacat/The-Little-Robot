@@ -175,6 +175,40 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //when enemy dies, push player away
+    //ref: https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Mathf.Sin.html
+    public void combatPush(float camPos)
+    {
+        pc.Gameplay.Disable(); //disable temporarily
+
+        Rigidbody rb = this.GetComponent<Rigidbody>();
+        float angle = camPos * 360f;
+
+        //angle to radians
+        float radians = angle * Mathf.Deg2Rad;
+
+        // Calculate directional force
+        float xDir = Mathf.Sin(radians);  //0 to 1 on x axis
+        float zDir = Mathf.Cos(radians);  //0 to 1 on z axis
+        //Debug.Log("xDir " + xDir);
+        //Debug.Log("zDir " + zDir);
+
+        Vector3 force = new Vector3(xDir * 70, 40f, -zDir * 70);
+
+        //add impulse to player
+        rb.AddForce(force, ForceMode.Impulse);
+        //Debug.Log("force " + force);
+
+        Invoke("turnOnControls", 0.5f);
+
+        //SwitchActionMap("Gameplay");
+    }
+
+    public void turnOnControls()
+    {
+        SwitchActionMap("Gameplay");
+    }
+
     //open pause menu
     public void onPause(InputAction.CallbackContext context)
     {
@@ -784,6 +818,7 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Death State-----------------------------------------------//
     public void ManagedeathState()
     {
+
         //Debug.Log("manage death");
         //fxBehave.StopCoroutine(fxBehave.walkSFX());
         //fxBehave.StopCoroutine(fxBehave.walkCoroutine);
