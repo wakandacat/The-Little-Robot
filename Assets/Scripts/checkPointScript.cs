@@ -42,17 +42,23 @@ public class checkPointScript : MonoBehaviour
         //don't respawn the enemy or its triggers if the player dies after the enemy is dead, but keep the light on
         if (SceneManager.GetActiveScene().name == "Combat1" && mainGameScript.firstBossDead == true)
         {
-            GameObject.Find("startBattleTrigger").GetComponent<StartEndBattleScript>().bossDefeated();
+            GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
+            GameObject.Find("startBattleTrigger").SetActive(false);
+            GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
             mainGameScript.m_audio.enemyWhirringSource.enabled = false; //don't play whirring if enemy is dead
         }
         else if (SceneManager.GetActiveScene().name == "Combat2" && mainGameScript.secondBossDead == true)
         {
-            GameObject.Find("startBattleTrigger").GetComponent<StartEndBattleScript>().bossDefeated();
+            GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
+            GameObject.Find("startBattleTrigger").SetActive(false);
+            GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
             mainGameScript.m_audio.enemyWhirringSource.enabled = false; //don't play whirring if enemy is dead
         }
         else if (SceneManager.GetActiveScene().name == "Combat3" && mainGameScript.thirdBossDead == true)
         {
-            GameObject.Find("startBattleTrigger").GetComponent<StartEndBattleScript>().bossDefeated();
+            GameObject.FindGameObjectWithTag("Boss Enemy").SetActive(false);
+            GameObject.Find("startBattleTrigger").SetActive(false);
+            GameObject.Find("proceedLight").GetComponent<Light>().intensity = 3;
             mainGameScript.m_audio.enemyWhirringSource.enabled = false; //don't play whirring if enemy is dead
         }
 

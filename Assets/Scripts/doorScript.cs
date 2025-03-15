@@ -10,22 +10,18 @@ public class doorScript : MonoBehaviour
     private bool movingUp = false;
     private bool movingDown = false;
     private Vector3 startPos;
-    public float delay = 0.7f;
+    public float delay = 1.0f;
     public float timeToOpen = 1.0f;
-    public bool doorOpen = false;
-
-    public bool isFungus = false;
 
     public void Awake()
     {
         startPos = this.transform.position;
-        timer = 0;
     }
 
     public void FixedUpdate()
     {
         //if the flag to open is set, then start the process
-        if (timer < (timeToOpen + delay) && movingUp && isFungus == false && movingDown == false)
+        if (timer < (timeToOpen + delay) && movingUp)
         {
             //increment the timer
             timer += timeStep;
@@ -41,11 +37,9 @@ public class doorScript : MonoBehaviour
             {
                 movingUp = false;
                 startPos = this.transform.position;
-                doorOpen = true;
-                timer = 0;
             }
         }
-        if (timer < timeToOpen && movingDown && movingUp == false)
+        else if (timer < timeToOpen && movingDown)
         {
             timer += timeStep;
             closeDoor();
@@ -54,9 +48,11 @@ public class doorScript : MonoBehaviour
             {
                 movingDown = false;
                 startPos = this.transform.position;
-                doorOpen = false;
-                timer = 0;
             }
+        }
+        else
+        {
+            timer = 0;
         }
     }
 
@@ -75,19 +71,4 @@ public class doorScript : MonoBehaviour
         float newY = Mathf.Lerp(startPos.y, startPos.y - 5f, timer);
         this.transform.position = new Vector3(startPos.x, newY, startPos.z);
     }
-
-    //for doors with fungus
-    public void fungusOpen()
-    {
-        //hide the fungus
-        this.transform.parent.GetChild(1).gameObject.SetActive(false);
-        this.transform.parent.GetChild(2).gameObject.SetActive(true);
-        isFungus = false;
-
-        //do some vfx explosion thing here to mask it???
-
-        //move the door like normal
-        movingUp = true;
-    }
-
 }

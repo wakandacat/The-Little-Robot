@@ -29,15 +29,11 @@ public class BossWakeupTrigger : MonoBehaviour
     {
         // Set Object References
         playerGameObject = GameObject.FindGameObjectWithTag("Player");
-
-        if (GameObject.FindGameObjectWithTag("Boss Enemy"))
-        {
-            bossEnemyScriptComponent = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
-            m_animator = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<Animator>();
-            enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
-            fxBehave = enemy.GetComponent<boss_fx_behaviors>();
-            m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
-        }
+        bossEnemyScriptComponent = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<BossEnemy>();
+        m_animator = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<Animator>();
+        enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+        fxBehave = enemy.GetComponent<boss_fx_behaviors>();
+        m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
 
     }
 
