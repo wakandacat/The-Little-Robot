@@ -17,7 +17,8 @@ public class StartEndBattleScript : MonoBehaviour
     public CinemachineBlenderSettings enemyAliveBlend;
     private CinemachineBrain camBrain;
     public GameObject enemyUI;
-    public Light proceedLight;
+    public GameObject proceedLight;
+    public GameObject proceedLightGreen;
 
     void Awake()
     {
@@ -60,7 +61,8 @@ public class StartEndBattleScript : MonoBehaviour
             mainGameScript.currLevelCount++;
 
             //turn on exit light
-            proceedLight.intensity = 3;
+            proceedLight.SetActive(false);
+            proceedLightGreen.SetActive(true);
 
             //switch cameras
             mainGameScript.SwitchToPlatformCam(0.4f);
