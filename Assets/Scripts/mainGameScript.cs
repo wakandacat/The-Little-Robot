@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
+using UnityEngine.Video;
 
 public class mainGameScript : MonoBehaviour
 {
@@ -33,9 +34,8 @@ public class mainGameScript : MonoBehaviour
 
     //intro cinematic camera and path
     public CinemachineVirtualCamera introCam;
-    bool introPlayed = false;
     private float camPos = 0;
-    public float introCamSpeed;
+    private float introCamSpeed = 0.003f;
     private float camStillTimer = 0f;
     public CinemachineVirtualCamera securityCam;
     public GameObject securityCanvas;
@@ -43,9 +43,20 @@ public class mainGameScript : MonoBehaviour
     public GameObject introCutCanvas;
 
     //cutscenes
-    public bool cutScenePlaying = true; //toggle for when menus open or cutscenes
+    public bool cutScenePlaying = true; //toggle for cutscenes to prevent player controller
+
+    //intro
+    bool introPlayed = false;
     public GameObject introStatic;
     public GameObject mainAudioMan;
+    public GameObject introSplashScreen;
+    public GameObject introStaticVideo;
+    public GameObject splashScreenCanvas;
+
+    //ending
+    public bool outroPlayed = false;
+    public bool outroPlaying = false;
+    public bool creditsPlaying = false;
 
     //player eye lights
     public GameObject playerSpotLight; //full intensity = 4
@@ -173,14 +184,39 @@ public class mainGameScript : MonoBehaviour
         Mouse.current.MakeCurrent(); 
         InputSystem.DisableDevice(Mouse.current); 
     }
-    public void SkipIntro()
+
+    public void SkipCutScene()
     {
-        cutScenePlaying = false;
+        if (cutScenePlaying == true)
+        {
+            cutScenePlaying = false;
+
+            if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
+            {
+                Debug.Log("intro skipped");
+                introPlayed = true;
+                IntroDoneResets();
+            }
+
+            if (SceneManager.GetActiveScene().name.Contains("EndScene") && outroPlaying == true)
+            {
+                Debug.Log("outro skipped");
+                outroPlayed = true;
+                OutroDone();
+            } 
+            else if (SceneManager.GetActiveScene().name.Contains("EndScene") && outroPlaying == false) //MIGHT NOT WORK ON REPLAY?????
+            {
+                Debug.Log("credits skipped");
+                creditsPlaying = false;
+                EndGame();
+            }
+        }
+        
     }
 
     public void IntroDoneResets()
     {
-        //Debug.Log("intro cinematic finished");
+        Debug.Log("intro cinematic finished");
         SwitchToPlatformCam(0.2f);
         introPlayed = true;
         cutScenePlaying = false;
@@ -189,23 +225,35 @@ public class mainGameScript : MonoBehaviour
         playerUICanvas.SetActive(true);
         securityCanvas.SetActive(false);
         introCutCanvas.SetActive(false);
+        splashScreenCanvas.SetActive(false);
         introStatic.SetActive(false);
-        mainAudioMan.GetComponent<audioManager>().playerSource.enabled = true; //once cutscene is done, turn on teh player sound effects
+        mainAudioMan.GetComponent<audioManager>().playerSource.enabled = true; //once cutscene is done, turn on the player sound effects
     }
 
+    public void OutroDone()
+    {
+        Debug.Log("outro cinematic finished");
+        outroPlayed = true;
+        outroPlaying = false;
+        playerPointLight.GetComponent<Light>().intensity = 0.0f;
+        playerSpotLight.GetComponent<Light>().intensity = 0.0f;    
+        mainAudioMan.GetComponent<audioManager>().playerSource.enabled = false; //turn off the player sound effects
+
+        //start the end credits
+        creditsPlaying = true;
+        cutScenePlaying = true;
+        if (GameObject.Find("endSceneStartObj"))
+        {
+            GameObject.Find("endSceneStartObj").GetComponent<endGameTrigger>().endTimer = 0; //reset teh timer
+        }
+    }
+
+    //go back to main menu
     public void EndGame()
     {
-       // Debug.Log("Thanks for playing!");
-        demoEndScreen.SetActive(true);
-        Time.timeScale = 0.0f;
-        GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused = true;
-       // mainMenu.SetActive(false);
-        controlMenu.SetActive(false);
-
-        //clear event selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        //set new default selected
-        EventSystem.current.SetSelectedGameObject(demoEndFirstButton);
+        cutScenePlaying = false;
+        creditsPlaying = false;
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void SwitchToBossCam()
@@ -245,7 +293,6 @@ public class mainGameScript : MonoBehaviour
 
     public void CheckPointResetPlatformCam(float rotation)
     {
-        Debug.Log("shjkhfjkghjk");
         platformCam.m_XAxis.Value = rotation;
         platformCam.ForceCameraPosition(transform.position, Quaternion.Euler(0, rotation, 0)); //force freelook to have player's rotation
         platformCam.m_YAxis.Value = 0.4f; //position up teh spine axis
@@ -258,18 +305,15 @@ public class mainGameScript : MonoBehaviour
         {
             if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
             {
-                if (introStatic.GetComponent<AudioSource>().isPlaying == false)
-                {
-                    introStatic.GetComponent<AudioSource>().Play(); //ensure the static sound is playing
-                }
-
+               
                 if (introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 1 && introPlayed == false)
                 {
-                    IntroDoneResets();
+                   // Debug.Log("whatttt");
+                    IntroDoneResets(); //end of cutscene
                 }
                 else
                 {
-                    camStillTimer = camStillTimer + Time.deltaTime; //increment the cutscene timer
+                    camStillTimer = camStillTimer + Time.deltaTime; //increment the cutscene timer                  
 
                     //hide intro load
                     if (camStillTimer <= 0.2f)
@@ -281,8 +325,37 @@ public class mainGameScript : MonoBehaviour
                         introCutCanvas.SetActive(false);
                     }
 
+                    //SPLASHSCREEN INTRO PLAYS HERE FIRST --> ~10seconds
+
+                    //once our splashscreen intro is finished
+                    if (introSplashScreen.GetComponent<VideoPlayer>().isPlaying == false)
+                    {
+                        introSplashScreen.SetActive(false); //turn it off
+                        splashScreenCanvas.SetActive(false);
+
+                        //hide intro load
+                        if (camStillTimer <= 11.7f)
+                        {
+                            introCutCanvas.SetActive(true); //cut to black
+                        }
+                        else
+                        {
+                            introCutCanvas.SetActive(false);
+
+                            //STATIC INTRO PLAYS HERE NEXT --> ~5seconds
+                            securityCanvas.SetActive(true);
+                            introStaticVideo.GetComponent<VideoPlayer>().Play();
+
+                            if (introStatic.GetComponent<AudioSource>().isPlaying == false)
+                            {
+                                introStatic.GetComponent<AudioSource>().Play(); //ensure the static sound is playing
+                            }
+
+                        }          
+                    }
+
                     //wait a few seconds at the beginning before starting the movement
-                    if (camStillTimer >= 5.0f)
+                    if (camStillTimer >= 16.5f)
                     {
                         //switch to introcam
                         introCam.Priority = securityCam.Priority + 1;
@@ -291,20 +364,21 @@ public class mainGameScript : MonoBehaviour
 
                         //stop the static noise
                         introStatic.SetActive(false);
+                        introStaticVideo.SetActive(false); //hide static video
 
                         //turn off black canvas cut
-                        if (camStillTimer >= 5.3f)
+                        if (camStillTimer >= 16.8f)
                         {
                             introCutCanvas.SetActive(false);
                         }
 
-                        if (camStillTimer >= 6.5f)
+                        if (camStillTimer >= 18f)
                         {
 
                             //move the camera along the dolly track
                             camPos += Mathf.Lerp(0, 1, introCamSpeed);
                             introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
-                            if (camStillTimer >= 8.5f)
+                            if (camStillTimer >= 20f)
                             {
                                 //turn on the robot's eye
                                 if (playerPointLight.GetComponent<Light>().intensity < 0.1f)
@@ -322,19 +396,20 @@ public class mainGameScript : MonoBehaviour
                         }                                
                       
                     } 
-                    else 
-                    {
-                      //start at security cam
-                    }
+                    //else 
+                    //{
+                    //  //start at security cam
+                    //}
                 }
             } 
         }
-        //user skipped cutscene with skip button
-        else if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false || cutScenePlaying == false)
-        {
-            IntroDoneResets();
+        ////user skipped cutscene with skip button
+        //else 
+        //{
+        //    Debug.Log("do do do");
+        //    IntroDoneResets();
 
-        }
+        //}
     }
 
 }

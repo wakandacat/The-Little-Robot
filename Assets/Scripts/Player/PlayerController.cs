@@ -252,7 +252,7 @@ public class PlayerController : MonoBehaviour
     //skip cinematic
     public void onSkip(InputAction.CallbackContext context)
     {
-        mainScript.GetComponent<mainGameScript>().SkipIntro();
+        mainScript.GetComponent<mainGameScript>().SkipCutScene();
     }
 
     public void findEnemy()
