@@ -110,7 +110,7 @@ public class Player_UI : MonoBehaviour
     {
         while (Health.canDash == false)
         {
-            Debug.Log("Hello 2");
+            //Debug.Log("Hello 2");
             //dashTimer += Time.deltaTime;
             dashBar.fillAmount += 0.1f;
             yield return new WaitForSeconds(0.1f);
