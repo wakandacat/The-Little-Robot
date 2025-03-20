@@ -11,6 +11,7 @@ public class groundCheck : MonoBehaviour
     public bool runOnce = false;
     PlayerController jumping;
     public bool sfxRunOnce = false;
+    public bool runRumbleOnce = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +37,7 @@ public class groundCheck : MonoBehaviour
         if (collision.gameObject.tag == "ground" || collision.gameObject.tag == "crate")
         {
             onGround = true;
+            jumping.quickDropStatetimer();
         }
 
     }
@@ -45,19 +47,17 @@ public class groundCheck : MonoBehaviour
         {
             jumping.falling = false;
             runOnce = false;
+            runRumbleOnce = false;
             jumping.handleJump();
             jumping.handleQuickDrop();
+
         }
 
     }
 
-    public void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "ground" || collision.gameObject.tag == "crate")
-        {
-            onGround = false;
-        }
+    public void OnCollisionExit(Collision collision) { 
 
+        onGround = false;
     }
 
 

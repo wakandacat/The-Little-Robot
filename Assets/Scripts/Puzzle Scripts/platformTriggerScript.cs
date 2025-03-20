@@ -12,6 +12,8 @@ public class platformTriggerScript : MonoBehaviour
     void Awake()
     {
         platform = transform.gameObject;
+
+       // player = GameObject.FindWithTag("Player");
     }
 
     //get teh platform movement and send it to the player controller
@@ -34,7 +36,6 @@ public class platformTriggerScript : MonoBehaviour
         //fi player collided
         if (other.gameObject.tag == "Player")
         {
-            //Debug.Log("on platform");
 
             player = other.gameObject;
             playerOn = true;
@@ -46,7 +47,6 @@ public class platformTriggerScript : MonoBehaviour
         //if player leaves
         if (other.gameObject.tag == "Player")
         {
-            //Debug.Log("off platform");
 
             //immediatley set player's extra velocity to 0
             player.gameObject.GetComponent<PlayerController>().platformMovement = Vector3.zero;

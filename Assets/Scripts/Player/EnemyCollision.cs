@@ -37,10 +37,6 @@ public class EnemyCollision : MonoBehaviour
     }
     public void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "Boss Enemy")
-        {
-            enemyCollision = false;
-            //Debug.Log("EnemyCollision: enemyCollision = false");
-        }
+        enemyCollision = false;
     }
 }

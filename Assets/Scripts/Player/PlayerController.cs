@@ -40,32 +40,38 @@ public class PlayerController : MonoBehaviour
     private float JfallMultiplier = 8.0f;
     private float quickDropMultiplier = 20.0f;
     public bool isJumping = false;
-    private bool isQuickDropping = false;
+    public bool isQuickDropping = false;
+    public bool quickDropState = false;
     public int jumpCounter = 0;
     private float rotationSpeed = 1.0f;
     public bool jumpState = false;
     public bool falling = false;
+    private bool collisionPostule = false;
+    private float quickDropTime = 0.0f;
+    private float quickDropDelay = 1.0f;
 
     //Dash vars
     public bool canDash = true;
     public bool isDashing = false;
     private float dashingPower = 40.0f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 1.75f;
+    public float dashingCooldown = 1.75f;
     private bool Dashing = false;
     private float gravityScale = 1.0f;
     private static float globalGravity = -9.81f;
     public Transform orientation;
     private float dashUpwardForce = 10.0f;
+    public Coroutine dashAction;
 
     //Attack vars
     public bool isAttacking = false;
     private bool attackState = false;
     public int attackCounter = 0;
     private float comboMaxTime = 1.5f;
-    private float attackCD = 1.75f;
+    private float attackCD = 0.5f;
     public bool runAttack = false;
     public bool runAttackAnim = false;
+    public Coroutine attackCooldown;
 
     //Roll vars
     public bool Rolling = false;
@@ -99,7 +105,8 @@ public class PlayerController : MonoBehaviour
 
     //Player taken damage vars
     public bool collision = false;
-    private float immunityTime = 1.75f;
+    private float immunityTime = 2.0f;
+    public Coroutine immunity;
 
     //animator
     private Animator playerAnimator;
@@ -118,7 +125,8 @@ public class PlayerController : MonoBehaviour
     //sound stuff
     player_fx_behaviors fxBehave;
     public bool runTakeDamageOnce = false;
-
+    public LayerMask groundMask;
+    public float height;
     void Start()
     {
         pc = new PlayerControls();
@@ -168,6 +176,40 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //when enemy dies, push player away
+    //ref: https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Mathf.Sin.html
+    public void combatPush(float camPos)
+    {
+        pc.Gameplay.Disable(); //disable temporarily
+
+        Rigidbody rb = this.GetComponent<Rigidbody>();
+        float angle = camPos * 360f;
+
+        //angle to radians
+        float radians = angle * Mathf.Deg2Rad;
+
+        // Calculate directional force
+        float xDir = Mathf.Sin(radians);  //0 to 1 on x axis
+        float zDir = Mathf.Cos(radians);  //0 to 1 on z axis
+        //Debug.Log("xDir " + xDir);
+        //Debug.Log("zDir " + zDir);
+
+        Vector3 force = new Vector3(xDir * 70, 40f, -zDir * 70);
+
+        //add impulse to player
+        rb.AddForce(force, ForceMode.Impulse);
+        //Debug.Log("force " + force);
+
+        Invoke("turnOnControls", 0.5f);
+
+        //SwitchActionMap("Gameplay");
+    }
+
+    public void turnOnControls()
+    {
+        SwitchActionMap("Gameplay");
+    }
+
     //open pause menu
     public void onPause(InputAction.CallbackContext context)
     {
@@ -211,14 +253,13 @@ public class PlayerController : MonoBehaviour
     //skip cinematic
     public void onSkip(InputAction.CallbackContext context)
     {
-        mainScript.GetComponent<mainGameScript>().SkipIntro();
+        mainScript.GetComponent<mainGameScript>().SkipCutScene();
     }
 
     public void findEnemy()
     {
         //update current scene reference
-        currentScene = SceneManager.GetActiveScene();
-
+        currentScene = SceneManager.GetActiveScene(); 
 
         if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
         {
@@ -259,6 +300,7 @@ public class PlayerController : MonoBehaviour
 
             //Find enemy 
             findEnemy();
+            
 
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
@@ -269,8 +311,13 @@ public class PlayerController : MonoBehaviour
 
                 //Raycast for debugging purposes
                 Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
-                Debug.DrawRay(transform.position, forward, Color.green);
+                Vector3 down = transform.TransformDirection(Vector3.down);
 
+               
+                Debug.DrawRay(transform.position, forward, Color.green);
+                Debug.DrawRay(transform.position, down, Color.red);
+                height = GetGroundDistance();
+                Debug.Log(height);
                 //if player in attack State start attack combo timer
                 if (attackState == true)
                 {
@@ -294,6 +341,7 @@ public class PlayerController : MonoBehaviour
             }
             manageFall(JfallMultiplier);
         }
+        //Debug.Log("quickDrop state" + quickDropState);
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
     //moved to player_fx_behaviors script
@@ -326,6 +374,19 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed + platformMovement);
 
 
+    }
+
+    public float GetGroundDistance()
+    {
+        float height = 3;
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundMask.value))
+        {
+            //Debug.Log("Hello");
+            height = hit.distance;
+        }
+        return height;
     }
 
     //-----------------------------------------------Jump-----------------------------------------------//
@@ -400,6 +461,16 @@ public class PlayerController : MonoBehaviour
         if (mainScript.cutScenePlaying == false)
         {
             isQuickDropping = context.ReadValueAsButton();
+            quickDropState = true;
+        }
+    }
+    public void quickDropStatetimer()
+    {
+        quickDropTime += Time.deltaTime;
+        if (quickDropDelay <= quickDropTime)
+        {
+            quickDropState = false;
+            quickDropTime = 0.0f;
         }
     }
 
@@ -431,16 +502,19 @@ public class PlayerController : MonoBehaviour
     {
         if (mainScript.cutScenePlaying == false)
         {
+
             //playerAnimator.SetBool("isDashing", true);
             Dashing = context.ReadValueAsButton();
             if (Dashing == true && canDash == true)
             {
-                StartCoroutine(Dash());
+                dashAction = StartCoroutine(Dash());
+                GameObject.Find("Player_UI").GetComponent<Player_UI>().dash_Bar();
             }
             else if (Dashing == true && canDash == false)
             {
                 m_audio.playPlayerSFX(8);
             }
+
         }
     }
     //-----------------------------------------------Roll-----------------------------------------------//
@@ -630,7 +704,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void attackCooldown()
+/*    public void attackCooldown()
     {
         Debug.Log("we are here");
         attackCD -= Time.deltaTime;
@@ -641,8 +715,8 @@ public class PlayerController : MonoBehaviour
             handleAttack();
             Debug.Log("attackCounter" + attackCounter);
         }
-    }
-    IEnumerator cooldown()
+    }*/
+    public IEnumerator cooldown()
     {
         yield return new WaitForSeconds(attackCD);
         handleAttack();
@@ -660,7 +734,7 @@ public class PlayerController : MonoBehaviour
                 attackCombo(attackCounter);
                 if (attackCounter == 3)
                 {
-                    StartCoroutine(cooldown());
+                    attackCooldown = StartCoroutine(cooldown());
                 }
             }
         }
@@ -680,7 +754,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     //https://www.youtube.com/watch?v=YSzmCf_L2cE
-    IEnumerator Immunity()
+    public IEnumerator Immunity()
     {
         //Debug.Log("Hello");
         Physics.IgnoreLayerCollision(7, 6, true);
@@ -697,6 +771,11 @@ public class PlayerController : MonoBehaviour
             collision = true;
             playerCurrenthealth -= 1;
 
+        }
+        if(other.gameObject.tag == "postule")
+        {
+            collisionPostule = true;
+            Debug.Log("touchign postules");
         }
 
         //sfx call based on what hit you
@@ -724,11 +803,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision == true && combatState == true && deathState == false)
         {
-            StartCoroutine(Immunity());
-        }
-        else
-        {
-            StopCoroutine(Immunity());
+            immunity = StartCoroutine(Immunity());
         }
         if (combatState == true)
         {
@@ -765,6 +840,7 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Death State-----------------------------------------------//
     public void ManagedeathState()
     {
+
         //Debug.Log("manage death");
         //fxBehave.StopCoroutine(fxBehave.walkSFX());
         //fxBehave.StopCoroutine(fxBehave.walkCoroutine);

@@ -38,7 +38,8 @@ public class ProjectileSpawner : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Private/Protected Attributes                                                                                                                                                                 * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    private Transform Spawner_FirePoint;            // transform for the spawner fire point game object
+    private Transform Spawner_FirePoint;                // transform for the spawner fire point game object
+    private Transform Spawner_FirePoint_OriginalValues; // holds the original transform values for the game object
     
     private float Spawner_NextFireTime;             // when the next projectile should be fired
 
@@ -60,8 +61,16 @@ public class ProjectileSpawner : MonoBehaviour
         // Setup Private Attributes
         Spawner_FirePoint = Spawner_FirePoint_GameObject.transform;
 
+        //Spawner_FirePoint_OriginalValues.position = Spawner_FirePoint_GameObject.transform.position;
+        //Spawner_FirePoint_OriginalValues.rotation = Spawner_FirePoint_GameObject.transform.rotation;
+        //Spawner_FirePoint_OriginalValues.localScale = Spawner_FirePoint_GameObject.transform.localScale;
+
         // Set Object References
         Spawner_Player_GameObject = GameObject.FindGameObjectWithTag("Player");
+
+        // Set Pool ID & Spawner
+        Spawner_ProjectilePool.Set_Pool_ID(Spawner_ID);
+        Spawner_ProjectilePool.Set_Spawner(this);
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -196,6 +205,16 @@ public class ProjectileSpawner : MonoBehaviour
     public void Reset_FirePointRotationToGameObject()
     {
         Update_FirePointRotation(Spawner_FirePoint_GameObject.transform.rotation);
+    }
+
+    public Vector3 Return_FirePointPosition()
+    {
+        return Spawner_FirePoint.transform.position;
+    }
+
+    public Quaternion Return_FirePointRotation()
+    {
+        return Spawner_FirePoint.transform.rotation;
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -335,10 +354,11 @@ public class ProjectileSpawner : MonoBehaviour
         }
     }
 
-    public bool CheckIfCheckIfAllProjectilesHaveBeenReturnedToQueue()
-    {
-        return Spawner_ProjectilePool.CheckIfAllProjectilesHaveBeenReturnedToQueue();
-    }
+    //public bool CheckIfCheckIfAllProjectilesHaveBeenReturnedToQueue()
+    //{
+    //    return Spawner_ProjectilePool.CheckIfAllProjectilesHaveBeenReturnedToQueue();
+    //}
+
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Projectile Pool Functions                                                                                                                                                                    * 
@@ -346,6 +366,11 @@ public class ProjectileSpawner : MonoBehaviour
     public void ReturnAllProjectilesToPool()
     {
         Spawner_ProjectilePool.ReturnAllProjectilesToPool();
+    }
+
+    public bool IsPoolFinishedFilling()
+    {
+        return Spawner_ProjectilePool.IsPoolFinishedFilling();
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

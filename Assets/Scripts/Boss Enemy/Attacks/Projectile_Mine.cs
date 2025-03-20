@@ -50,9 +50,6 @@ public class Projectile_Mine : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     public void Initialize_Mine(ProjectilePool Projectile_Pool, Vector3 Arc_NewTarget, float Arc_NewHeight, float Arc_NewDuration)
     {
-        // Run base Initialize() function
-        Initialize(Projectile_Pool);
-
         InitializeArcMovement(Arc_NewTarget, Arc_NewHeight, Arc_NewDuration);
 
         // 
@@ -60,6 +57,9 @@ public class Projectile_Mine : Projectile
 
         // Animation Stuff
         Animation_Reset();
+
+        // Run base Initialize() function
+        Initialize(Projectile_Pool);
     }
 
     public void InitializeArcMovement(Vector3 Arc_NewTarget, float Arc_NewHeight, float Arc_NewDuration)

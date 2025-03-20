@@ -16,8 +16,8 @@ MonoBehaviour:
   - m_From: battleCam
     m_To: freeLookCam
     m_Blend:
-      m_Style: 6
-      m_Time: 0.1
+      m_Style: 1
+      m_Time: 0.7
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -106,6 +106,39 @@ MonoBehaviour:
     m_Blend:
       m_Style: 6
       m_Time: 0.3
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: freeLookCam
+    m_To: playerCam
+    m_Blend:
+      m_Style: 0
+      m_Time: 2
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: endSecurityCam
+    m_To: playerCam
+    m_Blend:
+      m_Style: 0
+      m_Time: 2
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: playerCam
+    m_To: endSecurityCam
+    m_Blend:
+      m_Style: 0
+      m_Time: 2
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
