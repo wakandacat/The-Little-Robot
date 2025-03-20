@@ -14,6 +14,8 @@ public class Player_UI : MonoBehaviour
     public GameObject bar_1;
     public GameObject bar_0;
     public Image dashBar;
+    public float dashTimer = 0.0f;
+    private Coroutine refillDashBar;
 
 
 
@@ -29,7 +31,6 @@ public class Player_UI : MonoBehaviour
     {
         Health_Bar_display();
         dash_Bar();
-        StartCoroutine(refillBar());
     }
 
     public void Health_Bar_display()
@@ -92,23 +93,29 @@ public class Player_UI : MonoBehaviour
     //https://www.youtube.com/watch?v=ju1dfCpDoF8
     public void dash_Bar()
     {
-        if(Health.canDash == false)
+/*        if (dashBar.fillAmount == 0)
+        {
+            refillDashBar = StartCoroutine(refillBar());
+
+        }*/
+        if (Health.canDash == false)
         {
             dashBar.fillAmount = 0;
-        }
-        if (Health.canDash == true)
-        {
-            dashBar.fillAmount = 1;
-        }
-    }
+            refillDashBar = StartCoroutine(refillBar());
 
-    IEnumerator refillBar()
+        }
+
+    }
+    private IEnumerator refillBar()
     {
-        yield return new WaitForSeconds(.1f);
         while (Health.canDash == false)
         {
-            dashBar.fillAmount += Time.deltaTime * 0.01f;
-            yield return new WaitForSeconds(.01f);
+            //Debug.Log("Hello 2");
+            //dashTimer += Time.deltaTime;
+            dashBar.fillAmount += 0.1f;
+            yield return new WaitForSeconds(0.1f);
         }
+        dashBar.fillAmount = 1;
+        dashTimer = 0.0f;
     }
 }
