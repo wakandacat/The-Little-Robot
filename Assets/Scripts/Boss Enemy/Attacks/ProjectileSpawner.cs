@@ -207,6 +207,16 @@ public class ProjectileSpawner : MonoBehaviour
         Update_FirePointRotation(Spawner_FirePoint_GameObject.transform.rotation);
     }
 
+    public Vector3 Return_FirePointPosition()
+    {
+        return Spawner_FirePoint.transform.position;
+    }
+
+    public Quaternion Return_FirePointRotation()
+    {
+        return Spawner_FirePoint.transform.rotation;
+    }
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Projectile Update Functions                                                                                                                                                                  * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -659,9 +659,9 @@ public class State_Awake : BossState
         }
 
         // DEBUGGING (MUST BE REMOVED):
-        //Attack_BestName = State_Attack_ArenaHazard_Mine_Random.Attack_Name;
-        //Attack_BestScore = State_Attack_ArenaHazard_Mine_Random.CalculateScore(bossEnemyComponent);
-        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_ArenaHazard_Mine_Random;
+        //Attack_BestName = State_Attack_Bullet_TrackingWall_Easy.Attack_Name;
+        //Attack_BestScore = State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Easy;
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
         Attack_TransitionToExecute();
@@ -1506,14 +1506,6 @@ public class State_Attack_Bullet_RapidFireShot_Easy : BossState
     // Attack Spawner
     private ProjectileSpawner SpawnerComponent_Bullet;
 
-    // Attack Values
-    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 3;
-    private float Attack_AngleOfSpread = 10.0f;
-    private int Attack_ProjectileVerticalCount = 3;
-    private float Attack_MinHeight = 0.0f;
-    private float Attack_MaxHeight = 3.0f;
-
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
         float score = 0.0f;
@@ -1584,8 +1576,9 @@ public class State_Attack_Bullet_RapidFireShot_Easy : BossState
                     playerPos = bossEnemyComponent.Player_EstimateFuturePosition(1.0f);
                     SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
                 }
-
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                //public void InitializeCluster(string clusterName, Vector3 New_StartingPosition, Quaternion New_Rotation, Vector3 New_Direction, float New_Speed, float New_Lifetime)
+                Vector3 direction = SpawnerComponent_Bullet.Return_FirePointRotation() * Vector3.forward;
+                bossEnemyComponent.InitializeCluster("Projectile_Cluster_5x5", SpawnerComponent_Bullet.Return_FirePointPosition(), SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
 
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
@@ -1672,14 +1665,6 @@ public class State_Attack_Bullet_RapidFireShot_Hard : BossState
     // Attack Spawner
     private ProjectileSpawner SpawnerComponent_Bullet;
 
-    // Attack Values
-    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 3;
-    private float Attack_AngleOfSpread = 10.0f;
-    private int Attack_ProjectileVerticalCount = 3;
-    private float Attack_MinHeight = 0.0f;
-    private float Attack_MaxHeight = 3.0f;
-
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
         float score = 0.0f;
@@ -1751,7 +1736,8 @@ public class State_Attack_Bullet_RapidFireShot_Hard : BossState
                     SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
                 }
 
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+                Vector3 direction = SpawnerComponent_Bullet.Return_FirePointRotation() * Vector3.forward;
+                bossEnemyComponent.InitializeCluster("Projectile_Cluster_5x5", SpawnerComponent_Bullet.Return_FirePointPosition(), SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
 
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
@@ -1813,6 +1799,338 @@ public class State_Attack_Bullet_RapidFireShot_Hard : BossState
 
     }
 }
+
+//public class State_Attack_Bullet_RapidFireShot_Easy : BossState
+//{
+//    // Private Attributes
+//    private bool Attack_Completed = false;
+
+//    // Attack_State Selection Properties
+//    public static string Attack_Name = "State_Attack_Bullet_RapidFireShot_Easy";
+//    public static float Energy_Cost = 1.0f;
+//    public static float Player_MinDistance = 10.0f;
+//    public static float Player_MaxDistance = 50.0f;
+
+//    // Spawner Values
+//    private float Attack_FireRate = 2.0f;
+//    private float Attack_FireRateDelay = 1f;
+//    private int Attack_Count = 24;
+//    private bool Attack_TrackHorizontal = false;
+//    private bool Attack_TrackVertical = false;
+//    private float Attack_TrackSpeed = 0.0f;
+//    private float Attack_ProjectileSpeed = 30.0f;
+//    private float Attack_ProjectileLifetime = 10.0f;
+
+//    // Attack Spawner
+//    private ProjectileSpawner SpawnerComponent_Bullet;
+
+//    // Attack Values
+//    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+//    private int Attack_ProjectileCount = 3;
+//    private float Attack_AngleOfSpread = 10.0f;
+//    private int Attack_ProjectileVerticalCount = 3;
+//    private float Attack_MinHeight = 0.0f;
+//    private float Attack_MaxHeight = 3.0f;
+
+//    public static float CalculateScore(BossEnemy bossEnemyComponent)
+//    {
+//        float score = 0.0f;
+
+//        // Check distance ----------------------------*
+//        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+//        {
+//            score += 1.0f;
+//        }
+//        else
+//        {
+//            score -= 1.0f;
+//        }
+
+//        // Check Attack_HistoryList ------------------*
+//        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+//        return score;
+//    }
+
+//    // Called when the state machine transitions to this state
+//    public override void Enter()
+//    {
+//        // Debugging
+//        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_RapidFireShot_Easy");
+
+//        // Boss Enemy Logic
+//        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+//        // Spawner Logic
+//        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+//        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+//        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+//        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+//        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+//        SpawnerComponent_Bullet.Reset_FirePointPositionToGameObject();
+//        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+//        // Animation Logic
+//        animator.SetBool("inAttack", true);
+
+//    }
+
+//    // Called once per frame
+//    public override void Update()
+//    {
+//        // Programming Logic
+
+//        // Spawner Logic
+//        // Attack is still occuring
+//        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+//        {
+//            //Debug.Log("BossEnemy: Spawner Is Active");
+//            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+//            {
+//                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
+//                SpawnerComponent_Bullet.PreAttackLogic();
+
+//                Vector3 playerPos;
+//                if (bossEnemyComponent.Player_GetDistanceFromXSecondsAgo(1.0f) < 5.0f)
+//                {
+//                    playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+//                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
+//                }
+//                else
+//                {
+//                    playerPos = bossEnemyComponent.Player_EstimateFuturePosition(1.0f);
+//                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
+//                }
+
+//                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+
+//                SpawnerComponent_Bullet.PostAttackLogic();
+//            }
+//        }
+//        // Attack has finished
+//        else
+//        {
+//            //Debug.Log("BossEnemy: Attack Completed");
+//            Attack_Completed = true;
+//        }
+
+//        // Animation Logic
+
+//    }
+
+//    // Called once per frame - after update
+//    public override void CheckTransition()
+//    {
+//        // Programming Logic
+//        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+//        {
+//            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+//        }
+//        else if (Attack_Completed == true)
+//        {
+//            bossEnemyComponent.TransitionToState_SelfCheck();
+//        }
+
+//        // Animation Logic
+
+//    }
+
+//    // Called at fixed intervals (used for physics updates)
+//    public override void FixedUpdate()
+//    {
+//        // Programming Logic
+
+//        // Animation Logic
+
+//    }
+
+//    // Called after all other update functions
+//    public override void LateUpdate()
+//    {
+//        // Programming Logic
+
+//        // Animation Logic
+
+//    }
+
+//    // Called when the state machine transitions out of this state
+//    public override void Exit()
+//    {
+//        // Programming Logic
+//        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+//        // Animation Logic
+//        animator.SetBool("inAttack", false);
+
+//    }
+//}
+
+//public class State_Attack_Bullet_RapidFireShot_Hard : BossState
+//{
+//    // Private Attributes
+//    private bool Attack_Completed = false;
+
+//    // Attack_State Selection Properties
+//    public static string Attack_Name = "State_Attack_Bullet_RapidFireShot_Easy";
+//    public static float Energy_Cost = 1.0f;
+//    public static float Player_MinDistance = 10.0f;
+//    public static float Player_MaxDistance = 50.0f;
+
+//    // Spawner Values
+//    private float Attack_FireRate = 4.0f;
+//    private float Attack_FireRateDelay = 1f;
+//    private int Attack_Count = 48;
+//    private bool Attack_TrackHorizontal = false;
+//    private bool Attack_TrackVertical = false;
+//    private float Attack_TrackSpeed = 0.0f;
+//    private float Attack_ProjectileSpeed = 30.0f;
+//    private float Attack_ProjectileLifetime = 10.0f;
+
+//    // Attack Spawner
+//    private ProjectileSpawner SpawnerComponent_Bullet;
+
+//    // Attack Values
+//    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+//    private int Attack_ProjectileCount = 3;
+//    private float Attack_AngleOfSpread = 10.0f;
+//    private int Attack_ProjectileVerticalCount = 3;
+//    private float Attack_MinHeight = 0.0f;
+//    private float Attack_MaxHeight = 3.0f;
+
+//    public static float CalculateScore(BossEnemy bossEnemyComponent)
+//    {
+//        float score = 0.0f;
+
+//        // Check distance ----------------------------*
+//        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+//        {
+//            score += 1.0f;
+//        }
+//        else
+//        {
+//            score -= 1.0f;
+//        }
+
+//        // Check Attack_HistoryList ------------------*
+//        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+//        return score;
+//    }
+
+//    // Called when the state machine transitions to this state
+//    public override void Enter()
+//    {
+//        // Debugging
+//        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_RapidFireShot_Easy");
+
+//        // Boss Enemy Logic
+//        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+//        // Spawner Logic
+//        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+//        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+//        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+//        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+//        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+//        SpawnerComponent_Bullet.Reset_FirePointPositionToGameObject();
+//        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+//        // Animation Logic
+//        animator.SetBool("inAttack", true);
+
+//    }
+
+//    // Called once per frame
+//    public override void Update()
+//    {
+//        // Programming Logic
+
+//        // Spawner Logic
+//        // Attack is still occuring
+//        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+//        {
+//            //Debug.Log("BossEnemy: Spawner Is Active");
+//            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+//            {
+//                ////Debug.Log("BossEnemy: Spawner Ready To Fire");
+//                SpawnerComponent_Bullet.PreAttackLogic();
+
+//                Vector3 playerPos;
+//                if (bossEnemyComponent.Player_GetDistanceFromXSecondsAgo(1.0f) < 5.0f)
+//                {
+//                    playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+//                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
+//                }
+//                else
+//                {
+//                    playerPos = bossEnemyComponent.Player_EstimateFuturePosition(0.75f);
+//                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, true);
+//                }
+
+//                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_ProjectileCount, Attack_AngleOfSpread, Attack_ProjectileVerticalCount, Attack_MinHeight, Attack_MaxHeight);
+
+//                SpawnerComponent_Bullet.PostAttackLogic();
+//            }
+//        }
+//        // Attack has finished
+//        else
+//        {
+//            //Debug.Log("BossEnemy: Attack Completed");
+//            Attack_Completed = true;
+//        }
+
+//        // Animation Logic
+
+//    }
+
+//    // Called once per frame - after update
+//    public override void CheckTransition()
+//    {
+//        // Programming Logic
+//        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+//        {
+//            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+//        }
+//        else if (Attack_Completed == true)
+//        {
+//            bossEnemyComponent.TransitionToState_SelfCheck();
+//        }
+
+//        // Animation Logic
+
+//    }
+
+//    // Called at fixed intervals (used for physics updates)
+//    public override void FixedUpdate()
+//    {
+//        // Programming Logic
+
+//        // Animation Logic
+
+//    }
+
+//    // Called after all other update functions
+//    public override void LateUpdate()
+//    {
+//        // Programming Logic
+
+//        // Animation Logic
+
+//    }
+
+//    // Called when the state machine transitions out of this state
+//    public override void Exit()
+//    {
+//        // Programming Logic
+//        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+//        // Animation Logic
+//        animator.SetBool("inAttack", false);
+
+//    }
+//}
 
 public class State_Attack_Bullet_TrackingCone_Easy : BossState
 {
@@ -2209,11 +2527,7 @@ public class State_Attack_Bullet_TrackingWall_Easy : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_JumpRope_ProjectileCount = 3;
-    private float Attack_JumpRope_AngleOfSpread = 3.0f;
-    private int Attack_JumpRope_ProjectileVerticalCount = 3;
-    private float Attack_JumpRope_MinHeight = 0.0f;
-    private float Attack_JumpRope_MaxHeight = 1.0f;
+    private float Attack_JumpRope_HeightOffset = 1.25f;
     private float Spawner_JumpRope_Rotation_Speed = 120.0f;
     private Quaternion Spawner_JumpRope_RotationQuat;
 
@@ -2289,9 +2603,13 @@ public class State_Attack_Bullet_TrackingWall_Easy : BossState
             if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
             {
                 SpawnerComponent_Bullet.PreAttackLogic();
-                
+
                 // Jump Rope
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_JumpRope_ProjectileCount, Attack_JumpRope_AngleOfSpread, Attack_JumpRope_ProjectileVerticalCount, Attack_JumpRope_MinHeight, Attack_JumpRope_MaxHeight);
+                //public void InitializeCluster(string clusterName, Vector3 New_StartingPosition, Quaternion New_Rotation, Vector3 New_Direction, float New_Speed, float New_Lifetime)
+                Vector3 direction = SpawnerComponent_Bullet.Return_FirePointRotation() * Vector3.forward;
+                Vector3 firingPosition = SpawnerComponent_Bullet.Return_FirePointPosition();
+                firingPosition.y += Attack_JumpRope_HeightOffset;
+                bossEnemyComponent.InitializeCluster("Projectile_Cluster_3x3", firingPosition, SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
 
                 // Tracking Wall
                 Spawner_JumpRope_RotationQuat = SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation;
@@ -2387,11 +2705,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_JumpRope_ProjectileCount = 3;
-    private float Attack_JumpRope_AngleOfSpread = 3.0f;
-    private int Attack_JumpRope_ProjectileVerticalCount = 3;
-    private float Attack_JumpRope_MinHeight = 0.0f;
-    private float Attack_JumpRope_MaxHeight = 2.0f;
+    private float Attack_JumpRope_HeightOffset = 1.25f;
     private float Spawner_JumpRope_Rotation_Speed = 210.0f;
     private Quaternion Spawner_JumpRope_RotationQuat;
 
@@ -2470,12 +2784,20 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
                 SpawnerComponent_Bullet.PreAttackLogic();
 
                 // Jump Rope
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_JumpRope_ProjectileCount, Attack_JumpRope_AngleOfSpread, Attack_JumpRope_ProjectileVerticalCount, Attack_JumpRope_MinHeight, Attack_JumpRope_MaxHeight);
+                //public void InitializeCluster(string clusterName, Vector3 New_StartingPosition, Quaternion New_Rotation, Vector3 New_Direction, float New_Speed, float New_Lifetime)
+                Vector3 direction = SpawnerComponent_Bullet.Return_FirePointRotation() * Vector3.forward;
+                Vector3 firingPosition = SpawnerComponent_Bullet.Return_FirePointPosition();
+                firingPosition.y += Attack_JumpRope_HeightOffset;
+                bossEnemyComponent.InitializeCluster("Projectile_Cluster_3x3", firingPosition, SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
 
                 // Jump Rope ALT
                 float randomDegree = Random.Range(0.0f, 360.0f);
                 SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, randomDegree, 0));
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_JumpRope_ProjectileCount, Attack_JumpRope_AngleOfSpread, Attack_JumpRope_ProjectileVerticalCount, Attack_JumpRope_MinHeight, Attack_JumpRope_MaxHeight);
+                //public void InitializeCluster(string clusterName, Vector3 New_StartingPosition, Quaternion New_Rotation, Vector3 New_Direction, float New_Speed, float New_Lifetime)
+                Vector3 directionALT = SpawnerComponent_Bullet.Return_FirePointRotation() * Vector3.forward;
+                Vector3 firingPositionALT = SpawnerComponent_Bullet.Return_FirePointPosition();
+                firingPosition.y += Attack_JumpRope_HeightOffset;
+                bossEnemyComponent.InitializeCluster("Projectile_Cluster_3x3", firingPositionALT, SpawnerComponent_Bullet.Return_FirePointRotation(), directionALT, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
                 SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, -randomDegree, 0));
 
                 // Tracking Wall
@@ -2553,6 +2875,377 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
 
     }
 }
+
+//public class State_Attack_Bullet_TrackingWall_Easy : BossState
+//{
+//    // Private Attributes
+//    private bool Attack_Completed = false;
+
+//    // Attack_State Selection Properties
+//    public static string Attack_Name = "State_Attack_Bullet_TrackingWall_Easy";
+//    public static float Energy_Cost = 1.0f;
+//    public static float Player_MinDistance = 10.0f;
+//    public static float Player_MaxDistance = 50.0f;
+
+//    // Spawner Values
+//    private float Attack_FireRate = 8.0f;
+//    private float Attack_FireRateDelay = 1f;
+//    private int Attack_Count = 100;
+//    private bool Attack_TrackHorizontal = false;
+//    private bool Attack_TrackVertical = false;
+//    private float Attack_TrackSpeed = 0.0f;
+//    private float Attack_ProjectileSpeed = 20.0f;
+//    private float Attack_ProjectileLifetime = 10.0f;
+
+//    // Attack Spawner
+//    private ProjectileSpawner SpawnerComponent_Bullet;
+
+//    // Attack Values
+//    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+//    private int Attack_JumpRope_ProjectileCount = 3;
+//    private float Attack_JumpRope_AngleOfSpread = 3.0f;
+//    private int Attack_JumpRope_ProjectileVerticalCount = 3;
+//    private float Attack_JumpRope_MinHeight = 0.0f;
+//    private float Attack_JumpRope_MaxHeight = 1.0f;
+//    private float Spawner_JumpRope_Rotation_Speed = 120.0f;
+//    private Quaternion Spawner_JumpRope_RotationQuat;
+
+//    private int Attack_Wall_ProjectileCount = 1;
+//    private float Attack_Wall_AngleOfSpread = 1.0f;
+//    private int Attack_Wall_ProjectileVerticalCount = 8;
+//    private float Attack_Wall_MinHeight = 0.0f;
+//    private float Attack_Wall_MaxHeight = 7.5f;
+
+//    public static float CalculateScore(BossEnemy bossEnemyComponent)
+//    {
+//        float score = 0.0f;
+
+//        // Check distance ----------------------------*
+//        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+//        {
+//            score += 1.0f;
+//        }
+//        else
+//        {
+//            score -= 1.0f;
+//        }
+
+//        // Check Attack_HistoryList ------------------*
+//        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+//        return score;
+//    }
+
+//    // Called when the state machine transitions to this state
+//    public override void Enter()
+//    {
+//        // Debugging
+//        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_TrackingWall_Easy");
+
+//        // Boss Enemy Logic
+//        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+//        if (Random.Range(0, 2) == 0)
+//        {
+//            Spawner_JumpRope_Rotation_Speed = Spawner_JumpRope_Rotation_Speed * -1;
+//        }
+
+//        // Spawner Logic
+//        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+//        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+//        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+//        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+//        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+//        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+//        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+//        // Animation Logic
+//        animator.SetBool("inAttack", true);
+
+//    }
+
+//    // Called once per frame
+//    public override void Update()
+//    {
+//        // Programming Logic
+
+//        // Spawner Logic
+//        // Attack is still occuring
+//        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+//        {
+//            //increment rotation
+//            float Spawner_Rotation_PerFrame = Spawner_JumpRope_Rotation_Speed * Time.deltaTime;
+//            SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, Spawner_Rotation_PerFrame, 0));
+
+//            // Spawner is ready for next projectile fire
+//            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+//            {
+//                SpawnerComponent_Bullet.PreAttackLogic();
+
+//                // Jump Rope
+//                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_JumpRope_ProjectileCount, Attack_JumpRope_AngleOfSpread, Attack_JumpRope_ProjectileVerticalCount, Attack_JumpRope_MinHeight, Attack_JumpRope_MaxHeight);
+
+//                // Tracking Wall
+//                Spawner_JumpRope_RotationQuat = SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation;
+//                Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+//                SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, false);
+//                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_Wall_ProjectileCount, Attack_Wall_AngleOfSpread, Attack_Wall_ProjectileVerticalCount, Attack_Wall_MinHeight, Attack_Wall_MaxHeight);
+//                SpawnerComponent_Bullet.Update_FirePointRotation(Spawner_JumpRope_RotationQuat);
+
+//                SpawnerComponent_Bullet.PostAttackLogic();
+//            }
+//        }
+//        // Attack has finished
+//        else
+//        {
+//            //Debug.Log("BossEnemy: Attack Completed");
+//            Attack_Completed = true;
+//        }
+
+//        // Animation Logic
+
+//    }
+
+//    // Called once per frame - after update
+//    public override void CheckTransition()
+//    {
+//        // Programming Logic
+//        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+//        {
+//            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+//        }
+//        else if (Attack_Completed == true)
+//        {
+//            bossEnemyComponent.TransitionToState_SelfCheck();
+//        }
+
+//        // Animation Logic
+
+//    }
+
+//    // Called at fixed intervals (used for physics updates)
+//    public override void FixedUpdate()
+//    {
+//        // Programming Logic
+
+//        // Animation Logic
+
+//    }
+
+//    // Called after all other update functions
+//    public override void LateUpdate()
+//    {
+//        // Programming Logic
+
+//        // Animation Logic
+
+//    }
+
+//    // Called when the state machine transitions out of this state
+//    public override void Exit()
+//    {
+//        // Programming Logic
+//        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+//        // Animation Logic
+//        animator.SetBool("inAttack", false);
+
+//    }
+//}
+
+//public class State_Attack_Bullet_TrackingWall_Hard : BossState
+//{
+//    // Private Attributes
+//    private bool Attack_Completed = false;
+
+//    // Attack_State Selection Properties
+//    public static string Attack_Name = "State_Attack_Bullet_TrackingWall_Hard";
+//    public static float Energy_Cost = 1.0f;
+//    public static float Player_MinDistance = 10.0f;
+//    public static float Player_MaxDistance = 50.0f;
+
+//    // Spawner Values
+//    private float Attack_FireRate = 10.0f;
+//    private float Attack_FireRateDelay = 1f;
+//    private int Attack_Count = 125;
+//    private bool Attack_TrackHorizontal = false;
+//    private bool Attack_TrackVertical = false;
+//    private float Attack_TrackSpeed = 0.0f;
+//    private float Attack_ProjectileSpeed = 25.0f;
+//    private float Attack_ProjectileLifetime = 10.0f;
+
+//    // Attack Spawner
+//    private ProjectileSpawner SpawnerComponent_Bullet;
+
+//    // Attack Values
+//    // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
+//    private int Attack_JumpRope_ProjectileCount = 3;
+//    private float Attack_JumpRope_AngleOfSpread = 3.0f;
+//    private int Attack_JumpRope_ProjectileVerticalCount = 3;
+//    private float Attack_JumpRope_MinHeight = 0.0f;
+//    private float Attack_JumpRope_MaxHeight = 2.0f;
+//    private float Spawner_JumpRope_Rotation_Speed = 210.0f;
+//    private Quaternion Spawner_JumpRope_RotationQuat;
+
+//    private int Attack_Wall_ProjectileCount = 1;
+//    private float Attack_Wall_AngleOfSpread = 1.0f;
+//    private int Attack_Wall_ProjectileVerticalCount = 8;
+//    private float Attack_Wall_MinHeight = 0.0f;
+//    private float Attack_Wall_MaxHeight = 7.5f;
+//    private bool Attack_Wall_Fire = false;
+
+//    public static float CalculateScore(BossEnemy bossEnemyComponent)
+//    {
+//        float score = 0.0f;
+
+//        // Check distance ----------------------------*
+//        if (bossEnemyComponent.Player_ReturnDistance() >= Player_MinDistance && bossEnemyComponent.Player_ReturnDistance() <= Player_MaxDistance)
+//        {
+//            score += 1.0f;
+//        }
+//        else
+//        {
+//            score -= 1.0f;
+//        }
+
+//        // Check Attack_HistoryList ------------------*
+//        score += bossEnemyComponent.returnAttackHistoryScore(Attack_Name);
+
+//        return score;
+//    }
+
+//    // Called when the state machine transitions to this state
+//    public override void Enter()
+//    {
+//        // Debugging
+//        //Debug.Log("BossEnemy: Entering State_Attack_Bullet_TrackingWall_Hard");
+
+//        // Boss Enemy Logic
+//        bossEnemyComponent.updateCurrentEnergy(bossEnemyComponent.returnCurrentEnergy() - Energy_Cost); // energy cost of attack applied
+
+//        if (Random.Range(0, 2) == 0)
+//        {
+//            Spawner_JumpRope_Rotation_Speed = Spawner_JumpRope_Rotation_Speed * -1;
+//        }
+
+//        // Spawner Logic
+//        SpawnerComponent_Bullet = bossEnemyComponent.ReturnComponent_Spawner_Bullet();
+//        SpawnerComponent_Bullet.ReturnAllProjectilesToPool();
+//        SpawnerComponent_Bullet.UpdateSpawner_AllValues(Attack_FireRate, Attack_Count, Attack_TrackHorizontal, Attack_TrackVertical, Attack_TrackSpeed);
+//        SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
+//        SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
+
+//        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+//        SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
+
+//        // Animation Logic
+//        animator.SetBool("inAttack", true);
+
+//    }
+
+//    // Called once per frame
+//    public override void Update()
+//    {
+//        // Programming Logic
+
+//        // Spawner Logic
+//        // Attack is still occuring
+//        if (SpawnerComponent_Bullet.ReturnSpawnerActive() == true)
+//        {
+//            //increment rotation
+//            float Spawner_Rotation_PerFrame = Spawner_JumpRope_Rotation_Speed * Time.deltaTime;
+//            SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, Spawner_Rotation_PerFrame, 0));
+
+//            // Spawner is ready for next projectile fire
+//            if (SpawnerComponent_Bullet.IsSpawnerReadyToFire() == true)
+//            {
+//                SpawnerComponent_Bullet.PreAttackLogic();
+
+//                // Jump Rope
+//                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_JumpRope_ProjectileCount, Attack_JumpRope_AngleOfSpread, Attack_JumpRope_ProjectileVerticalCount, Attack_JumpRope_MinHeight, Attack_JumpRope_MaxHeight);
+
+//                // Jump Rope ALT
+//                float randomDegree = Random.Range(0.0f, 360.0f);
+//                SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, randomDegree, 0));
+//                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_JumpRope_ProjectileCount, Attack_JumpRope_AngleOfSpread, Attack_JumpRope_ProjectileVerticalCount, Attack_JumpRope_MinHeight, Attack_JumpRope_MaxHeight);
+//                SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, -randomDegree, 0));
+
+//                // Tracking Wall
+//                if (Attack_Wall_Fire == true)
+//                {
+//                    Spawner_JumpRope_RotationQuat = SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation;
+//                    Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+//                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, false);
+//                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_Wall_ProjectileCount, Attack_Wall_AngleOfSpread, Attack_Wall_ProjectileVerticalCount, Attack_Wall_MinHeight, Attack_Wall_MaxHeight);
+//                    SpawnerComponent_Bullet.Update_FirePointRotation(Spawner_JumpRope_RotationQuat);
+//                    Attack_Wall_Fire = false;
+//                }
+//                else
+//                {
+//                    Attack_Wall_Fire = true;
+//                }
+
+//                SpawnerComponent_Bullet.PostAttackLogic();
+//            }
+//        }
+//        // Attack has finished
+//        else
+//        {
+//            //Debug.Log("BossEnemy: Attack Completed");
+//            Attack_Completed = true;
+//        }
+
+//        // Animation Logic
+
+//    }
+
+//    // Called once per frame - after update
+//    public override void CheckTransition()
+//    {
+//        // Programming Logic
+//        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+//        {
+//            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+//        }
+//        else if (Attack_Completed == true)
+//        {
+//            bossEnemyComponent.TransitionToState_SelfCheck();
+//        }
+
+//        // Animation Logic
+
+//    }
+
+//    // Called at fixed intervals (used for physics updates)
+//    public override void FixedUpdate()
+//    {
+//        // Programming Logic
+
+//        // Animation Logic
+
+//    }
+
+//    // Called after all other update functions
+//    public override void LateUpdate()
+//    {
+//        // Programming Logic
+
+//        // Animation Logic
+
+//    }
+
+//    // Called when the state machine transitions out of this state
+//    public override void Exit()
+//    {
+//        // Programming Logic
+//        bossEnemyComponent.appendToAttackHistory(Attack_Name);
+
+//        // Animation Logic
+//        animator.SetBool("inAttack", false);
+
+//    }
+//}
 
 public class State_Attack_Bullet_RotatingWall_Easy : BossState
 {

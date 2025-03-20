@@ -55,6 +55,8 @@ public class BossEnemy : MonoBehaviour
     [Tooltip("The amount of damage that the boss enemy takes when a projectile is successfully deflected back into the boss enemy.")]
     public float Deflection_DamageOnSuccessfulDeflect = 5.0f;
 
+    [Tooltip("Contains the prefabs for the clustered projectile variants.")]
+    public GameObject[] ClusteredProjectileGameObjects;
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Private/Protected Attributes                                                                                                                                                                 * 
@@ -314,6 +316,53 @@ public class BossEnemy : MonoBehaviour
             }
         }
         return true; // all spawners have their pools ready
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Cluster Projectile Functions                                                                                                                                                                 * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public GameObject FindClusterProjectileByName(string name)
+    {
+        foreach (GameObject obj in ClusteredProjectileGameObjects)
+        {
+            if (obj != null && obj.name == name)
+            {
+                return obj;
+            }
+        }
+        return ClusteredProjectileGameObjects[0]; // Return index[0] if no match is found
+    }
+
+    //protected void Initialize(Vector3 New_Direction, float New_Speed, float New_Lifetime)
+    public void InitializeCluster(string clusterName, Vector3 New_StartingPosition, Quaternion New_Rotation, Vector3 New_Direction, float New_Speed, float New_Lifetime)
+    {
+        // Find the prefab by name from the ClusteredProjectileGameObjects array
+        GameObject ClusterPrefab = FindClusterProjectileByName(clusterName);
+
+        // Check if a valid prefab was found
+        if (ClusterPrefab != null)
+        {
+            // Instantiate the prefab at the starting position with the given rotation
+            GameObject clusterObject = Instantiate(ClusterPrefab, New_StartingPosition, New_Rotation);
+
+            // Initialize the newly instantiated cluster object (if needed)
+            // Assuming the prefab has a script component like `ClusterProjectile` that needs to be initialized
+            Projectile_Cluster clusterScript = clusterObject.GetComponent<Projectile_Cluster>();
+
+            if (clusterScript != null)
+            {
+                // Initialize the cluster with the provided parameters
+                clusterScript.Initialize(New_Direction, New_Speed, New_Lifetime);
+            }
+            else
+            {
+                Debug.LogWarning("ClusterPrefab does not have a ClusterProjectile script attached!");
+            }
+        }
+        else
+        {
+            Debug.LogError("Cluster prefab not found: " + clusterName);
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
