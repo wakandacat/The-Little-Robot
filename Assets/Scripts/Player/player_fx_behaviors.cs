@@ -74,7 +74,7 @@ public class player_fx_behaviors : MonoBehaviour
     void FixedUpdate()
     {
         vfx_triggers();
-        RumbleConditions();
+        //RumbleConditions();
         var currentState = getPlayerState();
         if(state == "Falling" && ground.onGround == true)
         {
@@ -128,11 +128,18 @@ public class player_fx_behaviors : MonoBehaviour
         {
             Rumble(0.75f, 1f, 1f);
         }*/
+
+
         if (ground.onGround == true && ground.runRumbleOnce == false)
         {
             ground.runRumbleOnce = true;
             Rumble(0.25f, 0.75f, 0.25f);
         }
+        if (playerScript.combatState == true && (playerScript.height > 0.0f && playerScript.height < 0.05f))
+        {
+            Rumble(0.0f, 0.0f, 0.0f);
+        }
+
     }
     //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
     public void vfx_triggers()
