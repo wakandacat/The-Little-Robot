@@ -96,9 +96,7 @@ public class Player_UI : MonoBehaviour
         {
             dashBar.fillAmount = 0;
             refillDashBar = StartCoroutine(refillBar());
-
         }
-
     }
     private IEnumerator refillBar()
     {
