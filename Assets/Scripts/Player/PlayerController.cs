@@ -483,16 +483,19 @@ public class PlayerController : MonoBehaviour
     {
         if (mainScript.cutScenePlaying == false)
         {
+
             //playerAnimator.SetBool("isDashing", true);
             Dashing = context.ReadValueAsButton();
             if (Dashing == true && canDash == true)
             {
                 dashAction = StartCoroutine(Dash());
+                GameObject.Find("Player_UI").GetComponent<Player_UI>().dash_Bar();
             }
             else if (Dashing == true && canDash == false)
             {
                 m_audio.playPlayerSFX(8);
             }
+
         }
     }
     //-----------------------------------------------Roll-----------------------------------------------//

@@ -30,7 +30,6 @@ public class Player_UI : MonoBehaviour
     void Update()
     {
         Health_Bar_display();
-        dash_Bar();
     }
 
     public void Health_Bar_display()
@@ -93,11 +92,6 @@ public class Player_UI : MonoBehaviour
     //https://www.youtube.com/watch?v=ju1dfCpDoF8
     public void dash_Bar()
     {
-/*        if (dashBar.fillAmount == 0)
-        {
-            refillDashBar = StartCoroutine(refillBar());
-
-        }*/
         if (Health.canDash == false)
         {
             dashBar.fillAmount = 0;
@@ -110,12 +104,8 @@ public class Player_UI : MonoBehaviour
     {
         while (Health.canDash == false)
         {
-            Debug.Log("Hello 2");
-            //dashTimer += Time.deltaTime;
             dashBar.fillAmount += 0.1f;
             yield return new WaitForSeconds(0.1f);
         }
-        dashBar.fillAmount = 1;
-        dashTimer = 0.0f;
     }
 }
