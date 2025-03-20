@@ -125,7 +125,8 @@ public class PlayerController : MonoBehaviour
     //sound stuff
     player_fx_behaviors fxBehave;
     public bool runTakeDamageOnce = false;
-
+    public LayerMask groundMask;
+    public float height;
     void Start()
     {
         pc = new PlayerControls();
@@ -258,8 +259,7 @@ public class PlayerController : MonoBehaviour
     public void findEnemy()
     {
         //update current scene reference
-        currentScene = SceneManager.GetActiveScene();
-
+        currentScene = SceneManager.GetActiveScene(); 
 
         if (currentScene.name == "Combat1" || currentScene.name == "Combat2" || currentScene.name == "Combat3")
         {
@@ -300,6 +300,7 @@ public class PlayerController : MonoBehaviour
 
             //Find enemy 
             findEnemy();
+            
 
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
@@ -310,8 +311,13 @@ public class PlayerController : MonoBehaviour
 
                 //Raycast for debugging purposes
                 Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
-                Debug.DrawRay(transform.position, forward, Color.green);
+                Vector3 down = transform.TransformDirection(Vector3.down);
 
+               
+                Debug.DrawRay(transform.position, forward, Color.green);
+                Debug.DrawRay(transform.position, down, Color.red);
+                height = GetGroundDistance();
+                Debug.Log(height);
                 //if player in attack State start attack combo timer
                 if (attackState == true)
                 {
@@ -368,6 +374,19 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed + platformMovement);
 
 
+    }
+
+    public float GetGroundDistance()
+    {
+        float height = 3;
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundMask.value))
+        {
+            //Debug.Log("Hello");
+            height = hit.distance;
+        }
+        return height;
     }
 
     //-----------------------------------------------Jump-----------------------------------------------//
