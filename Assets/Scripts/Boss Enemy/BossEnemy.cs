@@ -81,6 +81,9 @@ public class BossEnemy : MonoBehaviour
     // State Machine Attributes ---------------------------------------------------------------------------------------------------
     private BossStateMachine stateMachine;
 
+    public delegate void MyFunctionDelegate();
+    MyFunctionDelegate Attack_TransitionToExecute = null;
+
     // Player Actions/Location ----------------------------------------------------------------------------------------------------
     private bool playerTriggeredBossWakeup = false;
     private float Player_TimePassedSinceLastPositionTrack = 0f;
@@ -319,6 +322,63 @@ public class BossEnemy : MonoBehaviour
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               Attack Indicator Functions                                                                                                                                                                   * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public GameObject Activate_AttackIndicatorByName(string IndicatorName)
+    {
+        Transform spawner = transform.Find("Attack_Indicator_Spawner");
+        foreach (Transform child in spawner)
+        {
+            if (child.gameObject.name == "Indicator_" + IndicatorName)
+            {
+                child.gameObject.SetActive(true);
+                return child.gameObject; // Return the activated object
+            }
+        }
+        return null;
+    }
+
+    public void Deactivate_AttackIndicatorByName(string IndicatorName)
+    {
+        Transform spawner = transform.Find("Attack_Indicator_Spawner");
+        foreach (Transform child in spawner)
+        {
+            if (child.gameObject.name == "Indicator_" + IndicatorName)
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public GameObject Return_AttackIndicatorSpawner()
+    {
+        Transform spawner = transform.Find("Attack_Indicator_Spawner");
+        return spawner.gameObject;
+    }
+
+    public void Rotate_AttackIndicatorSpawner_FacePlayer()
+    {
+        Transform spawner = transform.Find("Attack_Indicator_Spawner");
+
+        Quaternion rotationToPlayer = Player_ReturnDirectionOfPlayer(spawner.position);
+        
+        rotationToPlayer.eulerAngles = new Vector3(0, rotationToPlayer.eulerAngles.y, 0);
+
+        spawner.rotation = rotationToPlayer;
+    }
+
+    public void Rotate_AttackIndicatorSpawner_ByDegrees(float degreesToRotate)
+    {
+        Transform spawner = transform.Find("Attack_Indicator_Spawner");
+
+        Quaternion currentRotation = spawner.rotation;
+
+        Quaternion newRotation = currentRotation * Quaternion.Euler(0, degreesToRotate, 0);
+
+        spawner.rotation = newRotation;
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Cluster Projectile Functions                                                                                                                                                                 * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public GameObject FindClusterProjectileByName(string name)
@@ -368,6 +428,32 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               State Transition Functions                                                                                                                                                                   * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //public delegate void MyFunctionDelegate();
+    //MyFunctionDelegate Attack_TransitionToExecute = null;
+    public void Set_Delegate(MyFunctionDelegate New_Delegate)
+    {
+        Attack_TransitionToExecute = New_Delegate;
+        //Debug.Log("DELEGATE SET");
+    }
+
+    public void Execute_Delegate()
+    {
+        Attack_TransitionToExecute();
+        //Debug.Log("DELEGATE EXECUTED");
+    }
+
+    public bool Compare_Delegate(MyFunctionDelegate New_Delegate)
+    {
+        if (Attack_TransitionToExecute == New_Delegate)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
     public void TransitionToState_Sleeping()
     {
         State_Sleeping sleepingState = new State_Sleeping();
@@ -403,6 +489,12 @@ public class BossEnemy : MonoBehaviour
         State_Death deathState = new State_Death();
         deathState.Initialize(bossAnimator, this);
         stateMachine.SetState(deathState);
+    }
+    public void TransitionToState_Attack_Indicator()
+    {
+        State_Attack_Indicator attackIndicator = new State_Attack_Indicator();
+        attackIndicator.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackIndicator);
     }
     public void TransitionToState_Attack_Bullet_SlowFiringShot_Easy()
     {
