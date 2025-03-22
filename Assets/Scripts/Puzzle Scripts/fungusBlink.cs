@@ -8,7 +8,7 @@ public class fungusBlink : MonoBehaviour
 
     private float blinkTime = 1f;
     Color regularCol = new Color(1f, 1f, 1f, 1f); 
-    Color blinkCol = new Color(157f / 255f, 0f / 255f, 0f / 255f, 1f); 
+    Color blinkCol = new Color(147f / 255f, 0f / 255f, 91f / 255f, 1f); 
 
     private List<MeshRenderer> meshList = new List<MeshRenderer>(); //array of all child funguses
     private List<Material> matList = new List<Material>();

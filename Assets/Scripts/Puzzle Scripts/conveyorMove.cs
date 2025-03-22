@@ -11,7 +11,8 @@ public class conveyorMove : MonoBehaviour
     private List<GameObject> movingObjects;
     public float speed;
     public Vector3 direction;
-    public Vector3 xVel;
+
+    public bool suckerUpper = false;
 
     private Material material;
 
@@ -24,14 +25,20 @@ public class conveyorMove : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        //move the material on the conveyor (x, y, z)
-        material.mainTextureOffset -= new Vector2(0, 1) * (speed/1000) * Time.deltaTime;
+        if (suckerUpper)
+        {
+            //move the material the opposite way on the conveyor
+            material.mainTextureOffset -= new Vector2(0, -1) * (speed / 1000) * Time.deltaTime;
+        }
+        else
+        {
+            //move the material on the conveyor
+            material.mainTextureOffset -= new Vector2(0, 1) * (speed / 1000) * Time.deltaTime;
+        }
 
         //for each object on the conveyor, add a force to it
         for (int i = 0; i < movingObjects.Count; i++)
         {
-            // movingObjects[i].GetComponent<Rigidbody>().velocity = speed * direction * Time.deltaTime;
 
             //additively add conveyor velocity so as not to overwrite
             if (movingObjects[i].GetComponent<Rigidbody>())

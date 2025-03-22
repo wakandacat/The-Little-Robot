@@ -1272,7 +1272,7 @@ PrefabInstance:
     - target: {fileID: 5591425553899949880, guid: e52380416573f524c81b75bc3a303c81,
         type: 3}
       propertyPath: HP_Maximum_3
-      value: 2
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5591425553899949880, guid: e52380416573f524c81b75bc3a303c81,
         type: 3}
@@ -3010,6 +3010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d4e409637d1324aa62415901a73ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  proceedSign: {fileID: 1194170656}
 --- !u!114 &6150147056529378384
 MonoBehaviour:
   m_ObjectHideFlags: 0

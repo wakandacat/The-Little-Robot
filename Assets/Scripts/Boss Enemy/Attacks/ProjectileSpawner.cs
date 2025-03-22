@@ -199,12 +199,15 @@ public class ProjectileSpawner : MonoBehaviour
 
     public void Reset_FirePointPositionToGameObject()
     {
-        Update_FirePointPosition(Spawner_FirePoint_GameObject.transform.position);
+        //Update_FirePointPosition(Spawner_FirePoint_GameObject.transform.position);
+        //Spawner_FirePoint_GameObject.transform.position = new Vector3(0, 8, 0);
+        Update_FirePointPosition(null, 8.0f, null);
     }
 
     public void Reset_FirePointRotationToGameObject()
     {
         Update_FirePointRotation(Spawner_FirePoint_GameObject.transform.rotation);
+        //Spawner_FirePoint_GameObject.transform.rotation = Quaternion.identity;
     }
 
     public Vector3 Return_FirePointPosition()
