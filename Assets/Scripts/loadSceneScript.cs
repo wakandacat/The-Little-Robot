@@ -9,6 +9,7 @@ public class loadSceneScript : MonoBehaviour
     //public string sceneName;
     private mainGameScript mainGameScript;
     private GameObject door;
+    public GameObject proceedSign;
 
     void Awake()
     {
@@ -54,6 +55,14 @@ public class loadSceneScript : MonoBehaviour
             {
                 door.GetComponent<doorScript>().openDoor();
             }
+        }
+
+        //let combat scenes do they own thing
+        if (!SceneManager.GetActiveScene().name.Contains("Combat"))
+        {
+            //turn on the proceed sign
+            proceedSign.transform.GetChild(0).gameObject.SetActive(true);
+            proceedSign.transform.GetChild(1).gameObject.GetComponent<AudioSource>().Play();
         }
 
         //remove to enusre it only runs once
