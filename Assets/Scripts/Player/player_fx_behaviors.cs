@@ -38,6 +38,8 @@ public class player_fx_behaviors : MonoBehaviour
     //haptics variables
     Gamepad pad;
     private Coroutine stopRumbleCoroutine;
+    private endGameTrigger endScene;
+    private bool foundTrigger = false;
 
     // Start is called before the first frame update
     void Start()
@@ -182,6 +184,11 @@ public class player_fx_behaviors : MonoBehaviour
     public string getPlayerState()
     {
         attackCounter = playerScript.attackCounter;
+
+        if(playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
+        {
+            return "Idle";
+        }
 
         //Attack State
         if (attackCounter == 1)

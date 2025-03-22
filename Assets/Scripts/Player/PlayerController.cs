@@ -125,8 +125,16 @@ public class PlayerController : MonoBehaviour
     //sound stuff
     player_fx_behaviors fxBehave;
     public bool runTakeDamageOnce = false;
+    
+    //Raycast
     public LayerMask groundMask;
     public float height;
+
+    //EndScene
+    public GameObject endScene;
+    public GameObject endTrigger;
+    public bool foundScene = false;
+    private bool triggerFound = false;
     void Start()
     {
         pc = new PlayerControls();
@@ -284,6 +292,25 @@ public class PlayerController : MonoBehaviour
             combatState = false;
         }
     }
+    public void findEndScene()
+    {
+        //update current scene reference
+        currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == "EndScene")
+        {
+            //assign current enemy
+            endScene = GameObject.Find("endSceneStartObj");
+            endTrigger = GameObject.Find("endSceneActionTrigger");
+            if(endScene != null)
+            {
+                foundScene = true;
+            }
+            if(endTrigger != null)
+            {
+                triggerFound = true;
+            }
+        }
+    }
 
     void Awake()
     {
@@ -297,10 +324,13 @@ public class PlayerController : MonoBehaviour
     {
         if (mainScript.cutScenePlaying == false)
         {
-
             //Find enemy 
             findEnemy();
-            
+            //find end scene triggers
+            findEndScene();
+            //Disable actions for end
+            stopActions();
+
 
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
@@ -332,6 +362,7 @@ public class PlayerController : MonoBehaviour
                 {
                     quickDrop();
                 }
+                //stopActions();
             }
             else if (deathState == true && diedOnce == false)
             {
@@ -345,8 +376,21 @@ public class PlayerController : MonoBehaviour
     }
     //-----------------------------------------------Animation Calls-----------------------------------------------//
     //moved to player_fx_behaviors script
-
     //-----------------------------------------------Move-----------------------------------------------//
+    public void stopActions()
+    {
+        if (triggerFound == true && endTrigger.GetComponent<TriggerPlayerActionOFF>().stopAction == true)
+        {
+            Debug.Log("Hello we are disabling the controls");
+            pc.Gameplay.Attack.Disable();
+            pc.Gameplay.Roll.Disable();
+            pc.Gameplay.Deflect.Disable();
+            pc.Gameplay.Jump.Disable();
+            pc.Gameplay.QuickDrop.Disable();
+            pc.Gameplay.Dash.Disable();
+            pc.Gameplay.FreeLook.Disable();
+        }
+    }
     public void moveCharacter(float playerSpeed)
     {
         //https://www.youtube.com/watch?v=BJzYGsMcy8Q

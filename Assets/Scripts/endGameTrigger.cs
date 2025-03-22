@@ -39,7 +39,7 @@ public class endGameTrigger : MonoBehaviour
     public GameObject creditsBlack;
     private CinemachineVirtualCamera creditsCam;
     private bool fadeDone = false;
-
+    public bool endCutscene = false;
     private void Start()
     {
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -79,6 +79,8 @@ public class endGameTrigger : MonoBehaviour
             //turn off gameplay values
             playerUI.SetActive(false);
             //stop animations???
+            //stopping animation in player fx script this is just a boolean that calls that condition
+            endCutscene = true;
             //collision.gameObject.GetComponent<Animator>().enabled = false;
 
         }
