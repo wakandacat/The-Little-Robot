@@ -84,6 +84,18 @@ public class doorScript : MonoBehaviour
         this.transform.parent.GetChild(2).gameObject.SetActive(true);
         isFungus = false;
 
+        //play fungus dead sound
+        if (this.transform.parent.GetComponent<AudioSource>().isPlaying == false)
+        {
+            this.transform.parent.GetComponent<AudioSource>().Play();
+        }
+
+        //door sound
+        if (this.transform.parent.GetChild(0).GetComponent<AudioSource>().isPlaying == false)
+        {
+            this.transform.parent.GetChild(0).GetComponent<AudioSource>().Play();
+        }
+
         //do some vfx explosion thing here to mask it???
 
         //move the door like normal

@@ -41,7 +41,7 @@ public class conveyorMove : MonoBehaviour
         {
 
             //additively add conveyor velocity so as not to overwrite
-            if (movingObjects[i].GetComponent<Rigidbody>())
+            if (movingObjects[i] != null && movingObjects[i].GetComponent<Rigidbody>())
             {
                 Rigidbody rb = movingObjects[i].GetComponent<Rigidbody>();
                 Vector3 conveyorVelocity = speed * direction * Time.deltaTime;
@@ -53,14 +53,24 @@ public class conveyorMove : MonoBehaviour
     }
 
     //add item when it collides with the belt
-    public void OnCollisionEnter(Collision collision)
+    public void OnTriggerEnter(Collider collision)
     {
+        //if (collision.gameObject.tag == "Player")
+        //{
+        //    Debug.Log("hi");
+        //}
+
         movingObjects.Add(collision.gameObject);
     }
 
     //when something leaves the belt
-    public void OnCollisionExit(Collision collision)
+    public void OnTriggerExit(Collider collision)
     {
+        //if (collision.gameObject.tag == "Player")
+        //{
+        //    Debug.Log("bye");
+        //}
+
         movingObjects.Remove(collision.gameObject);
     }
 }

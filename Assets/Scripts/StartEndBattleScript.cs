@@ -165,6 +165,11 @@ public class StartEndBattleScript : MonoBehaviour
         middlePlatform.transform.position = new Vector3(startPos.x, startPos.y - 1.5f, startPos.z);
         middlePlatform.transform.Rotate(0f, 0f, 5f);
 
+        if (middlePlatform.GetComponent<AudioSource>().isPlaying == false)
+        {
+            middlePlatform.gameObject.GetComponent<AudioSource>().Play();
+        }
+
         //push the robot away --> explosion or something
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().combatPush(battleCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition);
 
@@ -180,6 +185,16 @@ public class StartEndBattleScript : MonoBehaviour
         //open end bridge
         endBridge.GetComponent<bridgeScript>().moveBridgeLeft();
         startBridge.GetComponent<bridgeScript>().moveBridgeRight();
+
+        if (startBridge.GetComponent<AudioSource>().isPlaying == false)
+        {
+            startBridge.gameObject.GetComponent<AudioSource>().Play();
+        }
+
+        if (endBridge.GetComponent<AudioSource>().isPlaying == false)
+        {
+            endBridge.gameObject.GetComponent<AudioSource>().Play();
+        }
 
         //turn on exit light
         proceedLight.SetActive(true);
@@ -238,6 +253,16 @@ public class StartEndBattleScript : MonoBehaviour
             //hide the bridges
             startBridge.GetComponent<bridgeScript>().moveBridgeLeft();
             endBridge.GetComponent<bridgeScript>().moveBridgeRight();
+
+            if (startBridge.GetComponent<AudioSource>().isPlaying == false)
+            {
+                startBridge.gameObject.GetComponent<AudioSource>().Play();
+            }
+
+            if (endBridge.GetComponent<AudioSource>().isPlaying == false)
+            {
+                endBridge.gameObject.GetComponent<AudioSource>().Play();
+            }
 
             //switch cameras
             mainGameScript.SwitchToBossCam();

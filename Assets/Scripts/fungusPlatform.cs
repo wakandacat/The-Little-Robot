@@ -24,6 +24,13 @@ public class fungusPlatform : MonoBehaviour
             postule.SetActive(false);
             deadPostule.SetActive(true);
             this.transform.parent.GetComponent<movingPlatformScript>().isFungus = false; //allow the platform to move again
+
+            //play fungus dead sound
+            if (this.transform.parent.GetComponent<AudioSource>().isPlaying == false)
+            {
+                this.transform.parent.GetComponent<AudioSource>().Play();
+            }
+
         }
     }
 
