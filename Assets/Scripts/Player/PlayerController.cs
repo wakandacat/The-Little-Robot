@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviour
     public bool collision = false;
     private float immunityTime = 2.0f;
     public Coroutine immunity;
+    public bool immunity_on = false;
 
     //animator
     private Animator playerAnimator;
@@ -801,11 +802,11 @@ public class PlayerController : MonoBehaviour
     public IEnumerator Immunity()
     {
         //Debug.Log("Hello");
+        immunity_on = true;
         Physics.IgnoreLayerCollision(7, 6, true);
         yield return new WaitForSeconds(immunityTime);
-        //Debug.Log("Hello 2");
-
         Physics.IgnoreLayerCollision(7, 6, false);
+        immunity_on = false;
     }
 
     public void OnTriggerEnter(Collider other)
