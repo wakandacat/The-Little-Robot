@@ -658,9 +658,9 @@ public class State_Awake : BossState
         }
 
         // DEBUGGING (MUST BE REMOVED):
-        //Attack_BestName = State_Attack_Bullet_TrackingWall_Easy.Attack_Name;
-        //Attack_BestScore = State_Attack_Bullet_TrackingWall_Easy.CalculateScore(bossEnemyComponent);
-        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Easy;
+        //Attack_BestName = State_Attack_Bullet_TrackingWall_Hard.Attack_Name;
+        //Attack_BestScore = State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent);
+        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Hard;
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
         //Attack_TransitionToExecute();
@@ -2391,11 +2391,18 @@ public class State_Attack_Bullet_TrackingWall_Easy : BossState
     private float Spawner_JumpRope_Rotation_Speed = 120.0f;
     private Quaternion Spawner_JumpRope_RotationQuat;
 
-    private int Attack_Wall_ProjectileCount = 1;
-    private float Attack_Wall_AngleOfSpread = 1.0f;
-    private int Attack_Wall_ProjectileVerticalCount = 8;
-    private float Attack_Wall_MinHeight = 0.0f;
-    private float Attack_Wall_MaxHeight = 7.5f;
+    //private int Attack_Wall_ProjectileCount = 1;
+    //private float Attack_Wall_AngleOfSpread = 1.0f;
+    //private int Attack_Wall_ProjectileVerticalCount = 8;
+    //private float Attack_Wall_MinHeight = 0.0f;
+    //private float Attack_Wall_MaxHeight = 7.5f;
+
+    private GameObject Wall_Prefab;
+    private GameObject Wall_GameObject;
+    private Vector3 Wall_Position;
+    private Quaternion Wall_Rotation;
+    private float Wall_RotationSpeed = 20.0f;
+    private bool Wall_RotatesRight = true;
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -2441,6 +2448,36 @@ public class State_Attack_Bullet_TrackingWall_Easy : BossState
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
+        // Wall Setup
+        Wall_Prefab = bossEnemyComponent.FindClusterProjectileByName("Projectile_Wall");
+
+        // Get the fire point position
+        Wall_Position = SpawnerComponent_Bullet.Return_FirePointPosition();
+
+        Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+        SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, false);
+        float Wall_Rotation_Offset = 0.0f;
+        bool randomLean = Random.Range(0, 2) == 0;
+        if (randomLean)
+        {
+            Wall_Rotation_Offset = 30.0f;
+            Wall_RotatesRight = false;
+        }
+        else
+        {
+            Wall_Rotation_Offset = -30.0f;
+            Wall_RotatesRight = true;
+        }
+
+        // Get the fire point rotation
+        Quaternion baseRotation = SpawnerComponent_Bullet.Return_FirePointRotation();
+
+        // Apply the Y-axis offset
+        Wall_Rotation = baseRotation * Quaternion.Euler(0, Wall_Rotation_Offset, 0);
+
+
+        Wall_GameObject = bossEnemyComponent.InitializeGameObject(Wall_Prefab, Wall_Position, Wall_Rotation);
+
         // Animation Logic
         animator.SetBool("inAttack", true);
 
@@ -2471,15 +2508,34 @@ public class State_Attack_Bullet_TrackingWall_Easy : BossState
                 firingPosition.y += Attack_JumpRope_HeightOffset;
                 bossEnemyComponent.InitializeCluster("Projectile_Cluster_3x3", firingPosition, SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
 
-                // Tracking Wall
-                Spawner_JumpRope_RotationQuat = SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation;
-                Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
-                SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, false);
-                SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_Wall_ProjectileCount, Attack_Wall_AngleOfSpread, Attack_Wall_ProjectileVerticalCount, Attack_Wall_MinHeight, Attack_Wall_MaxHeight);
-                SpawnerComponent_Bullet.Update_FirePointRotation(Spawner_JumpRope_RotationQuat);
+                // Tracking Wall OLD
+                //Spawner_JumpRope_RotationQuat = SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation;
+                //Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                //SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, false);
+                //SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_Wall_ProjectileCount, Attack_Wall_AngleOfSpread, Attack_Wall_ProjectileVerticalCount, Attack_Wall_MinHeight, Attack_Wall_MaxHeight);
+                //SpawnerComponent_Bullet.Update_FirePointRotation(Spawner_JumpRope_RotationQuat);
 
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
+
+            // Tracking Wall NEW
+            // Get the current rotation of the wall
+            Quaternion currentRotation = Wall_GameObject.transform.rotation;
+
+            // Get the rotation direction based on Wall_RotatesRight
+            float rotationDirection = Wall_RotatesRight ? 1.0f : -1.0f;
+
+            // Calculate the target rotation (the current rotation + rotation per second)
+            float targetYRotation = currentRotation.eulerAngles.y + (rotationDirection * Wall_RotationSpeed * Time.deltaTime);
+
+            // Ensure the Y rotation stays within the range of 0 to 360 degrees
+            targetYRotation = targetYRotation % 360f; // Keeps the targetYRotation between 0 and 360
+
+            // Create a target Quaternion with the updated Y rotation
+            Quaternion targetRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+
+            // Smoothly rotate towards the target rotation
+            Wall_GameObject.transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation, Wall_RotationSpeed * Time.deltaTime);
         }
         // Attack has finished
         else
@@ -2532,6 +2588,7 @@ public class State_Attack_Bullet_TrackingWall_Easy : BossState
     {
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
+        bossEnemyComponent.DeleteGameObject(Wall_GameObject);
 
         // Animation Logic
         animator.SetBool("inAttack", false);
@@ -2569,12 +2626,19 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
     private float Spawner_JumpRope_Rotation_Speed = 210.0f;
     private Quaternion Spawner_JumpRope_RotationQuat;
 
-    private int Attack_Wall_ProjectileCount = 1;
-    private float Attack_Wall_AngleOfSpread = 1.0f;
-    private int Attack_Wall_ProjectileVerticalCount = 8;
-    private float Attack_Wall_MinHeight = 0.0f;
-    private float Attack_Wall_MaxHeight = 7.5f;
-    private bool Attack_Wall_Fire = false;
+    //private int Attack_Wall_ProjectileCount = 1;
+    //private float Attack_Wall_AngleOfSpread = 1.0f;
+    //private int Attack_Wall_ProjectileVerticalCount = 8;
+    //private float Attack_Wall_MinHeight = 0.0f;
+    //private float Attack_Wall_MaxHeight = 7.5f;
+    //private bool Attack_Wall_Fire = false;
+
+    private GameObject Wall_Prefab;
+    private GameObject Wall_GameObject;
+    private Vector3 Wall_Position;
+    private Quaternion Wall_Rotation;
+    private float Wall_RotationSpeed = 20.0f;
+    private bool Wall_RotatesRight = true;
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -2620,6 +2684,36 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
+        // Wall Setup
+        Wall_Prefab = bossEnemyComponent.FindClusterProjectileByName("Projectile_Wall");
+
+        // Get the fire point position
+        Wall_Position = SpawnerComponent_Bullet.Return_FirePointPosition();
+
+        Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+        SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, false);
+        float Wall_Rotation_Offset = 0.0f;
+        bool randomLean = Random.Range(0, 2) == 0;
+        if (randomLean)
+        {
+            Wall_Rotation_Offset = 30.0f;
+            Wall_RotatesRight = false;
+        }
+        else
+        {
+            Wall_Rotation_Offset = -30.0f;
+            Wall_RotatesRight = true;
+        }
+
+        // Get the fire point rotation
+        Quaternion baseRotation = SpawnerComponent_Bullet.Return_FirePointRotation();
+
+        // Apply the Y-axis offset
+        Wall_Rotation = baseRotation * Quaternion.Euler(0, Wall_Rotation_Offset, 0);
+
+
+        Wall_GameObject = bossEnemyComponent.InitializeGameObject(Wall_Prefab, Wall_Position, Wall_Rotation);
+
         // Animation Logic
         animator.SetBool("inAttack", true);
 
@@ -2656,27 +2750,46 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
                 //public void InitializeCluster(string clusterName, Vector3 New_StartingPosition, Quaternion New_Rotation, Vector3 New_Direction, float New_Speed, float New_Lifetime)
                 Vector3 directionALT = SpawnerComponent_Bullet.Return_FirePointRotation() * Vector3.forward;
                 Vector3 firingPositionALT = SpawnerComponent_Bullet.Return_FirePointPosition();
-                firingPosition.y += Attack_JumpRope_HeightOffset;
+                firingPositionALT.y += Attack_JumpRope_HeightOffset;
                 bossEnemyComponent.InitializeCluster("Projectile_Cluster_3x3", firingPositionALT, SpawnerComponent_Bullet.Return_FirePointRotation(), directionALT, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
                 SpawnerComponent_Bullet.Update_FirePointRotation(SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation *= Quaternion.Euler(0, -randomDegree, 0));
 
-                // Tracking Wall
-                if (Attack_Wall_Fire == true)
-                {
-                    Spawner_JumpRope_RotationQuat = SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation;
-                    Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
-                    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, false);
-                    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_Wall_ProjectileCount, Attack_Wall_AngleOfSpread, Attack_Wall_ProjectileVerticalCount, Attack_Wall_MinHeight, Attack_Wall_MaxHeight);
-                    SpawnerComponent_Bullet.Update_FirePointRotation(Spawner_JumpRope_RotationQuat);
-                    Attack_Wall_Fire = false;
-                }
-                else
-                {
-                    Attack_Wall_Fire = true;
-                }
+                // Tracking Wall OLD
+                //if (Attack_Wall_Fire == true)
+                //{
+                //    Spawner_JumpRope_RotationQuat = SpawnerComponent_Bullet.ReturnSpawnerTransform().rotation;
+                //    Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
+                //    SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, 0.0f, 0.0f, true, false);
+                //    SpawnerComponent_Bullet.Spawner_Bullet_StackedConeShot(Attack_Wall_ProjectileCount, Attack_Wall_AngleOfSpread, Attack_Wall_ProjectileVerticalCount, Attack_Wall_MinHeight, Attack_Wall_MaxHeight);
+                //    SpawnerComponent_Bullet.Update_FirePointRotation(Spawner_JumpRope_RotationQuat);
+                //    Attack_Wall_Fire = false;
+                //}
+                //else
+                //{
+                //    Attack_Wall_Fire = true;
+                //}
 
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
+
+            // Tracking Wall NEW
+            // Get the current rotation of the wall
+            Quaternion currentRotation = Wall_GameObject.transform.rotation;
+
+            // Get the rotation direction based on Wall_RotatesRight
+            float rotationDirection = Wall_RotatesRight ? 1.0f : -1.0f;
+
+            // Calculate the target rotation (the current rotation + rotation per second)
+            float targetYRotation = currentRotation.eulerAngles.y + (rotationDirection * Wall_RotationSpeed * Time.deltaTime);
+
+            // Ensure the Y rotation stays within the range of 0 to 360 degrees
+            targetYRotation = targetYRotation % 360f; // Keeps the targetYRotation between 0 and 360
+
+            // Create a target Quaternion with the updated Y rotation
+            Quaternion targetRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+
+            // Smoothly rotate towards the target rotation
+            Wall_GameObject.transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation, Wall_RotationSpeed * Time.deltaTime);
         }
         // Attack has finished
         else
@@ -2729,6 +2842,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
     {
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
+        bossEnemyComponent.DeleteGameObject(Wall_GameObject);
 
         // Animation Logic
         animator.SetBool("inAttack", false);

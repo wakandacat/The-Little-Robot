@@ -425,6 +425,17 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
+    public GameObject InitializeGameObject(GameObject New_Prefab, Vector3 New_StartingPosition, Quaternion New_Rotation)
+    {
+        GameObject New_GameObject = Instantiate(New_Prefab, New_StartingPosition, New_Rotation);
+        return New_GameObject;
+    }
+
+    public void DeleteGameObject(GameObject To_Delete)
+    {
+        Destroy(To_Delete);
+    }
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               State Transition Functions                                                                                                                                                                   * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
