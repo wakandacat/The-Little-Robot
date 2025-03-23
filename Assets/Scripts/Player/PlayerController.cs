@@ -347,7 +347,7 @@ public class PlayerController : MonoBehaviour
                 Debug.DrawRay(transform.position, forward, Color.green);
                 Debug.DrawRay(transform.position, down, Color.red);
                 height = GetGroundDistance();
-                Debug.Log(height);
+                //Debug.Log(height);
                 //if player in attack State start attack combo timer
                 if (attackState == true)
                 {

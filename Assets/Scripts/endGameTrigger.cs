@@ -320,12 +320,12 @@ public class endGameTrigger : MonoBehaviour
                     endTimer = endTimer + Time.deltaTime; //increment the cutscene timer      
 
                     //hang on title for a few seconds before moving
-                    if (endTimer >= 3f && scrollObj.transform.localPosition.y < 6125) //if we have not yet hit the end logo, scroll
+                    if (endTimer >= 3f && scrollObj.transform.localPosition.y < 6500) //if we have not yet hit the end logo, scroll
                     {
                         scrollObj.transform.localPosition += new Vector3(0, 100 * Time.deltaTime, 0);
 
                         //fade out the alpah on black background
-                        if (endTimer >= 16f && fadeDone == false)
+                        if (endTimer >= 10f && fadeDone == false)
                         {
                             Color currentColor = creditsBlack.GetComponent<Image>().color;
                             currentColor.a -= Time.deltaTime * 0.3f;
