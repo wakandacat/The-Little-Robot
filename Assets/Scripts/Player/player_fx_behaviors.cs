@@ -15,6 +15,7 @@ public class player_fx_behaviors : MonoBehaviour
     public Rigidbody rb;
     private PlayerController playerScript;
     groundCheck ground;
+    public GameObject cloudFungus;
 
     //animation variables
     private Animator m_animator;
@@ -30,6 +31,8 @@ public class player_fx_behaviors : MonoBehaviour
     public ParticleSystem attack_3;
     public ParticleSystem takeDamage;
     public GameObject invulnerability;
+    public ParticleSystem fungusHit;
+    public ParticleSystem cloudfungushit;
     public int attackCounter = 0;
 
     //sfx variables
@@ -61,6 +64,8 @@ public class player_fx_behaviors : MonoBehaviour
         attack_3.Stop();
         takeDamage.Stop();
         invulnerability.SetActive(false);
+        fungusHit.Stop();
+        cloudfungushit.Stop();
         if (m_animator == null)
         {
             Debug.Log("this is null");
