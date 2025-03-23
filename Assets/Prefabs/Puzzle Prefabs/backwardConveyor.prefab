@@ -137,7 +137,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e175a9b39b89fe04ea575f5aa0fc8cce,
         type: 3}
       propertyPath: m_Name
-      value: conveyor_belt_long (6)
+      value: backwardConveyor
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e175a9b39b89fe04ea575f5aa0fc8cce,
         type: 3}
@@ -348,6 +348,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7599222859049947537}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 19c60ab9f22e1a845ab3c737e6e67e94,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1092692961810593732}
   m_SourcePrefab: {fileID: 100100000, guid: 19c60ab9f22e1a845ab3c737e6e67e94, type: 3}
 --- !u!4 &8377209654566352117 stripped
 Transform:
@@ -395,8 +399,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2392652, y: 1.0000006, z: 7.972469}
-  m_Center: {x: 0.00000007370277, y: -0.5000002, z: 2.013767}
+  m_Size: {x: 2.2392652, y: 1.2044036, z: 7.972469}
+  m_Center: {x: 0.000000085068564, y: -0.39779866, z: 2.0137672}
 --- !u!82 &7599222859049947537
 AudioSource:
   m_ObjectHideFlags: 0
@@ -407,7 +411,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 4feb0d35b79511d4d97820c343857505, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 757b753f943a7484d98401b0af1c99e1, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -493,3 +497,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &1092692961810593732
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9154132935645212239}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.239265, y: 0.99253476, z: 7.972469}
+  m_Center: {x: -0.000000034140854, y: -0.49626735, z: 2.0137677}

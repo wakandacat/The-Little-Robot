@@ -54,6 +54,12 @@ public class loadSceneScript : MonoBehaviour
             if (door.GetComponent<doorScript>().isFungus == false)
             {
                 door.GetComponent<doorScript>().openDoor();
+
+                //door sound
+                if (door.GetComponent<AudioSource>().isPlaying == false)
+                {
+                    door.GetComponent<AudioSource>().Play();
+                }
             }
         }
 

@@ -55,6 +55,7 @@ public class bridgeScript : MonoBehaviour
         // Debug.Log("hiiiii");
         float newZ = Mathf.Lerp(startPos.z, startPos.z - 20f, timer);
         this.transform.position = new Vector3(startPos.x, startPos.y, newZ);
+
     }
 
     public void moveBridgeRight()
@@ -63,5 +64,6 @@ public class bridgeScript : MonoBehaviour
         // Debug.Log("byeeee");
         float newZ = Mathf.Lerp(startPos.z, startPos.z + 20f, timer);
         this.transform.position = new Vector3(startPos.x, startPos.y, newZ);
+
     }
 }
