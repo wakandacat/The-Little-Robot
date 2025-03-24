@@ -513,15 +513,21 @@ public class BossEnemy : MonoBehaviour
         attackBulletSlowFiringShot.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletSlowFiringShot);
     }
+    public void TransitionToState_Attack_Bullet_SlowFiringShot_Medium()
+    {
+        State_Attack_Bullet_SlowFiringShot_Medium attackBulletSlowFiringShot = new State_Attack_Bullet_SlowFiringShot_Medium();
+        attackBulletSlowFiringShot.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletSlowFiringShot);
+    }
     public void TransitionToState_Attack_Bullet_SlowFiringShot_Hard()
     {
         State_Attack_Bullet_SlowFiringShot_Hard attackBulletSlowFiringShot = new State_Attack_Bullet_SlowFiringShot_Hard();
         attackBulletSlowFiringShot.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletSlowFiringShot);
     }
-    public void TransitionToState_Attack_Bullet_RapidFireShot_Easy()
+    public void TransitionToState_Attack_Bullet_RapidFireShot_Medium()
     {
-        State_Attack_Bullet_RapidFireShot_Easy attackBulletRapidFireShot = new State_Attack_Bullet_RapidFireShot_Easy();
+        State_Attack_Bullet_RapidFireShot_Medium attackBulletRapidFireShot = new State_Attack_Bullet_RapidFireShot_Medium();
         attackBulletRapidFireShot.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletRapidFireShot);
     }
@@ -537,15 +543,21 @@ public class BossEnemy : MonoBehaviour
         attackBulletTrackingCone.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletTrackingCone);
     }
+    public void TransitionToState_Attack_Bullet_TrackingCone_Medium()
+    {
+        State_Attack_Bullet_TrackingCone_Medium attackBulletTrackingCone = new State_Attack_Bullet_TrackingCone_Medium();
+        attackBulletTrackingCone.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletTrackingCone);
+    }
     public void TransitionToState_Attack_Bullet_TrackingCone_Hard()
     {
         State_Attack_Bullet_TrackingCone_Hard attackBulletTrackingCone = new State_Attack_Bullet_TrackingCone_Hard();
         attackBulletTrackingCone.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletTrackingCone);
     }
-    public void TransitionToState_Attack_Bullet_TrackingWall_Easy()
+    public void TransitionToState_Attack_Bullet_TrackingWall_Medium()
     {
-        State_Attack_Bullet_TrackingWall_Easy attackBulletTrackingWall = new State_Attack_Bullet_TrackingWall_Easy();
+        State_Attack_Bullet_TrackingWall_Medium attackBulletTrackingWall = new State_Attack_Bullet_TrackingWall_Medium();
         attackBulletTrackingWall.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletTrackingWall);
     }
@@ -561,6 +573,12 @@ public class BossEnemy : MonoBehaviour
         attackBulletRotatingWall.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletRotatingWall);
     }
+    public void TransitionToState_Attack_Bullet_RotatingWall_Medium()
+    {
+        State_Attack_Bullet_RotatingWall_Medium attackBulletRotatingWall = new State_Attack_Bullet_RotatingWall_Medium();
+        attackBulletRotatingWall.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletRotatingWall);
+    }
     public void TransitionToState_Attack_Bullet_RotatingWall_Hard()
     {
         State_Attack_Bullet_RotatingWall_Hard attackBulletRotatingWall = new State_Attack_Bullet_RotatingWall_Hard();
@@ -570,6 +588,12 @@ public class BossEnemy : MonoBehaviour
     public void TransitionToState_Attack_Bullet_JumpRope_Easy()
     {
         State_Attack_Bullet_JumpRope_Easy attackBulletJumpRope = new State_Attack_Bullet_JumpRope_Easy();
+        attackBulletJumpRope.Initialize(bossAnimator, this);
+        stateMachine.SetState(attackBulletJumpRope);
+    }
+    public void TransitionToState_Attack_Bullet_JumpRope_Medium()
+    {
+        State_Attack_Bullet_JumpRope_Medium attackBulletJumpRope = new State_Attack_Bullet_JumpRope_Medium();
         attackBulletJumpRope.Initialize(bossAnimator, this);
         stateMachine.SetState(attackBulletJumpRope);
     }
