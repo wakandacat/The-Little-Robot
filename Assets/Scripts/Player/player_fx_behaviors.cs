@@ -221,10 +221,12 @@ public class player_fx_behaviors : MonoBehaviour
         attackCounter = playerScript.attackCounter;
         if(mainScript.ballform == true)
         {
+            Debug.Log("Ball_in");
             return "ball_in";
         }
         if (mainScript.wakeupAnim == true)
         {
+            Debug.Log("wake up call");
             return "wakeup";
         }
 

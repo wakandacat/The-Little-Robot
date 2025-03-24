@@ -192,6 +192,8 @@ public class mainGameScript : MonoBehaviour
         if (cutScenePlaying == true)
         {
             cutScenePlaying = false;
+            wakeupAnim = false;
+            ballform = false;
 
             if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
@@ -222,6 +224,8 @@ public class mainGameScript : MonoBehaviour
         SwitchToPlatformCam(0.2f);
         introPlayed = true;
         cutScenePlaying = false;
+        wakeupAnim = false;
+        ballform = false;
         playerPointLight.GetComponent<Light>().intensity = 0.1f;
         playerSpotLight.GetComponent<Light>().intensity = 4.0f;
         playerUICanvas.SetActive(true);
