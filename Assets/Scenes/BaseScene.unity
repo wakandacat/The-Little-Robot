@@ -2427,6 +2427,8 @@ MonoBehaviour:
   introSplashScreen: {fileID: 1444068556}
   introStaticVideo: {fileID: 1222296432}
   splashScreenCanvas: {fileID: 1943620581}
+  wakeupAnim: 0
+  ballform: 0
   outroPlayed: 0
   outroPlaying: 0
   creditsPlaying: 0
@@ -34701,6 +34703,26 @@ PrefabInstance:
       propertyPath: m_audio
       value: 
       objectReference: {fileID: 1909374290}
+    - target: {fileID: 6937972769228868787, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
+      propertyPath: rollVfx
+      value: 
+      objectReference: {fileID: 2025232780}
+    - target: {fileID: 6937972769228868787, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
+      propertyPath: fungusHit
+      value: 
+      objectReference: {fileID: 1457478178}
+    - target: {fileID: 6937972769228868787, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
+      propertyPath: cloudfungushit
+      value: 
+      objectReference: {fileID: 2116734747}
+    - target: {fileID: 6937972769228868787, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
+      propertyPath: invulnerability
+      value: 
+      objectReference: {fileID: 2064047365}
     - target: {fileID: 7034163278260392914, guid: 10873a520eaf2d14c958b9aac03a69fe,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

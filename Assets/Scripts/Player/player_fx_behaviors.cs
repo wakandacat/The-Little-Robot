@@ -15,6 +15,8 @@ public class player_fx_behaviors : MonoBehaviour
     public Rigidbody rb;
     private PlayerController playerScript;
     groundCheck ground;
+    public GameObject cloudFungus;
+    private mainGameScript mainScript;
 
     //animation variables
     private Animator m_animator;
@@ -29,6 +31,10 @@ public class player_fx_behaviors : MonoBehaviour
     public ParticleSystem attack_2;
     public ParticleSystem attack_3;
     public ParticleSystem takeDamage;
+    public GameObject invulnerability;
+    public ParticleSystem fungusHit;
+    public ParticleSystem cloudfungushit;
+    public ParticleSystem rollVfx;
     public int attackCounter = 0;
 
     //sfx variables
@@ -38,6 +44,8 @@ public class player_fx_behaviors : MonoBehaviour
     //haptics variables
     Gamepad pad;
     private Coroutine stopRumbleCoroutine;
+    private endGameTrigger endScene;
+    private bool foundTrigger = false;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +56,7 @@ public class player_fx_behaviors : MonoBehaviour
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         m_animator = this.GetComponent<Animator>();
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
+        mainScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
 
         //animation
         state = "Idle";
@@ -57,6 +66,10 @@ public class player_fx_behaviors : MonoBehaviour
         attack_2.Stop();
         attack_3.Stop();
         takeDamage.Stop();
+        invulnerability.SetActive(false);
+        fungusHit.Stop();
+        cloudfungushit.Stop();
+        rollVfx.Stop();
         if (m_animator == null)
         {
             Debug.Log("this is null");
@@ -135,7 +148,7 @@ public class player_fx_behaviors : MonoBehaviour
             ground.runRumbleOnce = true;
             Rumble(0.25f, 0.75f, 0.25f);
         }
-        if (playerScript.combatState == true && (playerScript.height > 0.0f && playerScript.height < 0.05f))
+        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
         {
             Rumble(0.0f, 0.0f, 0.0f);
         }
@@ -176,12 +189,51 @@ public class player_fx_behaviors : MonoBehaviour
             playerScript.runTakeDamageOnce = true;
             takeDamage.Play();
         }
+        if(playerScript.immunity_on == true)
+        {
+            invulnerability.SetActive(true);
+        }
+        if(playerScript.immunity_on == false)
+        {
+            invulnerability.SetActive(false);
+        }
+        if(playerScript.collisionTendril == true)
+        {
+            fungusHit.Play();
+        }
+        else
+        {
+            fungusHit.Stop();
+        }
+        if(playerScript.rollCounter == 1 && playerScript.leftStick.magnitude >= 0.1f)
+        {
+            rollVfx.Play();
+        }
+        if(playerScript.isDashing == true)
+        {
+            rollVfx.Play();
+        }
     }
 
     //https://www.youtube.com/watch?v=ToGq1LCTqMw
     public string getPlayerState()
     {
         attackCounter = playerScript.attackCounter;
+        if(mainScript.ballform == true)
+        {
+            Debug.Log("Ball_in");
+            return "ball_in";
+        }
+        if (mainScript.wakeupAnim == true)
+        {
+            Debug.Log("wake up call");
+            return "wakeup";
+        }
+
+        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
+        {
+            return "Idle";
+        }
 
         //Attack State
         if (attackCounter == 1)
