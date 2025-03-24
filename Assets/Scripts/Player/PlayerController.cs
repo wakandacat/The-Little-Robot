@@ -332,8 +332,6 @@ public class PlayerController : MonoBehaviour
             findEndScene();
             //Disable actions for end
             stopActions();
-
-
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
             {
@@ -349,7 +347,7 @@ public class PlayerController : MonoBehaviour
                 Debug.DrawRay(transform.position, forward, Color.green);
                 Debug.DrawRay(transform.position, down, Color.red);
                 height = GetGroundDistance();
-                //Debug.Log(height);
+                Debug.Log(height);
                 //if player in attack State start attack combo timer
                 if (attackState == true)
                 {

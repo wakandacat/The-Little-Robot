@@ -40,6 +40,7 @@ public class player_fx_behaviors : MonoBehaviour
     //sfx variables
     public audioManager m_audio;
     public Coroutine walkCoroutine;
+    public Coroutine dashVfx;
 
     //haptics variables
     Gamepad pad;
@@ -87,7 +88,7 @@ public class player_fx_behaviors : MonoBehaviour
     void FixedUpdate()
     {
         vfx_triggers();
-        //RumbleConditions();
+        RumbleConditions();
         var currentState = getPlayerState();
         if(state == "Falling" && ground.onGround == true)
         {
@@ -154,6 +155,12 @@ public class player_fx_behaviors : MonoBehaviour
         }
 
     }
+    public IEnumerator playDashVfx()
+    {
+        rollVfx.Play();
+        yield return new WaitForSeconds(0.2f);
+        rollVfx.Stop();
+    }
     //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
     public void vfx_triggers()
     {
@@ -209,9 +216,13 @@ public class player_fx_behaviors : MonoBehaviour
         {
             rollVfx.Play();
         }
+        else if(playerScript.rollCounter == 1 && playerScript.leftStick.magnitude == 0.0f)
+        {
+            rollVfx.Stop();
+        }
         if(playerScript.isDashing == true)
         {
-            rollVfx.Play();
+            dashVfx = StartCoroutine(playDashVfx());
         }
     }
 
