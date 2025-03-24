@@ -819,12 +819,12 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.name.Contains("tendril_single"))
         {
             collisionTendril = true;
-            Debug.Log("touchign postules");
+            //Debug.Log("touchign postules");
         }
         if (other.gameObject.tag == "postule")
         {
             collisionPostule = true;
-            Debug.Log("touchign postules");
+            //Debug.Log("touchign postules");
         }
 
         //sfx call based on what hit you
@@ -891,7 +891,7 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Death State-----------------------------------------------//
     public void ManagedeathState()
     {
-
+        mainScript.playerDeaths++;
         //Debug.Log("manage death");
         //fxBehave.StopCoroutine(fxBehave.walkSFX());
         //fxBehave.StopCoroutine(fxBehave.walkCoroutine);

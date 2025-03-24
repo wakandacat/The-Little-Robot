@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -29,6 +30,8 @@ public class endGameTrigger : MonoBehaviour
     private AudioSource staticSound;
     private GameObject playerViewCanvas;
     private AudioSource doorAudio;
+    private CinemachineVirtualCamera walkingCam;
+
 
     private GameObject player;
     private GameObject playerUI;
@@ -61,6 +64,7 @@ public class endGameTrigger : MonoBehaviour
         staticSound = endCutsceneGrp.transform.GetChild(5).gameObject.GetComponent<AudioSource>();
         playerViewCanvas = endCutsceneGrp.transform.GetChild(7).gameObject;
         doorAudio = endCutsceneGrp.transform.GetChild(8).gameObject.GetComponent<AudioSource>();
+        walkingCam = endCutsceneGrp.transform.GetChild(9).gameObject.GetComponent<CinemachineVirtualCamera>();
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -82,6 +86,10 @@ public class endGameTrigger : MonoBehaviour
             //stopping animation in player fx script this is just a boolean that calls that condition
             endCutscene = true;
             //collision.gameObject.GetComponent<Animator>().enabled = false;
+
+            //prep the player's stats
+            playerViewCanvas.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "DEATHS: " + mainGameScript.playerDeaths;
+            playerViewCanvas.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = "TIME: " + Mathf.FloorToInt(mainGameScript.playerTime / 60f) + ":" + Mathf.FloorToInt(mainGameScript.playerTime % 60f);
 
         }
     }
@@ -125,7 +133,7 @@ public class endGameTrigger : MonoBehaviour
                         mainGameScript.CheckPointResetPlatformCam(this.transform.eulerAngles.y); //freelook face forward --> not sure if needed
 
                         //switch to playercam first to show door
-                        playerCam.Priority = freeCam.Priority + 1;
+                        playerCam.Priority = walkingCam.Priority + 1;
                     }
                     else
                     {
