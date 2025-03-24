@@ -16,6 +16,7 @@ public class player_fx_behaviors : MonoBehaviour
     private PlayerController playerScript;
     groundCheck ground;
     public GameObject cloudFungus;
+    private mainGameScript mainScript;
 
     //animation variables
     private Animator m_animator;
@@ -33,6 +34,7 @@ public class player_fx_behaviors : MonoBehaviour
     public GameObject invulnerability;
     public ParticleSystem fungusHit;
     public ParticleSystem cloudfungushit;
+    public ParticleSystem rollVfx;
     public int attackCounter = 0;
 
     //sfx variables
@@ -54,6 +56,7 @@ public class player_fx_behaviors : MonoBehaviour
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         m_animator = this.GetComponent<Animator>();
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
+        mainScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
 
         //animation
         state = "Idle";
@@ -66,6 +69,7 @@ public class player_fx_behaviors : MonoBehaviour
         invulnerability.SetActive(false);
         fungusHit.Stop();
         cloudfungushit.Stop();
+        rollVfx.Stop();
         if (m_animator == null)
         {
             Debug.Log("this is null");
@@ -193,14 +197,38 @@ public class player_fx_behaviors : MonoBehaviour
         {
             invulnerability.SetActive(false);
         }
+        if(playerScript.collisionTendril == true)
+        {
+            fungusHit.Play();
+        }
+        else
+        {
+            fungusHit.Stop();
+        }
+        if(playerScript.rollCounter == 1 && playerScript.leftStick.magnitude >= 0.1f)
+        {
+            rollVfx.Play();
+        }
+        if(playerScript.isDashing == true)
+        {
+            rollVfx.Play();
+        }
     }
 
     //https://www.youtube.com/watch?v=ToGq1LCTqMw
     public string getPlayerState()
     {
         attackCounter = playerScript.attackCounter;
+        if(mainScript.ballform == true)
+        {
+            return "ball_in";
+        }
+        if (mainScript.wakeupAnim == true)
+        {
+            return "wakeup";
+        }
 
-        if(playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
+        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
         {
             return "Idle";
         }

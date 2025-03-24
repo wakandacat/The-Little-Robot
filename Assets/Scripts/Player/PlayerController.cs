@@ -108,6 +108,7 @@ public class PlayerController : MonoBehaviour
     private float immunityTime = 2.0f;
     public Coroutine immunity;
     public bool immunity_on = false;
+    public bool collisionTendril = false;
 
     //animator
     private Animator playerAnimator;
@@ -817,7 +818,12 @@ public class PlayerController : MonoBehaviour
             playerCurrenthealth -= 1;
 
         }
-        if(other.gameObject.tag == "postule")
+        if (other.gameObject.name.Contains("tendril_single"))
+        {
+            collisionTendril = true;
+            Debug.Log("touchign postules");
+        }
+        if (other.gameObject.tag == "postule")
         {
             collisionPostule = true;
             Debug.Log("touchign postules");
@@ -837,7 +843,9 @@ public class PlayerController : MonoBehaviour
     public void OnTriggerExit(Collider other)
     {
         collision = false;
+        collisionTendril = false;
         runTakeDamageOnce = false;
+        //runTaketendrilDamageOnce = false;
     }
 
     //-----------------------------------------------Health Regen-----------------------------------------------//
