@@ -17,6 +17,8 @@ public class Projectile_Mine : Projectile
     public Collider Mine_DetectionCollider;
     [Tooltip("The GameObject used for the explosion.")]
     public GameObject Mine_ExplosionGameObject;
+    [Tooltip("The Material applied when the bomb is unarmed.")]
+    public Material Mine_UnarmedMaterial;
     [Tooltip("The Material applied when the bomb is armed.")]
     public Material Mine_ArmedMaterial;
 
@@ -188,7 +190,8 @@ public class Projectile_Mine : Projectile
     // --------------------------------------------------------------------------------------------------------------------------------------------------------
     private void Animation_Reset()
     {
-        Animation_ResetMaterial();
+        //Animation_ResetMaterial();
+        Animation_UpdateMaterial(Mine_UnarmedMaterial);
     }
 
     private void Animation_Armed()

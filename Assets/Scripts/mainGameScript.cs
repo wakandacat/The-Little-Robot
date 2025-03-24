@@ -11,6 +11,10 @@ using UnityEngine.Video;
 
 public class mainGameScript : MonoBehaviour
 {
+    public int playerDeaths = 0; //stats
+    public float playerTime = 0; //https://discussions.unity.com/t/how-to-make-a-timer-that-counts-up-in-seconds-as-an-int/147546
+    //timer += Time.deltaTime; int seconds = timer % 60;
+
     //main game settings from main menu
     private GameObject gameSettings;
     public GameObject settingsMenu;
@@ -52,6 +56,8 @@ public class mainGameScript : MonoBehaviour
     public GameObject introSplashScreen;
     public GameObject introStaticVideo;
     public GameObject splashScreenCanvas;
+    public bool wakeupAnim = false;
+    public bool ballform = false;
 
     //ending
     public bool outroPlayed = false;
@@ -118,6 +124,11 @@ public class mainGameScript : MonoBehaviour
 
     private void Start()
     {
+
+        //reset stats
+        playerDeaths = 0;
+        playerTime = 0;
+
         if (EventSystem.current)
         {
             EventSystem.current.SetSelectedGameObject(null);
@@ -168,6 +179,7 @@ public class mainGameScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        playerTime += Time.deltaTime; //record the player's time
 
         //--------------INTRO CUTSCENE---------------
         if (introPlayed == false)
@@ -190,6 +202,8 @@ public class mainGameScript : MonoBehaviour
         if (cutScenePlaying == true)
         {
             cutScenePlaying = false;
+            wakeupAnim = false;
+            ballform = false;
 
             if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
@@ -220,6 +234,8 @@ public class mainGameScript : MonoBehaviour
         SwitchToPlatformCam(0.2f);
         introPlayed = true;
         cutScenePlaying = false;
+        wakeupAnim = false;
+        ballform = false;
         playerPointLight.GetComponent<Light>().intensity = 0.1f;
         playerSpotLight.GetComponent<Light>().intensity = 4.0f;
         playerUICanvas.SetActive(true);
@@ -306,6 +322,7 @@ public class mainGameScript : MonoBehaviour
             if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
             {
                
+               
                 if (introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition >= 1 && introPlayed == false)
                 {
                    // Debug.Log("whatttt");
@@ -330,6 +347,7 @@ public class mainGameScript : MonoBehaviour
                     //once our splashscreen intro is finished
                     if (introSplashScreen.GetComponent<VideoPlayer>().isPlaying == false)
                     {
+                        ballform = true;
                         introSplashScreen.SetActive(false); //turn it off
                         splashScreenCanvas.SetActive(false);
 
@@ -374,12 +392,16 @@ public class mainGameScript : MonoBehaviour
 
                         if (camStillTimer >= 18f)
                         {
-
+                            //stop ball form and start wake up
+                            ballform = false;
+                            //Play wake up animation
+                            wakeupAnim = true;
                             //move the camera along the dolly track
                             camPos += Mathf.Lerp(0, 1, introCamSpeed);
                             introCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = camPos;
                             if (camStillTimer >= 20f)
                             {
+                               
                                 //turn on the robot's eye
                                 if (playerPointLight.GetComponent<Light>().intensity < 0.1f)
                                 {
@@ -392,9 +414,14 @@ public class mainGameScript : MonoBehaviour
                                     playerSpotLight.GetComponent<Light>().intensity += (introCamSpeed * 10);
                                 }
                             }
+                            if (camStillTimer >= 24f)
+                            {
+                                wakeupAnim = false;
+                            }
 
-                        }                                
-                      
+                        }
+
+
                     } 
                     //else 
                     //{

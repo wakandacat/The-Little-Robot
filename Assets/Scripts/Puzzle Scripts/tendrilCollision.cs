@@ -22,7 +22,7 @@ public class tendrilCollision : MonoBehaviour
         {
             transform.root.gameObject.GetComponent<tendril_Behavior>().hasCollided = true;
             m_audio.playPlayerSFX(10);
-            player.collision = true;
+            player.collisionTendril = true;
             player.playerCurrenthealth -= 1;
 
         }
@@ -32,7 +32,7 @@ public class tendrilCollision : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            player.collision = false;
+            player.collisionTendril = false;
         }
     }
 }
