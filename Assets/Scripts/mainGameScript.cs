@@ -11,6 +11,10 @@ using UnityEngine.Video;
 
 public class mainGameScript : MonoBehaviour
 {
+    public int playerDeaths = 0; //stats
+    public float playerTime = 0; //https://discussions.unity.com/t/how-to-make-a-timer-that-counts-up-in-seconds-as-an-int/147546
+    //timer += Time.deltaTime; int seconds = timer % 60;
+
     //main game settings from main menu
     private GameObject gameSettings;
     public GameObject settingsMenu;
@@ -120,6 +124,11 @@ public class mainGameScript : MonoBehaviour
 
     private void Start()
     {
+
+        //reset stats
+        playerDeaths = 0;
+        playerTime = 0;
+
         if (EventSystem.current)
         {
             EventSystem.current.SetSelectedGameObject(null);
@@ -170,6 +179,7 @@ public class mainGameScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        playerTime += Time.deltaTime; //record the player's time
 
         //--------------INTRO CUTSCENE---------------
         if (introPlayed == false)
