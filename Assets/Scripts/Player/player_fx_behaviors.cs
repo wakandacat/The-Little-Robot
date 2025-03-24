@@ -35,6 +35,7 @@ public class player_fx_behaviors : MonoBehaviour
     public ParticleSystem fungusHit;
     public ParticleSystem cloudfungushit;
     public ParticleSystem rollVfx;
+    public ParticleSystem healthRegen;
     public int attackCounter = 0;
 
     //sfx variables
@@ -71,6 +72,7 @@ public class player_fx_behaviors : MonoBehaviour
         fungusHit.Stop();
         cloudfungushit.Stop();
         rollVfx.Stop();
+        healthRegen.Stop();
         if (m_animator == null)
         {
             Debug.Log("this is null");
@@ -223,6 +225,14 @@ public class player_fx_behaviors : MonoBehaviour
         if(playerScript.isDashing == true)
         {
             dashVfx = StartCoroutine(playDashVfx());
+        }
+        if(playerScript.canRegen == true)
+        {
+            healthRegen.Play();
+        }
+        else
+        {
+            healthRegen.Stop();
         }
     }
 
