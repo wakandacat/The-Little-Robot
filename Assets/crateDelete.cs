@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class crateDelete : MonoBehaviour
 {
-
+    public float timeToKill;
     void Awake()
     {
-        Invoke("Delete", 30f);
+        Invoke("Delete", timeToKill);
     }
 
 
