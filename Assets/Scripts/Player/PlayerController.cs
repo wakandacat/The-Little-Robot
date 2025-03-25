@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour
 
     //health regen
     public bool canRegen = true;
+    public bool playRegenVfx = false;
 
     //sound stuff
     player_fx_behaviors fxBehave;
@@ -874,14 +875,17 @@ public class PlayerController : MonoBehaviour
         if (canRegen == false || playerCurrenthealth == playerHealth)
         {
             //Debug.Log("regen stopped");
+            playRegenVfx = false;
         }
         else if (canRegen == true && (playerCurrenthealth < playerHealth) && deathState == false)
         {
             regenTimer += Time.deltaTime;
             if (healthRegenDelay <= regenTimer)
             {
+                playRegenVfx = true;
                 playerCurrenthealth++;
                 regenTimer = 0.0f;
+                
             }
 
         }

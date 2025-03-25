@@ -163,6 +163,7 @@ public class player_fx_behaviors : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         rollVfx.Stop();
     }
+
     //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
     public void vfx_triggers()
     {
@@ -222,11 +223,15 @@ public class player_fx_behaviors : MonoBehaviour
         {
             rollVfx.Stop();
         }
+        else if(playerScript.rollCounter == 0)
+        {
+            rollVfx.Stop();
+        }
         if(playerScript.isDashing == true)
         {
             dashVfx = StartCoroutine(playDashVfx());
         }
-        if(playerScript.canRegen == true)
+        if(playerScript.playRegenVfx == true && playerScript.playerCurrenthealth < playerScript.playerHealth)
         {
             healthRegen.Play();
         }
