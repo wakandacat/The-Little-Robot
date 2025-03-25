@@ -348,7 +348,7 @@ public class PlayerController : MonoBehaviour
                 Debug.DrawRay(transform.position, forward, Color.green);
                 Debug.DrawRay(transform.position, down, Color.red);
                 height = GetGroundDistance();
-                Debug.Log(height);
+                //Debug.Log(height);
                 //if player in attack State start attack combo timer
                 if (attackState == true)
                 {
@@ -807,6 +807,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(immunityTime);
         Physics.IgnoreLayerCollision(7, 6, false);
         immunity_on = false;
+        yield return new WaitForSeconds(5.0f);
     }
 
     public void OnTriggerEnter(Collider other)
@@ -855,7 +856,16 @@ public class PlayerController : MonoBehaviour
 
         if (collision == true && combatState == true && deathState == false)
         {
+            Debug.Log("inv call");
             immunity = StartCoroutine(Immunity());
+        }
+        if(combatState == true && enemy !=null)
+        {
+            if(enemy.GetComponent<BossEnemy>().HP_IsZero() == true)
+            {
+                immunity_on = false;
+            }
+           
         }
         if (combatState == true)
         {

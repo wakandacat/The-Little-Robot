@@ -80,17 +80,13 @@ public class player_fx_behaviors : MonoBehaviour
 
         //sfx
         walkCoroutine = StartCoroutine(walkSFX());
-        if (pad != null)
-        {
-            pad.SetMotorSpeeds(0.0f, 0.0f);
-        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         vfx_triggers();
-        RumbleConditions();
+        //RumbleConditions();
         var currentState = getPlayerState();
         if(state == "Falling" && ground.onGround == true)
         {
