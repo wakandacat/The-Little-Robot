@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour
 
     //health regen
     public bool canRegen = true;
+    public bool playRegenVfx = false;
 
     //sound stuff
     player_fx_behaviors fxBehave;
@@ -332,8 +333,6 @@ public class PlayerController : MonoBehaviour
             findEndScene();
             //Disable actions for end
             stopActions();
-
-
             //Check if the player is dead or alive
             if (deathState == false && Physics.gravity.y <= -9.81f)
             {
@@ -808,6 +807,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(immunityTime);
         Physics.IgnoreLayerCollision(7, 6, false);
         immunity_on = false;
+        yield return new WaitForSeconds(5.0f);
     }
 
     public void OnTriggerEnter(Collider other)
@@ -856,7 +856,16 @@ public class PlayerController : MonoBehaviour
 
         if (collision == true && combatState == true && deathState == false)
         {
+            Debug.Log("inv call");
             immunity = StartCoroutine(Immunity());
+        }
+        if(combatState == true && enemy !=null)
+        {
+            if(enemy.GetComponent<BossEnemy>().HP_IsZero() == true)
+            {
+                immunity_on = false;
+            }
+           
         }
         if (combatState == true)
         {
@@ -876,14 +885,17 @@ public class PlayerController : MonoBehaviour
         if (canRegen == false || playerCurrenthealth == playerHealth)
         {
             //Debug.Log("regen stopped");
+            playRegenVfx = false;
         }
         else if (canRegen == true && (playerCurrenthealth < playerHealth) && deathState == false)
         {
             regenTimer += Time.deltaTime;
             if (healthRegenDelay <= regenTimer)
             {
+                playRegenVfx = true;
                 playerCurrenthealth++;
                 regenTimer = 0.0f;
+                
             }
 
         }

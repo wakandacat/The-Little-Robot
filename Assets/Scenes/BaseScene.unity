@@ -23181,7 +23181,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887847756}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.001687962, y: 0.8039377, z: -0.59470683, w: 0.002281824}
+  m_LocalRotation: {x: -0.023070652, y: 0.8165792, z: -0.57584363, w: -0.03271551}
   m_LocalPosition: {x: 0.06750122, y: 5.5199995, z: -6.9685416}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -30118,13 +30118,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079934419}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1601664, y: 0.49280912, z: 0.8529863, w: 0.062452633}
-  m_LocalPosition: {x: 0.24, y: 1.03, z: 0.5}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.11, y: 1.24, z: -0.02}
   m_LocalScale: {x: 0.68545616, y: 0.68545616, z: 0.29765934}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 575736765}
-  m_LocalEulerAnglesHint: {x: -124.844, y: 215.87201, z: -27.567017}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!199 &2079934421
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -32310,18 +32310,18 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: 0
-          outSlope: -0.8
+          value: 0.82296574
+          inSlope: -3.2900307
+          outSlope: -3.2900307
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.058496527
         - serializedVersion: 3
-          time: 1
-          value: 0.2
+          time: 0.99444777
+          value: 0
           inSlope: -0.8
-          outSlope: 0
+          outSlope: -0.8
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -32579,7 +32579,7 @@ ParticleSystem:
       m_Bits: 4294967295
     influenceList: []
   ClampVelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -32742,7 +32742,7 @@ ParticleSystem:
     magnitude:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 4
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -32796,11 +32796,11 @@ ParticleSystem:
     inWorldSpace: 0
     multiplyDragByParticleSize: 1
     multiplyDragByParticleVelocity: 1
-    dampen: 0
+    dampen: 0.1
     drag:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.01
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -40173,6 +40173,11 @@ PrefabInstance:
       objectReference: {fileID: 1457478178}
     - target: {fileID: 6937972769228868787, guid: 10873a520eaf2d14c958b9aac03a69fe,
         type: 3}
+      propertyPath: healthRegen
+      value: 
+      objectReference: {fileID: 2079934422}
+    - target: {fileID: 6937972769228868787, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
       propertyPath: cloudfungushit
       value: 
       objectReference: {fileID: 2116734747}
@@ -40383,6 +40388,94 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5493018251113752803}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6323445188310653135
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1051290424347753213, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051290424347753213, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].repeatInterval
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051290424347753213, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051290424347753213, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177497332937759713, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7617154146587282352, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_Name
+      value: Enemy_Bullet_projectile
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3c2cc124b0e20554987801524cade8a0, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -40407,3 +40500,4 @@ SceneRoots:
   - {fileID: 1924251729}
   - {fileID: 1728821858}
   - {fileID: 734830197}
+  - {fileID: 6323445188310653135}

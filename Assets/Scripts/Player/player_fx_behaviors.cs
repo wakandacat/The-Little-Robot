@@ -35,11 +35,13 @@ public class player_fx_behaviors : MonoBehaviour
     public ParticleSystem fungusHit;
     public ParticleSystem cloudfungushit;
     public ParticleSystem rollVfx;
+    public ParticleSystem healthRegen;
     public int attackCounter = 0;
 
     //sfx variables
     public audioManager m_audio;
     public Coroutine walkCoroutine;
+    public Coroutine dashVfx;
 
     //haptics variables
     Gamepad pad;
@@ -70,6 +72,7 @@ public class player_fx_behaviors : MonoBehaviour
         fungusHit.Stop();
         cloudfungushit.Stop();
         rollVfx.Stop();
+        healthRegen.Stop();
         if (m_animator == null)
         {
             Debug.Log("this is null");
@@ -77,10 +80,6 @@ public class player_fx_behaviors : MonoBehaviour
 
         //sfx
         walkCoroutine = StartCoroutine(walkSFX());
-        if (pad != null)
-        {
-            pad.SetMotorSpeeds(0.0f, 0.0f);
-        }
     }
 
     // Update is called once per frame
@@ -154,6 +153,13 @@ public class player_fx_behaviors : MonoBehaviour
         }
 
     }
+    public IEnumerator playDashVfx()
+    {
+        rollVfx.Play();
+        yield return new WaitForSeconds(0.2f);
+        rollVfx.Stop();
+    }
+
     //https://discussions.unity.com/t/playing-a-particle-system-through-script-c/610122
     public void vfx_triggers()
     {
@@ -209,9 +215,25 @@ public class player_fx_behaviors : MonoBehaviour
         {
             rollVfx.Play();
         }
+        else if(playerScript.rollCounter == 1 && playerScript.leftStick.magnitude == 0.0f)
+        {
+            rollVfx.Stop();
+        }
+        else if(playerScript.rollCounter == 0)
+        {
+            rollVfx.Stop();
+        }
         if(playerScript.isDashing == true)
         {
-            rollVfx.Play();
+            dashVfx = StartCoroutine(playDashVfx());
+        }
+        if(playerScript.playRegenVfx == true && playerScript.playerCurrenthealth < playerScript.playerHealth)
+        {
+            healthRegen.Play();
+        }
+        else
+        {
+            healthRegen.Stop();
         }
     }
 
