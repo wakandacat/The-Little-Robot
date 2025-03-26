@@ -3,7 +3,22 @@ guid: 8a92f181e6e900d4fbcc682b74fa8cc7
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: coat_mat
+    second: {fileID: 2100000, guid: 5854655552d1e5248b3c1375fb877acf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eye_mat
+    second: {fileID: 2100000, guid: 479513230d90022428b79611ff1fdc3f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_blinn_wood
+    second: {fileID: 2100000, guid: 1d9f36c325e9b3e4ba16461d96a140d3, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -90,7 +105,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.022999998
+    globalScale: 2.3
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
