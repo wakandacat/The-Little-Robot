@@ -377,6 +377,11 @@ public class State_Death : BossState
         animator.SetBool("woken", false);
         animator.SetBool("toIdle", false);
         m_audio.playEnemySFX(2);
+        GameObject groundFall = GameObject.Find("TermProject_Arena_floor_in");
+        if (groundFall.GetComponent<AudioSource>().isPlaying == false)
+        {
+            groundFall.gameObject.GetComponent<AudioSource>().Play();
+        }
 
         //turn off eyes on death
         fxBehave.eyesOffCoroutine = fxBehave.StartCoroutine(fxBehave.turnOffEyes());
