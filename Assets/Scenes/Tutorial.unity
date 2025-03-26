@@ -745,7 +745,7 @@ GameObject:
   m_Component:
   - component: {fileID: 778854797}
   - component: {fileID: 778854798}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: proceedAudio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1362,6 +1362,77 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &1245364081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1245364082}
+  - component: {fileID: 1245364083}
+  - component: {fileID: 1245364084}
+  m_Layer: 0
+  m_Name: Global Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1245364082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245364081}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -17.9, y: 5.2, z: 14}
+  m_LocalScale: {x: 11.235798, y: 73.486, z: 81.09014}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1921394529}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1245364083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245364081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 0
+  priority: 0
+  blendDistance: 0.5
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 82d7af82d80e99f46ab644720502cb7b, type: 2}
+--- !u!65 &1245364084
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245364081}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1246208573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1883,7 +1954,7 @@ GameObject:
   - component: {fileID: 1488182666}
   - component: {fileID: 1488182665}
   - component: {fileID: 1488182664}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Proceed Sign Green (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2330,77 +2401,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1739430937}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1763681633
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1763681634}
-  - component: {fileID: 1763681636}
-  - component: {fileID: 1763681635}
-  m_Layer: 0
-  m_Name: Sphere Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1763681634
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1763681633}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.37, z: 14.1}
-  m_LocalScale: {x: 27.720608, y: 1.7754536, z: 35.556553}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1921394529}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1763681635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1763681633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 0
-  priority: 0
-  blendDistance: 1
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: aeea5e1b9497af64895aaf50a1e17a7b, type: 2}
---- !u!135 &1763681636
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1763681633}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1782074974
 GameObject:
   m_ObjectHideFlags: 0
@@ -2926,13 +2926,13 @@ GameObject:
   - component: {fileID: 1921394532}
   - component: {fileID: 1921394531}
   - component: {fileID: 1921394530}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LightPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1921394529
 Transform:
   m_ObjectHideFlags: 0
@@ -2946,7 +2946,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1763681634}
+  - {fileID: 1245364082}
   m_Father: {fileID: 1488182667}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
 --- !u!64 &1921394530
@@ -3330,6 +3330,51 @@ PrefabInstance:
       propertyPath: m_Name
       value: fungus_bio_temp
       objectReference: {fileID: 0}
+    - target: {fileID: 621502887585881920, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026178941125588601, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2714684608844384461, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2931790449473079255, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006898765680803715, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3137324108048466855, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3920439966593368641, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6063239493118316805, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6410622194386471274, guid: 7971f18d29ff9b343a8e2a5c549d4d7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3397,6 +3442,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: fungus_bio_temp_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080091378424093154, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1897607371004679403, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2031975647375731588, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2291027922103999559, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2664221242205672271, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5530488127323052945, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6480587282229360450, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7475937940128089603, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8317987149041926048, guid: e2e8d91dde18690478052585fa2b8b38,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

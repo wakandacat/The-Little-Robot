@@ -280,7 +280,7 @@ GameObject:
   m_Component:
   - component: {fileID: 119559990}
   - component: {fileID: 119559989}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TopRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +435,7 @@ GameObject:
   - component: {fileID: 162171735}
   - component: {fileID: 162171733}
   - component: {fileID: 162171736}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 206610922}
   - component: {fileID: 206610923}
   - component: {fileID: 206610924}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1207,7 +1207,9 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
-  m_Layer: 0
+  - component: {fileID: 330585550}
+  - component: {fileID: 330585549}
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -1366,6 +1368,83 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 5751693e4e1bb114bb63f355c37730b0, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
+--- !u!114 &330585550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 330585546}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 0
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 0
+  m_ShowCustomSorter: 0
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!1001 &335476305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1673,7 +1752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 393205588}
   - component: {fileID: 393205587}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BottomRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3257,7 +3336,7 @@ GameObject:
   - component: {fileID: 664372834}
   - component: {fileID: 664372833}
   - component: {fileID: 664372832}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3590,7 +3669,7 @@ GameObject:
   - component: {fileID: 685458049}
   - component: {fileID: 685458051}
   - component: {fileID: 685458050}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventCam02Dolly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3697,7 +3776,7 @@ GameObject:
   - component: {fileID: 752341196}
   - component: {fileID: 752341197}
   - component: {fileID: 752341198}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventCam01Dolly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4046,7 +4125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 801680415}
   - component: {fileID: 801680416}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventCam01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5407,7 +5486,7 @@ GameObject:
   m_Component:
   - component: {fileID: 943887968}
   - component: {fileID: 943887969}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: battleCamTrack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5790,7 +5869,7 @@ GameObject:
   - component: {fileID: 1009095017}
   - component: {fileID: 1009095016}
   - component: {fileID: 1009095018}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5927,7 +6006,7 @@ GameObject:
   - component: {fileID: 1036296761}
   - component: {fileID: 1036296760}
   - component: {fileID: 1036296762}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6663,7 +6742,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1109893563}
   - component: {fileID: 1109893562}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: battleCam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7219,7 +7298,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1193214866}
   - component: {fileID: 1193214867}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventCam02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7565,7 +7644,7 @@ GameObject:
   - component: {fileID: 1278439295}
   - component: {fileID: 1278439297}
   - component: {fileID: 1278439298}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: freeLookCam
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -8480,7 +8559,7 @@ GameObject:
   - component: {fileID: 1358548925}
   - component: {fileID: 1358548924}
   - component: {fileID: 1358548923}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19703,7 +19782,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1543011270}
   - component: {fileID: 1543011269}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventTrack02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21734,7 +21813,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1730367190}
   - component: {fileID: 1730367189}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventTrack01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22288,7 +22367,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1800926313}
   - component: {fileID: 1800926314}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventCam03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22360,7 +22439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1803570999}
   - component: {fileID: 1803570998}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventTrack03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22642,7 +22721,7 @@ GameObject:
   - component: {fileID: 1847384294}
   - component: {fileID: 1847384293}
   - component: {fileID: 1847384292}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23120,7 +23199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1887847758}
   - component: {fileID: 1887847757}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MiddleRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23181,7 +23260,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887847756}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.023070652, y: 0.8165792, z: -0.57584363, w: -0.03271551}
+  m_LocalRotation: {x: 0.001687962, y: 0.8039377, z: -0.59470683, w: 0.002281824}
   m_LocalPosition: {x: 0.06750122, y: 5.5199995, z: -6.9685416}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -24082,7 +24161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1924251729}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VentCams
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39912,7 +39991,7 @@ GameObject:
   - component: {fileID: 2117998221}
   - component: {fileID: 2117998223}
   - component: {fileID: 2117998222}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ventCam03Dolly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40101,6 +40180,16 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.7
       objectReference: {fileID: 0}
+    - target: {fileID: 2075839834537985000, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2558472326971200127, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3530572856551100806, guid: 10873a520eaf2d14c958b9aac03a69fe,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -40191,6 +40280,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ef6406f10610c22429eaf1b4e6e85ee4, type: 2}
+    - target: {fileID: 7630817692592635722, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8352296667471675257, guid: 10873a520eaf2d14c958b9aac03a69fe,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -40470,6 +40569,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy_Bullet_projectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 7617154146587282352, guid: 3c2cc124b0e20554987801524cade8a0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
