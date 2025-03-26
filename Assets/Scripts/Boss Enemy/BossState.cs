@@ -66,6 +66,7 @@ public class State_Sleeping : BossState
         //Debug.Log("BossEnemy: Entering State_Sleeping");
 
         // Animation Logic
+        //animator.SetBool("woken", false);
 
     }
 
@@ -132,12 +133,6 @@ public class State_WakingUp : BossState
         //Debug.Log("BossEnemy: Entering State_WakingUp");
 
         // FX Logic
-        //this results in coroutine error cannot continue
-        //if (fxBehave.eyesOnCoroutine != null)
-        //{
-        //    fxBehave.StopCoroutine(fxBehave.eyesOnCoroutine);
-        //    fxBehave.eyesOnCoroutine = null; // Clear reference after stopping
-        //}
         m_audio.playEnemySFX(0);
 
     }
@@ -202,7 +197,9 @@ public class State_SelfCheck : BossState
         //Debug.Log("BossEnemy: Entering State_SelfCheck");
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
         animator.SetBool("toIdle", true);
+        animator.SetBool("downed", false);
 
     }
 
@@ -261,7 +258,9 @@ public class State_SelfCheck : BossState
         // Programming Logic
 
         // Animation Logic
-
+        animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", true);
+        animator.SetBool("downed", false);
     }
 }
 
@@ -280,8 +279,10 @@ public class State_LowEnergy : BossState
         //bossEnemyComponent.HP_TurnInvulnerabilityOff();
 
         // FX Logic
-        animator.SetBool("downed", true);
         animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", false);
+        animator.SetBool("downed", true);
+        animator.SetBool("melee", false);
         m_audio.playEnemySFX(1);
         for (int i = 0; i < fxBehave.eyes.Length; i++)
         {
@@ -346,6 +347,8 @@ public class State_LowEnergy : BossState
         //Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
         // FX Logic
+        animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", true);
         animator.SetBool("downed", false);
         fxBehave.eyesOnCoroutine = fxBehave.StartCoroutine(fxBehave.turnOnEyes());
     }
@@ -372,11 +375,11 @@ public class State_Death : BossState
         // FX Logic
         animator.SetBool("die", true);
         animator.SetBool("woken", false);
+        animator.SetBool("toIdle", false);
         m_audio.playEnemySFX(2);
 
         //turn off eyes on death
         fxBehave.eyesOffCoroutine = fxBehave.StartCoroutine(fxBehave.turnOffEyes());
-        //fxBehave.StartCoroutine(fxBehave.turnOffEyes());
 
     }
 
@@ -447,7 +450,9 @@ public class State_Awake : BossState
         // INSERT: attack selection logic
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
         animator.SetBool("toIdle", true);
+        animator.SetBool("downed", false);
 
 
     }
@@ -520,6 +525,9 @@ public class State_Awake : BossState
         // Programming Logic
 
         // Animation Logic
+        animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", true);
+        animator.SetBool("downed", false);
 
     }
 
@@ -962,7 +970,7 @@ public class State_Attack_Indicator : BossState
     {
         // Programming Logic
         Debug.Log("BossEnemy: Entering State_Attack_Indicator");
-
+        bool isMelee = false;
         Timer_StartTime = Time.time;
 
         // State_Attack_Bullet_SlowFiringShot
@@ -971,6 +979,7 @@ public class State_Attack_Indicator : BossState
             Attack_Name = "SlowFiringShot";
             Spawner_FacePlayer = true;
             Spawner_RotateDegreesPerSecond = 0.0f;
+            
 }
         else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard) == true)
         {
@@ -1054,6 +1063,7 @@ public class State_Attack_Indicator : BossState
         {
             Attack_Name = "Melee";
             Timer_Duration = 0.0f;
+            isMelee = true;
         }
 
         // State_Attack_ArenaHazard_Mine_Random
@@ -1064,6 +1074,18 @@ public class State_Attack_Indicator : BossState
         }
 
         bossEnemyComponent.Activate_AttackIndicatorByName(Attack_Name);
+
+        //FX behavior
+        if (isMelee)
+        {
+            animator.SetBool("melee", true);
+        }
+        else
+        {
+            animator.SetBool("inAttack", true);
+        }
+
+        animator.SetBool("toIdle", false);
     }
 
     // Called once per frame
@@ -1201,7 +1223,7 @@ public class State_Attack_Bullet_SlowFiringShot_Easy : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -1283,6 +1305,7 @@ public class State_Attack_Bullet_SlowFiringShot_Easy : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", true);
 
     }
 }
@@ -1352,7 +1375,7 @@ public class State_Attack_Bullet_SlowFiringShot_Medium : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -1434,6 +1457,7 @@ public class State_Attack_Bullet_SlowFiringShot_Medium : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", true);
 
     }
 }
@@ -1507,7 +1531,7 @@ public class State_Attack_Bullet_SlowFiringShot_Hard : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -1600,6 +1624,7 @@ public class State_Attack_Bullet_SlowFiringShot_Hard : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", true);
 
     }
 }
@@ -1668,7 +1693,7 @@ public class State_Attack_Bullet_RapidFireShot_Medium : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -1759,6 +1784,7 @@ public class State_Attack_Bullet_RapidFireShot_Medium : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", true);
 
     }
 }
@@ -1827,7 +1853,7 @@ public class State_Attack_Bullet_RapidFireShot_Hard : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -1918,7 +1944,7 @@ public class State_Attack_Bullet_RapidFireShot_Hard : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -1996,7 +2022,7 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -2102,7 +2128,7 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -2180,7 +2206,7 @@ public class State_Attack_Bullet_TrackingCone_Medium : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -2286,7 +2312,7 @@ public class State_Attack_Bullet_TrackingCone_Medium : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -2365,7 +2391,7 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -2471,7 +2497,7 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -2593,7 +2619,7 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
         Wall_GameObject = bossEnemyComponent.InitializeGameObject(Wall_Prefab, Wall_Position, Wall_Rotation);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -2706,7 +2732,7 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -2829,7 +2855,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
         Wall_GameObject = bossEnemyComponent.InitializeGameObject(Wall_Prefab, Wall_Position, Wall_Rotation);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -2960,7 +2986,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -3041,7 +3067,7 @@ public class State_Attack_Bullet_RotatingWall_Easy : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -3139,7 +3165,7 @@ public class State_Attack_Bullet_RotatingWall_Easy : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -3220,7 +3246,7 @@ public class State_Attack_Bullet_RotatingWall_Medium : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -3318,7 +3344,7 @@ public class State_Attack_Bullet_RotatingWall_Medium : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -3399,7 +3425,7 @@ public class State_Attack_Bullet_RotatingWall_Hard : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -3497,7 +3523,7 @@ public class State_Attack_Bullet_RotatingWall_Hard : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -3574,7 +3600,7 @@ public class State_Attack_Bullet_JumpRope_Easy : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -3655,7 +3681,7 @@ public class State_Attack_Bullet_JumpRope_Easy : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -3732,7 +3758,7 @@ public class State_Attack_Bullet_JumpRope_Medium : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -3813,7 +3839,7 @@ public class State_Attack_Bullet_JumpRope_Medium : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -3890,7 +3916,7 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -3971,7 +3997,7 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -4127,7 +4153,7 @@ public class State_Attack_ArenaHazard_Mine_Random : BossState
 
         // Animation Logic
         animator.SetBool("inAttack", false);
-
+        animator.SetBool("toIdle", true);
     }
 }
 
@@ -4171,7 +4197,7 @@ public class State_Attack_StandUpMelee : BossState
         Attack_StartTimeStamp = Time.time;
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        //animator.SetBool("inAttack", true);
 
     }
 
@@ -4239,7 +4265,8 @@ public class State_Attack_StandUpMelee : BossState
         GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
-        animator.SetBool("inAttack", false);
+        //animator.SetBool("inAttack", false);
+        animator.SetBool("toIdle", true);
 
     }
 }
@@ -4307,7 +4334,7 @@ public class State_Attack_Melee01 : BossState
         Attack_StartTimeStamp = Time.time;
 
         // Animation Logic
-        animator.SetBool("inAttack", true);
+        animator.SetBool("melee", true);
 
     }
 
@@ -4378,7 +4405,7 @@ public class State_Attack_Melee01 : BossState
         GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
-        animator.SetBool("inAttack", false);
+        animator.SetBool("melee", false);
 
     }
 }

@@ -324,7 +324,7 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Attack Indicator Functions                                                                                                                                                                   * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public GameObject Activate_AttackIndicatorByName(string IndicatorName)
+    public GameObject Activate_AttackIndicatorByName(string IndicatorName) //ginette
     {
         Transform spawner = transform.Find("Attack_Indicator_Spawner");
         foreach (Transform child in spawner)
@@ -718,7 +718,8 @@ public class BossEnemy : MonoBehaviour
     public void VFX_DamageSparks_PlayRandom(int numSparks)
     {
         //Debug.Log("Boss Enemy: VFX_DamageSparks_PlayRandom() Performed");
-        GameObject Sparks_Parent = transform.Find("root/jnt_rotBase/OnHit_VFX")?.gameObject;
+        //GameObject Sparks_Parent = transform.Find("root/jnt_rotBase/OnHit_VFX")?.gameObject;
+        GameObject Sparks_Parent = GameObject.Find("OnHit_VFX");
         int Sparks_NumberOfNodes = Sparks_Parent.transform.childCount;
         for (int i = numSparks; i > 0; i--)
         {
