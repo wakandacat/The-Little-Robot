@@ -1014,8 +1014,14 @@ public class State_Attack_Indicator : BossState
             Attack_Name = "SlowFiringShot";
             Spawner_FacePlayer = true;
             Spawner_RotateDegreesPerSecond = 0.0f;
-            
-}
+
+        }
+        else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Medium) == true)
+        {
+            Attack_Name = "SlowFiringShot";
+            Spawner_FacePlayer = true;
+            Spawner_RotateDegreesPerSecond = 0.0f;
+        }
         else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard) == true)
         {
             Attack_Name = "SlowFiringShot";
@@ -1039,6 +1045,12 @@ public class State_Attack_Indicator : BossState
 
         // State_Attack_Bullet_TrackingCone
         else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Easy) == true)
+        {
+            Attack_Name = "TrackingCone";
+            Spawner_FacePlayer = true;
+            Spawner_RotateDegreesPerSecond = 0.0f;
+        }
+        else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingCone_Medium) == true)
         {
             Attack_Name = "TrackingCone";
             Spawner_FacePlayer = true;
@@ -1072,6 +1084,12 @@ public class State_Attack_Indicator : BossState
             Spawner_FacePlayer = false;
             Spawner_RotateDegreesPerSecond = 180f;
         }
+        else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Medium) == true)
+        {
+            Attack_Name = "RotatingWall";
+            Spawner_FacePlayer = false;
+            Spawner_RotateDegreesPerSecond = 180f;
+        }
         else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_RotatingWall_Hard) == true)
         {
             Attack_Name = "RotatingWall";
@@ -1081,6 +1099,12 @@ public class State_Attack_Indicator : BossState
 
         // State_Attack_Bullet_JumpRope
         else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy) == true)
+        {
+            Attack_Name = "JumpRope";
+            Spawner_FacePlayer = false;
+            Spawner_RotateDegreesPerSecond = 90f;
+        }
+        else if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Medium) == true)
         {
             Attack_Name = "JumpRope";
             Spawner_FacePlayer = false;
