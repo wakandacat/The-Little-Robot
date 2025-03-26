@@ -2024,6 +2024,7 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2208,6 +2209,7 @@ public class State_Attack_Bullet_TrackingCone_Medium : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2393,6 +2395,7 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -2591,6 +2594,7 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Wall Setup
@@ -2827,6 +2831,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Wall Setup
@@ -3007,7 +3012,7 @@ public class State_Attack_Bullet_RotatingWall_Easy : BossState
     public static float Player_MaxDistance = 50.0f;
 
     // Spawner Values
-    private float Attack_FireRate = 8.0f;
+    private float Attack_FireRate = 6.0f;
     private float Attack_FireRateDelay = 1f;
     private int Attack_Count = 160;
     private bool Attack_TrackHorizontal = false;
@@ -3067,7 +3072,7 @@ public class State_Attack_Bullet_RotatingWall_Easy : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         float randomRotation = Random.Range(0.0f, 360.0f);
-        SpawnerComponent_Bullet.Update_FirePointRotation(null, randomRotation, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, randomRotation, 0.0f);
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
@@ -3186,7 +3191,7 @@ public class State_Attack_Bullet_RotatingWall_Medium : BossState
     public static float Player_MaxDistance = 50.0f;
 
     // Spawner Values
-    private float Attack_FireRate = 12.0f;
+    private float Attack_FireRate = 10.0f;
     private float Attack_FireRateDelay = 1f;
     private int Attack_Count = 240;
     private bool Attack_TrackHorizontal = false;
@@ -3246,7 +3251,7 @@ public class State_Attack_Bullet_RotatingWall_Medium : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         float randomRotation = Random.Range(0.0f, 360.0f);
-        SpawnerComponent_Bullet.Update_FirePointRotation(null, randomRotation, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, randomRotation, 0.0f);
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
@@ -3365,7 +3370,7 @@ public class State_Attack_Bullet_RotatingWall_Hard : BossState
     public static float Player_MaxDistance = 50.0f;
 
     // Spawner Values
-    private float Attack_FireRate = 16.0f;
+    private float Attack_FireRate = 14.0f;
     private float Attack_FireRateDelay = 1f;
     private int Attack_Count = 320;
     private bool Attack_TrackHorizontal = false;
@@ -3425,7 +3430,7 @@ public class State_Attack_Bullet_RotatingWall_Hard : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         float randomRotation = Random.Range(0.0f, 360.0f);
-        SpawnerComponent_Bullet.Update_FirePointRotation(null, randomRotation, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, randomRotation, 0.0f);
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
@@ -3602,6 +3607,7 @@ public class State_Attack_Bullet_JumpRope_Easy : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -3760,6 +3766,7 @@ public class State_Attack_Bullet_JumpRope_Medium : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
@@ -3918,6 +3925,7 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
         SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Animation Logic
