@@ -194,7 +194,8 @@ public class State_SelfCheck : BossState
     public override void Enter()
     {
         // Programming Logic
-        //Debug.Log("BossEnemy: Entering State_SelfCheck");
+        Debug.Log("BossEnemy: Entering State_SelfCheck");
+        Debug.Log("BossEnemy: Current Energy: " + bossEnemyComponent.returnCurrentEnergy());
 
         // Animation Logic
         animator.SetBool("inAttack", false);
@@ -443,6 +444,7 @@ public class State_Awake : BossState
     // Attack_State Selection Properties
     private bool delayFinished = false;
     private float enterStateTimeStamp = 0.0f;
+    private bool attackSelected = false;
 
     // Called when the state machine transitions to this state
     public override void Enter()
@@ -453,6 +455,18 @@ public class State_Awake : BossState
         enterStateTimeStamp = Time.time;
 
         // INSERT: attack selection logic
+        if (bossEnemyComponent.returnBossEnemyEncounterIteration() == 1)
+        {
+            Attack_Selection_1();
+        }
+        else if (bossEnemyComponent.returnBossEnemyEncounterIteration() == 2)
+        {
+            Attack_Selection_2();
+        }
+        else if (bossEnemyComponent.returnBossEnemyEncounterIteration() == 3)
+        {
+            Attack_Selection_3();
+        }
 
         // Animation Logic
         animator.SetBool("inAttack", false);
@@ -468,6 +482,29 @@ public class State_Awake : BossState
         // Programming Logic
 
         // Animation Logic
+        //note
+        // Check for when it is one second before we enter State_Attack_Indicator
+        if (attackSelected == true)
+        {
+            if (Time.time >= enterStateTimeStamp + bossEnemyComponent.returnStateAwakeDelay() - 1.0f)
+            {
+                if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Melee01) == true)
+                {
+                    animator.SetBool("inAttack", false);
+                    animator.SetBool("toIdle", true);
+                    animator.SetBool("downed", false);
+                    animator.SetBool("toIdle", false);
+                }
+                else
+                {
+                    animator.SetBool("inAttack", false);
+                    animator.SetBool("toIdle", true);
+                    animator.SetBool("downed", false);
+                    animator.SetBool("toIdle", false);
+                    animator.SetBool("inAttack", true);
+                }
+            }
+        }
 
     }
 
@@ -479,26 +516,15 @@ public class State_Awake : BossState
         {
             bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
         }
+        else if (attackSelected == true && delayFinished == true && bossEnemyComponent.AreAllPoolsFinishedFilling() == true) // check if the delay has been completed and the projectile pools are filled
+        {
+            bossEnemyComponent.TransitionToState_Attack_Indicator();
+        }
         else if (delayFinished == false) // check if the delay has been completed
         {
             if (Time.time - enterStateTimeStamp >= bossEnemyComponent.returnStateAwakeDelay()) // if not, check if the duration of the delay has been exceeded
             {
                 delayFinished = true; // if so, set delay to have been completed
-            }
-        }
-        else if (delayFinished == true && bossEnemyComponent.AreAllPoolsFinishedFilling() == true)  // check if the delay has been completed and the projectile pools are filled
-        {
-            if (bossEnemyComponent.returnBossEnemyEncounterIteration() == 1)
-            {
-                Attack_Selection_1();
-            }
-            else if (bossEnemyComponent.returnBossEnemyEncounterIteration() == 2)
-            {
-                Attack_Selection_2();
-            }
-            else if (bossEnemyComponent.returnBossEnemyEncounterIteration() == 3)
-            {
-                Attack_Selection_3();
             }
         }
 
@@ -530,9 +556,10 @@ public class State_Awake : BossState
         // Programming Logic
 
         // Animation Logic
-        animator.SetBool("inAttack", false);
-        animator.SetBool("toIdle", true);
-        animator.SetBool("downed", false);
+        //note
+        //animator.SetBool("inAttack", false);
+        //animator.SetBool("toIdle", true);
+        //animator.SetBool("downed", false);
 
     }
 
@@ -637,14 +664,15 @@ public class State_Awake : BossState
         }
 
         // DEBUGGING (MUST BE REMOVED):
-        //Attack_BestName = State_Attack_Bullet_TrackingWall_Hard.Attack_Name;
-        //Attack_BestScore = State_Attack_Bullet_TrackingWall_Hard.CalculateScore(bossEnemyComponent);
-        //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_TrackingWall_Hard;
+        Attack_BestName = State_Attack_Bullet_JumpRope_Easy.Attack_Name;
+        Attack_BestScore = State_Attack_Bullet_JumpRope_Easy.CalculateScore(bossEnemyComponent);
+        Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
         //Attack_TransitionToExecute();
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
-        bossEnemyComponent.TransitionToState_Attack_Indicator();
+        attackSelected = true;
+        //bossEnemyComponent.TransitionToState_Attack_Indicator();
     }
 
     public void Attack_Selection_2()
@@ -797,7 +825,8 @@ public class State_Awake : BossState
         // Transition to Best Choice -------------------------------------------------------------------------------*
         //Attack_TransitionToExecute();
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
-        bossEnemyComponent.TransitionToState_Attack_Indicator();
+        attackSelected = true;
+        //bossEnemyComponent.TransitionToState_Attack_Indicator();
     }
 
     public void Attack_Selection_3()
@@ -950,7 +979,8 @@ public class State_Awake : BossState
         // Transition to Best Choice -------------------------------------------------------------------------------*
         //Attack_TransitionToExecute();
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
-        bossEnemyComponent.TransitionToState_Attack_Indicator();
+        attackSelected = true;
+        //bossEnemyComponent.TransitionToState_Attack_Indicator();
     }
 }
 
@@ -1087,10 +1117,11 @@ public class State_Attack_Indicator : BossState
         }
         else
         {
-            animator.SetBool("inAttack", true);
+            //note
+            //animator.SetBool("inAttack", true);
         }
 
-        animator.SetBool("toIdle", false);
+        //animator.SetBool("toIdle", false);
     }
 
     // Called once per frame
@@ -2054,7 +2085,7 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
                     SpawnerComponent_Bullet.UpdateSpawner_Tracking(false, false, 0);
 
                     // Rotate spawner to face away from player by random ammount between 90 - 270 degrees
-                    float randomRotation = Random.Range(90.0f, 270.0001f);
+                    float randomRotation = 0.0f;
                     Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
                     SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, randomRotation, 0.0f, true, false);
 
@@ -2239,7 +2270,7 @@ public class State_Attack_Bullet_TrackingCone_Medium : BossState
                     SpawnerComponent_Bullet.UpdateSpawner_Tracking(false, false, 0);
 
                     // Rotate spawner to face away from player by random ammount between 90 - 270 degrees
-                    float randomRotation = Random.Range(90.0f, 270.0001f);
+                    float randomRotation = 0.0f;
                     Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
                     SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, randomRotation, 0.0f, true, false);
 
@@ -2425,7 +2456,7 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
                     SpawnerComponent_Bullet.UpdateSpawner_Tracking(false, false, 0);
 
                     // Rotate spawner to face away from player by random ammount between 90 - 270 degrees
-                    float randomRotation = Random.Range(90.0f, 270.0001f);
+                    float randomRotation = 0.0f;
                     Vector3 playerPos = bossEnemyComponent.Player_ReturnPlayerPosition();
                     SpawnerComponent_Bullet.Update_FirePointRotation_FaceTarget(playerPos, randomRotation, 0.0f, true, false);
 
@@ -2528,7 +2559,7 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
     private float Attack_ProjectileSpeed = 20.0f;
-    private float Attack_ProjectileLifetime = 10.0f;
+    private float Attack_ProjectileLifetime = 7.0f;
 
     // Attack Spawner
     private ProjectileSpawner SpawnerComponent_Bullet;
@@ -2764,7 +2795,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
     private float Attack_ProjectileSpeed = 25.0f;
-    private float Attack_ProjectileLifetime = 10.0f;
+    private float Attack_ProjectileLifetime = 6.0f;
 
     // Attack Spawner
     private ProjectileSpawner SpawnerComponent_Bullet;
@@ -3606,7 +3637,7 @@ public class State_Attack_Bullet_JumpRope_Easy : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.3f, null);
         SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
@@ -3765,7 +3796,7 @@ public class State_Attack_Bullet_JumpRope_Medium : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.3f, null);
         SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
@@ -3924,7 +3955,7 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
         SpawnerComponent_Bullet.Set_All_ProjectileLifetime(Attack_ProjectileLifetime);
         SpawnerComponent_Bullet.Set_Bullet_ProjectileSpeed(Attack_ProjectileSpeed);
 
-        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.5f, null);
+        SpawnerComponent_Bullet.Update_FirePointPosition(null, 0.3f, null);
         SpawnerComponent_Bullet.Update_FirePointRotation(0.0f, 0.0f, 0.0f);
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
@@ -4294,7 +4325,7 @@ public class State_Attack_Melee01 : BossState
     private Vector3 Attack_ColliderSphereScale_Out = new Vector3(8.0f, 4.0f, 8.0f);
     private bool Attack_IsColliderSphereScaleOut = false;
     private float Attack_Duration = 3.0f;
-    private float Attack_Delay = 1.0f;
+    private float Attack_Delay = 2.0f;
     private float Attack_StartTimeStamp = 0.0f;
 
     // Attack_State Selection Properties
