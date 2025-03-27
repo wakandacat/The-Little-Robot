@@ -17,7 +17,7 @@ public class endGameTrigger : MonoBehaviour
 
     //end game cutscene
     public float endTimer = 0f;
-    private float outroSpeed = 0.003f;
+    private float outroSpeed = 0.004f;
     private float camPos = 0;
     private GameObject endCutsceneGrp;
     private GameObject cutCanvas;
@@ -48,6 +48,8 @@ public class endGameTrigger : MonoBehaviour
     public bool startEndIdle = false;
     public bool playerLookingUp = false;
     public bool sci_startAnim = true;
+
+    Animator m_animator;
     private void Start()
     {
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -70,6 +72,8 @@ public class endGameTrigger : MonoBehaviour
         playerViewCanvas = endCutsceneGrp.transform.GetChild(7).gameObject;
         doorAudio = endCutsceneGrp.transform.GetChild(8).gameObject.GetComponent<AudioSource>();
         walkingCam = endCutsceneGrp.transform.GetChild(9).gameObject.GetComponent<CinemachineVirtualCamera>();
+
+        m_animator = GameObject.Find("cutscenePlayer").GetComponent<Animator>();
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -90,6 +94,10 @@ public class endGameTrigger : MonoBehaviour
             //stop animations???
             //stopping animation in player fx script this is just a boolean that calls that condition
             endCutscene = true;
+
+            //player end animations
+            //m_animator.SetBool("goToS1", true);
+
             //collision.gameObject.GetComponent<Animator>().enabled = false;
 
             //prep the player's stats
@@ -127,6 +135,7 @@ public class endGameTrigger : MonoBehaviour
                 {
                     endTimer = endTimer + Time.deltaTime; //increment the cutscene timer                  
                     mainGameScript.outroPlaying = true;
+                    m_animator.SetBool("goToS1", true);
 
                     //hide intro load
                     if (endTimer <= 0.5f)
@@ -167,6 +176,7 @@ public class endGameTrigger : MonoBehaviour
                             {
                                 staticSound.Play(); //ensure the static sound is playing
                             }
+                            
 
                         }
 
@@ -174,6 +184,7 @@ public class endGameTrigger : MonoBehaviour
                         {
                             cutCanvas.SetActive(false); //hide black cut again
                             startEndIdle = false;
+                            m_animator.SetBool("goToS2", true);
 
                         }
                         playerLookingUp = true;
@@ -202,11 +213,16 @@ public class endGameTrigger : MonoBehaviour
                             }
 
                         }
+                        if(endTimer >= 6f && endTimer < 6.1f)
+                        {
+                            m_animator.SetBool("goToS3", true);
+                            Debug.Log("play 3rd shot");
+                        }
 
                         if (endTimer >= 8f && endTimer < 8.1f)
                         {
                             cutCanvas.SetActive(true);
-
+                            
                             //switch to player cam
                             playerCam.Priority = securityCam.Priority + 1;
 
@@ -229,6 +245,7 @@ public class endGameTrigger : MonoBehaviour
                             cutCanvas.SetActive(false); //hide black cut again
                             //Scientist start animation here
                             sci_startAnim = true;
+                            
                         }
 
                         //move camera along track
