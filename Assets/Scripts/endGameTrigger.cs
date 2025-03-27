@@ -43,6 +43,11 @@ public class endGameTrigger : MonoBehaviour
     private CinemachineVirtualCamera creditsCam;
     private bool fadeDone = false;
     public bool endCutscene = false;
+
+    //Animation call booleans
+    public bool startEndIdle = false;
+    public bool playerLookingUp = false;
+    public bool sci_startAnim = true;
     private void Start()
     {
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -132,6 +137,9 @@ public class endGameTrigger : MonoBehaviour
                         player.transform.rotation = this.transform.rotation;
                         mainGameScript.CheckPointResetPlatformCam(this.transform.eulerAngles.y); //freelook face forward --> not sure if needed
 
+                        //Call player idle animation here
+                        startEndIdle = true;
+
                         //switch to playercam first to show door
                         playerCam.Priority = walkingCam.Priority + 1;
                     }
@@ -165,7 +173,11 @@ public class endGameTrigger : MonoBehaviour
                         if (endTimer >= 3.1f && endTimer < 3.5f)
                         {
                             cutCanvas.SetActive(false); //hide black cut again
+                            startEndIdle = false;
+
                         }
+                        playerLookingUp = true;
+                        Debug.Log("player looking up " + playerLookingUp);
 
                         if (endTimer >= 3.5f && endTimer < 10f)
                         {
@@ -215,6 +227,8 @@ public class endGameTrigger : MonoBehaviour
                         if (endTimer >= 8.1f && endTimer < 8.2f)
                         {
                             cutCanvas.SetActive(false); //hide black cut again
+                            //Scientist start animation here
+                            sci_startAnim = true;
                         }
 
                         //move camera along track
