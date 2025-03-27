@@ -49,12 +49,14 @@ public class endGameTrigger : MonoBehaviour
     //Animation call booleans
     public bool startEndIdle = false;
     public bool playerLookingUp = false;
-    public bool sci_startAnim = true;
+    public bool sci_startAnim = false;
+    private bool grab_player = false;
 
     //dude vars
     public GameObject finalPos;
 
     Animator m_animator;
+    Animator guy_animator;
     private void Start()
     {
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -84,7 +86,7 @@ public class endGameTrigger : MonoBehaviour
             m_animator = cutScenePlayer.gameObject.GetComponent<Animator>();
 
         }
-
+        guy_animator = scientist.gameObject.GetComponent<Animator>();
         cutScenePlayer.SetActive(false);
         scientist.SetActive(false);
 
@@ -152,9 +154,18 @@ public class endGameTrigger : MonoBehaviour
 
     public void makeDudeMove()
     {
-        float speed = 1.0f;
+        float speed = 1f;
         Debug.Log("Moving towawards player");
         scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
+        guy_animator.SetBool("guy_S1", true);
+        if (grab_player == true)
+        {
+            guy_animator.SetBool("guy_S1", false);
+
+            guy_animator.SetBool("guy_S2", true);
+
+        }
+
     }
     public void OutroCam()
     {
@@ -292,7 +303,8 @@ public class endGameTrigger : MonoBehaviour
                             if (camPos >= 0.87f && playerViewCanvas.activeSelf == false)
                             {
                                 playerViewCanvas.SetActive(true); //look through the player's eyes
-
+                                //Scientist grab
+                                grab_player = true;
                                 //static again
                                 if (staticVid.isPlaying == false)
                                 {
