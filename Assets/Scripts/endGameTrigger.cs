@@ -157,7 +157,7 @@ public class endGameTrigger : MonoBehaviour
         float speed = 1.0f;
         Debug.Log("Moving towawards player");
         //scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
-        float dudeNewZ = Mathf.Lerp(scientist.transform.position.z, finalPos.transform.position.z, 0.05f);
+        float dudeNewZ = Mathf.Lerp(scientist.transform.position.z, finalPos.transform.position.z, 0.01f);
         scientist.transform.position = new Vector3(scientist.transform.position.x, scientist.transform.position.y, dudeNewZ);
         //guy_animator.SetBool("guy_S1", true);
         //if (grab_player == true)
