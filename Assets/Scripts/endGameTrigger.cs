@@ -88,7 +88,7 @@ public class endGameTrigger : MonoBehaviour
         }
         guy_animator = scientist.gameObject.GetComponent<Animator>();
         cutScenePlayer.SetActive(false);
-        scientist.SetActive(false);
+        //scientist.SetActive(false);
 
 
     }
@@ -156,14 +156,16 @@ public class endGameTrigger : MonoBehaviour
     {
         float speed = 1.0f;
         Debug.Log("Moving towawards player");
-        scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
-        guy_animator.SetBool("guy_S1", true);
-        if (grab_player == true)
-        {
+        //scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
+        float dudeNewZ = Mathf.Lerp(scientist.transform.position.z, finalPos.transform.position.z, 0.05f);
+        scientist.transform.position = new Vector3(scientist.transform.position.x, scientist.transform.position.y, dudeNewZ);
+        //guy_animator.SetBool("guy_S1", true);
+        //if (grab_player == true)
+        //{
 
-            guy_animator.SetBool("guy_S2", true);
+        //    guy_animator.SetBool("guy_S2", true);
 
-        }
+        //}
 
     }
     public void OutroCam()
@@ -241,7 +243,7 @@ public class endGameTrigger : MonoBehaviour
                                 {
                                     Debug.Log("door open");
                                     doorAudio.Play();
-                                    scientist.SetActive(true);
+                                    scientist.SetActive(true); //ginette
                                     
                                 }
                             }
@@ -259,14 +261,16 @@ public class endGameTrigger : MonoBehaviour
                         }
                         if(endTimer >= 6f && endTimer < 6.1f)
                         {
+                            
                             m_animator.SetBool("goToS3", true);
                             Debug.Log("play 3rd shot");
                         }
-
+                        
                         if (endTimer >= 8f && endTimer < 8.1f)
                         {
                             cutCanvas.SetActive(true);
-                            
+                            sci_startAnim = true;
+                            guy_animator.SetBool("guy_S1", true);
                             //switch to player cam
                             playerCam.Priority = securityCam.Priority + 1;
 
@@ -288,7 +292,7 @@ public class endGameTrigger : MonoBehaviour
                         {
                             cutCanvas.SetActive(false); //hide black cut again
                             //Scientist start animation here
-                            sci_startAnim = true;
+                            //sci_startAnim = true;
 
                         }
 
@@ -303,7 +307,8 @@ public class endGameTrigger : MonoBehaviour
                             {
                                 playerViewCanvas.SetActive(true); //look through the player's eyes
                                 //Scientist grab
-                                grab_player = true;
+                                //grab_player = true;
+                                guy_animator.SetBool("guy_S2", true);
                                 //static again
                                 if (staticVid.isPlaying == false)
                                 {
