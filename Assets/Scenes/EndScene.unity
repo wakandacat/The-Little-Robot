@@ -5581,6 +5581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   endTimer: 0
   cutScenePlayer: {fileID: 1223431591}
+  scientist: {fileID: 660213796}
   creditsCanvas: {fileID: 468044838}
   scrollObj: {fileID: 1137038861}
   creditsBlack: {fileID: 1308177242}
@@ -5588,6 +5589,7 @@ MonoBehaviour:
   startEndIdle: 0
   playerLookingUp: 0
   sci_startAnim: 1
+  finalPos: {fileID: 2087516045}
 --- !u!1 &1501493878
 GameObject:
   m_ObjectHideFlags: 0
@@ -6896,6 +6898,37 @@ Transform:
   - {fileID: 915779448}
   m_Father: {fileID: 1137038862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2087516045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2087516046}
+  m_Layer: 0
+  m_Name: scientistfinalPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2087516046
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087516045}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.54, y: -140.43, z: 1130.91}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -6916,3 +6949,4 @@ SceneRoots:
   - {fileID: 956794360}
   - {fileID: 448327816}
   - {fileID: 975857724}
+  - {fileID: 2087516046}

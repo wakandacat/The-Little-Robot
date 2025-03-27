@@ -36,6 +36,7 @@ public class endGameTrigger : MonoBehaviour
     private GameObject player;
     private GameObject playerUI;
     public GameObject cutScenePlayer;
+    public GameObject scientist;
 
     //credits
     public GameObject creditsCanvas;
@@ -49,6 +50,9 @@ public class endGameTrigger : MonoBehaviour
     public bool startEndIdle = false;
     public bool playerLookingUp = false;
     public bool sci_startAnim = true;
+
+    //dude vars
+    public GameObject finalPos;
 
     Animator m_animator;
     private void Start()
@@ -80,7 +84,11 @@ public class endGameTrigger : MonoBehaviour
             m_animator = cutScenePlayer.gameObject.GetComponent<Animator>();
 
         }
+
         cutScenePlayer.SetActive(false);
+        scientist.SetActive(false);
+
+
     }
     public void hidePlayer()
     {
@@ -135,9 +143,19 @@ public class endGameTrigger : MonoBehaviour
             CreditsRoll();
         }
 
+        if(sci_startAnim == true)
+        {
+            makeDudeMove();
+        }
+
     }
 
-
+    public void makeDudeMove()
+    {
+        float speed = 1.0f;
+        Debug.Log("Moving towawards player");
+        scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
+    }
     public void OutroCam()
     {
         if (mainGameScript.cutScenePlaying) //left button on controller to skip cutscenes
@@ -213,6 +231,8 @@ public class endGameTrigger : MonoBehaviour
                                 {
                                     Debug.Log("door open");
                                     doorAudio.Play();
+                                    scientist.SetActive(true);
+                                    
                                 }
                             }
 
@@ -259,7 +279,7 @@ public class endGameTrigger : MonoBehaviour
                             cutCanvas.SetActive(false); //hide black cut again
                             //Scientist start animation here
                             sci_startAnim = true;
-                            
+
                         }
 
                         //move camera along track
@@ -341,7 +361,7 @@ public class endGameTrigger : MonoBehaviour
     {
         if (mainGameScript.cutScenePlaying) //left button on controller to skip cutscenes
         {
-            if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
+            if (GameObject.FindWithTag("Player")) //continue the cutscene if the game is not paused
             {
                 //the cutscene is finished
                 if (mainGameScript.creditsPlaying == true)
