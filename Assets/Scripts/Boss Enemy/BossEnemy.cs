@@ -324,7 +324,7 @@ public class BossEnemy : MonoBehaviour
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Attack Indicator Functions                                                                                                                                                                   * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public GameObject Activate_AttackIndicatorByName(string IndicatorName) //ginette
+    public GameObject Activate_AttackIndicatorByName(string IndicatorName) 
     {
         Transform spawner = transform.Find("Attack_Indicator_Spawner");
         foreach (Transform child in spawner)

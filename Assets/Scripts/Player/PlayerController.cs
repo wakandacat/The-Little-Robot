@@ -72,6 +72,13 @@ public class PlayerController : MonoBehaviour
     public bool runAttack = false;
     public bool runAttackAnim = false;
     public Coroutine attackCooldown;
+    public bool runAttack1Once = false;
+    public bool runAttack2Once = false;
+    public bool runAttack3Once = false;
+    private Coroutine attackAnim1;
+    private Coroutine attackAnim2;
+    private Coroutine attackAnim3;
+
 
     //Roll vars
     public bool Rolling = false;
@@ -661,6 +668,8 @@ public class PlayerController : MonoBehaviour
     {
         if (counter == 1)
         {
+            runAttack1Once = true;
+
             if (enemyCollision.enemyCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
@@ -672,12 +681,14 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(0);
             }
+            attackAnim1 = StartCoroutine(runAttck1Once());
             runAttack = false;
             runAttackAnim = false;
             isAttacking = false;
         }
         else if (counter == 2)
         {
+            runAttack2Once = true;
 
             if (enemyCollision.enemyCollision == true)
             {
@@ -690,12 +701,14 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(1);
             }
+            attackAnim2 = StartCoroutine(runAttck2Once());
             runAttack = false;
             runAttackAnim = false;
             isAttacking = false;
         }
         else if (counter == 3)
         {
+            runAttack3Once = true;
 
             if (enemyCollision.enemyCollision == true)
             {
@@ -709,6 +722,7 @@ public class PlayerController : MonoBehaviour
                 //play sfx
                 m_audio.playPlayerSFX(2);
             }
+            attackAnim3 = StartCoroutine(runAttck3Once());
             runAttack = false;
             runAttackAnim = false;
             isAttacking = false;
@@ -726,18 +740,16 @@ public class PlayerController : MonoBehaviour
         //attackCD = 1.0f;
         runAttack = false;
         runAttackAnim = false;
+        StopCoroutine(attackAnim1);
+        StopCoroutine(attackAnim2);
+        StopCoroutine(attackAnim3);
+
     }
     //Starts the timer and checks whether it is done or not
     //https://discussions.unity.com/t/start-countdown-timer-with-condition/203968
     //when we get all combos remeber to reset timer
     public void timer()
     {
-        //comboMaxTime -= Time.deltaTime;
-        //if (comboMaxTime < 0)
-        //{
-        //    handleAttack();
-        //    comboMaxTime = 0;
-        //}
         comboMaxTime -= Time.deltaTime;
         if (comboMaxTime < 0)
         {
@@ -748,19 +760,21 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-/*    public void attackCooldown()
+    public IEnumerator runAttck1Once()
     {
-        Debug.Log("we are here");
-        attackCD -= Time.deltaTime;
-        if (attackCD < 0)
-        {
-            attackCD = 0;
-            Debug.Log("we are here 2");
-            handleAttack();
-            Debug.Log("attackCounter" + attackCounter);
-        }
-    }*/
+        yield return new WaitForSeconds(0.4f);
+        runAttack1Once = false;
+    }
+    public IEnumerator runAttck2Once()
+    {
+        yield return new WaitForSeconds(0.4f);
+        runAttack2Once = false;
+    }
+    public IEnumerator runAttck3Once()
+    {
+        yield return new WaitForSeconds(0.4f);
+        runAttack3Once = false;
+    }
     public IEnumerator cooldown()
     {
         yield return new WaitForSeconds(attackCD);
