@@ -832,11 +832,11 @@ public class PlayerController : MonoBehaviour
             playerCurrenthealth -= 1;
 
         }
-        if (other.gameObject.name.Contains("tendril_single"))
+/*        if (other.gameObject.name.Contains("tendril_single"))
         {
             collisionTendril = true;
             //Debug.Log("touchign postules");
-        }
+        }*/
         if (other.gameObject.tag == "postule")
         {
             collisionPostule = true;
