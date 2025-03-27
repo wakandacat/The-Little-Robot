@@ -103,4 +103,15 @@ public class Projectile_Bullet : Projectile
         Projectile_HasBeenDeflected = true;
         Debug.Log("Projectile_Bullet: Deflection Has Occured!");
     }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               OnTriggerEnter Functions                                                                                                               * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    private void OnTriggerEnter(Collider other)
+    {
+        if (Get_ProjectileLifetime_AsPercentage() >= 0.1f && other.CompareTag("Boss Enemy") == false && other.CompareTag("Player") == false)
+        {
+            ReturnToPool();
+        }
+    }
 }

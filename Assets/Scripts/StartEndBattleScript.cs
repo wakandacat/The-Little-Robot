@@ -58,6 +58,7 @@ public class StartEndBattleScript : MonoBehaviour
             CancelInvoke("enemyDeadCutsceneStart");
             CancelInvoke("enemyDeadCutsceneEnd");
             CancelInvoke("SwitchBlend");
+            CancelInvoke("startCamShake");
             return;
         }
 
@@ -78,16 +79,17 @@ public class StartEndBattleScript : MonoBehaviour
                 mainGameScript.currLevelCount++;
 
                 //cutscene chunks
-                Invoke("enemyDeadCutsceneStart", 1.0f);
+                Invoke("startCamShake", 1.0f);
+                Invoke("enemyDeadCutsceneStart", 2.7f);
 
-                Invoke("enemyDeadCutsceneEnd", 5.0f);
+                Invoke("enemyDeadCutsceneEnd", 6.0f);
 
-                Invoke("SwitchBlend", 8.0f); //switch cameras after a delay
+                Invoke("SwitchBlend", 7.0f); //switch cameras after a delay
 
-            //enemyDeadCutsceneStart();
-            //enemyDeadCutsceneEnd();
-            //SwitchBlend();
-            //Debug.Log("yooooooooooooooop");
+                //enemyDeadCutsceneStart();
+                //enemyDeadCutsceneEnd();
+                //SwitchBlend();
+                //Debug.Log("yooooooooooooooop");
 
 
             }
@@ -105,11 +107,12 @@ public class StartEndBattleScript : MonoBehaviour
                 mainGameScript.currLevelCount++;
 
                 //cutscene chunks
-                Invoke("enemyDeadCutsceneStart", 1.0f);
+                Invoke("startCamShake", 1.0f);
+                Invoke("enemyDeadCutsceneStart", 2.7f);
 
-                Invoke("enemyDeadCutsceneEnd", 5.0f);
+                Invoke("enemyDeadCutsceneEnd", 6.0f);
 
-                Invoke("SwitchBlend", 8.0f); //switch cameras after a delay
+                Invoke("SwitchBlend", 7.0f); //switch cameras after a delay
             }
             else if (SceneManager.GetActiveScene().name == "Combat3" && mainGameScript.thirdBossDead == false)
             {
@@ -125,11 +128,12 @@ public class StartEndBattleScript : MonoBehaviour
                 mainGameScript.currLevelCount++;
 
                 //cutscene chunks
-                Invoke("enemyDeadCutsceneStart", 1.0f);
+                Invoke("startCamShake", 1.0f);
+                Invoke("enemyDeadCutsceneStart", 2.7f);
 
-                Invoke("enemyDeadCutsceneEnd", 5.0f);
+                Invoke("enemyDeadCutsceneEnd", 6.0f);
 
-                Invoke("SwitchBlend", 8.0f); //switch cameras after a delay
+                Invoke("SwitchBlend", 7.0f); //switch cameras after a delay
             }
 
             //enemy.GetComponent<boss_fx_behaviors>().StopCoroutine(enemy.GetComponent<boss_fx_behaviors>().turnOffEyes()); //ginette
@@ -148,8 +152,7 @@ public class StartEndBattleScript : MonoBehaviour
                 if (timer >= (timeToFall + delay))
                 {
                     falling = false;
-                    enemy.SetActive(false);
-                    middlePlatform.SetActive(false);
+                   
                 }
             }
 
@@ -165,22 +168,24 @@ public class StartEndBattleScript : MonoBehaviour
         middlePlatform.transform.position = new Vector3(startPos.x, startPos.y - 1.5f, startPos.z);
         middlePlatform.transform.Rotate(0f, 0f, 5f);
 
-        if (middlePlatform.GetComponent<AudioSource>().isPlaying == false)
-        {
-            middlePlatform.gameObject.GetComponent<AudioSource>().Play();
-        }
+        //if (middlePlatform.GetComponent<AudioSource>().isPlaying == false)
+        //{
+        //    middlePlatform.gameObject.GetComponent<AudioSource>().Play();
+        //}
 
         //push the robot away --> explosion or something
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().combatPush(battleCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition);
 
         platformFall();
 
-        shakeCam(2f);
+        //shakeCam(2f);
     }
 
     public void enemyDeadCutsceneEnd()
     {
         stopShakeCam();
+        enemy.SetActive(false);
+        middlePlatform.SetActive(false);
 
         //open end bridge
         endBridge.GetComponent<bridgeScript>().moveBridgeLeft();
@@ -207,14 +212,31 @@ public class StartEndBattleScript : MonoBehaviour
     {
         falling = true;
 
-        float newY = Mathf.Lerp(startPos.y, startPos.y - 50f, (timer - delay));
+        float newY = Mathf.Lerp(startPos.y, startPos.y - 70f, (timer - delay));
         middlePlatform.transform.position = new Vector3(startPos.x, newY, startPos.z);
-        enemy.transform.position = new Vector3(startPos.x, newY, startPos.z);
+        if (middlePlatform.transform.position.y < startPos.y - 8f)
+        {
+            //float eneY = Mathf.Lerp(startPos.y, startPos.y - 49f, 0.5f);
+            //enemy.transform.position = new Vector3(startPos.x, eneY, startPos.z);
+            float enemyFallStart = Mathf.Max(0, (timer - 0.5f) * 0.5f);
+            float eneY = Mathf.Lerp(startPos.y, startPos.y - 190f, enemyFallStart);
+            enemy.transform.position = new Vector3(startPos.x, eneY, startPos.z);
+        }
+        else
+        {
+            enemy.transform.position = new Vector3(startPos.x, startPos.y+1, startPos.z);
+        }
+        //enemy.transform.position = new Vector3(startPos.x, newY, startPos.z);
     }
 
     public void shakeCam(float intensity)
     {
         battleCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = intensity;
+    }
+
+    public void startCamShake() 
+    {
+        shakeCam(2f);
     }
 
     public void stopShakeCam()

@@ -101,4 +101,15 @@ public class Projectile_Cluster : MonoBehaviour
     {
         transform.position += Projectile_Direction * Projectile_Speed * Time.fixedDeltaTime;    // move towards Projectile_Direction at Projectile_Speed per second
     }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    // *               OnTriggerEnter Functions                                                                                                               * 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------
+    private void OnTriggerEnter(Collider other)
+    {
+        if (Get_ProjectileLifetime_AsPercentage() >= 0.1f && other.CompareTag("Boss Enemy") == false && other.CompareTag("Player") == false)
+        {
+            Destroy(gameObject);
+        }
+    }
 }
