@@ -17,7 +17,7 @@ public class endGameTrigger : MonoBehaviour
 
     //end game cutscene
     public float endTimer = 0f;
-    private float outroSpeed = 0.004f;
+    private float outroSpeed = 0.005f;
     private float camPos = 0;
     private GameObject endCutsceneGrp;
     private GameObject cutCanvas;
@@ -31,6 +31,7 @@ public class endGameTrigger : MonoBehaviour
     private GameObject playerViewCanvas;
     private AudioSource doorAudio;
     private CinemachineVirtualCamera walkingCam;
+    public GameObject camLookingUp;
 
 
     private GameObject player;
@@ -305,6 +306,7 @@ public class endGameTrigger : MonoBehaviour
                             //once we hit the end of the track
                             if (camPos >= 0.87f && playerViewCanvas.activeSelf == false)
                             {
+                                playerCam.LookAt = camLookingUp.transform;
                                 playerViewCanvas.SetActive(true); //look through the player's eyes
                                 //Scientist grab
                                 //grab_player = true;
@@ -357,6 +359,7 @@ public class endGameTrigger : MonoBehaviour
 
                         if (endTimer >= 23) //hang on black screen for a second before ending
                         {
+                            playerCam.LookAt = null;
                             endTimer = 0; //reset teh timer
                             cutCanvas.SetActive(true);
                             mainGameScript.outroPlayed = true; //finish the cutscene
