@@ -5901,6 +5901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   proceedSign: {fileID: 873241471}
+  proceedaudio: {fileID: 873241472}
 --- !u!65 &682960709
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7228,7 +7229,13 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 2e0ff6190eb8e1a4090165db5487df96, type: 3}
 --- !u!1 &873241471 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 731505511276443386, guid: 2e0ff6190eb8e1a4090165db5487df96,
+  m_CorrespondingSourceObject: {fileID: 857208573889829886, guid: 2e0ff6190eb8e1a4090165db5487df96,
+    type: 3}
+  m_PrefabInstance: {fileID: 873241470}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &873241472 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1718228752546475380, guid: 2e0ff6190eb8e1a4090165db5487df96,
     type: 3}
   m_PrefabInstance: {fileID: 873241470}
   m_PrefabAsset: {fileID: 0}

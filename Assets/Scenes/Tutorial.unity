@@ -875,7 +875,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d4e409637d1324aa62415901a73ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  proceedSign: {fileID: 1488182663}
+  proceedSign: {fileID: 242125911381889086}
+  proceedaudio: {fileID: 242125911381889085}
 --- !u!1 &1024529867
 GameObject:
   m_ObjectHideFlags: 0
@@ -1743,12 +1744,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
---- !u!1 &1488182663 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7043277327334422959, guid: 92e4177d02af3f9479d97b30f9c38505,
-    type: 3}
-  m_PrefabInstance: {fileID: 242125911381889084}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1635158806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2854,6 +2849,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92e4177d02af3f9479d97b30f9c38505, type: 3}
+--- !u!82 &242125911381889085 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5500771551714144295, guid: 92e4177d02af3f9479d97b30f9c38505,
+    type: 3}
+  m_PrefabInstance: {fileID: 242125911381889084}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &242125911381889086 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1661817329112941867, guid: 92e4177d02af3f9479d97b30f9c38505,
+    type: 3}
+  m_PrefabInstance: {fileID: 242125911381889084}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6421338609771481762
 PrefabInstance:
   m_ObjectHideFlags: 0
