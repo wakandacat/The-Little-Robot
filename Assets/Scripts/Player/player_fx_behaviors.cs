@@ -253,9 +253,20 @@ public class player_fx_behaviors : MonoBehaviour
             return "wakeup";
         }
 
-        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
+/*        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
         {
             return "Idle";
+        }
+*/
+        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().startEndIdle == true)
+        {
+            return "Idle";
+        }
+
+        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().playerLookingUp == true)
+        {
+            Debug.Log("Hello we are looking around");
+            return "LookingAround";
         }
 
         //Attack State

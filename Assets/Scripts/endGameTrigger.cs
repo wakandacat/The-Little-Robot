@@ -17,7 +17,7 @@ public class endGameTrigger : MonoBehaviour
 
     //end game cutscene
     public float endTimer = 0f;
-    private float outroSpeed = 0.003f;
+    private float outroSpeed = 0.005f;
     private float camPos = 0;
     private GameObject endCutsceneGrp;
     private GameObject cutCanvas;
@@ -31,10 +31,13 @@ public class endGameTrigger : MonoBehaviour
     private GameObject playerViewCanvas;
     private AudioSource doorAudio;
     private CinemachineVirtualCamera walkingCam;
+    public GameObject camLookingUp;
 
 
     private GameObject player;
     private GameObject playerUI;
+    public GameObject cutScenePlayer;
+    public GameObject scientist;
 
     //credits
     public GameObject creditsCanvas;
@@ -43,12 +46,25 @@ public class endGameTrigger : MonoBehaviour
     private CinemachineVirtualCamera creditsCam;
     private bool fadeDone = false;
     public bool endCutscene = false;
+
+    //Animation call booleans
+    public bool startEndIdle = false;
+    public bool playerLookingUp = false;
+    public bool sci_startAnim = false;
+    private bool grab_player = false;
+
+    //dude vars
+    public GameObject finalPos;
+
+    Animator m_animator;
+    Animator guy_animator;
     private void Start()
     {
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
         fxBehave = GameObject.FindWithTag("Player").GetComponent<player_fx_behaviors>();
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
         player = GameObject.FindGameObjectWithTag("Player");
+        cutScenePlayer = GameObject.Find("cutscenePlayer");
         playerUI = GameObject.Find("Player_UI");
         endCutsceneGrp = GameObject.Find("outroCutscene");
 
@@ -65,8 +81,28 @@ public class endGameTrigger : MonoBehaviour
         playerViewCanvas = endCutsceneGrp.transform.GetChild(7).gameObject;
         doorAudio = endCutsceneGrp.transform.GetChild(8).gameObject.GetComponent<AudioSource>();
         walkingCam = endCutsceneGrp.transform.GetChild(9).gameObject.GetComponent<CinemachineVirtualCamera>();
-    }
 
+        if(cutScenePlayer != null)
+        {
+            m_animator = cutScenePlayer.gameObject.GetComponent<Animator>();
+
+        }
+        guy_animator = scientist.gameObject.GetComponent<Animator>();
+        cutScenePlayer.SetActive(false);
+        //scientist.SetActive(false);
+
+
+    }
+    public void hidePlayer()
+    {
+        player.SetActive(false);
+        if(cutScenePlayer != null)
+        {
+            cutScenePlayer.SetActive(true);
+
+        }
+
+    }
     public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -77,20 +113,22 @@ public class endGameTrigger : MonoBehaviour
                 fxBehave.StopCoroutine(fxBehave.walkCoroutine);
                 fxBehave.walkCoroutine = null; // Clear reference after stopping
             }
-
+            hidePlayer();
             mainGameScript.cutScenePlaying = true;
-
             //turn off gameplay values
             playerUI.SetActive(false);
             //stop animations???
             //stopping animation in player fx script this is just a boolean that calls that condition
             endCutscene = true;
+
+            //player end animations
+            //m_animator.SetBool("goToS1", true);
+
             //collision.gameObject.GetComponent<Animator>().enabled = false;
 
             //prep the player's stats
             playerViewCanvas.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "DEATHS: " + mainGameScript.playerDeaths;
             playerViewCanvas.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = "TIME: " + Mathf.FloorToInt(mainGameScript.playerTime / 60f) + ":" + Mathf.FloorToInt(mainGameScript.playerTime % 60f);
-
         }
     }
 
@@ -108,20 +146,41 @@ public class endGameTrigger : MonoBehaviour
             CreditsRoll();
         }
 
+        if(sci_startAnim == true)
+        {
+            makeDudeMove();
+        }
+
     }
 
+    public void makeDudeMove()
+    {
+        float speed = 1.0f;
+        Debug.Log("Moving towawards player");
+        //scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
+        float dudeNewZ = Mathf.Lerp(scientist.transform.position.z, finalPos.transform.position.z, 0.01f);
+        scientist.transform.position = new Vector3(scientist.transform.position.x, scientist.transform.position.y, dudeNewZ);
+        //guy_animator.SetBool("guy_S1", true);
+        //if (grab_player == true)
+        //{
 
+        //    guy_animator.SetBool("guy_S2", true);
+
+        //}
+
+    }
     public void OutroCam()
     {
         if (mainGameScript.cutScenePlaying) //left button on controller to skip cutscenes
         {
-            if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
+            if (GameObject.FindWithTag("Player")) //continue the cutscene if the game is not paused
             {
                 //the cutscene is finished
                 if (mainGameScript.outroPlayed != true)
                 {
                     endTimer = endTimer + Time.deltaTime; //increment the cutscene timer                  
                     mainGameScript.outroPlaying = true;
+                    m_animator.SetBool("goToS1", true);
 
                     //hide intro load
                     if (endTimer <= 0.5f)
@@ -131,6 +190,9 @@ public class endGameTrigger : MonoBehaviour
                         player.transform.position = this.transform.position; //center player
                         player.transform.rotation = this.transform.rotation;
                         mainGameScript.CheckPointResetPlatformCam(this.transform.eulerAngles.y); //freelook face forward --> not sure if needed
+
+                        //Call player idle animation here
+                        startEndIdle = true;
 
                         //switch to playercam first to show door
                         playerCam.Priority = walkingCam.Priority + 1;
@@ -159,13 +221,19 @@ public class endGameTrigger : MonoBehaviour
                             {
                                 staticSound.Play(); //ensure the static sound is playing
                             }
+                            
 
                         }
 
                         if (endTimer >= 3.1f && endTimer < 3.5f)
                         {
                             cutCanvas.SetActive(false); //hide black cut again
+                            startEndIdle = false;
+                            m_animator.SetBool("goToS2", true);
+
                         }
+                        playerLookingUp = true;
+                        Debug.Log("player looking up " + playerLookingUp);
 
                         if (endTimer >= 3.5f && endTimer < 10f)
                         {
@@ -176,6 +244,8 @@ public class endGameTrigger : MonoBehaviour
                                 {
                                     Debug.Log("door open");
                                     doorAudio.Play();
+                                    scientist.SetActive(true); //ginette
+                                    
                                 }
                             }
 
@@ -190,11 +260,18 @@ public class endGameTrigger : MonoBehaviour
                             }
 
                         }
-
+                        if(endTimer >= 6f && endTimer < 6.1f)
+                        {
+                            
+                            m_animator.SetBool("goToS3", true);
+                            Debug.Log("play 3rd shot");
+                        }
+                        
                         if (endTimer >= 8f && endTimer < 8.1f)
                         {
                             cutCanvas.SetActive(true);
-
+                            sci_startAnim = true;
+                            guy_animator.SetBool("guy_S1", true);
                             //switch to player cam
                             playerCam.Priority = securityCam.Priority + 1;
 
@@ -215,6 +292,9 @@ public class endGameTrigger : MonoBehaviour
                         if (endTimer >= 8.1f && endTimer < 8.2f)
                         {
                             cutCanvas.SetActive(false); //hide black cut again
+                            //Scientist start animation here
+                            //sci_startAnim = true;
+
                         }
 
                         //move camera along track
@@ -226,8 +306,11 @@ public class endGameTrigger : MonoBehaviour
                             //once we hit the end of the track
                             if (camPos >= 0.87f && playerViewCanvas.activeSelf == false)
                             {
+                                playerCam.LookAt = camLookingUp.transform;
                                 playerViewCanvas.SetActive(true); //look through the player's eyes
-
+                                //Scientist grab
+                                //grab_player = true;
+                                guy_animator.SetBool("guy_S2", true);
                                 //static again
                                 if (staticVid.isPlaying == false)
                                 {
@@ -276,6 +359,7 @@ public class endGameTrigger : MonoBehaviour
 
                         if (endTimer >= 23) //hang on black screen for a second before ending
                         {
+                            playerCam.LookAt = null;
                             endTimer = 0; //reset teh timer
                             cutCanvas.SetActive(true);
                             mainGameScript.outroPlayed = true; //finish the cutscene
@@ -296,7 +380,7 @@ public class endGameTrigger : MonoBehaviour
     {
         if (mainGameScript.cutScenePlaying) //left button on controller to skip cutscenes
         {
-            if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
+            if (GameObject.FindWithTag("Player")) //continue the cutscene if the game is not paused
             {
                 //the cutscene is finished
                 if (mainGameScript.creditsPlaying == true)
