@@ -205,6 +205,7 @@ public class player_fx_behaviors : MonoBehaviour
         }
         if(playerScript.collisionTendril == true)
         {
+            Debug.Log("this vfx is playing" + fungusHit.isPlaying);
             fungusHit.Play();
         }
         else
