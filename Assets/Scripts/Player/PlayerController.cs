@@ -740,9 +740,6 @@ public class PlayerController : MonoBehaviour
         //attackCD = 1.0f;
         runAttack = false;
         runAttackAnim = false;
-        StopCoroutine(attackAnim1);
-        StopCoroutine(attackAnim2);
-        StopCoroutine(attackAnim3);
 
     }
     //Starts the timer and checks whether it is done or not
