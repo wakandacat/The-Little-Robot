@@ -35,6 +35,7 @@ public class endGameTrigger : MonoBehaviour
 
     private GameObject player;
     private GameObject playerUI;
+    public GameObject cutScenePlayer;
 
     //credits
     public GameObject creditsCanvas;
@@ -56,6 +57,7 @@ public class endGameTrigger : MonoBehaviour
         fxBehave = GameObject.FindWithTag("Player").GetComponent<player_fx_behaviors>();
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
         player = GameObject.FindGameObjectWithTag("Player");
+        cutScenePlayer = GameObject.Find("cutscenePlayer");
         playerUI = GameObject.Find("Player_UI");
         endCutsceneGrp = GameObject.Find("outroCutscene");
 
@@ -73,9 +75,23 @@ public class endGameTrigger : MonoBehaviour
         doorAudio = endCutsceneGrp.transform.GetChild(8).gameObject.GetComponent<AudioSource>();
         walkingCam = endCutsceneGrp.transform.GetChild(9).gameObject.GetComponent<CinemachineVirtualCamera>();
 
-        m_animator = GameObject.Find("cutscenePlayer").GetComponent<Animator>();
-    }
+        if(cutScenePlayer != null)
+        {
+            m_animator = cutScenePlayer.gameObject.GetComponent<Animator>();
 
+        }
+        cutScenePlayer.SetActive(false);
+    }
+    public void hidePlayer()
+    {
+        player.SetActive(false);
+        if(cutScenePlayer != null)
+        {
+            cutScenePlayer.SetActive(true);
+
+        }
+
+    }
     public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -86,9 +102,8 @@ public class endGameTrigger : MonoBehaviour
                 fxBehave.StopCoroutine(fxBehave.walkCoroutine);
                 fxBehave.walkCoroutine = null; // Clear reference after stopping
             }
-
+            hidePlayer();
             mainGameScript.cutScenePlaying = true;
-
             //turn off gameplay values
             playerUI.SetActive(false);
             //stop animations???
@@ -103,7 +118,6 @@ public class endGameTrigger : MonoBehaviour
             //prep the player's stats
             playerViewCanvas.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "DEATHS: " + mainGameScript.playerDeaths;
             playerViewCanvas.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = "TIME: " + Mathf.FloorToInt(mainGameScript.playerTime / 60f) + ":" + Mathf.FloorToInt(mainGameScript.playerTime % 60f);
-
         }
     }
 
@@ -128,7 +142,7 @@ public class endGameTrigger : MonoBehaviour
     {
         if (mainGameScript.cutScenePlaying) //left button on controller to skip cutscenes
         {
-            if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
+            if (GameObject.FindWithTag("Player")) //continue the cutscene if the game is not paused
             {
                 //the cutscene is finished
                 if (mainGameScript.outroPlayed != true)

@@ -516,6 +516,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 97745211}
   m_CullTransparentMesh: 1
+--- !u!1 &187901118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 187901119}
+  - component: {fileID: 187901120}
+  m_Layer: 0
+  m_Name: AudioListener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &187901119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187901118}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -13.72678, y: 142.531, z: -1130.232}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 975857725}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &187901120
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187901118}
+  m_Enabled: 1
 --- !u!1001 &198891133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3951,15 +3991,35 @@ PrefabInstance:
       propertyPath: m_Name
       value: cutscenePlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 09b70d2f0fbf49946b04cc232ff1c78b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 09b70d2f0fbf49946b04cc232ff1c78b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 09b70d2f0fbf49946b04cc232ff1c78b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 187901119}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 09b70d2f0fbf49946b04cc232ff1c78b,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1223431592}
   m_SourcePrefab: {fileID: 100100000, guid: 09b70d2f0fbf49946b04cc232ff1c78b, type: 3}
+--- !u!4 &975857725 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 09b70d2f0fbf49946b04cc232ff1c78b,
+    type: 3}
+  m_PrefabInstance: {fileID: 975857724}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &985783986
 GameObject:
   m_ObjectHideFlags: 0
@@ -5520,6 +5580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endTimer: 0
+  cutScenePlayer: {fileID: 1223431591}
   creditsCanvas: {fileID: 468044838}
   scrollObj: {fileID: 1137038861}
   creditsBlack: {fileID: 1308177242}
