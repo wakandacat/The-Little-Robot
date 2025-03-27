@@ -154,13 +154,12 @@ public class endGameTrigger : MonoBehaviour
 
     public void makeDudeMove()
     {
-        float speed = 1f;
+        float speed = 1.0f;
         Debug.Log("Moving towawards player");
         scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
         guy_animator.SetBool("guy_S1", true);
         if (grab_player == true)
         {
-            guy_animator.SetBool("guy_S1", false);
 
             guy_animator.SetBool("guy_S2", true);
 
