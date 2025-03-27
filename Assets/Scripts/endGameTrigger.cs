@@ -95,8 +95,8 @@ public class endGameTrigger : MonoBehaviour
     }
     public void hidePlayer()
     {
-        player.SetActive(false);
-        if(cutScenePlayer != null)
+        player.transform.position.Set(0.0f, 500.0f, 0.0f);
+        if (cutScenePlayer != null)
         {
             cutScenePlayer.SetActive(true);
 
@@ -173,7 +173,7 @@ public class endGameTrigger : MonoBehaviour
     {
         if (mainGameScript.cutScenePlaying) //left button on controller to skip cutscenes
         {
-            if (GameObject.FindWithTag("Player")) //continue the cutscene if the game is not paused
+            if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
             {
                 //the cutscene is finished
                 if (mainGameScript.outroPlayed != true)
@@ -380,7 +380,7 @@ public class endGameTrigger : MonoBehaviour
     {
         if (mainGameScript.cutScenePlaying) //left button on controller to skip cutscenes
         {
-            if (GameObject.FindWithTag("Player")) //continue the cutscene if the game is not paused
+            if (GameObject.FindWithTag("Player") && GameObject.FindWithTag("Player").GetComponent<PlayerController>().isPaused == false) //continue the cutscene if the game is not paused
             {
                 //the cutscene is finished
                 if (mainGameScript.creditsPlaying == true)
