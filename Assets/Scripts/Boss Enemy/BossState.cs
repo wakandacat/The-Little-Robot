@@ -395,6 +395,7 @@ public class State_Death : BossState
         // Programming Logic
 
         // Animation Logic
+        animator.SetBool("die", false);
 
     }
 

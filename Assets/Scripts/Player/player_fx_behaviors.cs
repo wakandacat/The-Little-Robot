@@ -205,6 +205,7 @@ public class player_fx_behaviors : MonoBehaviour
         }
         if(playerScript.collisionTendril == true)
         {
+            Debug.Log("this vfx is playing" + fungusHit.isPlaying);
             fungusHit.Play();
         }
         else
@@ -269,28 +270,15 @@ public class player_fx_behaviors : MonoBehaviour
         }
 
         //Attack State
-        if (attackCounter == 1)
+        if (attackCounter == 1 && playerScript.runAttack1Once == true)
         {
             return "Attack_1";
         }
-/*        if (attackCounter == 1 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
-        {
-            return "walk";
-        }*/
-
-/*        if (attackCounter == 2 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
-        {
-            return "walk";
-        }*/
-        if (attackCounter == 2)
+        if (attackCounter == 2 && playerScript.runAttack2Once == true)
         {
             return "Attack_2";
         }
-/*        if (attackCounter == 3 && (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true))
-        {
-            return "walk";
-        }*/
-        if (attackCounter == 3)
+        if (attackCounter == 3 && playerScript.runAttack3Once == true)
         {
             return "Attack_3";
         }

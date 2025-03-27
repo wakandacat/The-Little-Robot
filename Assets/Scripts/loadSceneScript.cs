@@ -10,6 +10,7 @@ public class loadSceneScript : MonoBehaviour
     private mainGameScript mainGameScript;
     private GameObject door;
     public GameObject proceedSign;
+    public AudioSource proceedaudio;
 
     void Awake()
     {
@@ -67,8 +68,8 @@ public class loadSceneScript : MonoBehaviour
         if (!SceneManager.GetActiveScene().name.Contains("Combat"))
         {
             //turn on the proceed sign
-            proceedSign.transform.GetChild(0).gameObject.SetActive(true);
-            proceedSign.transform.GetChild(1).gameObject.GetComponent<AudioSource>().Play();
+            proceedSign.SetActive(true);
+            proceedaudio.Play();
         }
 
         //remove to enusre it only runs once

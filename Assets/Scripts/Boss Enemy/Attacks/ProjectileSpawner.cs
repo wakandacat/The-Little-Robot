@@ -452,7 +452,7 @@ public class ProjectileSpawner : MonoBehaviour
         Vector3 targetPosition = Spawner_FirePoint.TransformPoint(localOffset);
 
         // Maintain the original height of Spawner_FirePoint
-        targetPosition.y = Spawner_FirePoint.position.y - 7.5f; // DEBUGGING TO FORCE TO LAND ON GROUND SHOULD BE UPDATED
+        targetPosition.y = Spawner_FirePoint.position.y - 8.2f; // DEBUGGING TO FORCE TO LAND ON GROUND SHOULD BE UPDATED
 
         // Set mine's position explicitly in world space
         NewMine.transform.position = Spawner_FirePoint.position;
