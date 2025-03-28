@@ -42,6 +42,8 @@ public class gasCloudScript : MonoBehaviour
             //take one hit of damage immediately
             player.playerCurrenthealth--;
             player.canRegen = false;
+            GameObject.Find("AudioManager").GetComponent<audioManager>().playPlayerSFX(11);
+            
 
         }
     }
@@ -63,6 +65,7 @@ public class gasCloudScript : MonoBehaviour
             {
                 player.playerCurrenthealth--;
                 gasTimer = 0f; //reset the timer
+                GameObject.Find("AudioManager").GetComponent<audioManager>().playPlayerSFX(11);
             }
         }
     }
