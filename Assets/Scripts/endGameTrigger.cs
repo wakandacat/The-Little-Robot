@@ -63,7 +63,7 @@ public class endGameTrigger : MonoBehaviour
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
         fxBehave = GameObject.FindWithTag("Player").GetComponent<player_fx_behaviors>();
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.Find("playerExport");
         cutScenePlayer = GameObject.Find("cutscenePlayer");
         playerUI = GameObject.Find("Player_UI");
         endCutsceneGrp = GameObject.Find("outroCutscene");
@@ -95,7 +95,7 @@ public class endGameTrigger : MonoBehaviour
     }
     public void hidePlayer()
     {
-        player.transform.position.Set(0.0f, 500.0f, 0.0f);
+        player.transform.position = new Vector3(0.0f, 500.0f, 0.0f);
         if (cutScenePlayer != null)
         {
             cutScenePlayer.SetActive(true);
@@ -107,6 +107,8 @@ public class endGameTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
+            player.transform.position = new Vector3(0.0f, 500.0f, 0.0f);
+            Debug.Log("Player position " + player.transform.position);
             m_audio.walkSource.loop = false; //turn off looping before killing coroutine
             if (fxBehave.walkCoroutine != null)
             {
@@ -187,8 +189,8 @@ public class endGameTrigger : MonoBehaviour
                     {
                         cutCanvas.SetActive(true);
                         //face player forward if not already
-                        player.transform.position = this.transform.position; //center player
-                        player.transform.rotation = this.transform.rotation;
+/*                        player.transform.position = this.transform.position; //center player
+                        player.transform.rotation = this.transform.rotation;*/
                         mainGameScript.CheckPointResetPlatformCam(this.transform.eulerAngles.y); //freelook face forward --> not sure if needed
 
                         //Call player idle animation here
@@ -207,6 +209,8 @@ public class endGameTrigger : MonoBehaviour
                             cutCanvas.SetActive(true);
 
                             //switch to security cam
+                            //https://discussions.unity.com/t/how-to-change-look-at-target-for-cinemachine/707973 cause Lina did not know this
+                            securityCam.m_LookAt = cutScenePlayer.transform;
                             securityCam.Priority = playerCam.Priority + 1;
 
                             //bring up security overlay
