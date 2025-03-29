@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class player_fx_behaviors : MonoBehaviour
 {
@@ -253,20 +254,23 @@ public class player_fx_behaviors : MonoBehaviour
             return "wakeup";
         }
 
-/*        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
+        /*        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
+                {
+                    return "Idle";
+                }
+        */
+        if (SceneManager.GetActiveScene().name == "EndScene")
         {
-            return "Idle";
-        }
-*/
-        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().startEndIdle == true)
-        {
-            return "Idle";
-        }
+            if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().startEndIdle == true)
+            {
+                return "Idle";
+            }
 
-        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().playerLookingUp == true)
-        {
-            Debug.Log("Hello we are looking around");
-            return "LookingAround";
+            if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().playerLookingUp == true)
+            {
+                Debug.Log("Hello we are looking around");
+                return "LookingAround";
+            }
         }
 
         //Attack State

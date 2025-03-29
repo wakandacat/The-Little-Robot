@@ -71,7 +71,7 @@ public class ventFloor : MonoBehaviour
         }
     }
 
-    void ActivateColliders()
+    public void ActivateColliders()
     {
         //switch back to the freelook cam
         platformCam.Priority = ventCam.Priority + 1;
