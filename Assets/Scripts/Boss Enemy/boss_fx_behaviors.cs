@@ -10,17 +10,31 @@ public class boss_fx_behaviors : MonoBehaviour
     public Coroutine eyesOnCoroutine;
     public Coroutine eyesOffCoroutine;
 
+    //Particle system
+    public ParticleSystem Slam_rings;
+    public ParticleSystem debris;
+    public ParticleSystem stand_up_vfx;
+    public ParticleSystem hand_impact;
+
+    public bool meleeVFXBool = false;
+
     // Start is called before the first frame update
     void Start()
     {
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
         enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+
+        //particle system
+        Slam_rings.Stop();
+        debris.Stop();
+        stand_up_vfx.Stop();
+        hand_impact.Stop();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        //vfx_behaviour();
     }
 
     public IEnumerator turnOnEyes()
@@ -76,4 +90,21 @@ public class boss_fx_behaviors : MonoBehaviour
         }
 
     }
+
+    //public void vfx_behaviour()
+    //{
+    //    meleeVFXBool = enemy.GetComponent<BossState>().returnMeleeVFXBool()
+    //    if (enemy.GetComponent<BossState>().playMeleeVFX == true)
+    //    {
+    //        Invoke("meleeVFX", 3.0f);
+    //    }
+    //}
+
+    //public void meleeVFX() 
+    //{
+    //    Slam_rings.Play();
+    //    debris.Play();
+    //    stand_up_vfx.Play();
+    //    hand_impact.Play();
+    //}
 }

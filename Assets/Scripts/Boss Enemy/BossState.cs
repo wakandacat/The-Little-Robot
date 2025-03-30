@@ -23,7 +23,6 @@ public abstract class BossState
     protected Animator animator;                            // will be set to whatever animator is being used for Boss Enemy
     protected boss_fx_behaviors fxBehave = GameObject.FindGameObjectWithTag("Boss Enemy").GetComponent<boss_fx_behaviors>();
     protected audioManager m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
-
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Initialize Function                                                                                                                                                                          * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -4359,6 +4358,21 @@ public class State_Attack_Melee01 : BossState
     public static float Player_MinDistance = 0.0f;
     public static float Player_MaxDistance = 5.0f;
 
+    //Particle system
+    public ParticleSystem Slam_rings;
+    public ParticleSystem debris;
+    public ParticleSystem hand_impact;
+
+    //timer
+
+
+    public void playMeleeVFX()
+    {
+        Slam_rings.Play();
+        debris.Play();
+        hand_impact.Play();
+    }
+
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
         float score = 0.0f;
@@ -4389,9 +4403,9 @@ public class State_Attack_Melee01 : BossState
 
         // Collider Sphere
         Attack_ColliderSphere = new GameObject("Attack_ColliderSphere");
-        MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
-        Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
-        MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
+        //MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
+        //Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        //MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
@@ -4404,6 +4418,14 @@ public class State_Attack_Melee01 : BossState
 
         // Animation Logic
         animator.SetBool("melee", true);
+        ////particle system
+        //Slam_rings = GameObject.Find("double_ring").GetComponent<ParticleSystem>();
+        //debris = GameObject.Find("debris").GetComponent<ParticleSystem>();
+        //hand_impact = GameObject.Find("slamHandImpact").GetComponent<ParticleSystem>();
+
+        //Slam_rings.Stop();
+        //debris.Stop();
+        //hand_impact.Stop();
 
     }
 
@@ -4419,6 +4441,14 @@ public class State_Attack_Melee01 : BossState
         // laser and laser contact
         if (Attack_IsColliderSphereScaleOut == false)              // check if collider sphere object scale has been set to use Attack_ColliderSphereScale_Out scaling
         {
+            //if(Time.time - Attack_StartTimeStamp >= 1.80f && Time.time - Attack_StartTimeStamp <= 1.89f)
+            //{
+            //    //play vfx
+            //    Slam_rings.Play();
+            //    debris.Play();
+            //    hand_impact.Play();
+            //}
+            
             if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
             {
                 Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
@@ -4426,10 +4456,15 @@ public class State_Attack_Melee01 : BossState
                 Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
                 Attack_ColliderSphere.tag = "Damage Source";
                 Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                ////stop vfx
+                //Slam_rings.Stop();
+                //debris.Stop();
+                //hand_impact.Stop();
             }
         }
 
         // Animation Logic
+        
 
     }
 
@@ -4475,6 +4510,7 @@ public class State_Attack_Melee01 : BossState
 
         // Animation Logic
         animator.SetBool("melee", false);
+        
 
     }
 }
