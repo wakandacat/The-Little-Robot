@@ -16,6 +16,8 @@ public class fungusBlink : MonoBehaviour
 
     private Coroutine blinkMethod;
 
+    float newScale = 1.05f; //float size for the pulsing
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,11 +38,17 @@ public class fungusBlink : MonoBehaviour
     //coroutine to blink between 2 colours
     private IEnumerator blinkCoroutine()
     {
+        Vector3 originalScale = transform.localScale;
+        
         while (isBlinking)
         {
             float timer = 0;
             while (timer < 1)
             {
+                //scale down
+                float scaleLerp = Mathf.Lerp(newScale, 1.0f, timer); //scale down
+                transform.localScale = originalScale * scaleLerp;
+
                 for (int i = 0; i < matList.Count; i++)
                 {
                     matList[i].SetColor("_BaseColor", Color.Lerp(regularCol, blinkCol, timer));
@@ -52,6 +60,10 @@ public class fungusBlink : MonoBehaviour
             timer = 0;
             while (timer < 1)
             {
+                //scale up
+                float scaleLerp = Mathf.Lerp(1.0f, newScale, timer); //scale up
+                transform.localScale = originalScale * scaleLerp;
+
                 for (int i = 0; i < matList.Count; i++)
                 {
                     matList[i].SetColor("_BaseColor", Color.Lerp(blinkCol, regularCol, timer));
@@ -60,5 +72,7 @@ public class fungusBlink : MonoBehaviour
                 yield return null;
             }
         }
+        //reset size on blinking end --> may screw things up
+        transform.localScale = originalScale;
     }
 }
