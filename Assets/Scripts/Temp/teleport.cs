@@ -256,6 +256,7 @@ public class teleport : MonoBehaviour
        // if (SceneManager.GetActiveScene().name != "EndScene")
         //{
             player.GetComponent<player_fx_behaviors>().StopCoroutine(player.GetComponent<player_fx_behaviors>().walkCoroutine);
+        player.GetComponent<PlayerController>().platformMovement = Vector3.zero; //zero out moving platform velocity
         //}       
 
         //if we are in the final cutscene, revert it all

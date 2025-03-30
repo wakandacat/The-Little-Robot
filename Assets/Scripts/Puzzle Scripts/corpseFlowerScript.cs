@@ -11,9 +11,43 @@ public class corpseFlowerScript : MonoBehaviour
     private float rotateSpeed = 0.005f;
     private float rotAngle = 40f;
 
+    //jitter
+    private bool isRumbling = false;
+    private Vector3 startPos;
+    public Coroutine rumblePlat;
+    private float minJitter = 0.05f;
+    private float maxJitter = 0.3f;
+
     private void Start()
     {
         this.transform.rotation = Quaternion.Euler(0, this.transform.eulerAngles.y, this.transform.eulerAngles.z); //make sure its right
+
+        startPos = this.transform.position; // for jitter
+        rumblePlat = StartCoroutine(LeafRumble());
+    }
+
+    public IEnumerator LeafRumble()
+    {
+        //rumble after triggering
+        while (true)
+        {
+            if (isRumbling == true)
+            {
+                //move door up
+                this.transform.position = new Vector3(startPos.x, startPos.y + Random.Range(minJitter, maxJitter), startPos.z);
+                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
+                startPos = this.transform.position;
+
+                //move door down
+                this.transform.position = new Vector3(startPos.x, startPos.y - Random.Range(minJitter, maxJitter), startPos.z);
+                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
+                startPos = this.transform.position;
+            }
+            else
+            {
+                yield return null; //wait
+            }
+        }
     }
 
 
@@ -63,7 +97,7 @@ public class corpseFlowerScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Player" && isRotating == false && goingDown == true)
         {
-            Invoke("startRotate", delayTime);
+            Invoke("startRumble", delayTime);
             if (this.gameObject.GetComponent<AudioSource>().isPlaying == false)
             {
                 this.gameObject.GetComponent<AudioSource>().Play();
@@ -71,9 +105,16 @@ public class corpseFlowerScript : MonoBehaviour
         }
     }
 
+    void startRumble()
+    {
+        isRumbling = true;
+        Invoke("startRotate", delayTime);
+    }
+
     void startRotate()
     {
         isRotating = true;
+        isRumbling = false;
     }
 
     void endRotate()

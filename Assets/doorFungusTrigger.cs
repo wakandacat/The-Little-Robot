@@ -13,6 +13,7 @@ public class doorFungusTrigger : MonoBehaviour
         {
             if(collision.gameObject.GetComponent<PlayerController>().attackCounter == 3 && runOnce == false)
             {
+                Debug.Log("inside trigger");
                 runOnce = true;
 
                 //open door
