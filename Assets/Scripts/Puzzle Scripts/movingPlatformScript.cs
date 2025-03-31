@@ -34,17 +34,52 @@ public class movingPlatformScript : MonoBehaviour
     //fungus bool
     public bool isFungus = false;
 
+    //jitter
+    private Vector3 startPos;
+    public Coroutine jitterPlat;
+    private float minJitter = 0.05f;
+    private float maxJitter = 0.1f;
+
     void Awake()
     {
         platform = transform.GetChild(0).gameObject;
         waypointParent = transform.GetChild(1);
         targetWaypointIndex = 0;
+
+        startPos = this.transform.position; // for jitter
+        jitterPlat = StartCoroutine(JitterPlatform());
     }
 
     void Start()
     {
         UpdateWaypoints();
     }
+
+    //jitter teh door while it has fungus on it
+    public IEnumerator JitterPlatform()
+    {
+        //if we have fungus and we have the next scene loaded
+        while (true)
+        {
+            if (isFungus == true)
+            {
+                //move plat left
+                this.transform.GetChild(0).transform.position = new Vector3(startPos.x + Random.Range(minJitter, maxJitter), startPos.y, startPos.z);
+                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
+                startPos = this.transform.GetChild(0).transform.position;
+
+                //move plat right
+                this.transform.GetChild(0).transform.position = new Vector3(startPos.x - Random.Range(minJitter, maxJitter), startPos.y, startPos.z);
+                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
+                startPos = this.transform.GetChild(0).transform.position;
+            }
+            else
+            {
+                yield return null; //wait
+            }
+        }
+    }
+
 
     void FixedUpdate()
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class doorScript : MonoBehaviour
 {
@@ -16,14 +17,48 @@ public class doorScript : MonoBehaviour
 
     public bool isFungus = false;
 
+    private Coroutine jittering;
+    private float minJitter = 0.05f;
+    private float maxJitter = 0.2f;
+    public bool loadedNextStart = false;
+    private bool runOnce = false;
+
     public void Awake()
     {
         startPos = this.transform.position;
         timer = 0;
+
+        jittering = StartCoroutine(JitterDoor());
+    }
+
+    //jitter teh door while it has fungus on it
+    public IEnumerator JitterDoor()
+    {
+        //if we have fungus and we have the next scene loaded
+        while (true)
+        {
+            if (isFungus == true && loadedNextStart == true)
+            {
+                //move door up
+                this.transform.position = new Vector3(startPos.x, startPos.y + Random.Range(minJitter, maxJitter), startPos.z);
+                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
+                startPos = this.transform.position;
+
+                //move door down
+                this.transform.position = new Vector3(startPos.x, startPos.y - Random.Range(minJitter, maxJitter), startPos.z);
+                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
+                startPos = this.transform.position;
+            }
+            else
+            {
+                yield return null; //wait
+            }   
+        }
     }
 
     public void FixedUpdate()
     {
+        //Debug.Log("checking: " + isFungus + " " + loadedNextStart);
         //if the flag to open is set, then start the process
         if (timer < (timeToOpen + delay) && movingUp && isFungus == false && movingDown == false)
         {
@@ -33,6 +68,13 @@ public class doorScript : MonoBehaviour
             //if the timer is greater than the delay time and not yet at the full time, then lerp the door open
             if (timer >= delay && timer <= (timeToOpen + delay))
             {
+                //door sound
+                if (this.transform.parent.GetChild(0).GetComponent<AudioSource>().isPlaying == false && runOnce == false)
+                {
+                    this.transform.parent.GetChild(0).GetComponent<AudioSource>().Play();
+                    runOnce = true;
+                }
+
                 openDoor();
             }
 
@@ -84,16 +126,14 @@ public class doorScript : MonoBehaviour
         this.transform.parent.GetChild(2).gameObject.SetActive(true);
         isFungus = false;
 
+        //stop the random jitter for teh door
+        StopCoroutine(JitterDoor());
+        jittering = null;
+
         //play fungus dead sound
         if (this.transform.parent.GetComponent<AudioSource>().isPlaying == false)
         {
             this.transform.parent.GetComponent<AudioSource>().Play();
-        }
-
-        //door sound
-        if (this.transform.parent.GetChild(0).GetComponent<AudioSource>().isPlaying == false)
-        {
-            this.transform.parent.GetChild(0).GetComponent<AudioSource>().Play();
         }
 
         //do some vfx explosion thing here to mask it???

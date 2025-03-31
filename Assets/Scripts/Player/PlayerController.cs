@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
     public GameObject endScene;
     public GameObject endTrigger;
     public bool foundScene = false;
-    private bool triggerFound = false;
+    public bool triggerFound = false;
     void Start()
     {
         pc = new PlayerControls();
@@ -387,18 +387,23 @@ public class PlayerController : MonoBehaviour
     //-----------------------------------------------Move-----------------------------------------------//
     public void stopActions()
     {
-        if (triggerFound == true && endTrigger.GetComponent<TriggerPlayerActionOFF>().stopAction == true)
+        //don't need to run this if we are not in endscene
+        if (SceneManager.GetActiveScene().name == "EndScene")
         {
-            rollCounter = 0;
-            Debug.Log("Hello we are disabling the controls");
-            pc.Gameplay.Attack.Disable();
-            pc.Gameplay.Roll.Disable();
-            pc.Gameplay.Deflect.Disable();
-            pc.Gameplay.Jump.Disable();
-            pc.Gameplay.QuickDrop.Disable();
-            pc.Gameplay.Dash.Disable();
-            pc.Gameplay.FreeLook.Disable();
+            if (triggerFound == true && endTrigger.GetComponent<TriggerPlayerActionOFF>().stopAction == true)
+            {
+                rollCounter = 0;
+                Debug.Log("Hello we are disabling the controls");
+                pc.Gameplay.Attack.Disable();
+                pc.Gameplay.Roll.Disable();
+                pc.Gameplay.Deflect.Disable();
+                pc.Gameplay.Jump.Disable();
+                pc.Gameplay.QuickDrop.Disable();
+                pc.Gameplay.Dash.Disable();
+                pc.Gameplay.FreeLook.Disable();
+            }
         }
+        
     }
     public void moveCharacter(float playerSpeed)
     {

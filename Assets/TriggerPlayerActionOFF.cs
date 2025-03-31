@@ -34,6 +34,8 @@ public class TriggerPlayerActionOFF : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            //move this back slightly and set it to be collider
+            this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, this.gameObject.transform.position.z - 3);
             this.gameObject.GetComponent<Collider>().isTrigger = false; //set this to be a collider so you cant go back
         }
     }

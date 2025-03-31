@@ -63,6 +63,18 @@ public class mainGameScript : MonoBehaviour
     public bool outroPlayed = false;
     public bool outroPlaying = false;
     public bool creditsPlaying = false;
+    public CinemachineVirtualCamera securCamEnd;
+    public CinemachineVirtualCamera walkingCamEnd;
+    public CinemachineVirtualCamera playerViewCamEnd;
+    public GameObject endSecurityCanvas;
+    public GameObject endPlayerCanvas;
+    public GameObject endDoorAudio;
+    public GameObject endStaticAudio;
+
+    //vent cams
+    public CinemachineVirtualCamera ventCam1;
+    public CinemachineVirtualCamera ventCam2;
+    public CinemachineVirtualCamera ventCam3;
 
     //player eye lights
     public GameObject playerSpotLight; //full intensity = 4
@@ -255,6 +267,12 @@ public class mainGameScript : MonoBehaviour
         playerSpotLight.GetComponent<Light>().intensity = 0.0f;    
         mainAudioMan.GetComponent<audioManager>().playerSource.enabled = false; //turn off the player sound effects
 
+        //ensure none of this is playing
+        endSecurityCanvas.SetActive(false);
+        endPlayerCanvas.SetActive(false);
+        endDoorAudio.GetComponent<AudioSource>().Stop();
+        endStaticAudio.GetComponent<AudioSource>().Stop();
+
         //start the end credits
         creditsPlaying = true;
         cutScenePlaying = true;
@@ -299,7 +317,17 @@ public class mainGameScript : MonoBehaviour
         } 
         else //runs every other time
         {
-            platformCam.Priority = bossCam.Priority + 1;
+            //ensure outro cams are not active
+            securCamEnd.Priority = 5;
+            playerViewCamEnd.Priority = 6;
+            walkingCamEnd.Priority = 7;
+
+            //ensure vent cams are not active
+            ventCam1.Priority = 10;
+            ventCam2.Priority = 10;
+            ventCam3.Priority = 10;
+
+            platformCam.Priority = bossCam.Priority + 1; 
         }
 
         platformCam.m_YAxis.Value = yaxis; //position up teh spine axis

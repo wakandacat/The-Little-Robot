@@ -108,12 +108,12 @@ public class endGameTrigger : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             player.transform.position = new Vector3(0.0f, 500.0f, 0.0f);
-            Debug.Log("Player position " + player.transform.position);
+            //Debug.Log("Player position " + player.transform.position);
             m_audio.walkSource.loop = false; //turn off looping before killing coroutine
             if (fxBehave.walkCoroutine != null)
             {
-                fxBehave.StopCoroutine(fxBehave.walkCoroutine);
-                fxBehave.walkCoroutine = null; // Clear reference after stopping
+                //fxBehave.StopCoroutine(fxBehave.walkCoroutine);
+                //fxBehave.walkCoroutine = null; // Clear reference after stopping
             }
             hidePlayer();
             mainGameScript.cutScenePlaying = true;
@@ -416,7 +416,7 @@ public class endGameTrigger : MonoBehaviour
                     endTimer = endTimer + Time.deltaTime; //increment the cutscene timer      
 
                     //hang on title for a few seconds before moving
-                    if (endTimer >= 3f && scrollObj.transform.localPosition.y < 6500) //if we have not yet hit the end logo, scroll
+                    if (endTimer >= 3f && scrollObj.transform.localPosition.y < 8500) //if we have not yet hit the end logo, scroll
                     {
                         scrollObj.transform.localPosition += new Vector3(0, 100 * Time.deltaTime, 0);
 
@@ -434,7 +434,7 @@ public class endGameTrigger : MonoBehaviour
                             creditsBlack.GetComponent<Image>().color = currentColor;
                         }
                         //fade background back in
-                        else if (fadeDone == true && endTimer >= 45f)
+                        else if (fadeDone == true && endTimer >= 55f)
                         {
 
                             Color currentColor = creditsBlack.GetComponent<Image>().color;
@@ -447,7 +447,7 @@ public class endGameTrigger : MonoBehaviour
                         }
 
                     } 
-                    else if(scrollObj.transform.localPosition.y >= 6125)
+                    else if(scrollObj.transform.localPosition.y >= 8500)
                     {
                         Invoke("callEnd", 3f);
                     }

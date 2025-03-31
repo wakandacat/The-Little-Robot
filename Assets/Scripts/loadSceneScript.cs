@@ -43,24 +43,22 @@ public class loadSceneScript : MonoBehaviour
         //find the door and open it 
         door = GameObject.Find("DoorGroup").transform.GetChild(mainGameScript.doorNum).gameObject;
 
+        //fungus door has children
         if (door.transform.childCount > 1)
         {
-            if (door.transform.GetChild(0).GetComponent<doorScript>().isFungus == false)
+            door.transform.GetChild(0).GetComponent<doorScript>().loadedNextStart = true;
+
+            if (door.transform.GetChild(0).GetComponent<doorScript>().isFungus == false) //I DONT THINK THIS RUNS
             {
                 door.transform.GetChild(0).GetComponent<doorScript>().openDoor();
             }
         }
-        else
+        else //regular door
         {
             if (door.GetComponent<doorScript>().isFungus == false)
             {
                 door.GetComponent<doorScript>().openDoor();
-
-                //door sound
-                if (door.GetComponent<AudioSource>().isPlaying == false)
-                {
-                    door.GetComponent<AudioSource>().Play();
-                }
+                door.GetComponent<doorScript>().loadedNextStart = true;
             }
         }
 
