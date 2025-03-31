@@ -873,7 +873,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision == true && combatState == true && deathState == false)
         {
-            Debug.Log("inv call");
+            //Debug.Log("inv call");
             immunity = StartCoroutine(Immunity());
         }
         if(combatState == true && enemy !=null)

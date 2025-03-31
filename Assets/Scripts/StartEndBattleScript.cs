@@ -36,6 +36,7 @@ public class StartEndBattleScript : MonoBehaviour
     public SpriteRenderer scientists;
     private Color m_color;
 
+    public Coroutine deathExplosions;
     void Awake()
     {
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
@@ -72,7 +73,10 @@ public class StartEndBattleScript : MonoBehaviour
 
                 enemyUI.SetActive(false);
 
-              //  camBrain.m_CustomBlends = enemyDeadBlend;
+                //camBrain.m_CustomBlends = enemyDeadBlend;
+
+                //run explosion vfx for enemy death
+                deathExplosions = StartCoroutine(enemy.GetComponent<BossEnemy>().VFX_DeathExplosions());
 
                 loadObj.SetActive(true);
 
@@ -100,7 +104,10 @@ public class StartEndBattleScript : MonoBehaviour
 
                 enemyUI.SetActive(false);
 
-              //  camBrain.m_CustomBlends = enemyDeadBlend;
+                //camBrain.m_CustomBlends = enemyDeadBlend;
+
+                //run explosion vfx for enemy death
+                deathExplosions = StartCoroutine(enemy.GetComponent<BossEnemy>().VFX_DeathExplosions());
 
                 loadObj.SetActive(true);
 
@@ -121,7 +128,10 @@ public class StartEndBattleScript : MonoBehaviour
 
                 enemyUI.SetActive(false);
 
-              //  camBrain.m_CustomBlends = enemyDeadBlend;
+                //camBrain.m_CustomBlends = enemyDeadBlend;
+
+                //run explosion vfx for enemy death
+                deathExplosions = StartCoroutine(enemy.GetComponent<BossEnemy>().VFX_DeathExplosions());
 
                 loadObj.SetActive(true);
 
@@ -254,6 +264,12 @@ public class StartEndBattleScript : MonoBehaviour
         scientists.color = m_color;
         this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + 100f, this.gameObject.transform.position.z);
         middlePlatform.SetActive(false);
+        if(deathExplosions != null)
+        {
+            StopCoroutine(deathExplosions);
+            deathExplosions = null;
+        }
+        
     }
 
     public void SwitchBlend()

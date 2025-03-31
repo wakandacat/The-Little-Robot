@@ -194,8 +194,8 @@ public class State_SelfCheck : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_SelfCheck");
-        Debug.Log("BossEnemy: Current Energy: " + bossEnemyComponent.returnCurrentEnergy());
+        //Debug.Log("BossEnemy: Entering State_SelfCheck");
+        //Debug.Log("BossEnemy: Current Energy: " + bossEnemyComponent.returnCurrentEnergy());
 
         // Animation Logic
         animator.SetBool("inAttack", false);

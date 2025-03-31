@@ -37,8 +37,10 @@ public class movingPlatformScript : MonoBehaviour
     //jitter
     private Vector3 startPos;
     public Coroutine jitterPlat;
-    private float minJitter = 0.05f;
-    private float maxJitter = 0.1f;
+    public float minJitter = 0.04f;
+    public float maxJitter = 0.06f;
+
+    public bool movingUp = false;
 
     void Awake()
     {
@@ -63,15 +65,31 @@ public class movingPlatformScript : MonoBehaviour
         {
             if (isFungus == true)
             {
-                //move plat left
-                this.transform.GetChild(0).transform.position = new Vector3(startPos.x + Random.Range(minJitter, maxJitter), startPos.y, startPos.z);
-                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
-                startPos = this.transform.GetChild(0).transform.position;
+                if(movingUp == false)
+                {
+                    //move plat left
+                    this.transform.GetChild(0).transform.position = new Vector3(startPos.x + Random.Range(minJitter, maxJitter), startPos.y, startPos.z);
+                    yield return new WaitForSeconds(0.2f);
+                    startPos = this.transform.GetChild(0).transform.position;
 
-                //move plat right
-                this.transform.GetChild(0).transform.position = new Vector3(startPos.x - Random.Range(minJitter, maxJitter), startPos.y, startPos.z);
-                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
-                startPos = this.transform.GetChild(0).transform.position;
+                    //move plat right
+                    this.transform.GetChild(0).transform.position = new Vector3(startPos.x - Random.Range(minJitter, maxJitter), startPos.y, startPos.z);
+                    yield return new WaitForSeconds(0.2f);
+                    startPos = this.transform.GetChild(0).transform.position;
+                }
+                else
+                {
+                    //move plat up
+                    this.transform.GetChild(0).transform.position = new Vector3(startPos.x, startPos.y + Random.Range(minJitter, maxJitter), startPos.z);
+                    yield return new WaitForSeconds(0.2f);
+                    startPos = this.transform.GetChild(0).transform.position;
+
+                    //move plat down
+                    this.transform.GetChild(0).transform.position = new Vector3(startPos.x, startPos.y - Random.Range(minJitter, maxJitter), startPos.z);
+                    yield return new WaitForSeconds(0.2f);
+                    startPos = this.transform.GetChild(0).transform.position;
+                }
+                
             }
             else
             {

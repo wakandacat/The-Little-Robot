@@ -18,8 +18,8 @@ public class doorScript : MonoBehaviour
     public bool isFungus = false;
 
     private Coroutine jittering;
-    private float minJitter = 0.05f;
-    private float maxJitter = 0.2f;
+    private float minJitter = 0.02f;
+    private float maxJitter = 0.04f;
     public bool loadedNextStart = false;
     private bool runOnce = false;
 
@@ -41,12 +41,12 @@ public class doorScript : MonoBehaviour
             {
                 //move door up
                 this.transform.position = new Vector3(startPos.x, startPos.y + Random.Range(minJitter, maxJitter), startPos.z);
-                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
+                yield return new WaitForSeconds(0.08f);
                 startPos = this.transform.position;
 
                 //move door down
                 this.transform.position = new Vector3(startPos.x, startPos.y - Random.Range(minJitter, maxJitter), startPos.z);
-                yield return new WaitForSeconds(Random.Range(minJitter, maxJitter));
+                yield return new WaitForSeconds(0.08f);
                 startPos = this.transform.position;
             }
             else

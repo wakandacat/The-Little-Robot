@@ -255,7 +255,7 @@ public class teleport : MonoBehaviour
         AudioManager.enemyWhirringSource.enabled = false;
        // if (SceneManager.GetActiveScene().name != "EndScene")
         //{
-            player.GetComponent<player_fx_behaviors>().StopCoroutine(player.GetComponent<player_fx_behaviors>().walkCoroutine);
+        player.GetComponent<player_fx_behaviors>().StopCoroutine(player.GetComponent<player_fx_behaviors>().walkCoroutine);
         player.GetComponent<PlayerController>().platformMovement = Vector3.zero; //zero out moving platform velocity
         //}       
 
@@ -275,7 +275,7 @@ public class teleport : MonoBehaviour
         {
             for (int i = 0; i < GameObject.FindGameObjectsWithTag("vent_floor").Length; i++)
             {
-                Debug.Log("resetting vents");
+                //Debug.Log("resetting vents");
                 GameObject.FindGameObjectsWithTag("vent_floor")[i].GetComponent<ventFloor>().ActivateColliders();
             }
         }

@@ -219,20 +219,20 @@ public class mainGameScript : MonoBehaviour
 
             if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
-                Debug.Log("intro skipped");
+                //Debug.Log("intro skipped");
                 introPlayed = true;
                 IntroDoneResets();
             }
 
             if (SceneManager.GetActiveScene().name.Contains("EndScene") && outroPlaying == true)
             {
-                Debug.Log("outro skipped");
+                //Debug.Log("outro skipped");
                 outroPlayed = true;
                 OutroDone();
             } 
             else if (SceneManager.GetActiveScene().name.Contains("EndScene") && outroPlaying == false) //MIGHT NOT WORK ON REPLAY?????
             {
-                Debug.Log("credits skipped");
+                //Debug.Log("credits skipped");
                 creditsPlaying = false;
                 EndGame();
             }
@@ -242,7 +242,7 @@ public class mainGameScript : MonoBehaviour
 
     public void IntroDoneResets()
     {
-        Debug.Log("intro cinematic finished");
+        //Debug.Log("intro cinematic finished");
         SwitchToPlatformCam(0.2f);
         introPlayed = true;
         cutScenePlaying = false;
@@ -260,7 +260,7 @@ public class mainGameScript : MonoBehaviour
 
     public void OutroDone()
     {
-        Debug.Log("outro cinematic finished");
+        //Debug.Log("outro cinematic finished");
         outroPlayed = true;
         outroPlaying = false;
         playerPointLight.GetComponent<Light>().intensity = 0.0f;

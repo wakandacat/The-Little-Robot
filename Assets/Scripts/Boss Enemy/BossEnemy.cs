@@ -730,6 +730,32 @@ public class BossEnemy : MonoBehaviour
         }
     }
 
+    public IEnumerator VFX_DeathExplosions()
+    {
+        GameObject topNode = GameObject.Find("Explosions_VFX"); //overarching parent
+        int numOfParentNodes = topNode.transform.childCount; //get number of children attached to top node
+
+        for(int i = 0; i < numOfParentNodes; i++)
+        {
+            Transform parentNode = topNode.transform.GetChild(i); //get the parent aka child of top node
+
+            //get each child of the parent node aka the particle systems
+            for(int j = 0; j < parentNode.transform.childCount; j++)
+            {
+                ParticleSystem explosion = parentNode.GetChild(j).GetComponent<ParticleSystem>();
+                
+                if (explosion != null) //if particle system found, play
+                {
+                    //Debug.Log("exploding");
+                    explosion.Play();
+                }
+            }
+
+            yield return new WaitForSeconds(0.4f);
+        }
+      
+    }
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // *               Energy Functions                                                                                                                                                                             * 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
