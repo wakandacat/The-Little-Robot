@@ -16,6 +16,9 @@ public class boss_fx_behaviors : MonoBehaviour
     public ParticleSystem stand_up_vfx;
     public ParticleSystem hand_impact;
 
+    private ParticleSystem poleL_lightning;
+    private ParticleSystem poleR_lightning;
+
     public bool meleeVFXBool = false;
 
     // Start is called before the first frame update
@@ -25,10 +28,9 @@ public class boss_fx_behaviors : MonoBehaviour
         enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
 
         //particle system
-        Slam_rings.Stop();
-        debris.Stop();
-        stand_up_vfx.Stop();
-        hand_impact.Stop();
+        poleL_lightning = GameObject.Find("Lightning_L").GetComponent<ParticleSystem>();
+        poleR_lightning = GameObject.Find("Lightning_R").GetComponent<ParticleSystem>();
+        VFX_stopPoles();
     }
 
     // Update is called once per frame
@@ -91,6 +93,16 @@ public class boss_fx_behaviors : MonoBehaviour
 
     }
 
+    public void VFX_startPoles()
+    {
+        poleL_lightning.Play();
+        poleR_lightning.Play();
+    }
+    public void VFX_stopPoles()
+    {
+        poleL_lightning.Stop();
+        poleR_lightning.Stop();
+    }
     //public void vfx_behaviour()
     //{
     //    meleeVFXBool = enemy.GetComponent<BossState>().returnMeleeVFXBool()

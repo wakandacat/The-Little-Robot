@@ -28,7 +28,7 @@ public class Player_UI : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Debug.Log("death state is " + Health.deathState);
+        //Debug.Log("death state is " + Health.deathState);
         Health_Bar_display();
         if (Health.deathState == true)
         {
