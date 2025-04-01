@@ -87,7 +87,7 @@ public class player_fx_behaviors : MonoBehaviour
     void FixedUpdate()
     {
         vfx_triggers();
-        //RumbleConditions();
+        RumbleConditions();
         var currentState = getPlayerState();
         if(state == "Falling" && ground.onGround == true)
         {
@@ -129,29 +129,32 @@ public class player_fx_behaviors : MonoBehaviour
     }
     public void RumbleConditions()
     {
-/*        if(playerScript.attackCounter == 1)
+        if (playerScript.attackCounter == 1 && playerScript.runAttack1Once == true)
         {
-            Rumble(0.25f, 0.25f, 1f);
+            Rumble(0.25f, 0.25f, 0.4f);
         }
-        if (playerScript.attackCounter == 2)
+        if (playerScript.attackCounter == 2 && playerScript.runAttack2Once == true)
         {
-            Rumble(0.25f, 0.25f, 1f);
+            Rumble(0.25f, 0.25f, 0.4f);
         }
-        if (playerScript.attackCounter == 3)
+        if (playerScript.attackCounter == 3 && playerScript.runAttack3Once == true)
+        {
+            Rumble(0.75f, 1f, 0.4f);
+        }
+        if(playerScript.collision == true)
         {
             Rumble(0.75f, 1f, 1f);
-        }*/
+        }
 
-
-        if (ground.onGround == true && ground.runRumbleOnce == false)
+ /*       if (ground.onGround == true && ground.runRumbleOnce == false)
         {
             ground.runRumbleOnce = true;
             Rumble(0.25f, 0.75f, 0.25f);
-        }
-        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
+        }*/
+/*        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
         {
             Rumble(0.0f, 0.0f, 0.0f);
-        }
+        }*/
 
     }
     public IEnumerator playDashVfx()
@@ -206,7 +209,6 @@ public class player_fx_behaviors : MonoBehaviour
         }
         if(playerScript.collisionTendril == true)
         {
-            Debug.Log("this vfx is playing" + fungusHit.isPlaying);
             fungusHit.Play();
         }
         else
@@ -245,12 +247,10 @@ public class player_fx_behaviors : MonoBehaviour
         attackCounter = playerScript.attackCounter;
         if(mainScript.ballform == true)
         {
-            //Debug.Log("Ball_in");
             return "ball_in";
         }
         if (mainScript.wakeupAnim == true)
         {
-            //Debug.Log("wake up call");
             return "wakeup";
         }
 
@@ -268,7 +268,6 @@ public class player_fx_behaviors : MonoBehaviour
 
             if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().playerLookingUp == true)
             {
-                Debug.Log("Hello we are looking around");
                 return "LookingAround";
             }
         }
@@ -301,6 +300,7 @@ public class player_fx_behaviors : MonoBehaviour
         if (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true)
         {
             runOnce = false;
+            m_animator.SetFloat("walkSpeed", playerScript.leftStick.magnitude);
             return "walk";
         }
         //Jump State
@@ -328,12 +328,11 @@ public class player_fx_behaviors : MonoBehaviour
 
     public IEnumerator walkSFX()
     {
-
         //for as long as player is using joystick
         while (true)
         {
             //if(playerScript.Rolling != true)
-            if(playerScript.leftStick.magnitude >= 0.1 && ground.onGround == true && playerScript.Rolling != true)
+            if (playerScript.leftStick.magnitude >= 0.1 && ground.onGround == true && playerScript.Rolling != true)
             {
                 //m_audio.walkSource.PlayOneShot(m_audio.walkSource.clip);
                 m_audio.walkSource.Play();
