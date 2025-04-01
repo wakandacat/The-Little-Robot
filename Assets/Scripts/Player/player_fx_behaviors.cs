@@ -151,10 +151,10 @@ public class player_fx_behaviors : MonoBehaviour
             ground.runRumbleOnce = true;
             Rumble(0.25f, 0.75f, 0.25f);
         }
-        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
+/*        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
         {
             Rumble(0.0f, 0.0f, 0.0f);
-        }
+        }*/
 
     }
     public IEnumerator playDashVfx()
