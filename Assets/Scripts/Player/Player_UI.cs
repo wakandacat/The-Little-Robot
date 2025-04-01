@@ -23,13 +23,17 @@ public class Player_UI : MonoBehaviour
     void Start()
     {
         Health = player.GetComponent<PlayerController>();
-
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        Debug.Log("death state is " + Health.deathState);
         Health_Bar_display();
+        if (Health.deathState == true)
+        {
+            dashBar.fillAmount = 1.0f;
+        }
     }
 
     public void Health_Bar_display()
@@ -94,7 +98,7 @@ public class Player_UI : MonoBehaviour
     {
         if (Health.canDash == false)
         {
-            dashBar.fillAmount = 0;
+            dashBar.fillAmount = 0.0f;
             refillDashBar = StartCoroutine(refillBar());
         }
     }
