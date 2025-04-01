@@ -300,6 +300,7 @@ public class player_fx_behaviors : MonoBehaviour
         if (playerScript.leftStick.magnitude > 0.1f && ground.onGround == true)
         {
             runOnce = false;
+            m_animator.SetFloat("walkSpeed", playerScript.leftStick.magnitude);
             return "walk";
         }
         //Jump State
@@ -327,12 +328,11 @@ public class player_fx_behaviors : MonoBehaviour
 
     public IEnumerator walkSFX()
     {
-
         //for as long as player is using joystick
         while (true)
         {
             //if(playerScript.Rolling != true)
-            if(playerScript.leftStick.magnitude >= 0.1 && ground.onGround == true && playerScript.Rolling != true)
+            if (playerScript.leftStick.magnitude >= 0.1 && ground.onGround == true && playerScript.Rolling != true)
             {
                 //m_audio.walkSource.PlayOneShot(m_audio.walkSource.clip);
                 m_audio.walkSource.Play();
