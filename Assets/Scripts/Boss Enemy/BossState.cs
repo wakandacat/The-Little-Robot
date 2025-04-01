@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.SceneManagement;
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // *               Abstract Class BossState                                                                                                                                                                     * 
@@ -270,6 +271,7 @@ public class State_SelfCheck : BossState
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 public class State_LowEnergy : BossState
 {
+
     // Called when the state machine transitions to this state
     public override void Enter()
     {
@@ -280,11 +282,11 @@ public class State_LowEnergy : BossState
         //bossEnemyComponent.HP_TurnInvulnerabilityOff();
 
         // FX Logic
-        animator.SetBool("inAttack", false);
-        animator.SetBool("toIdle", false);
         animator.SetBool("downed", true);
-        animator.SetBool("melee", false);
+        animator.SetBool("exitDowned", false);
+
         m_audio.playEnemySFX(1);
+
         for (int i = 0; i < fxBehave.eyes.Length; i++)
         {
             fxBehave.eyes[i].intensity = 0.01f;
@@ -299,7 +301,7 @@ public class State_LowEnergy : BossState
         bossEnemyComponent.regainCurrentEnergyPerFrame();   // regain X% of Energy_RegainedPerSecond by multiplying the amount by the duration of time between frames (at 50fps, 1/50th)
 
         // Animation Logic
-
+        animator.SetBool("downed", false);
     }
 
     // Called once per frame
@@ -348,9 +350,9 @@ public class State_LowEnergy : BossState
         //Debug.Log("BossEnemy: Current HP = " + bossEnemyComponent.HP_ReturnCurrent());
 
         // FX Logic
-        animator.SetBool("inAttack", false);
+        //animator.SetBool("inAttack", false);
         animator.SetBool("toIdle", true);
-        animator.SetBool("downed", false);
+        animator.SetBool("exitDowned", true);
         fxBehave.eyesOnCoroutine = fxBehave.StartCoroutine(fxBehave.turnOnEyes());
     }
 }
@@ -4241,7 +4243,8 @@ public class State_Attack_StandUpMelee : BossState
     private float Attack_Duration = 3.0f;
     private float Attack_Delay = 1.0f;
     private float Attack_StartTimeStamp = 0.0f;
-    
+    private ParticleSystem VFX_standUp;
+
     // Called when the state machine transitions to this state
     public override void Enter()
     {
@@ -4252,9 +4255,9 @@ public class State_Attack_StandUpMelee : BossState
 
         // Collider Sphere
         Attack_ColliderSphere = new GameObject("Attack_ColliderSphere");
-        MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
-        Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
-        MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
+        //MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
+        //Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        //MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
@@ -4265,8 +4268,8 @@ public class State_Attack_StandUpMelee : BossState
         // Misc.
         Attack_StartTimeStamp = Time.time;
 
-        // Animation Logic
-        //animator.SetBool("inAttack", true);
+        // FX logic
+        VFX_standUp = GameObject.Find("VFX_standUp").GetComponent<ParticleSystem>();
 
     }
 
@@ -4277,6 +4280,8 @@ public class State_Attack_StandUpMelee : BossState
         if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
         {
             Attack_Completed = true; // if so, set Attack_Completed to true
+            //stop vfx
+            VFX_standUp.Stop();
         }
 
         // laser and laser contact
@@ -4289,6 +4294,8 @@ public class State_Attack_StandUpMelee : BossState
                 Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
                 Attack_ColliderSphere.tag = "Damage Source";
                 Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                //play vfx
+                VFX_standUp.Play();
             }
         }
 
@@ -4358,6 +4365,31 @@ public class State_Attack_Melee01 : BossState
     public static float Energy_Cost = 1.0f;
     public static float Player_MinDistance = 0.0f;
     public static float Player_MaxDistance = 5.0f;
+    
+    //Particle system
+    public ParticleSystem blast_outer;
+    public ParticleSystem blast_inner;
+    //public ParticleSystem Slam_rings;
+    public ParticleSystem debris;
+    public ParticleSystem hand_impact;
+
+    public void playMeleeVFX()
+    {
+        //Slam_rings.Play();
+        blast_outer.Play();
+        blast_inner.Play();
+        debris.Play();
+        hand_impact.Play();
+    } 
+    
+    public void stopMeleeVFX()
+    {
+        //Slam_rings.Stop();
+        blast_outer.Stop();
+        blast_inner.Stop();
+        debris.Stop();
+        hand_impact.Stop();
+    }
 
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -4389,9 +4421,9 @@ public class State_Attack_Melee01 : BossState
 
         // Collider Sphere
         Attack_ColliderSphere = new GameObject("Attack_ColliderSphere");
-        MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
-        Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
-        MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
+        //MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
+        //Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+        //MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
@@ -4404,6 +4436,15 @@ public class State_Attack_Melee01 : BossState
 
         // Animation Logic
         animator.SetBool("melee", true);
+        
+        //particle system
+        //Slam_rings = GameObject.Find("double_ring").GetComponent<ParticleSystem>();
+        blast_outer = GameObject.Find("blast_outer").GetComponent<ParticleSystem>();
+        blast_inner = GameObject.Find("blast_inner").GetComponent<ParticleSystem>();
+        debris = GameObject.Find("debris").GetComponent<ParticleSystem>();
+        hand_impact = GameObject.Find("slamHandImpact").GetComponent<ParticleSystem>();
+
+        //stopMeleeVFX();
 
     }
 
@@ -4414,11 +4455,26 @@ public class State_Attack_Melee01 : BossState
         if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
         {
             Attack_Completed = true; // if so, set Attack_Completed to true
+            stopMeleeVFX(); //stop melee vfx
         }
 
         // laser and laser contact
         if (Attack_IsColliderSphereScaleOut == false)              // check if collider sphere object scale has been set to use Attack_ColliderSphereScale_Out scaling
         {
+            //play melee vfx,, each iteration needs unique delay value bc each iteration changes
+            if(SceneManager.GetActiveScene().name == "Combat1" && Time.time - Attack_StartTimeStamp >= Attack_Delay - 0.6f)
+            {
+                playMeleeVFX();
+            }
+            else if (SceneManager.GetActiveScene().name == "Combat2" && Time.time - Attack_StartTimeStamp >= Attack_Delay - 0.6f)
+            {
+                playMeleeVFX();
+            }
+            else if (SceneManager.GetActiveScene().name == "Combat3" && Time.time - Attack_StartTimeStamp >= Attack_Delay - 0.215f)
+            {
+                playMeleeVFX();
+            }
+
             if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
             {
                 Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
@@ -4426,10 +4482,12 @@ public class State_Attack_Melee01 : BossState
                 Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
                 Attack_ColliderSphere.tag = "Damage Source";
                 Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+
             }
         }
 
         // Animation Logic
+
 
     }
 

@@ -115,7 +115,6 @@ public class Projectile_Mine : Projectile
         if (Mine_DurationOfExplosion_ElapsedTime >= Mine_DurationOfExplosion)
         {
             //turn off VFX
-            Debug.Log("calling stopvfx");
             stopVFX();
             ExplosionActive(false);
             Mine_CurrentState = MineState.Disabled;
@@ -143,7 +142,6 @@ public class Projectile_Mine : Projectile
         {
             Mine_CurrentState = MineState.Exploding;
             ExplosionActive(true);
-            Debug.Log("calling startvfx");
             startVFX(); //start VFX
             
         }
@@ -208,43 +206,29 @@ public class Projectile_Mine : Projectile
 
     public void startVFX()
     {
-        Debug.Log("in start vfx");
         Transform explosionNode = transform.Find("VFX_explosion").transform; //overarching parent
 
         for (int i = 0; i < explosionNode.transform.childCount; i++)
         {
-            Debug.Log("top node found");
             ParticleSystem explosion = explosionNode.GetChild(i).GetComponent<ParticleSystem>();
 
             if (explosion != null) //if particle system found, play
             {
-                Debug.Log("exploding");
                 explosion.Play();
-            }
-            else
-            {
-                Debug.Log("no particle system found");
             }
         }
     }
     public void stopVFX()
     {
-        //Debug.Log("in stop vfx");
         Transform explosionNode = transform.Find("VFX_explosion").transform; //overarching parent
 
         for (int i = 0; i < explosionNode.transform.childCount; i++)
         {
-            //Debug.Log("top node found");
             ParticleSystem explosion = explosionNode.GetChild(i).GetComponent<ParticleSystem>();
 
             if (explosion != null) //if particle system found, play
             {
-                //Debug.Log("killing myself");
                 explosion.Stop();
-            }
-            else
-            {
-                //Debug.Log("no particle system found");
             }
         }
     }
