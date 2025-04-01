@@ -146,11 +146,11 @@ public class player_fx_behaviors : MonoBehaviour
             Rumble(0.75f, 1f, 1f);
         }
 
-        if (ground.onGround == true && ground.runRumbleOnce == false)
+ /*       if (ground.onGround == true && ground.runRumbleOnce == false)
         {
             ground.runRumbleOnce = true;
             Rumble(0.25f, 0.75f, 0.25f);
-        }
+        }*/
 /*        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
         {
             Rumble(0.0f, 0.0f, 0.0f);
