@@ -16,8 +16,8 @@ public class StartEndBattleScript : MonoBehaviour
     public GameObject enemy;
     private mainGameScript mainGameScript;
     public GameObject loadObj;
-   // public CinemachineBlenderSettings enemyDeadBlend;
-   // public CinemachineBlenderSettings enemyAliveBlend;
+    public CinemachineBlenderSettings regularBlend;
+    public CinemachineBlenderSettings enemyDeadBlend;
     private CinemachineBrain camBrain;
     public GameObject enemyUI;
     public GameObject proceedLight;
@@ -36,6 +36,7 @@ public class StartEndBattleScript : MonoBehaviour
     public SpriteRenderer scientists;
     private Color m_color;
 
+    public Coroutine deathExplosions;
     void Awake()
     {
         mainGameScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
@@ -65,16 +66,16 @@ public class StartEndBattleScript : MonoBehaviour
         //check enemy's state here for death
         if (enemy.GetComponent<BossEnemy>().HP_ReturnCurrent() <= 0)
         {
+
             if (SceneManager.GetActiveScene().name == "Combat1" && mainGameScript.firstBossDead == false)
             {
                 mainGameScript.firstBossDead = true;
                 mainGameScript.m_audio.playBackgroundMusic("platform");
 
-                enemyUI.SetActive(false);
+                enemyUI.SetActive(false);              
 
-              //  camBrain.m_CustomBlends = enemyDeadBlend;
-
-                loadObj.SetActive(true);
+                //run explosion vfx for enemy death
+                deathExplosions = StartCoroutine(enemy.GetComponent<BossEnemy>().VFX_DeathExplosions());
 
                 mainGameScript.currLevelCount++;
 
@@ -86,12 +87,6 @@ public class StartEndBattleScript : MonoBehaviour
 
                 Invoke("SwitchBlend", 7.0f); //switch cameras after a delay
 
-                //enemyDeadCutsceneStart();
-                //enemyDeadCutsceneEnd();
-                //SwitchBlend();
-                //Debug.Log("yooooooooooooooop");
-
-
             }
             else if (SceneManager.GetActiveScene().name == "Combat2" && mainGameScript.secondBossDead == false)
             {
@@ -100,9 +95,8 @@ public class StartEndBattleScript : MonoBehaviour
 
                 enemyUI.SetActive(false);
 
-              //  camBrain.m_CustomBlends = enemyDeadBlend;
-
-                loadObj.SetActive(true);
+                //run explosion vfx for enemy death
+                deathExplosions = StartCoroutine(enemy.GetComponent<BossEnemy>().VFX_DeathExplosions());
 
                 mainGameScript.currLevelCount++;
 
@@ -121,9 +115,8 @@ public class StartEndBattleScript : MonoBehaviour
 
                 enemyUI.SetActive(false);
 
-              //  camBrain.m_CustomBlends = enemyDeadBlend;
-
-                loadObj.SetActive(true);
+                //run explosion vfx for enemy death
+                deathExplosions = StartCoroutine(enemy.GetComponent<BossEnemy>().VFX_DeathExplosions());
 
                 mainGameScript.currLevelCount++;
 
@@ -162,23 +155,20 @@ public class StartEndBattleScript : MonoBehaviour
 
     public void enemyDeadCutsceneStart()
     {
+        //Debug.Log("enemy dead blend because boss dead");
+        camBrain.m_CustomBlends = enemyDeadBlend; //switch blend
+
         battleCam.GetComponent<CinemachineVirtualCamera>().LookAt = lookAtWhenDead.transform; // no longer look at the enemy, he boutta plummet
 
         //tilt platform a little under enemy's weight
         middlePlatform.transform.position = new Vector3(startPos.x, startPos.y - 1.5f, startPos.z);
         middlePlatform.transform.Rotate(0f, 0f, 5f);
 
-        //if (middlePlatform.GetComponent<AudioSource>().isPlaying == false)
-        //{
-        //    middlePlatform.gameObject.GetComponent<AudioSource>().Play();
-        //}
-
         //push the robot away --> explosion or something
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().combatPush(battleCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().combatPush(battleCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition, enemy.transform.position);
 
         platformFall();
 
-        //shakeCam(2f);
     }
 
     public void enemyDeadCutsceneEnd()
@@ -247,6 +237,7 @@ public class StartEndBattleScript : MonoBehaviour
     //if boss is dead but you've respawned in combat area
     public void bossDefeated()
     {
+        camBrain.m_CustomBlends = regularBlend; //switch blend
         enemy.SetActive(false);
         loadObj.SetActive(true);
         proceedLight.SetActive(true);
@@ -254,13 +245,24 @@ public class StartEndBattleScript : MonoBehaviour
         scientists.color = m_color;
         this.gameObject.transform.position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y + 100f, this.gameObject.transform.position.z);
         middlePlatform.SetActive(false);
+        if(deathExplosions != null)
+        {
+            StopCoroutine(deathExplosions);
+            deathExplosions = null;
+        }
+        
     }
 
     public void SwitchBlend()
     {
         mainGameScript.CheckPointResetPlatformCam(battleCam.transform.eulerAngles.y); //force freelook to bosscam rotation
+
         //switch cameras
         mainGameScript.SwitchToPlatformCam(0.4f);
+
+        loadObj.SetActive(true); //activate trigger for next area at this point and not any earlier
+
+        //camBrain.m_CustomBlends = regularBlend;
     }
 
     public void OnTriggerEnter(Collider collision)

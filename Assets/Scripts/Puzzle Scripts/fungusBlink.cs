@@ -16,7 +16,7 @@ public class fungusBlink : MonoBehaviour
 
     private Coroutine blinkMethod;
 
-    float newScale = 1.05f; //float size for the pulsing
+    float newScale = 1.1f; //float size for the pulsing
 
     // Start is called before the first frame update
     void Start()

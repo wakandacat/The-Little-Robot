@@ -12048,6 +12048,8 @@ MonoBehaviour:
   endBridge: {fileID: 1837187538}
   enemy: {fileID: 6788852119012660681}
   loadObj: {fileID: 79837012}
+  regularBlend: {fileID: 11400000, guid: c51409daebca028459882353d8bc13d9, type: 2}
+  enemyDeadBlend: {fileID: 11400000, guid: e19b0c2983542ab4c8fd44047bb19253, type: 2}
   enemyUI: {fileID: 652126204}
   proceedLight: {fileID: 786624660}
   proceedSound: {fileID: 786624661}
@@ -12249,8 +12251,8 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 400
-  m_Range: 200
+  m_Intensity: 200
+  m_Range: 170
   m_SpotAngle: 159.11111
   m_InnerSpotAngle: 91.03265
   m_CookieSize: 10

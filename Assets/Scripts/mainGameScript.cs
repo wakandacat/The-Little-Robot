@@ -102,6 +102,14 @@ public class mainGameScript : MonoBehaviour
     //audio vars
     public audioManager m_audio;
 
+    //teleport flag
+    public bool isTeleporting = false;
+    public CinemachineBlenderSettings regularBlend;
+    public CinemachineBlenderSettings teleportBlend;
+    public CinemachineBlenderSettings enemyDeadBlend;
+    public CinemachineBrain camBrain;
+
+
     void Awake()
     {
 
@@ -191,6 +199,7 @@ public class mainGameScript : MonoBehaviour
 
     void FixedUpdate()
     {
+
         playerTime += Time.deltaTime; //record the player's time
 
         //--------------INTRO CUTSCENE---------------
@@ -219,20 +228,20 @@ public class mainGameScript : MonoBehaviour
 
             if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
             {
-                Debug.Log("intro skipped");
+                //Debug.Log("intro skipped");
                 introPlayed = true;
                 IntroDoneResets();
             }
 
             if (SceneManager.GetActiveScene().name.Contains("EndScene") && outroPlaying == true)
             {
-                Debug.Log("outro skipped");
+                //Debug.Log("outro skipped");
                 outroPlayed = true;
                 OutroDone();
             } 
             else if (SceneManager.GetActiveScene().name.Contains("EndScene") && outroPlaying == false) //MIGHT NOT WORK ON REPLAY?????
             {
-                Debug.Log("credits skipped");
+                //Debug.Log("credits skipped");
                 creditsPlaying = false;
                 EndGame();
             }
@@ -242,7 +251,7 @@ public class mainGameScript : MonoBehaviour
 
     public void IntroDoneResets()
     {
-        Debug.Log("intro cinematic finished");
+        //Debug.Log("intro cinematic finished");
         SwitchToPlatformCam(0.2f);
         introPlayed = true;
         cutScenePlaying = false;
@@ -260,7 +269,7 @@ public class mainGameScript : MonoBehaviour
 
     public void OutroDone()
     {
-        Debug.Log("outro cinematic finished");
+        //Debug.Log("outro cinematic finished");
         outroPlayed = true;
         outroPlaying = false;
         playerPointLight.GetComponent<Light>().intensity = 0.0f;
@@ -292,13 +301,7 @@ public class mainGameScript : MonoBehaviour
 
     public void SwitchToBossCam()
     {
-        //Debug.Log("battle cam");
         enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
-
-        //move the track to teh enemy's position
-        Vector3 bossPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 13, enemy.transform.position.z);
-        battleTrack.transform.position = bossPos;
-        bossCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0;
 
         bossCam.LookAt = enemy.transform;
         bossCam.Priority = platformCam.Priority + 1;
@@ -308,6 +311,20 @@ public class mainGameScript : MonoBehaviour
 
     public void SwitchToPlatformCam(float yaxis)
     {
+        //Debug.Log("blend:" + camBrain.m_CustomBlends.name);
+        //switch to telport blend if we teleported  
+        if(isTeleporting == false && camBrain.m_CustomBlends != enemyDeadBlend)
+        {
+            //Debug.Log("regularBlend");
+            camBrain.m_CustomBlends = regularBlend;
+        }
+        else if (isTeleporting == true)
+        {
+            //Debug.Log("teleportBlend");
+            camBrain.m_CustomBlends = teleportBlend;
+        }
+
+
         //onyl runs after intro cam
         if (SceneManager.GetActiveScene().name.Contains("Tutorial"))
         {
@@ -333,6 +350,19 @@ public class mainGameScript : MonoBehaviour
         platformCam.m_YAxis.Value = yaxis; //position up teh spine axis
 
         usingBossCam = false;
+
+        //revert back to regular blend
+        if (isTeleporting == true || camBrain.m_CustomBlends != regularBlend)
+        {
+            isTeleporting = false;
+            Invoke("switchBackToRegularBlend", 1f);
+        }
+    }
+
+    void switchBackToRegularBlend()
+    {
+        //Debug.Log("reset blend");
+        camBrain.m_CustomBlends = regularBlend;
     }
 
     public void CheckPointResetPlatformCam(float rotation)
