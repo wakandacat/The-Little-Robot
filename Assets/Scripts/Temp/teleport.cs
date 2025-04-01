@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,6 +50,17 @@ public class teleport : MonoBehaviour
             this.GetComponent<mainGameScript>().doorNum = door;
         }
 
+        //MOVE BATTLE TRACK NOW SO IT DOESNT CLIP WALLS LATER
+        if (sceneName.Contains("Combat"))
+        {
+            GameObject enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+
+            ////move the track to teh enemy's position
+            Vector3 bossPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 13, enemy.transform.position.z);
+            GameObject.Find("battleCamTrack").transform.position = bossPos;
+            GameObject.Find("battleCam").GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0;
+        }
+
     }
 
     //dev tool teleport to any scene
@@ -60,6 +72,8 @@ public class teleport : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1))
             {
                 //Debug.Log("1 pressed");
+
+                this.GetComponent<mainGameScript>().isTeleporting = true;
 
                 if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
                 {
@@ -89,6 +103,8 @@ public class teleport : MonoBehaviour
             {
                 // Debug.Log("2 pressed");
 
+                this.GetComponent<mainGameScript>().isTeleporting = true;
+
                 if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
                 {
                     this.GetComponent<mainGameScript>().SkipCutScene();
@@ -114,6 +130,8 @@ public class teleport : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Keypad3) || Input.GetKeyDown(KeyCode.Alpha3))
             {
                 //Debug.Log("3 pressed");
+
+                this.GetComponent<mainGameScript>().isTeleporting = true;
 
                 if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
                 {
@@ -141,6 +159,8 @@ public class teleport : MonoBehaviour
             {
                 //Debug.Log("4 pressed");
 
+                this.GetComponent<mainGameScript>().isTeleporting = true;
+
                 if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
                 {
                     this.GetComponent<mainGameScript>().SkipCutScene();
@@ -166,6 +186,8 @@ public class teleport : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Keypad5) || Input.GetKeyDown(KeyCode.Alpha5))
             {
                 //Debug.Log("5 pressed");
+
+                this.GetComponent<mainGameScript>().isTeleporting = true;
 
                 if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
                 {
@@ -193,6 +215,8 @@ public class teleport : MonoBehaviour
             {
                 //Debug.Log("6 pressed");
 
+                this.GetComponent<mainGameScript>().isTeleporting = true;
+
                 if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
                 {
                     this.GetComponent<mainGameScript>().SkipCutScene();
@@ -218,6 +242,8 @@ public class teleport : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Keypad7) || Input.GetKeyDown(KeyCode.Alpha7))
             {
                 //Debug.Log("7 pressed");
+
+                this.GetComponent<mainGameScript>().isTeleporting = true;
 
                 if (this.GetComponent<mainGameScript>().cutScenePlaying == true)
                 {

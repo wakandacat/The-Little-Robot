@@ -229,22 +229,22 @@ public class Projectile_Mine : Projectile
     }
     public void stopVFX()
     {
-        Debug.Log("in stop vfx");
+        //Debug.Log("in stop vfx");
         Transform explosionNode = transform.Find("VFX_explosion").transform; //overarching parent
 
         for (int i = 0; i < explosionNode.transform.childCount; i++)
         {
-            Debug.Log("top node found");
+            //Debug.Log("top node found");
             ParticleSystem explosion = explosionNode.GetChild(i).GetComponent<ParticleSystem>();
 
             if (explosion != null) //if particle system found, play
             {
-                Debug.Log("killing myself");
+                //Debug.Log("killing myself");
                 explosion.Stop();
             }
             else
             {
-                Debug.Log("no particle system found");
+                //Debug.Log("no particle system found");
             }
         }
     }

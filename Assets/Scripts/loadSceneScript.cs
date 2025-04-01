@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class loadSceneScript : MonoBehaviour
 {
@@ -76,6 +77,18 @@ public class loadSceneScript : MonoBehaviour
         //set newest scene to active
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(mainGameScript.currentScene));
         // Debug.Log("set  " + mainGameScript.currentScene + "as active");
+
+        //MOVE BATTLE TRACK NOW SO IT DOESNT CLIP WALLS LATER
+        if (SceneManager.GetActiveScene().name.Contains("Combat"))
+        {
+            GameObject enemy = GameObject.FindGameObjectWithTag("Boss Enemy");
+
+            ////move the track to teh enemy's position
+            Vector3 bossPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 13, enemy.transform.position.z);
+            GameObject.Find("battleCamTrack").transform.position = bossPos;
+            GameObject.Find("battleCam").GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0;
+        }
+
 
     }
 

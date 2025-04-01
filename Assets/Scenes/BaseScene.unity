@@ -1344,7 +1344,7 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 50
+  m_FocalLength: 23.051785
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -2643,6 +2643,11 @@ MonoBehaviour:
   currCheckpoint: {fileID: 1298906022}
   checkpointGrp: {fileID: 57281593}
   m_audio: {fileID: 1909374290}
+  isTeleporting: 0
+  regularBlend: {fileID: 11400000, guid: c51409daebca028459882353d8bc13d9, type: 2}
+  teleportBlend: {fileID: 11400000, guid: f907d759d6fe9c84695b5dc1632ec066, type: 2}
+  enemyDeadBlend: {fileID: 11400000, guid: e19b0c2983542ab4c8fd44047bb19253, type: 2}
+  camBrain: {fileID: 330585548}
 --- !u!114 &504155890
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -119,6 +119,9 @@ public class endGameTrigger : MonoBehaviour
             mainGameScript.cutScenePlaying = true;
             //turn off gameplay values
             playerUI.SetActive(false);
+
+            cutCanvas.SetActive(true); //bring up black canvas
+
             //stop animations???
             //stopping animation in player fx script this is just a boolean that calls that condition
             endCutscene = true;
@@ -126,10 +129,17 @@ public class endGameTrigger : MonoBehaviour
             //player end animations
             //m_animator.SetBool("goToS1", true);
 
+            //ensure cam is at end of path
+            walkingCam.Follow = null;
+            walkingCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_AutoDolly.m_Enabled = false;
+            walkingCam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 1;
+
             //collision.gameObject.GetComponent<Animator>().enabled = false;
 
+            playerCam.m_LookAt = camLookingUp.transform;
+
             //prep the player's stats
-            playerViewCanvas.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "DEATHS: " + mainGameScript.playerDeaths;
+            playerViewCanvas.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "RESETS: " + mainGameScript.playerDeaths;
             playerViewCanvas.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = "TIME: " + Mathf.FloorToInt(mainGameScript.playerTime / 60f) + ":" + Mathf.FloorToInt(mainGameScript.playerTime % 60f);
         }
     }
@@ -187,7 +197,7 @@ public class endGameTrigger : MonoBehaviour
                     //hide intro load
                     if (endTimer <= 0.5f)
                     {
-                        cutCanvas.SetActive(true);
+                       // cutCanvas.SetActive(true);
                         //face player forward if not already
 /*                        player.transform.position = this.transform.position; //center player
                         player.transform.rotation = this.transform.rotation;*/

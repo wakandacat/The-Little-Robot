@@ -196,8 +196,9 @@ public class PlayerController : MonoBehaviour
 
     //when enemy dies, push player away
     //ref: https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Mathf.Sin.html
-    public void combatPush(float camPos)
+    public void combatPush(float camPos, Vector3 enemyPos)
     {
+
         pc.Gameplay.Disable(); //disable temporarily
 
         Rigidbody rb = this.GetComponent<Rigidbody>();
@@ -209,10 +210,20 @@ public class PlayerController : MonoBehaviour
         // Calculate directional force
         float xDir = Mathf.Sin(radians);  //0 to 1 on x axis
         float zDir = Mathf.Cos(radians);  //0 to 1 on z axis
-        //Debug.Log("xDir " + xDir);
-        //Debug.Log("zDir " + zDir);
+                                          //Debug.Log("xDir " + xDir);
+                                          //Debug.Log("zDir " + zDir);
 
-        Vector3 force = new Vector3(xDir * 70, 40f, -zDir * 70);
+        //stronger when closer to enemy
+        // Calculate player's distance from the center
+        float distanceToCenter = Vector3.Distance(this.transform.position, enemyPos);
+
+        // Normalize distance (0 at center, 1 at arena edge)
+        float proximityFactor = Mathf.Clamp01(distanceToCenter / 25); //arena radius ~= 30
+
+        // Scale force based on proximity factor
+        float pushMultiplier = Mathf.Lerp(1.0f, 0f, proximityFactor); //scale based on distance
+
+        Vector3 force = new Vector3(xDir * 60 * pushMultiplier, 40f, -zDir * 60 * pushMultiplier);
 
         //add impulse to player
         rb.AddForce(force, ForceMode.Impulse);
