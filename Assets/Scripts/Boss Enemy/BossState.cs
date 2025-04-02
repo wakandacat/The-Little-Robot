@@ -365,9 +365,11 @@ public class State_LowEnergy : BossState
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 public class State_Death : BossState
 {
+
     // Called when the state machine transitions to this state
     public override void Enter()
     {
+
         // Programming Logic
         //Debug.Log("BossEnemy: Entering State_Death");
         bossEnemyComponent.GetComponent<CapsuleCollider>().enabled = false;
@@ -400,6 +402,7 @@ public class State_Death : BossState
         // Programming Logic
 
         // Animation Logic
+
         animator.SetBool("die", false);
 
     }
@@ -584,8 +587,7 @@ public class State_Awake : BossState
         // Determine Best Choice -----------------------------------------------------------------------------------*
         for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
         {
-            //Debug.Log("Attack_BestScore: " + Attack_BestScore);
-            // State_Attack_Bullet_SlowFiringShot_Easy -----------------------
+            //State_Attack_Bullet_SlowFiringShot_Easy---------------------- -
             if (State_Attack_Bullet_SlowFiringShot_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
                 Attack_BestName = State_Attack_Bullet_SlowFiringShot_Easy.Attack_Name;
@@ -680,8 +682,8 @@ public class State_Awake : BossState
 
         if (Attack_TransitionToExecute == null) //fixes bug where every 6th attack becomes null??
         {
-            //Debug.Log("we hit null");
             Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Easy;
+            //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Melee01;
         }
 
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
@@ -694,7 +696,7 @@ public class State_Awake : BossState
         // Determine Best Choice -----------------------------------------------------------------------------------*
         for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
         {
-            // State_Attack_Bullet_SlowFiringShot_Medium -----------------------
+            //State_Attack_Bullet_SlowFiringShot_Medium---------------------- -
             if (State_Attack_Bullet_SlowFiringShot_Medium.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
                 Attack_BestName = State_Attack_Bullet_SlowFiringShot_Medium.Attack_Name;
@@ -843,6 +845,7 @@ public class State_Awake : BossState
         {
             //Debug.Log("we hit null");
             Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Medium;
+            //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Melee01;
         }
 
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
@@ -1004,6 +1007,7 @@ public class State_Awake : BossState
         {
             //Debug.Log("we hit null");
             Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
+            //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Melee01;
         }
 
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
@@ -4278,8 +4282,8 @@ public class State_Attack_StandUpMelee : BossState
     private bool Attack_Completed = false;
     private GameObject Attack_GameObjectParent;
     private GameObject Attack_ColliderSphere;
-    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 4.0f, 1.5f);
-    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(8.0f, 4.0f, 8.0f);
+    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 3.0f, 1.5f);
+    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(6.0f, 4.0f, 6.0f);
     private bool Attack_IsColliderSphereScaleOut = false;
     private float Attack_Duration = 3.0f;
     private float Attack_Delay = 1.0f;
@@ -4302,8 +4306,8 @@ public class State_Attack_StandUpMelee : BossState
         // Collider Sphere
         Attack_ColliderSphere = new GameObject("Attack_ColliderSphere");
         //MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
-        //Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
-        //MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
+       // Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+       // MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
@@ -4358,7 +4362,11 @@ public class State_Attack_StandUpMelee : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        if (Attack_Completed == true)
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
         {
             bossEnemyComponent.TransitionToState_Awake();
         }
@@ -4405,11 +4413,13 @@ public class State_Attack_Melee01 : BossState
     private bool Attack_Completed = false;
     private GameObject Attack_GameObjectParent;
     private GameObject Attack_ColliderSphere;
-    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 4.0f, 1.5f);
-    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(8.0f, 4.0f, 8.0f);
+   // private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 3.0f, 1.5f);
+    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(6.0f, 4.0f, 6.0f);
     private bool Attack_IsColliderSphereScaleOut = false;
     private float Attack_Duration = 3.0f;
-    private float Attack_Delay = 2.0f;
+    private float Attack_Delay01 = 1.5f; //originally 2.0 --> it seems first melee is faster than all other melees???
+    private float Attack_Delay02 = 1.8f; //this one's ok actually
+    private float Attack_Delay03 = 1.4f; //this one is impossible to sync idk
     private float Attack_StartTimeStamp = 0.0f;
 
     // Attack_State Selection Properties
@@ -4479,9 +4489,11 @@ public class State_Attack_Melee01 : BossState
         Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.isKinematic = true;
-        Attack_ColliderSphere.transform.position = bossEnemyComponent.returnBossEnemyPosition();
-        Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
+        //move collider out front of enemy
+        Attack_ColliderSphere.transform.position = new Vector3(bossEnemyComponent.returnBossEnemyPosition().x, bossEnemyComponent.returnBossEnemyPosition().y, bossEnemyComponent.returnBossEnemyPosition().z - 6);
+       // Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
         Attack_ColliderSphere.transform.SetParent(Attack_GameObjectParent.transform);
+        Attack_ColliderSphere.SetActive(false); //hide it initially
 
         // Misc.
         Attack_StartTimeStamp = Time.time;
@@ -4515,21 +4527,10 @@ public class State_Attack_Melee01 : BossState
         if (Attack_IsColliderSphereScaleOut == false)              // check if collider sphere object scale has been set to use Attack_ColliderSphereScale_Out scaling
         {
             //play melee vfx,, each iteration needs unique delay value bc each iteration changes
-            if(SceneManager.GetActiveScene().name == "Combat1" && Time.time - Attack_StartTimeStamp >= Attack_Delay - 0.6f)
+            if (SceneManager.GetActiveScene().name == "Combat1" && Time.time - Attack_StartTimeStamp >= Attack_Delay01)
             {
-                playMeleeVFX();
-            }
-            else if (SceneManager.GetActiveScene().name == "Combat2" && Time.time - Attack_StartTimeStamp >= Attack_Delay - 0.6f)
-            {
-                playMeleeVFX();
-            }
-            else if (SceneManager.GetActiveScene().name == "Combat3" && Time.time - Attack_StartTimeStamp >= Attack_Delay - 0.215f)
-            {
-                playMeleeVFX();
-            }
 
-            if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
-            {
+                Attack_ColliderSphere.SetActive(true);
                 Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
                 SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
                 Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
@@ -4537,7 +4538,35 @@ public class State_Attack_Melee01 : BossState
                 Attack_ColliderSphere.layer = 6;
                 Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
 
+                playMeleeVFX();
             }
+            else if (SceneManager.GetActiveScene().name == "Combat2" && Time.time - Attack_StartTimeStamp >= Attack_Delay02)
+            {
+
+                Attack_ColliderSphere.SetActive(true);
+                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
+                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
+                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
+                Attack_ColliderSphere.tag = "Damage Source";
+                Attack_ColliderSphere.layer = 6;
+                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+
+                playMeleeVFX();
+            }
+            else if (SceneManager.GetActiveScene().name == "Combat3" && Time.time - Attack_StartTimeStamp >= Attack_Delay03)
+            {
+
+                Attack_ColliderSphere.SetActive(true);
+                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
+                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
+                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
+                Attack_ColliderSphere.tag = "Damage Source";
+                Attack_ColliderSphere.layer = 6;
+                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+
+                playMeleeVFX();
+            }
+
         }
 
         // Animation Logic
@@ -4545,11 +4574,14 @@ public class State_Attack_Melee01 : BossState
 
     }
 
-    // Called once per frame
     public override void CheckTransition()
     {
         // Programming Logic
-        if (Attack_Completed == true)
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Attack_Completed == true)
         {
             bossEnemyComponent.TransitionToState_SelfCheck();
         }
