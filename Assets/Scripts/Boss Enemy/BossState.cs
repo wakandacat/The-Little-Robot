@@ -4285,7 +4285,12 @@ public class State_Attack_StandUpMelee : BossState
     private float Attack_Delay = 1.0f;
     private float Attack_StartTimeStamp = 0.0f;
     private ParticleSystem VFX_standUp;
+    private GameObject player;
 
+    private void findPlayer()
+    {
+        player = GameObject.Find("PlayerExport");
+    }
     // Called when the state machine transitions to this state
     public override void Enter()
     {
@@ -4338,6 +4343,10 @@ public class State_Attack_StandUpMelee : BossState
                 Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
                 //play vfx
                 VFX_standUp.Play();
+                if (player!=null)
+                {
+                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f);
+                }
             }
         }
 
