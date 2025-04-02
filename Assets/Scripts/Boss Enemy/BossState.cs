@@ -584,6 +584,7 @@ public class State_Awake : BossState
         // Determine Best Choice -----------------------------------------------------------------------------------*
         for (int i = 0; i < 5; i++)     // loop up to 5 times to find a suitable attack
         {
+            //Debug.Log("Attack_BestScore: " + Attack_BestScore);
             // State_Attack_Bullet_SlowFiringShot_Easy -----------------------
             if (State_Attack_Bullet_SlowFiringShot_Easy.CalculateScore(bossEnemyComponent) > Attack_BestScore)
             {
@@ -676,7 +677,13 @@ public class State_Awake : BossState
         //Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_JumpRope_Easy;
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
-        //Attack_TransitionToExecute();
+
+        if (Attack_TransitionToExecute == null) //fixes bug where every 6th attack becomes null??
+        {
+            //Debug.Log("we hit null");
+            Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Easy;
+        }
+
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
         attackSelected = true;
         //bossEnemyComponent.TransitionToState_Attack_Indicator();
@@ -831,6 +838,13 @@ public class State_Awake : BossState
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
         //Attack_TransitionToExecute();
+
+        if (Attack_TransitionToExecute == null) //fixes bug where every 6th attack becomes null??
+        {
+            //Debug.Log("we hit null");
+            Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Medium;
+        }
+
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
         attackSelected = true;
         //bossEnemyComponent.TransitionToState_Attack_Indicator();
@@ -985,6 +999,13 @@ public class State_Awake : BossState
 
         // Transition to Best Choice -------------------------------------------------------------------------------*
         //Attack_TransitionToExecute();
+
+        if (Attack_TransitionToExecute == null) //fixes bug where every 6th attack becomes null??
+        {
+            //Debug.Log("we hit null");
+            Attack_TransitionToExecute = bossEnemyComponent.TransitionToState_Attack_Bullet_SlowFiringShot_Hard;
+        }
+
         bossEnemyComponent.Set_Delegate(Attack_TransitionToExecute);
         attackSelected = true;
         //bossEnemyComponent.TransitionToState_Attack_Indicator();
@@ -1011,7 +1032,7 @@ public class State_Attack_Indicator : BossState
     public override void Enter()
     {
         // Programming Logic
-        Debug.Log("BossEnemy: Entering State_Attack_Indicator");
+        //Debug.Log("BossEnemy: Entering State_Attack_Indicator");
         bool isMelee = false;
         Timer_StartTime = Time.time;
 
@@ -3085,7 +3106,7 @@ public class State_Attack_Bullet_RotatingWall_Easy : BossState
     // Spawner Values
     private float Attack_FireRate = 6.0f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 160;
+    private int Attack_Count = 60;
     private bool Attack_TrackHorizontal = false;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
@@ -3265,7 +3286,7 @@ public class State_Attack_Bullet_RotatingWall_Medium : BossState
     // Spawner Values
     private float Attack_FireRate = 10.0f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 240;
+    private int Attack_Count = 140;
     private bool Attack_TrackHorizontal = false;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
@@ -3445,7 +3466,7 @@ public class State_Attack_Bullet_RotatingWall_Hard : BossState
     // Spawner Values
     private float Attack_FireRate = 14.0f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 320;
+    private int Attack_Count = 220;
     private bool Attack_TrackHorizontal = false;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
@@ -3637,7 +3658,7 @@ public class State_Attack_Bullet_JumpRope_Easy : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 100;
+    private int Attack_ProjectileCount = 30;
     private float Attack_AngleOfSpread = 360.0f;
     private int Attack_ProjectileVerticalCount = 1;
     private float Attack_MinHeight = 0.5f;
@@ -3797,7 +3818,7 @@ public class State_Attack_Bullet_JumpRope_Medium : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 100;
+    private int Attack_ProjectileCount = 50;
     private float Attack_AngleOfSpread = 360.0f;
     private int Attack_ProjectileVerticalCount = 1;
     private float Attack_MinHeight = 0.5f;
@@ -3937,7 +3958,7 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
     private bool Attack_Completed = false;
 
     // Attack_State Selection Properties
-    public static string Attack_Name = "State_Attack_Bullet_JumpRope_Easy";
+    public static string Attack_Name = "State_Attack_Bullet_JumpRope_Hard";
     public static float Energy_Cost = 1.0f;
     public static float Player_MinDistance = 10.0f;
     public static float Player_MaxDistance = 50.0f;
@@ -3957,7 +3978,7 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 100;
+    private int Attack_ProjectileCount = 75;
     private float Attack_AngleOfSpread = 360.0f;
     private int Attack_ProjectileVerticalCount = 1;
     private float Attack_MinHeight = 0.5f;
