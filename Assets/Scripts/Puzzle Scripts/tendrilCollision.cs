@@ -24,6 +24,7 @@ public class tendrilCollision : MonoBehaviour
             m_audio.playPlayerSFX(10);
             player.collisionTendril = true;
             player.playerCurrenthealth -= 1;
+            player.GetComponent<player_fx_behaviors>().Rumble(0.25f, 0.25f, 0.1f);
 
         }
     }

@@ -50,7 +50,10 @@ public class groundCheck : MonoBehaviour
             runRumbleOnce = false;
             jumping.handleJump();
             jumping.handleQuickDrop();
-
+        }
+        if(collision.gameObject.tag == "ground")
+        {
+            this.GetComponent<player_fx_behaviors>().Rumble(0.25f, 0.25f, 0.1f);
         }
 
     }
