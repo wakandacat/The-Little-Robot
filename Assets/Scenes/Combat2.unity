@@ -828,6 +828,11 @@ PrefabInstance:
       objectReference: {fileID: 2023407693}
     - target: {fileID: 6490991882255051218, guid: e41c977d330ba684eb8efc7011bc28f1,
         type: 3}
+      propertyPath: HP_Maximum_3
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 6490991882255051218, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
       propertyPath: Energy_Maximum_2
       value: 4
       objectReference: {fileID: 0}
@@ -2178,6 +2183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35989efdd4cceda49af42a62f7adedc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
 --- !u!4 &950784002153819994
 Transform:
   m_ObjectHideFlags: 0
@@ -3097,6 +3103,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bafca5bdba8477f4f8efe83cf1dc576f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movingLeft: 0
+  movingRight: 0
 --- !u!4 &2197136843906838631
 Transform:
   m_ObjectHideFlags: 0
@@ -3681,6 +3689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d4e409637d1324aa62415901a73ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   proceedSign: {fileID: 1464502836}
   proceedaudio: {fileID: 1464502837}
 --- !u!114 &4429259241308949803
@@ -3709,6 +3718,7 @@ MonoBehaviour:
   battleCam: {fileID: 0}
   lookAtWhenDead: {fileID: 2047351542}
   scientists: {fileID: 380313173435211696}
+  camShake: 0
 --- !u!1 &4492130247477508341
 GameObject:
   m_ObjectHideFlags: 0
@@ -5537,6 +5547,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bafca5bdba8477f4f8efe83cf1dc576f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movingLeft: 0
+  movingRight: 0
 --- !u!1 &6906263059538138720 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8959a5d32604ae54d9b3f56f17263278,

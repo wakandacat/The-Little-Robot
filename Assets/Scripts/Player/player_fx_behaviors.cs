@@ -56,7 +56,14 @@ public class player_fx_behaviors : MonoBehaviour
     private endGameTrigger endScene;
     private bool foundTrigger = false;
 
-    // Start is called before the first frame update
+
+    public void Awake()
+    {
+        //set gamepad
+        pad = Gamepad.current;
+        stopRumbling();
+    }
+
     void Start()
     {
         //get player controller script, needed for accessing joystick inputs
@@ -132,12 +139,13 @@ public class player_fx_behaviors : MonoBehaviour
     //https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/Gamepad.html
     public void Rumble(float low, float high, float duration)
     {
-        pad = Gamepad.current;
         if (pad != null)
         {
             pad.SetMotorSpeeds(low, high);
         }
-        stopRumbleCoroutine = StartCoroutine(stopRumble(duration));
+        stopRumbleCoroutine = StartCoroutine(stopRumble(duration)); //maybe remove, we shouldn't need to start/stop it
+        //Invoke("stopRumbling", 0.3f); //temp unless lina can't get the rumble to stop
+        
     }
     public IEnumerator stopRumble(float duration)
     {
@@ -149,42 +157,61 @@ public class player_fx_behaviors : MonoBehaviour
         }
         pad.SetMotorSpeeds(0f, 0f);
     }
+    //temp unless lina can't figure out stopping
+    public void stopRumbling()
+    {
+        pad.SetMotorSpeeds(0.0f,0.0f);
+    }
     public void RumbleConditions()
     {
+        //you hit the enemy
         if (playerScript.attackCounter == 1 && playerScript.runAttack1Once == true && playerScript.enemyPlayerCollision == true)
         {
-            Rumble(0.25f, 0.25f, 0.4f);
+            Rumble(0.08f, 0.3f, 0.2f);
         }
+        //you hit enemy 2
         if (playerScript.attackCounter == 2 && playerScript.runAttack2Once == true && playerScript.enemyPlayerCollision == true)
         {
-            Rumble(0.25f, 0.25f, 0.4f);
+            Rumble(0.1f, 0.3f, 0.2f);
         }
+        //you hit enemy 3
         if (playerScript.attackCounter == 3 && playerScript.runAttack3Once == true && playerScript.enemyPlayerCollision == true)
         {
-            Rumble(0.25f, 0.75f, 0.4f);
+            Rumble(0.13f, 0.4f, 0.3f);
         }
+        //if projectile hits you
         if (playerScript.collision == true)
         {
-            Rumble(0.75f, 1f, 1f);
+            Rumble(0.15f, 0.3f, 0.5f);
         }
+        //you died
         if (playerScript.deathState == true)
         {
             Rumble(0.0f, 0.0f, 0.0f);
         }
+        //bridge haptics
         if (left == true || right == true)
         {
             //Debug.Log("Here bridge haptics");
-            Rumble(0.5f, 0.5f, 1.0f);
+            Rumble(0.008f, 0.2f, 0.2f);
         }
-        if (camShake == true)
+        //camshake
+        if (camShake == true) //if this is used for boss death it needs to start and end slightly earlier 
         {
-            Rumble(0.25f, 0.75f, 1.0f);
+            Rumble(0.2f, 0.7f, 0.7f);
         }
-        if (door.GetComponentInChildren<doorScript>().movingDown == true || door.GetComponentInChildren<doorScript>().movingDown == true)
+        //door closing
+        if (door.GetComponentInChildren<doorScript>().movingUp == true)
         {
             Debug.Log("doors are opening");
-            Rumble(0.25f, 0.25f, 1.0f);
+            Rumble(0.005f, 0.15f, 0.10f);
         }
+        if (door.GetComponentInChildren<doorScript>().movingDown == true)
+        {
+            Debug.Log("doors are closing");
+            Rumble(0.08f, 0.12f, 0.1f);
+        }
+        
     }
     public IEnumerator playDashVfx()
     {
