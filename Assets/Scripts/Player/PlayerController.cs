@@ -458,6 +458,7 @@ public class PlayerController : MonoBehaviour
 
         //Move player using the rigid body
         rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed + platformMovement);
+        //rb.velocity +=  cameraRelativeMovement * playerSpeed + platformMovement;
 
 
     }
@@ -500,6 +501,8 @@ public class PlayerController : MonoBehaviour
         {
             falling = true;
             rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            //rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier;
+
         }
     }
     //Jump Logic here
@@ -534,6 +537,8 @@ public class PlayerController : MonoBehaviour
         if (ground.onGround == false && (rb.velocity.y < 0))
         {
             rb.velocity += Vector3.up * Physics.gravity.y * quickDropMultiplier * Time.deltaTime;
+            //rb.velocity += Vector3.up * Physics.gravity.y * quickDropMultiplier;
+
         }
     }
     //quick drop flag handler
