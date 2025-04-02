@@ -581,6 +581,11 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 970105932659066273, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.32
+      objectReference: {fileID: 0}
     - target: {fileID: 1262901852082403109, guid: e41c977d330ba684eb8efc7011bc28f1,
         type: 3}
       propertyPath: playOnAwake
@@ -591,11 +596,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss_3.0_C2
       objectReference: {fileID: 0}
+    - target: {fileID: 1464886977822775273, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 2147320374957788260, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806307871769017543, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3088174995862933297, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.32
+      objectReference: {fileID: 0}
     - target: {fileID: 3091836239309032941, guid: e41c977d330ba684eb8efc7011bc28f1,
         type: 3}
       propertyPath: Spawner_ProjectilePool
       value: 
       objectReference: {fileID: 2023407694}
+    - target: {fileID: 3661004999953343589, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.32
+      objectReference: {fileID: 0}
     - target: {fileID: 3816438946967614019, guid: e41c977d330ba684eb8efc7011bc28f1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -821,6 +851,16 @@ PrefabInstance:
       propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[1].tangentMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4194441918249985067, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5261427516525505863, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6075271547321847594, guid: e41c977d330ba684eb8efc7011bc28f1,
         type: 3}
       propertyPath: Spawner_ProjectilePool
@@ -831,6 +871,16 @@ PrefabInstance:
       propertyPath: Energy_Maximum_2
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6575059813641076788, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632850480996674759, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6658750475089708605, guid: e41c977d330ba684eb8efc7011bc28f1,
         type: 3}
       propertyPath: playOnAwake
@@ -840,6 +890,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8113749015026505078, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262796441442342150, guid: e41c977d330ba684eb8efc7011bc28f1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 9080727201602409220, guid: e41c977d330ba684eb8efc7011bc28f1,
         type: 3}
@@ -2178,6 +2238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35989efdd4cceda49af42a62f7adedc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
 --- !u!4 &950784002153819994
 Transform:
   m_ObjectHideFlags: 0
@@ -3097,6 +3158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bafca5bdba8477f4f8efe83cf1dc576f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movingLeft: 0
+  movingRight: 0
 --- !u!4 &2197136843906838631
 Transform:
   m_ObjectHideFlags: 0
@@ -3681,6 +3744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d4e409637d1324aa62415901a73ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   proceedSign: {fileID: 1464502836}
   proceedaudio: {fileID: 1464502837}
 --- !u!114 &4429259241308949803
@@ -3709,6 +3773,7 @@ MonoBehaviour:
   battleCam: {fileID: 0}
   lookAtWhenDead: {fileID: 2047351542}
   scientists: {fileID: 380313173435211696}
+  camShake: 0
 --- !u!1 &4492130247477508341
 GameObject:
   m_ObjectHideFlags: 0
@@ -5537,6 +5602,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bafca5bdba8477f4f8efe83cf1dc576f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movingLeft: 0
+  movingRight: 0
 --- !u!1 &6906263059538138720 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8959a5d32604ae54d9b3f56f17263278,
