@@ -185,18 +185,6 @@ public class player_fx_behaviors : MonoBehaviour
             Debug.Log("doors are opening");
             Rumble(0.25f, 0.25f, 1.0f);
         }
-
-
-        /*       if (ground.onGround == true && ground.runRumbleOnce == false)
-               {
-                   ground.runRumbleOnce = true;
-                   Rumble(0.25f, 0.75f, 0.25f);
-               }*/
-        /*        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
-                {
-                    Rumble(0.0f, 0.0f, 0.0f);
-                }*/
-
     }
     public IEnumerator playDashVfx()
     {
@@ -272,13 +260,10 @@ public class player_fx_behaviors : MonoBehaviour
         {
             dashVfx = StartCoroutine(playDashVfx());
         }
-        if(playerScript.playRegenVfx == true && playerScript.playerCurrenthealth < playerScript.playerHealth)
+        if(playerScript.playerCurrenthealth < 5.0f)
         {
+            Debug.Log("we are regaining health");
             healthRegen.Play();
-        }
-        else
-        {
-            healthRegen.Stop();
         }
     }
 
@@ -294,12 +279,6 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return "wakeup";
         }
-
-        /*        if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().endCutscene == true)
-                {
-                    return "Idle";
-                }
-        */
         if (SceneManager.GetActiveScene().name == "EndScene")
         {
             if (playerScript.foundScene == true && playerScript.endScene.GetComponent<endGameTrigger>().startEndIdle == true)

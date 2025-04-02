@@ -939,10 +939,12 @@ public class PlayerController : MonoBehaviour
         }
         else if (canRegen == true && (playerCurrenthealth < playerHealth) && deathState == false)
         {
+
             regenTimer += Time.deltaTime;
             if (healthRegenDelay <= regenTimer)
             {
                 playRegenVfx = true;
+
                 playerCurrenthealth++;
                 regenTimer = 0.0f;
                 
