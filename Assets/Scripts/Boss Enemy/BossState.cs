@@ -2614,8 +2614,8 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
     //private float Attack_Wall_MinHeight = 0.0f;
     //private float Attack_Wall_MaxHeight = 7.5f;
 
-    private GameObject Wall_Prefab;
-    private GameObject Wall_GameObject;
+    //private GameObject Wall_Prefab;
+    //private GameObject Wall_GameObject;
     private Vector3 Wall_Position;
     private Quaternion Wall_Rotation;
     private float Wall_RotationSpeed = 20.0f;
@@ -2667,7 +2667,7 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Wall Setup
-        Wall_Prefab = bossEnemyComponent.FindClusterProjectileByName("Projectile_Wall");
+        //Wall_Prefab = bossEnemyComponent.FindClusterProjectileByName("Projectile_Wall");
 
         // Get the fire point position
         Wall_Position = SpawnerComponent_Bullet.Return_FirePointPosition();
@@ -2694,7 +2694,7 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
         Wall_Rotation = baseRotation * Quaternion.Euler(0, Wall_Rotation_Offset, 0);
 
 
-        Wall_GameObject = bossEnemyComponent.InitializeGameObject(Wall_Prefab, Wall_Position, Wall_Rotation);
+        //Wall_GameObject = bossEnemyComponent.InitializeGameObject(Wall_Prefab, Wall_Position, Wall_Rotation);
 
         // Animation Logic
         //animator.SetBool("inAttack", true);
@@ -2738,22 +2738,22 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
 
             // Tracking Wall NEW
             // Get the current rotation of the wall
-            Quaternion currentRotation = Wall_GameObject.transform.rotation;
+            //Quaternion currentRotation = Wall_GameObject.transform.rotation;
 
             // Get the rotation direction based on Wall_RotatesRight
             float rotationDirection = Wall_RotatesRight ? 1.0f : -1.0f;
 
             // Calculate the target rotation (the current rotation + rotation per second)
-            float targetYRotation = currentRotation.eulerAngles.y + (rotationDirection * Wall_RotationSpeed * Time.deltaTime);
+            //float targetYRotation = currentRotation.eulerAngles.y + (rotationDirection * Wall_RotationSpeed * Time.deltaTime);
 
             // Ensure the Y rotation stays within the range of 0 to 360 degrees
-            targetYRotation = targetYRotation % 360f; // Keeps the targetYRotation between 0 and 360
+            //targetYRotation = targetYRotation % 360f; // Keeps the targetYRotation between 0 and 360
 
             // Create a target Quaternion with the updated Y rotation
-            Quaternion targetRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+            //Quaternion targetRotation = Quaternion.Euler(0f, targetYRotation, 0f);
 
             // Smoothly rotate towards the target rotation
-            Wall_GameObject.transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation, Wall_RotationSpeed * Time.deltaTime);
+            //Wall_GameObject.transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation, Wall_RotationSpeed * Time.deltaTime);
         }
         // Attack has finished
         else
@@ -2806,7 +2806,7 @@ public class State_Attack_Bullet_TrackingWall_Medium : BossState
     {
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
-        bossEnemyComponent.DeleteGameObject(Wall_GameObject);
+        //bossEnemyComponent.DeleteGameObject(Wall_GameObject);
 
         // Animation Logic
         animator.SetBool("inAttack", false);
@@ -2852,8 +2852,8 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
     //private float Attack_Wall_MaxHeight = 7.5f;
     //private bool Attack_Wall_Fire = false;
 
-    private GameObject Wall_Prefab;
-    private GameObject Wall_GameObject;
+    //private GameObject Wall_Prefab;
+    //private GameObject Wall_GameObject;
     private Vector3 Wall_Position;
     private Quaternion Wall_Rotation;
     private float Wall_RotationSpeed = 20.0f;
@@ -2905,7 +2905,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
         SpawnerComponent_Bullet.StartAttack(Attack_FireRateDelay);
 
         // Wall Setup
-        Wall_Prefab = bossEnemyComponent.FindClusterProjectileByName("Projectile_Wall");
+        //Wall_Prefab = bossEnemyComponent.FindClusterProjectileByName("Projectile_Wall");
 
         // Get the fire point position
         Wall_Position = SpawnerComponent_Bullet.Return_FirePointPosition();
@@ -2932,7 +2932,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
         Wall_Rotation = baseRotation * Quaternion.Euler(0, Wall_Rotation_Offset, 0);
 
 
-        Wall_GameObject = bossEnemyComponent.InitializeGameObject(Wall_Prefab, Wall_Position, Wall_Rotation);
+       // Wall_GameObject = bossEnemyComponent.InitializeGameObject(Wall_Prefab, Wall_Position, Wall_Rotation);
 
         // Animation Logic
         //animator.SetBool("inAttack", true);
@@ -2994,22 +2994,22 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
 
             // Tracking Wall NEW
             // Get the current rotation of the wall
-            Quaternion currentRotation = Wall_GameObject.transform.rotation;
+            //Quaternion currentRotation = Wall_GameObject.transform.rotation;
 
             // Get the rotation direction based on Wall_RotatesRight
             float rotationDirection = Wall_RotatesRight ? 1.0f : -1.0f;
 
             // Calculate the target rotation (the current rotation + rotation per second)
-            float targetYRotation = currentRotation.eulerAngles.y + (rotationDirection * Wall_RotationSpeed * Time.deltaTime);
+            //float targetYRotation = currentRotation.eulerAngles.y + (rotationDirection * Wall_RotationSpeed * Time.deltaTime);
 
             // Ensure the Y rotation stays within the range of 0 to 360 degrees
-            targetYRotation = targetYRotation % 360f; // Keeps the targetYRotation between 0 and 360
+            //targetYRotation = targetYRotation % 360f; // Keeps the targetYRotation between 0 and 360
 
             // Create a target Quaternion with the updated Y rotation
-            Quaternion targetRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+            //Quaternion targetRotation = Quaternion.Euler(0f, targetYRotation, 0f);
 
             // Smoothly rotate towards the target rotation
-            Wall_GameObject.transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation, Wall_RotationSpeed * Time.deltaTime);
+            //Wall_GameObject.transform.rotation = Quaternion.RotateTowards(currentRotation, targetRotation, Wall_RotationSpeed * Time.deltaTime);
         }
         // Attack has finished
         else
@@ -3062,7 +3062,7 @@ public class State_Attack_Bullet_TrackingWall_Hard : BossState
     {
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
-        bossEnemyComponent.DeleteGameObject(Wall_GameObject);
+        //bossEnemyComponent.DeleteGameObject(Wall_GameObject);
 
         // Animation Logic
         animator.SetBool("inAttack", false);
