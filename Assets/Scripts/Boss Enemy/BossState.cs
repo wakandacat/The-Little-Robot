@@ -1820,7 +1820,7 @@ public class State_Attack_Bullet_RapidFireShot_Medium : BossState
                 }
                 //public void InitializeCluster(string clusterName, Vector3 New_StartingPosition, Quaternion New_Rotation, Vector3 New_Direction, float New_Speed, float New_Lifetime)
                 Vector3 direction = SpawnerComponent_Bullet.Return_FirePointRotation() * Vector3.forward;
-                bossEnemyComponent.InitializeCluster("Projectile_Cluster_5x5", SpawnerComponent_Bullet.Return_FirePointPosition(), SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
+                bossEnemyComponent.InitializeCluster("Projectile_Cluster_3x3", SpawnerComponent_Bullet.Return_FirePointPosition(), SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
 
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
@@ -1980,7 +1980,7 @@ public class State_Attack_Bullet_RapidFireShot_Hard : BossState
                 }
 
                 Vector3 direction = SpawnerComponent_Bullet.Return_FirePointRotation() * Vector3.forward;
-                bossEnemyComponent.InitializeCluster("Projectile_Cluster_5x5", SpawnerComponent_Bullet.Return_FirePointPosition(), SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
+                bossEnemyComponent.InitializeCluster("Projectile_Cluster_3x3", SpawnerComponent_Bullet.Return_FirePointPosition(), SpawnerComponent_Bullet.Return_FirePointRotation(), direction, Attack_ProjectileSpeed, Attack_ProjectileLifetime);
 
                 SpawnerComponent_Bullet.PostAttackLogic();
             }
@@ -2070,8 +2070,8 @@ public class State_Attack_Bullet_TrackingCone_Easy : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 10;
-    private int Attack_ProjectileCount_ALT = 11;
+    private int Attack_ProjectileCount = 8;
+    private int Attack_ProjectileCount_ALT = 9;
     private float Attack_AngleOfSpread = 60.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
@@ -2244,7 +2244,7 @@ public class State_Attack_Bullet_TrackingCone_Medium : BossState
     // Spawner Values
     private float Attack_FireRate = 0.75f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 10;
+    private int Attack_Count = 8;
     private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 120.0f;
@@ -2430,10 +2430,10 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
     // Spawner Values
     private float Attack_FireRate = 1.0f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 15;
+    private int Attack_Count = 10;
     private bool Attack_TrackHorizontal = true;
     private bool Attack_TrackVertical = false;
-    private float Attack_TrackSpeed = 200.0f;
+    private float Attack_TrackSpeed = 160.0f;
     private float Attack_ProjectileSpeed = 15.0f;
     private float Attack_ProjectileLifetime = 10.0f;
 
@@ -2442,9 +2442,9 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 20;
-    private int Attack_ProjectileCount_ALT = 21;
-    private float Attack_AngleOfSpread = 90.0f;
+    private int Attack_ProjectileCount = 12;
+    private int Attack_ProjectileCount_ALT = 13;
+    private float Attack_AngleOfSpread = 60.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
     private float Attack_MaxHeight = 3.5f;
@@ -3110,7 +3110,7 @@ public class State_Attack_Bullet_RotatingWall_Easy : BossState
     // Spawner Values
     private float Attack_FireRate = 6.0f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 60;
+    private int Attack_Count = 80;
     private bool Attack_TrackHorizontal = false;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
@@ -3290,7 +3290,7 @@ public class State_Attack_Bullet_RotatingWall_Medium : BossState
     // Spawner Values
     private float Attack_FireRate = 10.0f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 140;
+    private int Attack_Count = 160;
     private bool Attack_TrackHorizontal = false;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
@@ -3662,7 +3662,7 @@ public class State_Attack_Bullet_JumpRope_Easy : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 30;
+    private int Attack_ProjectileCount = 50;
     private float Attack_AngleOfSpread = 360.0f;
     private int Attack_ProjectileVerticalCount = 1;
     private float Attack_MinHeight = 0.5f;
@@ -3822,7 +3822,7 @@ public class State_Attack_Bullet_JumpRope_Medium : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 50;
+    private int Attack_ProjectileCount = 70;
     private float Attack_AngleOfSpread = 360.0f;
     private int Attack_ProjectileVerticalCount = 1;
     private float Attack_MinHeight = 0.5f;
@@ -3975,14 +3975,14 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
     private float Attack_ProjectileSpeed = 20.0f;
-    private float Attack_ProjectileLifetime = 10.0f;
+    private float Attack_ProjectileLifetime = 8.0f;
 
     // Attack Spawner
     private ProjectileSpawner SpawnerComponent_Bullet;
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 75;
+    private int Attack_ProjectileCount = 85;
     private float Attack_AngleOfSpread = 360.0f;
     private int Attack_ProjectileVerticalCount = 1;
     private float Attack_MinHeight = 0.5f;
@@ -4280,17 +4280,18 @@ public class State_Attack_StandUpMelee : BossState
 {
     // Private Attributes
     private bool Attack_Completed = false;
-    private GameObject Attack_GameObjectParent;
-    private GameObject Attack_ColliderSphere;
-    private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 3.0f, 1.5f);
-    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(6.0f, 4.0f, 6.0f);
-    private bool Attack_IsColliderSphereScaleOut = false;
+    //private GameObject Attack_GameObjectParent; //scrapped
+    private GameObject Attack_ColliderSphere; //use find
+    //private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 3.0f, 1.5f); //scrapped
+    //private Vector3 Attack_ColliderSphereScale_Out = new Vector3(6.0f, 4.0f, 6.0f); //scrapped
+    //private bool Attack_IsColliderSphereScaleOut = false; //scrapped
     private float Attack_Duration = 3.0f;
     private float Attack_Delay = 1.0f;
     private float Attack_StartTimeStamp = 0.0f;
     private ParticleSystem VFX_standUp;
     private GameObject player;
-
+    private Vector3 colliderTargetSize = new Vector3(15.0f, 15.0f, 15.0f);
+    private Vector3 originalSize;
     private void findPlayer()
     {
         player = GameObject.Find("PlayerExport");
@@ -4298,24 +4299,11 @@ public class State_Attack_StandUpMelee : BossState
     // Called when the state machine transitions to this state
     public override void Enter()
     {
-        // Programming Logic
-        //Debug.Log("BossEnemy: Entering State_Attack_StandUpMelee");
-        // Attack Setup Logic
-        Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
-
         // Collider Sphere
-        Attack_ColliderSphere = new GameObject("Attack_ColliderSphere");
-        //MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
-       // Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
-       // MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
-        Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
-        rigidBody.useGravity = false;
-        rigidBody.isKinematic = true;
-        Attack_ColliderSphere.transform.position = bossEnemyComponent.returnBossEnemyPosition();
-        Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
-        Attack_ColliderSphere.transform.SetParent(Attack_GameObjectParent.transform);
+        Attack_ColliderSphere = GameObject.Find("attackCollider_sphere");
+        originalSize = Attack_ColliderSphere.transform.localScale;
+        Debug.Log(originalSize);
 
-        // Misc.
         Attack_StartTimeStamp = Time.time;
 
         // FX logic
@@ -4330,26 +4318,32 @@ public class State_Attack_StandUpMelee : BossState
         // Programming Logic
         if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
         {
-            Attack_Completed = true; // if so, set Attack_Completed to true
+            Attack_Completed = true;
+            //reset collider size
+            Attack_ColliderSphere.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             //stop vfx
             VFX_standUp.Stop();
         }
 
-        // laser and laser contact
-        if (Attack_IsColliderSphereScaleOut == false)              // check if collider sphere object scale has been set to use Attack_ColliderSphereScale_Out scaling
+        
+        if (Attack_Completed == false)
         {
+ 
             if (Time.time - Attack_StartTimeStamp >= Attack_Delay) // if so, check if the duration of the attack has been exceeded Attack_Delay
             {
-                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
-                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
-                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
-                Attack_ColliderSphere.tag = "Damage Source";
-                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                //update timer
+                float elapsedTime = (Time.time - Attack_StartTimeStamp - Attack_Delay) / 0.5f;
+                elapsedTime = Mathf.Clamp01(elapsedTime);
+
+                //lerp collider up until it hits 15 in scale
+                Vector3 newScale = Vector3.Lerp(originalSize, colliderTargetSize, elapsedTime);
+                Attack_ColliderSphere.transform.localScale = newScale;
+                Debug.Log(newScale);
                 //play vfx
                 VFX_standUp.Play();
                 if (player!=null)
                 {
-                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f);
+                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f); //ginette
                 }
             }
         }
@@ -4397,7 +4391,7 @@ public class State_Attack_StandUpMelee : BossState
     public override void Exit()
     {
         // Attack Logic
-        GameObject.Destroy(Attack_GameObjectParent);
+        //GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
         //animator.SetBool("inAttack", false);
@@ -4411,17 +4405,17 @@ public class State_Attack_Melee01 : BossState
 {
     // Private Attributes
     private bool Attack_Completed = false;
-    private GameObject Attack_GameObjectParent;
-    private GameObject Attack_ColliderSphere;
-   // private Vector3 Attack_ColliderSphereScale_In = new Vector3(1.5f, 3.0f, 1.5f);
-    private Vector3 Attack_ColliderSphereScale_Out = new Vector3(6.0f, 4.0f, 6.0f);
-    private bool Attack_IsColliderSphereScaleOut = false;
+    //private GameObject Attack_GameObjectParent;
+    private GameObject Attack_ColliderCube;
+    private Vector3 originalSize;
+    private Vector3 originalPosition;
+    private Vector3 colliderTargetSize = new Vector3(18.0f, 0, 18.0f);
     private float Attack_Duration = 3.0f;
     private float Attack_Delay01 = 1.5f; //originally 2.0 --> it seems first melee is faster than all other melees???
-    private float Attack_Delay02 = 1.8f; //this one's ok actually
-    private float Attack_Delay03 = 1.4f; //this one is impossible to sync idk
+    private float Attack_Delay02 = 1.5f; //this one's ok actually, was 1.8
+    private float Attack_Delay03 = 1.4f; //this one is impossible to sync idk,, when in doubt reuse medium lol
     private float Attack_StartTimeStamp = 0.0f;
-
+    private float Attack_Delay = 1.5f;
     // Attack_State Selection Properties
     public static string Attack_Name = "State_Attack_Melee01";
     public static float Energy_Cost = 1.0f;
@@ -4431,7 +4425,6 @@ public class State_Attack_Melee01 : BossState
     //Particle system
     public ParticleSystem blast_outer;
     public ParticleSystem blast_inner;
-    //public ParticleSystem Slam_rings;
     public ParticleSystem debris;
     public ParticleSystem hand_impact;
 
@@ -4477,23 +4470,10 @@ public class State_Attack_Melee01 : BossState
     public override void Enter()
     {
         // Programming Logic
-        //Debug.Log("BossEnemy: Entering State_Attack_StandUpMelee");
-        // Attack Setup Logic
-        Attack_GameObjectParent = new GameObject("Attack_GameObjectParent");
-
-        // Collider Sphere
-        Attack_ColliderSphere = new GameObject("Attack_ColliderSphere");
-        //MeshFilter Attack_ColliderSphere_meshfilter = Attack_ColliderSphere.AddComponent<MeshFilter>();
-        //Attack_ColliderSphere_meshfilter.mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
-        //MeshRenderer Attack_ColliderSphere_meshRenderer = Attack_ColliderSphere.AddComponent<MeshRenderer>();
-        Rigidbody rigidBody = Attack_ColliderSphere.AddComponent<Rigidbody>();
-        rigidBody.useGravity = false;
-        rigidBody.isKinematic = true;
-        //move collider out front of enemy
-        Attack_ColliderSphere.transform.position = new Vector3(bossEnemyComponent.returnBossEnemyPosition().x, bossEnemyComponent.returnBossEnemyPosition().y, bossEnemyComponent.returnBossEnemyPosition().z - 6);
-       // Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_In;
-        Attack_ColliderSphere.transform.SetParent(Attack_GameObjectParent.transform);
-        Attack_ColliderSphere.SetActive(false); //hide it initially
+        //get collider object and save it's scale and position values
+        Attack_ColliderCube = GameObject.Find("attackCollider_cube");
+        originalSize = Attack_ColliderCube.transform.localScale;
+        originalPosition = Attack_ColliderCube.transform.localPosition;
 
         // Misc.
         Attack_StartTimeStamp = Time.time;
@@ -4521,56 +4501,65 @@ public class State_Attack_Melee01 : BossState
         {
             Attack_Completed = true; // if so, set Attack_Completed to true
             stopMeleeVFX(); //stop melee vfx
+
+            //reset collider values
+            Attack_ColliderCube.transform.localScale = originalSize;
+            Attack_ColliderCube.transform.localPosition = originalPosition;            
         }
 
-        // laser and laser contact
-        if (Attack_IsColliderSphereScaleOut == false)              // check if collider sphere object scale has been set to use Attack_ColliderSphereScale_Out scaling
+        if (Attack_Completed == false)
         {
             //play melee vfx,, each iteration needs unique delay value bc each iteration changes
-            if (SceneManager.GetActiveScene().name == "Combat1" && Time.time - Attack_StartTimeStamp >= Attack_Delay01)
+            if (SceneManager.GetActiveScene().name == "Combat1" && Time.time - Attack_StartTimeStamp >= Attack_Delay)
             {
+                //move collider where it can be reached
+                Attack_ColliderCube.transform.localPosition = new Vector3(originalPosition.x, 1.0f, originalPosition.z);
 
-                Attack_ColliderSphere.SetActive(true);
-                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
-                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
-                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
-                Attack_ColliderSphere.tag = "Damage Source";
-                Attack_ColliderSphere.layer = 6;
-                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                //update timer
+                float elapsedTime = (Time.time - Attack_StartTimeStamp - Attack_Delay01) / 0.8f;
+                elapsedTime = Mathf.Clamp01(elapsedTime);
+
+                //lerp collider up until it hits the target scale
+                Vector3 newScale = Vector3.Lerp(originalSize, colliderTargetSize, elapsedTime);
+                Attack_ColliderCube.transform.localScale = newScale;
+                Debug.Log(newScale);
 
                 playMeleeVFX();
             }
-            else if (SceneManager.GetActiveScene().name == "Combat2" && Time.time - Attack_StartTimeStamp >= Attack_Delay02)
+            else if (SceneManager.GetActiveScene().name == "Combat2" && Time.time - Attack_StartTimeStamp >= Attack_Delay)
             {
+                //move collider where it can be reached
+                Attack_ColliderCube.transform.localPosition = new Vector3(originalPosition.x, 1.0f, originalPosition.z);
 
-                Attack_ColliderSphere.SetActive(true);
-                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
-                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
-                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
-                Attack_ColliderSphere.tag = "Damage Source";
-                Attack_ColliderSphere.layer = 6;
-                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                //update timer
+                float elapsedTime = (Time.time - Attack_StartTimeStamp - Attack_Delay01) / 0.8f;
+                elapsedTime = Mathf.Clamp01(elapsedTime);
+
+                //lerp collider up until it hits the target scale
+                Vector3 newScale = Vector3.Lerp(originalSize, colliderTargetSize, elapsedTime);
+                Attack_ColliderCube.transform.localScale = newScale;
+                Debug.Log(newScale);
 
                 playMeleeVFX();
             }
-            else if (SceneManager.GetActiveScene().name == "Combat3" && Time.time - Attack_StartTimeStamp >= Attack_Delay03)
+            else if (SceneManager.GetActiveScene().name == "Combat3" && Time.time - Attack_StartTimeStamp >= Attack_Delay)
             {
+                //move collider where it can be reached
+                Attack_ColliderCube.transform.localPosition = new Vector3(originalPosition.x, 1.0f, originalPosition.z);
 
-                Attack_ColliderSphere.SetActive(true);
-                Attack_IsColliderSphereScaleOut = true;                                                                     // if so, update Attack_IsColliderSphereScaleOut to true
-                SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
-                Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
-                Attack_ColliderSphere.tag = "Damage Source";
-                Attack_ColliderSphere.layer = 6;
-                Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
+                //update timer
+                float elapsedTime = (Time.time - Attack_StartTimeStamp - Attack_Delay01) / 0.8f;
+                elapsedTime = Mathf.Clamp01(elapsedTime);
+
+                //lerp collider up until it hits the target scale
+                Vector3 newScale = Vector3.Lerp(originalSize, colliderTargetSize, elapsedTime);
+                Attack_ColliderCube.transform.localScale = newScale;
+                Debug.Log(newScale);
 
                 playMeleeVFX();
             }
 
         }
-
-        // Animation Logic
-
 
     }
 
@@ -4613,9 +4602,6 @@ public class State_Attack_Melee01 : BossState
     {
         // Programming Logic
         bossEnemyComponent.appendToAttackHistory(Attack_Name);
-
-        // Attack Logic
-        GameObject.Destroy(Attack_GameObjectParent);
 
         // Animation Logic
         animator.SetBool("melee", false);
