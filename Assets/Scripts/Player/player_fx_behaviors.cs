@@ -21,6 +21,10 @@ public class player_fx_behaviors : MonoBehaviour
     private GameObject bridge;
     private bool left;
     private bool right;
+    private GameObject endGameTrigger;
+    private bool camShake;
+    private GameObject unloadTrigger;
+    private GameObject door;
 
     //animation variables
     private Animator m_animator;
@@ -62,6 +66,12 @@ public class player_fx_behaviors : MonoBehaviour
         m_animator = this.GetComponent<Animator>();
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
         mainScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
+        door = GameObject.Find("DoorGroup");
+        if(unloadTrigger != null)
+        {
+            unloadTrigger = GameObject.Find("unloadSceneObject");
+        }
+        
         //animation
         state = "Idle";
         landVfx.Stop();
@@ -83,19 +93,21 @@ public class player_fx_behaviors : MonoBehaviour
         //sfx
         walkCoroutine = StartCoroutine(walkSFX());
     }
-    public void findBridge()
+    public void findComabtSceneElements()
     {
         if (playerScript.combatState == true)
         {
             bridge = GameObject.Find("TermProject_bridge_end");
             left = bridge.gameObject.GetComponent<bridgeScript>().movingLeft;
             right = bridge.gameObject.GetComponent<bridgeScript>().movingRight;
+            endGameTrigger = GameObject.Find("startBattleTrigger");
+            camShake = endGameTrigger.gameObject.GetComponent<StartEndBattleScript>().camShake;
         }
     }
     // Update is called once per frame
     void FixedUpdate()
     {
-        findBridge();
+        findComabtSceneElements();
         vfx_triggers();
         RumbleConditions();
         var currentState = getPlayerState();
@@ -151,20 +163,29 @@ public class player_fx_behaviors : MonoBehaviour
         {
             Rumble(0.25f, 0.75f, 0.4f);
         }
-        if(playerScript.collision == true)
+        if (playerScript.collision == true)
         {
             Rumble(0.75f, 1f, 1f);
         }
-        if(playerScript.deathState == true)
+        if (playerScript.deathState == true)
         {
             Rumble(0.0f, 0.0f, 0.0f);
         }
-        if(left == true || right == true)
+        if (left == true || right == true)
         {
-            Debug.Log("Here bridge haptics");
+            //Debug.Log("Here bridge haptics");
             Rumble(0.5f, 0.5f, 1.0f);
-
         }
+        if (camShake == true)
+        {
+            Rumble(0.25f, 0.75f, 1.0f);
+        }
+        if (door.GetComponentInChildren<doorScript>().movingDown == true || door.GetComponentInChildren<doorScript>().movingDown == true)
+        {
+            Debug.Log("doors are opening");
+            Rumble(0.25f, 0.25f, 1.0f);
+        }
+
 
         /*       if (ground.onGround == true && ground.runRumbleOnce == false)
                {

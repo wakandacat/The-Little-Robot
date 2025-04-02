@@ -8,8 +8,8 @@ public class doorScript : MonoBehaviour
 
     private float timer = 0;
     private float timeStep = 0.01f;
-    private bool movingUp = false;
-    private bool movingDown = false;
+    public bool movingUp = false;
+    public bool movingDown = false;
     private Vector3 startPos;
     public float delay = 0.7f;
     public float timeToOpen = 1.0f;

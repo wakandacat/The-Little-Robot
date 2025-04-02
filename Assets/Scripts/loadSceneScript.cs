@@ -9,7 +9,7 @@ public class loadSceneScript : MonoBehaviour
    
     //public string sceneName;
     private mainGameScript mainGameScript;
-    private GameObject door;
+    public GameObject door;
     public GameObject proceedSign;
     public AudioSource proceedaudio;
 

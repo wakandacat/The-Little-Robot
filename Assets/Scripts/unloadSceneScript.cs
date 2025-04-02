@@ -8,7 +8,7 @@ public class unloadSceneScript : MonoBehaviour
 
     //public string sceneToUnload;
     private mainGameScript mainGameScript;
-    private GameObject door;
+    public GameObject door;
 
     void Awake()
     {
