@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1829209251351603302}
   - component: {fileID: 947825943331869380}
   - component: {fileID: 8726971319552774640}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Boss Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,12 +118,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 522e422fbd544a84f8dba57f74cab199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP_Maximum: 30
-  Energy_Maximum: 5
-  Energy_RegainedPerSecond: 0.5
-  Energy_RegainedOnStrike: 1
+  HP_Maximum_1: 50
+  Energy_Maximum_1: 3
+  Energy_RegainedPerSecond_1: 0.15
+  Energy_RegainedOnStrike_1: 0.4
+  State_Awake_Delay_1: 4
+  HP_Maximum_2: 75
+  Energy_Maximum_2: 4
+  Energy_RegainedPerSecond_2: 0.15
+  Energy_RegainedOnStrike_2: 0.4
+  State_Awake_Delay_2: 3
+  HP_Maximum_3: 100
+  Energy_Maximum_3: 5
+  Energy_RegainedPerSecond_3: 0.15
+  Energy_RegainedOnStrike_3: 0.4
+  State_Awake_Delay_3: 2
   Player_PositionTrackingTimeInterval: 0.02
   Player_PositionTrackingMaxTimeTracked: 3
-  AwakeState_Delay: 3
-  Attack_BasicProjectile01: {fileID: 6745135230358999026, guid: ccb06d8ade8264744a78094086a672a9,
-    type: 3}
+  Deflection_DamageOnSuccessfulDeflect: 5
+  ClusteredProjectileGameObjects: []

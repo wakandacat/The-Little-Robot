@@ -21,7 +21,7 @@ public class EnemyCollision : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
        //Debug.Log("in enemyCollision before if");
-        if (collision.gameObject.tag == "Boss Enemy")
+        if ( collision.gameObject.layer == 14)
         {
             enemyCollision = true;
             //Debug.Log("EnemyCollision: enemyCollision = true");
@@ -29,7 +29,7 @@ public class EnemyCollision : MonoBehaviour
     }
     public void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.tag == "Boss Enemy")
+        if ( collision.gameObject.layer == 14)
         {
             enemyCollision = true;
             //Debug.Log("EnemyCollision: enemyCollision = true");
