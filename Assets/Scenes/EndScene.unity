@@ -635,46 +635,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &187901118
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 187901119}
-  - component: {fileID: 187901120}
-  m_Layer: 0
-  m_Name: AudioListener
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &187901119
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 187901118}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.72678, y: 142.531, z: -1130.232}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 975857725}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &187901120
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 187901118}
-  m_Enabled: 1
 --- !u!1001 &198891133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4409,10 +4369,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 09b70d2f0fbf49946b04cc232ff1c78b,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 187901119}
     - targetCorrespondingSourceObject: {fileID: -6235226547981976661, guid: 09b70d2f0fbf49946b04cc232ff1c78b,
         type: 3}
       insertIndex: -1
@@ -4423,12 +4379,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1223431592}
   m_SourcePrefab: {fileID: 100100000, guid: 09b70d2f0fbf49946b04cc232ff1c78b, type: 3}
---- !u!4 &975857725 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 09b70d2f0fbf49946b04cc232ff1c78b,
-    type: 3}
-  m_PrefabInstance: {fileID: 975857724}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &975857726 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6235226547981976661, guid: 09b70d2f0fbf49946b04cc232ff1c78b,

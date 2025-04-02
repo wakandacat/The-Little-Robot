@@ -12,7 +12,7 @@ public class gasParticleScript : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
           //  Debug.Log("turning gas on");
-            particleSys.GetComponent<ParticleSystem>().Play();
+            //particleSys.GetComponent<ParticleSystem>().Play();
         }
     }
 
@@ -21,7 +21,7 @@ public class gasParticleScript : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
            // Debug.Log("turning gas off");
-            particleSys.GetComponent<ParticleSystem>().Stop();
+            //particleSys.GetComponent<ParticleSystem>().Stop();
         }
     }
 }

@@ -334,17 +334,30 @@ public class mainGameScript : MonoBehaviour
         } 
         else //runs every other time
         {
+
+            int highestVal = 0;
+            int[] camsPriority = new int[] { securCamEnd.Priority, walkingCamEnd.Priority, playerViewCamEnd.Priority, bossCam.Priority, ventCam1.Priority, ventCam2.Priority, ventCam3.Priority, introCam.Priority, securityCam.Priority};
+
+            for (int i = 0; i < camsPriority.Length; i++)
+            {
+                if (camsPriority[i] > highestVal)
+                {
+                    highestVal = camsPriority[i];
+                }
+            }
+
             //ensure outro cams are not active
             securCamEnd.Priority = 5;
             playerViewCamEnd.Priority = 6;
             walkingCamEnd.Priority = 7;
 
             //ensure vent cams are not active
-            ventCam1.Priority = 10;
-            ventCam2.Priority = 10;
-            ventCam3.Priority = 10;
-
-            platformCam.Priority = bossCam.Priority + 1; 
+            ventCam1.Priority = 8;
+            ventCam2.Priority = 8;
+            ventCam3.Priority = 8;
+            //Debug.Log("highestVal " + highestVal);
+            //platformCam.Priority = bossCam.Priority + 1; 
+            platformCam.Priority = highestVal + 1;
         }
 
         platformCam.m_YAxis.Value = yaxis; //position up teh spine axis
