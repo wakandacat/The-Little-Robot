@@ -180,11 +180,11 @@ public class player_fx_behaviors : MonoBehaviour
         {
             Rumble(0.25f, 0.75f, 1.0f);
         }
-        if (door.GetComponentInChildren<doorScript>().movingDown == true || door.GetComponentInChildren<doorScript>().movingDown == true)
+/*        if (door.GetComponentInChildren<doorScript>().movingDown == true || door.GetComponentInChildren<doorScript>().movingDown == true)
         {
             Debug.Log("doors are opening");
             Rumble(0.25f, 0.25f, 1.0f);
-        }
+        }*/
     }
     public IEnumerator playDashVfx()
     {
