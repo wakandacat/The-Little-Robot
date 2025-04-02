@@ -38,8 +38,6 @@ public class ventScript : MonoBehaviour
                 //turn colliders off
                 collider1.SetActive(false);
                 collider2.SetActive(false);
-                //switch to the vent cam
-                ventCam.Priority = platformCam.Priority + 1;
 
                 //switch the camera offset direction depending on which side is entered first
                 if (collision.contacts[0].thisCollider.name == "exitCollider")
@@ -55,6 +53,7 @@ public class ventScript : MonoBehaviour
 
                 GameObject.Find("VentCams").GetComponentsInChildren<CinemachineTrackedDolly>()[ventNum - 1].m_PathOffset.z = 3 * entranceDirection;
                 GameObject.Find("VentCams").GetComponentsInChildren<CinemachineComposer>()[ventNum - 1].m_TrackedObjectOffset.z = 3 * (-1) * entranceDirection;
+
             }
         }
     }

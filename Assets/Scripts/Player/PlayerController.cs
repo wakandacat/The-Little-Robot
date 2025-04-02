@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour
     private float maxRollSpeed = 12.0f;
     public bool rollState = false;
     public bool inVent = false;
+    private bool ventRunOnce = false;
 
     //Deflect vars
     private bool Deflecting = false;
@@ -345,6 +346,20 @@ public class PlayerController : MonoBehaviour
     {
         if (mainScript.cutScenePlaying == false)
         {
+
+            if (inVent == false && ventRunOnce == false)
+            {
+                //Debug.Log("not in vent anymore");
+                mainScript.GetComponent<mainGameScript>().SwitchToPlatformCam(0.4f);
+                ventRunOnce = true;
+
+            } 
+            else if (inVent == true)
+            {
+               // Debug.Log("in vent");
+                ventRunOnce = false;
+            }
+
             //Find enemy 
             findEnemy();
             //find end scene triggers
@@ -367,7 +382,7 @@ public class PlayerController : MonoBehaviour
                 Debug.DrawRay(transform.position, forward, Color.green);
                 Debug.DrawRay(transform.position, down, Color.red);
                 height = GetGroundDistance();
-                Debug.Log(height);
+                //Debug.Log(height);
                 //if player in attack State start attack combo timer
                 if (attackState == true)
                 {

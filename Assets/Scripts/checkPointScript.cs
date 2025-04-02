@@ -89,5 +89,22 @@ public class checkPointScript : MonoBehaviour
         //MAKE THE FREELOOK CAMERA FACE FORWARD AS WELL
         mainGameScript.CheckPointResetPlatformCam(this.transform.eulerAngles.y);
 
+        ////ensure all vent cams are at beginning
+        //if (GameObject.Find("ventCam01").GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition != 0)
+        //{
+        //    GameObject.Find("ventCam01").GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0;
+        //}
+
+        //if (GameObject.Find("ventCam02").GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition != 0)
+        //{
+        //    GameObject.Find("ventCam02").GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0;
+        //}
+
+        //if (GameObject.Find("ventCam03").GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition != 0)
+        //{
+        //    Debug.Log("huh");
+        //    GameObject.Find("ventCam03").GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTrackedDolly>().m_PathPosition = 0;
+        //}
+
     }
 }
