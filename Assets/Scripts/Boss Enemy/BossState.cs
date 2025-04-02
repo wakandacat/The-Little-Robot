@@ -4504,6 +4504,7 @@ public class State_Attack_Melee01 : BossState
                 SphereCollider Attack_LaserContactObject_collider = Attack_ColliderSphere.AddComponent<SphereCollider>();   // add a collider
                 Attack_LaserContactObject_collider.isTrigger = true;                                                        // set collider trigger to true
                 Attack_ColliderSphere.tag = "Damage Source";
+                Attack_ColliderSphere.layer = 6;
                 Attack_ColliderSphere.transform.localScale = Attack_ColliderSphereScale_Out;                                // set collider sphere object to use Attack_ColliderSphereScale_Out scaling
 
             }

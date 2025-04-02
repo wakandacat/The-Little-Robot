@@ -888,6 +888,10 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("inv call");
             immunity = StartCoroutine(Immunity());
         }
+        if(collision == false && combatState == true)
+        {
+            StopCoroutine(Immunity());
+        }
         if(combatState == true && enemy !=null)
         {
             if(enemy.GetComponent<BossEnemy>().HP_IsZero() == true)
