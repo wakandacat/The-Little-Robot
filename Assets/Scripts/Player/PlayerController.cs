@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
     public bool runAttack1Once = false;
     public bool runAttack2Once = false;
     public bool runAttack3Once = false;
+    public bool enemyPlayerCollision = false;
     private Coroutine attackAnim1;
     private Coroutine attackAnim2;
     private Coroutine attackAnim3;
@@ -699,11 +700,12 @@ public class PlayerController : MonoBehaviour
 
     public void attackCombo(int counter)
     {
+        enemyPlayerCollision = enemyCollision.enemyCollision;
         if (counter == 1)
         {
             runAttack1Once = true;
 
-            if (enemyCollision.enemyCollision == true)
+            if (enemyPlayerCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage);
                 //play sfx on hit
@@ -723,7 +725,7 @@ public class PlayerController : MonoBehaviour
         {
             runAttack2Once = true;
 
-            if (enemyCollision.enemyCollision == true)
+            if (enemyPlayerCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 2);
                 //play sfx on hit
@@ -743,7 +745,7 @@ public class PlayerController : MonoBehaviour
         {
             runAttack3Once = true;
 
-            if (enemyCollision.enemyCollision == true)
+            if (enemyPlayerCollision == true)
             {
                 enemy.GetComponent<BossEnemy>().HP_TakeDamage(playerDamage * 3 + 2);
                 //play sfx

@@ -36,6 +36,8 @@ public class StartEndBattleScript : MonoBehaviour
     public SpriteRenderer scientists;
     private Color m_color;
 
+    public bool camShake = false;
+
     public Coroutine deathExplosions;
     void Awake()
     {
@@ -226,11 +228,13 @@ public class StartEndBattleScript : MonoBehaviour
 
     public void startCamShake() 
     {
+        camShake = true;
         shakeCam(2f);
     }
 
     public void stopShakeCam()
     {
+        camShake = false;
         battleCam.GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
     }
 

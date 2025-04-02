@@ -7,8 +7,8 @@ public class bridgeScript : MonoBehaviour
 
     private float timer = 0;
     private float timeStep = 0.01f;
-    private bool movingLeft = false;
-    private bool movingRight = false;
+    public bool movingLeft = false;
+    public bool movingRight = false;
     private Vector3 startPos;
     private float timeToMove = 1.0f;
 

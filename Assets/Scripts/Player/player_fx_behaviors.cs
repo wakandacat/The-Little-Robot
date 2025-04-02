@@ -18,11 +18,13 @@ public class player_fx_behaviors : MonoBehaviour
     groundCheck ground;
     public GameObject cloudFungus;
     private mainGameScript mainScript;
+    private GameObject bridge;
+    private bool left;
+    private bool right;
 
     //animation variables
     private Animator m_animator;
     private string state = "Idle";
-
 
     //vfx variables
     private bool runOnce = false;
@@ -60,7 +62,6 @@ public class player_fx_behaviors : MonoBehaviour
         m_animator = this.GetComponent<Animator>();
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
         mainScript = GameObject.Find("WorldManager").GetComponent<mainGameScript>();
-
         //animation
         state = "Idle";
         landVfx.Stop();
@@ -82,10 +83,19 @@ public class player_fx_behaviors : MonoBehaviour
         //sfx
         walkCoroutine = StartCoroutine(walkSFX());
     }
-
+    public void findBridge()
+    {
+        if (playerScript.combatState == true)
+        {
+            bridge = GameObject.Find("TermProject_bridge_end");
+            left = bridge.gameObject.GetComponent<bridgeScript>().movingLeft;
+            right = bridge.gameObject.GetComponent<bridgeScript>().movingRight;
+        }
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
+        findBridge();
         vfx_triggers();
         RumbleConditions();
         var currentState = getPlayerState();
@@ -129,15 +139,15 @@ public class player_fx_behaviors : MonoBehaviour
     }
     public void RumbleConditions()
     {
-        if (playerScript.attackCounter == 1 && playerScript.runAttack1Once == true)
+        if (playerScript.attackCounter == 1 && playerScript.runAttack1Once == true && playerScript.enemyPlayerCollision == true)
         {
             Rumble(0.25f, 0.25f, 0.4f);
         }
-        if (playerScript.attackCounter == 2 && playerScript.runAttack2Once == true)
+        if (playerScript.attackCounter == 2 && playerScript.runAttack2Once == true && playerScript.enemyPlayerCollision == true)
         {
             Rumble(0.25f, 0.25f, 0.4f);
         }
-        if (playerScript.attackCounter == 3 && playerScript.runAttack3Once == true)
+        if (playerScript.attackCounter == 3 && playerScript.runAttack3Once == true && playerScript.enemyPlayerCollision == true)
         {
             Rumble(0.25f, 0.75f, 0.4f);
         }
@@ -145,16 +155,26 @@ public class player_fx_behaviors : MonoBehaviour
         {
             Rumble(0.75f, 1f, 1f);
         }
-
- /*       if (ground.onGround == true && ground.runRumbleOnce == false)
-        {
-            ground.runRumbleOnce = true;
-            Rumble(0.25f, 0.75f, 0.25f);
-        }*/
-/*        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
+        if(playerScript.deathState == true)
         {
             Rumble(0.0f, 0.0f, 0.0f);
-        }*/
+        }
+        if(left == true || right == true)
+        {
+            Debug.Log("Here bridge haptics");
+            Rumble(0.5f, 0.5f, 1.0f);
+
+        }
+
+        /*       if (ground.onGround == true && ground.runRumbleOnce == false)
+               {
+                   ground.runRumbleOnce = true;
+                   Rumble(0.25f, 0.75f, 0.25f);
+               }*/
+        /*        if (playerScript.combatState == true && (playerScript.height > 0.05f && playerScript.height < 0.06f))
+                {
+                    Rumble(0.0f, 0.0f, 0.0f);
+                }*/
 
     }
     public IEnumerator playDashVfx()
