@@ -139,7 +139,7 @@ public class player_fx_behaviors : MonoBehaviour
         }
         if (playerScript.attackCounter == 3 && playerScript.runAttack3Once == true)
         {
-            Rumble(0.75f, 1f, 0.4f);
+            Rumble(0.25f, 0.75f, 0.4f);
         }
         if(playerScript.collision == true)
         {
