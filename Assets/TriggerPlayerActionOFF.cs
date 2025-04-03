@@ -24,7 +24,7 @@ public class TriggerPlayerActionOFF : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             stopAction = true;
-            Debug.Log("stopAction" + stopAction);
+           // Debug.Log("stopAction" + stopAction);
             rotation = this.transform.eulerAngles.y;
             walkingCam.Priority = freeLook.Priority + 1; //switch to the track cam
         }
