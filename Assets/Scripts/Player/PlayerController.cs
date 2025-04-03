@@ -854,10 +854,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Hello");
         immunity_on = true;
         Physics.IgnoreLayerCollision(7, 6, true);
-        collision = false;
-        hitOnce = true;
         yield return new WaitForSeconds(immunityTime);
-        hitOnce = false;
         Physics.IgnoreLayerCollision(7, 6, false);
         immunity_on = false;
         yield return new WaitForSeconds(5.0f);
