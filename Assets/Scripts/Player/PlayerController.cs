@@ -148,6 +148,8 @@ public class PlayerController : MonoBehaviour
     public GameObject endTrigger;
     public bool foundScene = false;
     public bool triggerFound = false;
+    public bool projectilefungus = true;
+    public bool hitOnce = false;
     void Start()
     {
         pc = new PlayerControls();
@@ -852,7 +854,10 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("Hello");
         immunity_on = true;
         Physics.IgnoreLayerCollision(7, 6, true);
+        collision = false;
+        hitOnce = true;
         yield return new WaitForSeconds(immunityTime);
+        hitOnce = false;
         Physics.IgnoreLayerCollision(7, 6, false);
         immunity_on = false;
         yield return new WaitForSeconds(5.0f);
@@ -878,8 +883,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //sfx call based on what hit you
-        if (other.gameObject.tag == "Projectile" && other.gameObject.name.Contains("fungus")) //projectile fungus
+        if (other.gameObject.tag == "projectileFungus" && other.gameObject.name.Contains("fungus")) //projectile fungus
         {
+            playerCurrenthealth -= 1;
+            projectilefungus = true;
             m_audio.playPlayerSFX(13);
         }
         else if (other.gameObject.name.Contains("Projectile"))
@@ -892,6 +899,7 @@ public class PlayerController : MonoBehaviour
     {
         collision = false;
         collisionTendril = false;
+        projectilefungus = false;
         runTakeDamageOnce = false;
         //runTaketendrilDamageOnce = false;
     }

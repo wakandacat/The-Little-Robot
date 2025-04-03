@@ -25,7 +25,7 @@ public class ConveyorSpawn : MonoBehaviour
             GameObject currItem = items[num];
 
             //it is a fungus projectile
-            if (currItem.gameObject.tag == "Projectile")
+            if (currItem.gameObject.tag == "projectileFungus")
             {
                 GameObject spawnedBox = Instantiate(currItem, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), this.transform.rotation);
                 spawnedBox.transform.SetParent(this.transform);

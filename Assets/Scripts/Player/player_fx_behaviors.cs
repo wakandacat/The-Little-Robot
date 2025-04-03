@@ -254,7 +254,7 @@ public class player_fx_behaviors : MonoBehaviour
             playerScript.runAttack = true;
             attack_3.Play();
         }
-        if (playerScript.collision == true && playerScript.runTakeDamageOnce == false)
+        if ((playerScript.collision == true || playerScript.projectilefungus == true) && playerScript.runTakeDamageOnce == false)
         {
             playerScript.runTakeDamageOnce = true;
             takeDamage.Play();
