@@ -20,10 +20,10 @@ public class dollyFollow : MonoBehaviour
     void Update()
     {
         //we entered thru exitCollider and leaving thru enterCollider
-        if (camPos >= 0.98 && cam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathOffset.z == -3)
+        if (camPos >= 0.97 && cam.GetCinemachineComponent<CinemachineTrackedDolly>().m_PathOffset.z == -3)
         {
             //Debug.Log("hahahahaahhah");
-            this.GetComponent<CinemachineDollyCart>().m_Position = 0.98f;
+            this.GetComponent<CinemachineDollyCart>().m_Position = 0.97f;
             cam.LookAt = null;
             cam.Follow = null;
         }

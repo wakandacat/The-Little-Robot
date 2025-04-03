@@ -421,7 +421,7 @@ public class PlayerController : MonoBehaviour
             if (triggerFound == true && endTrigger.GetComponent<TriggerPlayerActionOFF>().stopAction == true)
             {
                 rollCounter = 0;
-                Debug.Log("Hello we are disabling the controls");
+               // Debug.Log("Hello we are disabling the controls");
                 pc.Gameplay.Attack.Disable();
                 pc.Gameplay.Roll.Disable();
                 pc.Gameplay.Deflect.Disable();

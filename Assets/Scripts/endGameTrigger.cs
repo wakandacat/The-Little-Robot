@@ -168,7 +168,7 @@ public class endGameTrigger : MonoBehaviour
     public void makeDudeMove()
     {
         float speed = 1.0f;
-        Debug.Log("Moving towawards player");
+       // Debug.Log("Moving towawards player");
         //scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
         float dudeNewZ = Mathf.Lerp(scientist.transform.position.z, finalPos.transform.position.z, 0.01f);
         scientist.transform.position = new Vector3(scientist.transform.position.x, scientist.transform.position.y, dudeNewZ);
@@ -247,12 +247,12 @@ public class endGameTrigger : MonoBehaviour
 
                         }
                         playerLookingUp = true;
-                        Debug.Log("player looking up " + playerLookingUp);
+                       // Debug.Log("player looking up " + playerLookingUp);
 
                         if (endTimer >= 3.5f && endTimer < 10f)
                         {
                             //open door sound
-                            if (endTimer >= 4.5f && endTimer < 4.6f)
+                            if (endTimer >= 3.9f && endTimer < 4.0f)
                             {
                                 if (doorAudio.isPlaying == false)
                                 {
@@ -261,10 +261,14 @@ public class endGameTrigger : MonoBehaviour
                                     scientist.SetActive(true); //ginette
                                     
                                 }
-                            }
+                            } 
+                            else if (endTimer >= 5.4f && endTimer < 5.5f)
+                            {
+                                doorAudio.Stop();
+                            }  
 
                             //close door sound
-                            if (endTimer >= 5.5f && endTimer < 5.6f)
+                            if (endTimer >= 5.6f && endTimer < 5.7f)
                             {
                                 if (doorAudio.isPlaying == false)
                                 {
@@ -278,7 +282,7 @@ public class endGameTrigger : MonoBehaviour
                         {
                             
                             m_animator.SetBool("goToS3", true);
-                            Debug.Log("play 3rd shot");
+                           // Debug.Log("play 3rd shot");
                         }
                         
                         if (endTimer >= 8f && endTimer < 8.1f)
@@ -322,6 +326,7 @@ public class endGameTrigger : MonoBehaviour
                             {
                                 playerCam.LookAt = camLookingUp.transform;
                                 playerViewCanvas.SetActive(true); //look through the player's eyes
+                                playerCam.m_Lens.FieldOfView = 70;
                                 //Scientist grab
                                 //grab_player = true;
                                 guy_animator.SetBool("guy_S2", true);
@@ -342,7 +347,7 @@ public class endGameTrigger : MonoBehaviour
                             }
                         }
 
-                        if (endTimer >= 17.5f && endTimer < 21f)
+                        if (endTimer >= 17f && endTimer < 21f)
                         {
                             //researcher grabs, big static
                             staticCanvas.GetComponent<RawImage>().color = new Color32(142, 142, 142, 255);
