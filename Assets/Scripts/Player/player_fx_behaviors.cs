@@ -196,10 +196,10 @@ public class player_fx_behaviors : MonoBehaviour
             Rumble(0.008f, 0.2f, 0.2f);
         }
         //camshake
-        if (camShake == true) //if this is used for boss death it needs to start and end slightly earlier 
-        {
-            Rumble(0.2f, 0.7f, 0.7f);
-        }
+        //if (camShake == true) //if this is used for boss death it needs to start and end slightly earlier 
+        //{
+        //    Rumble(0.2f, 0.7f, 0.5f);
+        //}
         //door closing
         if (door.GetComponentInChildren<doorScript>().movingUp == true)
         {
@@ -388,7 +388,6 @@ public class player_fx_behaviors : MonoBehaviour
         {
             float timeToWait = 0.2f; //default time to wait
             //clip full length is 0.6f
-            Debug.Log(playerScript.leftStick.magnitude);
             //if(playerScript.Rolling != true)
             if (playerScript.leftStick.magnitude >= 0.7f && ground.onGround == true && playerScript.Rolling != true)
             {

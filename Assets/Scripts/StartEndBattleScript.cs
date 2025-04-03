@@ -37,6 +37,7 @@ public class StartEndBattleScript : MonoBehaviour
     private Color m_color;
 
     public bool camShake = false;
+    public player_fx_behaviors fxBehave;
 
     public Coroutine deathExplosions;
     void Awake()
@@ -51,6 +52,14 @@ public class StartEndBattleScript : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        fxBehave = GameObject.FindWithTag("Player").GetComponent<player_fx_behaviors>();
+        if(fxBehave == null)
+        {
+            Debug.Log("scream");
+        }
+    }
 
     void FixedUpdate()
     {
@@ -82,7 +91,7 @@ public class StartEndBattleScript : MonoBehaviour
                 mainGameScript.currLevelCount++;
 
                 //cutscene chunks
-                Invoke("startCamShake", 1.0f);
+                Invoke("startCamShake", 0.8f);
                 Invoke("enemyDeadCutsceneStart", 2.7f);
 
                 Invoke("enemyDeadCutsceneEnd", 6.0f);
@@ -103,7 +112,7 @@ public class StartEndBattleScript : MonoBehaviour
                 mainGameScript.currLevelCount++;
 
                 //cutscene chunks
-                Invoke("startCamShake", 1.0f);
+                Invoke("startCamShake", 0.8f);
                 Invoke("enemyDeadCutsceneStart", 2.7f);
 
                 Invoke("enemyDeadCutsceneEnd", 6.0f);
@@ -123,7 +132,7 @@ public class StartEndBattleScript : MonoBehaviour
                 mainGameScript.currLevelCount++;
 
                 //cutscene chunks
-                Invoke("startCamShake", 1.0f);
+                Invoke("startCamShake", 0.8f);
                 Invoke("enemyDeadCutsceneStart", 2.7f);
 
                 Invoke("enemyDeadCutsceneEnd", 6.0f);
@@ -230,6 +239,8 @@ public class StartEndBattleScript : MonoBehaviour
     {
         camShake = true;
         shakeCam(2f);
+        fxBehave.Rumble(0.2f, 0.7f, 2.0f);
+
     }
 
     public void stopShakeCam()

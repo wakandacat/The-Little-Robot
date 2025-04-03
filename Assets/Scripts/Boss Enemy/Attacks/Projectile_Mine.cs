@@ -147,11 +147,7 @@ public class Projectile_Mine : Projectile
             Mine_CurrentState = MineState.Exploding;
             ExplosionActive(true);
             startVFX(); //start VFX
-            if(player != null)
-            {
-                player.GetComponent<player_fx_behaviors>().Rumble(0.25f, 0.25f, 0.1f);
-            }
-
+ 
         }
     }
 

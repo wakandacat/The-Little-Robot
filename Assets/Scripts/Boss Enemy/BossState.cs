@@ -4297,7 +4297,7 @@ public class State_Attack_StandUpMelee : BossState
     private Vector3 originalSize;
     private void findPlayer()
     {
-        player = GameObject.Find("PlayerExport");
+        player = GameObject.FindWithTag("Player");
     }
     // Called when the state machine transitions to this state
     public override void Enter()
@@ -4308,6 +4308,7 @@ public class State_Attack_StandUpMelee : BossState
         Debug.Log(originalSize);
 
         Attack_StartTimeStamp = Time.time;
+        findPlayer();
 
         // FX logic
         VFX_standUp = GameObject.Find("VFX_standUp").GetComponent<ParticleSystem>();
@@ -4318,7 +4319,6 @@ public class State_Attack_StandUpMelee : BossState
     // Called once per frame
     public override void Update()
     {
-        findPlayer();
         // Programming Logic
         if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
         {
@@ -4345,9 +4345,11 @@ public class State_Attack_StandUpMelee : BossState
                 Debug.Log(newScale);
                 //play vfx
                 VFX_standUp.Play();
-                if (player!=null)
+                //haptics
+                if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
-                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f); //ginette
+                    player.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.3f);
+                    //ginette
                 }
             }
         }
@@ -4415,11 +4417,11 @@ public class State_Attack_Melee01 : BossState
     private Vector3 originalPosition;
     private Vector3 colliderTargetSize = new Vector3(18.0f, 0, 18.0f);
     private float Attack_Duration = 3.0f;
-    private float Attack_Delay01 = 1.5f; //originally 2.0 --> it seems first melee is faster than all other melees???
-    private float Attack_Delay02 = 1.5f; //this one's ok actually, was 1.8
-    private float Attack_Delay03 = 1.4f; //this one is impossible to sync idk,, when in doubt reuse medium lol
+    private float Attack_Delay01 = 1.6f; //originally 2.0 --> it seems first melee is faster than all other melees???
+    private float Attack_Delay02 = 1.8f; //this one's ok actually, was 1.8
+    private float Attack_Delay03 = 1.8f; //this one is impossible to sync idk,, when in doubt reuse medium lol
     private float Attack_StartTimeStamp = 0.0f;
-    private float Attack_Delay = 1.5f;
+    //private float Attack_Delay = 1.6f;
     // Attack_State Selection Properties
     public static string Attack_Name = "State_Attack_Melee01";
     public static float Energy_Cost = 1.0f;
@@ -4454,7 +4456,7 @@ public class State_Attack_Melee01 : BossState
 
     private void findPlayer()
     {
-        player = GameObject.Find("PlayerExport");
+        player = GameObject.FindWithTag("Player");
     }
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
@@ -4498,6 +4500,7 @@ public class State_Attack_Melee01 : BossState
         debris = GameObject.Find("debris").GetComponent<ParticleSystem>();
         hand_impact = GameObject.Find("slamHandImpact").GetComponent<ParticleSystem>();
 
+        findPlayer();
         stopMeleeVFX();
         fxBehave.VFX_stopPoles(); //safe guard
 
@@ -4506,7 +4509,7 @@ public class State_Attack_Melee01 : BossState
     // Called once per frame
     public override void Update()
     {
-        findPlayer();
+        
         // Programming Logic
         if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
         {
@@ -4521,7 +4524,7 @@ public class State_Attack_Melee01 : BossState
         if (Attack_Completed == false)
         {
             //play melee vfx,, each iteration needs unique delay value bc each iteration changes
-            if (SceneManager.GetActiveScene().name == "Combat1" && Time.time - Attack_StartTimeStamp >= Attack_Delay)
+            if (SceneManager.GetActiveScene().name == "Combat1" && Time.time - Attack_StartTimeStamp >= Attack_Delay01)
             {
                 //move collider where it can be reached
                 Attack_ColliderCube.transform.localPosition = new Vector3(originalPosition.x, 1.0f, originalPosition.z);
@@ -4537,12 +4540,13 @@ public class State_Attack_Melee01 : BossState
 
                 playMeleeVFX();
 
-                if (player != null)
+                if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
-                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f); //ginette
+                    player.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.2f);
+                    //ginette
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "Combat2" && Time.time - Attack_StartTimeStamp >= Attack_Delay)
+            else if (SceneManager.GetActiveScene().name == "Combat2" && Time.time - Attack_StartTimeStamp >= Attack_Delay01)
             {
                 //move collider where it can be reached
                 Attack_ColliderCube.transform.localPosition = new Vector3(originalPosition.x, 1.0f, originalPosition.z);
@@ -4558,12 +4562,13 @@ public class State_Attack_Melee01 : BossState
 
                 playMeleeVFX();
 
-                if (player != null)
+                if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
-                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f); //ginette
+                    player.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.2f);
+                    //ginette
                 }
             }
-            else if (SceneManager.GetActiveScene().name == "Combat3" && Time.time - Attack_StartTimeStamp >= Attack_Delay)
+            else if (SceneManager.GetActiveScene().name == "Combat3" && Time.time - Attack_StartTimeStamp >= Attack_Delay02)
             {
                 //move collider where it can be reached
                 Attack_ColliderCube.transform.localPosition = new Vector3(originalPosition.x, 1.0f, originalPosition.z);
@@ -4579,11 +4584,18 @@ public class State_Attack_Melee01 : BossState
 
                 playMeleeVFX();
 
-                if (player != null)
+                if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
-                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f); //ginette
+                    player.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.2f);
+                    //ginette
                 }
             }
+
+            //if (player != null && player.GetComponent<PlayerController>().collision == true)
+            //{
+            //    player.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.3f);
+            //    //ginette
+            //}
 
         }
 
