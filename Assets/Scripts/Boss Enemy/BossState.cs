@@ -2447,9 +2447,9 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 12;
-    private int Attack_ProjectileCount_ALT = 13;
-    private float Attack_AngleOfSpread = 60.0f;
+    private int Attack_ProjectileCount = 10;
+    private int Attack_ProjectileCount_ALT = 11;
+    private float Attack_AngleOfSpread = 65.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
     private float Attack_MaxHeight = 3.5f;
