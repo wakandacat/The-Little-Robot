@@ -213,6 +213,10 @@ public class player_fx_behaviors : MonoBehaviour
         }
         
     }
+    public void OnApplicationQuit()
+    {
+        stopRumbling();
+    }
     public IEnumerator playDashVfx()
     {
         rollVfx.Play();

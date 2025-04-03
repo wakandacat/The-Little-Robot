@@ -4315,6 +4315,7 @@ public class State_Attack_StandUpMelee : BossState
     // Called once per frame
     public override void Update()
     {
+        findPlayer();
         // Programming Logic
         if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
         {
@@ -4421,6 +4422,8 @@ public class State_Attack_Melee01 : BossState
     public static float Energy_Cost = 1.0f;
     public static float Player_MinDistance = 0.0f;
     public static float Player_MaxDistance = 5.0f;
+
+    private GameObject player;
     
     //Particle system
     public ParticleSystem blast_outer;
@@ -4446,6 +4449,10 @@ public class State_Attack_Melee01 : BossState
         hand_impact.Stop();
     }
 
+    private void findPlayer()
+    {
+        player = GameObject.Find("PlayerExport");
+    }
     public static float CalculateScore(BossEnemy bossEnemyComponent)
     {
         float score = 0.0f;
@@ -4496,6 +4503,7 @@ public class State_Attack_Melee01 : BossState
     // Called once per frame
     public override void Update()
     {
+        findPlayer();
         // Programming Logic
         if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
         {
@@ -4525,6 +4533,11 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+
+                if (player != null)
+                {
+                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f); //ginette
+                }
             }
             else if (SceneManager.GetActiveScene().name == "Combat2" && Time.time - Attack_StartTimeStamp >= Attack_Delay)
             {
@@ -4541,6 +4554,11 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+
+                if (player != null)
+                {
+                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f); //ginette
+                }
             }
             else if (SceneManager.GetActiveScene().name == "Combat3" && Time.time - Attack_StartTimeStamp >= Attack_Delay)
             {
@@ -4557,6 +4575,11 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+
+                if (player != null)
+                {
+                    player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.5f, 0.5f, 0.1f); //ginette
+                }
             }
 
         }
