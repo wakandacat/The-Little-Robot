@@ -386,18 +386,37 @@ public class player_fx_behaviors : MonoBehaviour
         //for as long as player is using joystick
         while (true)
         {
+            float timeToWait = 0.2f; //default time to wait
+            //clip full length is 0.6f
+            Debug.Log(playerScript.leftStick.magnitude);
             //if(playerScript.Rolling != true)
-            if (playerScript.leftStick.magnitude >= 0.1 && ground.onGround == true && playerScript.Rolling != true)
+            if (playerScript.leftStick.magnitude >= 0.7f && ground.onGround == true && playerScript.Rolling != true)
             {
-                //m_audio.walkSource.PlayOneShot(m_audio.walkSource.clip);
+                timeToWait = 0.25f;
+                m_audio.walkSource.Play();
+            }
+            else if(playerScript.leftStick.magnitude >= 0.4f && ground.onGround == true && playerScript.Rolling != true)
+            {
+                timeToWait = 0.35f;
+                m_audio.walkSource.Play();
+            }
+            else if (playerScript.leftStick.magnitude >= 0.25f && ground.onGround == true && playerScript.Rolling != true)
+            {
+                timeToWait = 0.42f;
+                m_audio.walkSource.Play();
+            }
+            else if(playerScript.leftStick.magnitude >= 0.1f && ground.onGround == true && playerScript.Rolling != true)
+            {
+                timeToWait = 0.5f;
                 m_audio.walkSource.Play();
             }
             else
             {
+                timeToWait = 0.1f;
                 m_audio.walkSource.Stop();
             }
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(timeToWait);
         }
         
     }

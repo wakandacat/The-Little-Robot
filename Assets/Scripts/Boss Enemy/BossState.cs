@@ -380,6 +380,9 @@ public class State_Death : BossState
         ProjectileSpawner SpawnerComponent_Mine = bossEnemyComponent.ReturnComponent_Spawner_Mine();
         SpawnerComponent_Mine.ReturnAllProjectilesToPool();
 
+        //kill any FX that slip through
+        fxBehave.VFX_stopPoles();
+
         // FX Logic
         animator.SetBool("die", true);
         animator.SetBool("woken", false);
@@ -501,14 +504,11 @@ public class State_Awake : BossState
                 if (bossEnemyComponent.Compare_Delegate(bossEnemyComponent.TransitionToState_Attack_Melee01) == true)
                 {
                     animator.SetBool("inAttack", false);
-                    animator.SetBool("toIdle", true);
                     animator.SetBool("downed", false);
                     animator.SetBool("toIdle", false);
                 }
                 else
                 {
-                    animator.SetBool("inAttack", false);
-                    animator.SetBool("toIdle", true);
                     animator.SetBool("downed", false);
                     animator.SetBool("toIdle", false);
                     animator.SetBool("inAttack", true);
@@ -1186,6 +1186,7 @@ public class State_Attack_Indicator : BossState
     public override void Update()
     {
         // Programming Logic
+
         if (Spawner_FacePlayer == true)
         {
             bossEnemyComponent.Rotate_AttackIndicatorSpawner_FacePlayer();
@@ -1204,9 +1205,11 @@ public class State_Attack_Indicator : BossState
     public override void CheckTransition()
     {
         // Programming Logic
-        ////Debug.Log("debug text hehe :3");
-        
-        if (Time.time - Timer_StartTime >= Timer_Duration)
+        if (bossEnemyComponent.HP_IsZero())                                  // check if HP_Current has fallen below 0
+        {
+            bossEnemyComponent.TransitionToState_Death();                     // if so, transition to Death State
+        }
+        else if (Time.time - Timer_StartTime >= Timer_Duration)
         {
             bossEnemyComponent.Execute_Delegate();
         }
