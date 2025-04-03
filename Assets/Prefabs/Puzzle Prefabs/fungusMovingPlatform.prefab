@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5045915818431457564}
   - component: {fileID: 2072393545305662330}
-  - component: {fileID: 369351837205525876}
+  - component: {fileID: 5319992736612416959}
   m_Layer: 0
   m_Name: fungusMovingPlatform
   m_TagString: Untagged
@@ -52,7 +52,7 @@ MonoBehaviour:
   minJitter: 0.02
   maxJitter: 0.05
   movingUp: 0
---- !u!82 &369351837205525876
+--- !u!82 &5319992736612416959
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62,9 +62,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 520a2738cbf8ddd4ea029a6df5da2d73, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 4b584b23927df86448bbcdab4af4e5d2, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -73,7 +73,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 8
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -123,7 +123,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -427,6 +427,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8093025163813687692}
+    - targetCorrespondingSourceObject: {fileID: 4143855187888160071, guid: 4ae5ba1e70feefc4c8e924f51546f538,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7549219546059584888}
     - targetCorrespondingSourceObject: {fileID: 6627484379039768492, guid: 4ae5ba1e70feefc4c8e924f51546f538,
         type: 3}
       insertIndex: -1
@@ -489,6 +493,102 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7630ffa645304943ab49417817d0038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!82 &7549219546059584888
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583799327060169693}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 520a2738cbf8ddd4ea029a6df5da2d73, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3087787700049550383 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1964126607072637621, guid: 4ae5ba1e70feefc4c8e924f51546f538,
