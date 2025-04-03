@@ -36,8 +36,8 @@ public class PlayerController : MonoBehaviour
     public Vector2 leftStick;
 
     //jump + quick drop vars
-    public float jumpForce = 20.0f;
-    private float JfallMultiplier = 8.0f;
+    public float jumpForce = 50.0f;
+    private float JfallMultiplier = 16.0f;
     private float quickDropMultiplier = 20.0f;
     public bool isJumping = false;
     public bool isQuickDropping = false;
@@ -457,8 +457,9 @@ public class PlayerController : MonoBehaviour
         }
 
         //Move player using the rigid body
-        rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed + platformMovement);
-        //rb.velocity +=  cameraRelativeMovement * playerSpeed + platformMovement;
+        //rb.MovePosition(transform.position + cameraRelativeMovement * Time.deltaTime * playerSpeed + platformMovement);
+        //rb.velocity =  cameraRelativeMovement * playerSpeed + platformMovement;
+        rb.AddForce(cameraRelativeMovement * playerSpeed + platformMovement - rb.velocity, ForceMode.VelocityChange);
 
 
     }
@@ -500,7 +501,7 @@ public class PlayerController : MonoBehaviour
         if (rb.velocity.y < 0)
         {
             falling = true;
-            rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.deltaTime;
+            rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.fixedDeltaTime;
             //rb.velocity += Vector3.up * Physics.gravity.y * fallMultiplier;
 
         }
@@ -536,7 +537,7 @@ public class PlayerController : MonoBehaviour
     {
         if (ground.onGround == false && (rb.velocity.y < 0))
         {
-            rb.velocity += Vector3.up * Physics.gravity.y * quickDropMultiplier * Time.deltaTime;
+            rb.velocity += Vector3.up * Physics.gravity.y * quickDropMultiplier *  Time.fixedDeltaTime;
             //rb.velocity += Vector3.up * Physics.gravity.y * quickDropMultiplier;
 
         }
