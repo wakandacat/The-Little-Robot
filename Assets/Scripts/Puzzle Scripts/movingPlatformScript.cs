@@ -149,5 +149,8 @@ public class movingPlatformScript : MonoBehaviour
         //distance between the two waypoints
         float distanceBetweenPoints = Vector3.Distance(prevWaypoint.position, targetWaypoint.position);
         timeToPoint = distanceBetweenPoints / speed;
+
+        //play sfx on direction change
+        this.GetComponent<AudioSource>().PlayOneShot(this.GetComponent<AudioSource>().clip);
     }
 }

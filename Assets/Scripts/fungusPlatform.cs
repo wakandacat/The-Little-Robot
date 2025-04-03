@@ -32,9 +32,9 @@ public class fungusPlatform : MonoBehaviour
             
 
             //play fungus dead sound
-            if (this.transform.parent.GetComponent<AudioSource>().isPlaying == false)
+            if (this.GetComponent<AudioSource>().isPlaying == false)
             {
-                this.transform.parent.GetComponent<AudioSource>().Play();
+                this.GetComponent<AudioSource>().PlayOneShot(this.GetComponent<AudioSource>().clip);
             }
 
             runOnce = true;
