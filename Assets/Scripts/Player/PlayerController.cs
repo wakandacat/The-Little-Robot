@@ -141,6 +141,7 @@ public class PlayerController : MonoBehaviour
     //Raycast
     public LayerMask groundMask;
     public float height;
+    public LayerMask fungusProjectile;
 
     //EndScene
     public GameObject endScene;
