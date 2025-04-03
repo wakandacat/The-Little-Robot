@@ -24,6 +24,7 @@ public class fungusPlatform : MonoBehaviour
             //Debug.Log("Hello");
             postule.SetActive(false);
             deadPostule.SetActive(true);
+            GameObject.FindWithTag("Player").GetComponent<player_fx_behaviors>().Rumble(0.25f, 0.25f, 0.1f);
             this.transform.parent.GetComponent<movingPlatformScript>().isFungus = false; //allow the platform to move again
 
             //stop the random jitter

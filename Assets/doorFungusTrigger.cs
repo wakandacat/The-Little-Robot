@@ -6,6 +6,12 @@ public class doorFungusTrigger : MonoBehaviour
 {
 
     private bool runOnce = false;
+    private player_fx_behaviors player;
+
+    private void Start()
+    {
+        player = GameObject.FindWithTag("Player").GetComponent<player_fx_behaviors>();
+    }
     private int previousCounter = 0;
 
     public void OnTriggerStay(Collider collision)
@@ -18,6 +24,7 @@ public class doorFungusTrigger : MonoBehaviour
 
                 //open door
                 this.transform.parent.GetChild(0).GetComponent<doorScript>().fungusOpen();
+                player.Rumble(0.5f, 0.25f, 0.3f);
             }
             else if(collision.gameObject.GetComponent<PlayerController>().attackCounter == 1 || collision.gameObject.GetComponent<PlayerController>().attackCounter == 2)
             {
