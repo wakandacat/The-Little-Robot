@@ -4438,6 +4438,8 @@ public class State_Attack_Melee01 : BossState
     public ParticleSystem debris;
     public ParticleSystem hand_impact;
 
+    private bool sfxPlayed = false;
+
     public void playMeleeVFX()
     {
         //Slam_rings.Play();
@@ -4541,6 +4543,12 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+                if(sfxPlayed == false)
+                {
+                    m_audio.playEnemySFX(5);
+                    sfxPlayed = true;
+                }
+                
 
                 if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
@@ -4563,6 +4571,11 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+                if (sfxPlayed == false)
+                {
+                    m_audio.playEnemySFX(5);
+                    sfxPlayed = true;
+                }
 
                 if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
@@ -4585,6 +4598,11 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+                if (sfxPlayed == false)
+                {
+                    m_audio.playEnemySFX(5);
+                    sfxPlayed = true;
+                }
 
                 if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
