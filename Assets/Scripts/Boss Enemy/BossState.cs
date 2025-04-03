@@ -4315,7 +4315,6 @@ public class State_Attack_StandUpMelee : BossState
     // Called once per frame
     public override void Update()
     {
-        findPlayer();
         // Programming Logic
         if (Time.time - Attack_StartTimeStamp >= Attack_Duration) // check if the duration of the attack has been exceeded Attack_Duration
         {
