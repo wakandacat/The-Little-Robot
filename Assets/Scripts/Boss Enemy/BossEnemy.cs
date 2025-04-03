@@ -750,7 +750,8 @@ public class BossEnemy : MonoBehaviour
                     explosion.Play();
                 }
             }
-
+            //play sfx
+            parentNode.GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.4f);
         }
       

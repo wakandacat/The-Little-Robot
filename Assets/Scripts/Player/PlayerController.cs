@@ -653,6 +653,7 @@ public class PlayerController : MonoBehaviour
                     {
                         handleRoll();
                     }
+                    m_audio.playPlayerSFX(12); //ball in/out sfx
                 }
             }
             else
@@ -877,10 +878,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //sfx call based on what hit you
-        //if (other.gameObject.name.Contains("gas"))
-        //{
-        //    m_audio.playPlayerSFX(11); //doesn't work atm, things will need unique name checks bc not all are called fungus
-        //}
+        if (other.gameObject.tag == "Projectile" && other.gameObject.name.Contains("fungus")) //projectile fungus
+        {
+            m_audio.playPlayerSFX(13);
+        }
         else if (other.gameObject.name.Contains("Projectile"))
         {
             m_audio.playPlayerSFX(4);

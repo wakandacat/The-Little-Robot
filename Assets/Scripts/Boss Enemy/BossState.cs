@@ -357,6 +357,7 @@ public class State_LowEnergy : BossState
         animator.SetBool("exitDowned", true);
         fxBehave.eyesOnCoroutine = fxBehave.StartCoroutine(fxBehave.turnOnEyes());
         fxBehave.VFX_startPoles();
+        m_audio.playEnemySFX(3);
     }
 }
 
@@ -1176,6 +1177,7 @@ public class State_Attack_Indicator : BossState
             //note
             //animator.SetBool("inAttack", true);
             fxBehave.VFX_startPoles();
+            m_audio.playEnemySFX(3);
         }
 
         //fxBehave.VFX_startPoles();

@@ -3253,6 +3253,108 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5365745175525817986}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &609806045 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6771197920548482837, guid: 1e1bce0b303a5094cb461b230bd19b1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5365745175525817986}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &609806049
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609806045}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 2a0d02a4dfbf5204cbf5b3351dfdce93, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &646704136
 GameObject:
   m_ObjectHideFlags: 0
@@ -23920,10 +24022,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 098ada5dbf1ad8f4d94ecd13af5824bd, type: 3}
   - {fileID: 8300000, guid: a3c3e6d25b7696c4dbfb3158e08462fa, type: 3}
   - {fileID: 8300000, guid: 94c613a495339e54e815332a1c138930, type: 3}
+  - {fileID: 8300000, guid: 9e51196dc96ec48448a85a2475b21c8e, type: 3}
+  - {fileID: 8300000, guid: 9beb162fbce5d6d47b7176a4fb2f5c02, type: 3}
   enemySFXClips:
   - {fileID: 8300000, guid: e03f2a696abcda64aa56608dc9808b2c, type: 3}
   - {fileID: 8300000, guid: 0a8e63e4700ebbb40bcd6b784caa3682, type: 3}
   - {fileID: 8300000, guid: d30c7cb15a6caa844b3b5a0bb3fe0a33, type: 3}
+  - {fileID: 8300000, guid: a4878dffeab09ca47b92cf241f2a101a, type: 3}
+  - {fileID: 8300000, guid: fc020fd7e47a63a4ca1d81f1a7ad2cc1, type: 3}
   backgroundSource: {fileID: 1909374291}
   playerSource: {fileID: 1909374294}
   walkSource: {fileID: 1909374295}
@@ -23941,7 +24047,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.45
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -40670,6 +40776,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 603421524}
+    - targetCorrespondingSourceObject: {fileID: 6771197920548482837, guid: 1e1bce0b303a5094cb461b230bd19b1b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 609806049}
     - targetCorrespondingSourceObject: {fileID: 7558767463436256188, guid: 1e1bce0b303a5094cb461b230bd19b1b,
         type: 3}
       insertIndex: -1

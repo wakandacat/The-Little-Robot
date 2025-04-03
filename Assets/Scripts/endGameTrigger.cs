@@ -58,6 +58,9 @@ public class endGameTrigger : MonoBehaviour
 
     Animator m_animator;
     Animator guy_animator;
+
+    //sfx variables
+    bool hasPlayedSFX = false;
     private void Start()
     {
         m_audio = GameObject.Find("AudioManager").GetComponent<audioManager>();
@@ -167,6 +170,7 @@ public class endGameTrigger : MonoBehaviour
 
     public void makeDudeMove()
     {
+        
         float speed = 1.0f;
        // Debug.Log("Moving towawards player");
         //scientist.transform.position = Vector3.MoveTowards(scientist.transform.position, finalPos.transform.position, speed*Time.deltaTime);
@@ -179,6 +183,12 @@ public class endGameTrigger : MonoBehaviour
         //    guy_animator.SetBool("guy_S2", true);
 
         //}
+        if(sci_startAnim == true && hasPlayedSFX == false)
+        {
+            //play walking sfx
+            this.GetComponent<AudioSource>().PlayOneShot(this.GetComponent<AudioSource>().clip);
+            hasPlayedSFX = true;
+        }
 
     }
     public void OutroCam()
