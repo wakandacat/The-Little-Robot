@@ -652,6 +652,7 @@ public class PlayerController : MonoBehaviour
                     {
                         handleRoll();
                     }
+                    m_audio.playPlayerSFX(12); //ball in/out sfx
                 }
             }
             else
