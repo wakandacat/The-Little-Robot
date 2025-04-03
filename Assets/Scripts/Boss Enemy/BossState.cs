@@ -3975,19 +3975,19 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
     // Spawner Values
     private float Attack_FireRate = 1.75f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 24;
+    private int Attack_Count = 22;
     private bool Attack_TrackHorizontal = false;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
-    private float Attack_ProjectileSpeed = 20.0f;
-    private float Attack_ProjectileLifetime = 8.0f;
+    private float Attack_ProjectileSpeed = 24.0f;
+    private float Attack_ProjectileLifetime = 22.0f;
 
     // Attack Spawner
     private ProjectileSpawner SpawnerComponent_Bullet;
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 85;
+    private int Attack_ProjectileCount = 100;
     private float Attack_AngleOfSpread = 360.0f;
     private int Attack_ProjectileVerticalCount = 1;
     private float Attack_MinHeight = 0.5f;
