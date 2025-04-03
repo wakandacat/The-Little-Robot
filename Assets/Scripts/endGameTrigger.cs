@@ -336,13 +336,13 @@ public class endGameTrigger : MonoBehaviour
                             }
 
                             //obscure transition with big static
-                            if (endTimer >= 15f && endTimer < 16f)
+                            if (endTimer >= 15f && endTimer < 15.25f) //this is the dude moving lol
                             {
                                 staticCanvas.GetComponent<RawImage>().color = new Color32(142, 142, 142, 63);
                             }
                         }
 
-                        if (endTimer >= 18f && endTimer < 21f)
+                        if (endTimer >= 17.5f && endTimer < 21f)
                         {
                             //researcher grabs, big static
                             staticCanvas.GetComponent<RawImage>().color = new Color32(142, 142, 142, 255);
