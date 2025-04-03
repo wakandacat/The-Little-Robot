@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     public bool falling = false;
     private bool collisionPostule = false;
     private float quickDropTime = 0.0f;
-    private float quickDropDelay = 1.0f;
+    private float quickDropDelay = 0.1f;
 
     //Dash vars
     public bool canDash = true;
