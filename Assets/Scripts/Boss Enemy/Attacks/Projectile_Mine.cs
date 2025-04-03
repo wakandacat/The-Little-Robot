@@ -30,7 +30,6 @@ public class Projectile_Mine : Projectile
     private Vector3 Arc_StartPosition;
     private Vector3 Arc_TargetPosition;
     private float Arc_ElapsedTime = 0.0f;
-    private GameObject player;
 
     private enum MineState
     {
@@ -40,10 +39,6 @@ public class Projectile_Mine : Projectile
         Triggered,
         Exploding,
         Disabled
-    }
-    private void findplayer()
-    {
-        player = GameObject.Find("PlayerExport");
     }
     private MineState Mine_CurrentState = MineState.Disabled;
 
@@ -141,16 +136,11 @@ public class Projectile_Mine : Projectile
     private void Triggered()
     {
         Mine_TimeToExplode_ElapsedTime += Time.deltaTime;
-        findplayer();
         if (Mine_TimeToExplode_ElapsedTime >= Mine_TimeToExplode)
         {
             Mine_CurrentState = MineState.Exploding;
             ExplosionActive(true);
             startVFX(); //start VFX
-            if(player != null)
-            {
-                player.GetComponent<player_fx_behaviors>().Rumble(0.25f, 0.25f, 0.1f);
-            }
 
         }
     }

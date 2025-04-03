@@ -23,7 +23,6 @@ public class doorScript : MonoBehaviour
     public bool loadedNextStart = false;
     private bool runOnce = false;
 
-    private GameObject player;
 
     public void Awake()
     {
@@ -31,10 +30,6 @@ public class doorScript : MonoBehaviour
         timer = 0;
 
         jittering = StartCoroutine(JitterDoor());
-    }
-    public void Start()
-    {
-        player = GameObject.FindWithTag("Player");
     }
 
     //jitter teh door while it has fungus on it
@@ -112,8 +107,6 @@ public class doorScript : MonoBehaviour
     {
         movingUp = true;
 
-        player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.25f, 0.25f, 1.0f);
-
         float newY = Mathf.Lerp(startPos.y, startPos.y + 5f, (timer - delay));
         this.transform.position = new Vector3(startPos.x, newY, startPos.z);
     }
@@ -121,8 +114,6 @@ public class doorScript : MonoBehaviour
     public void closeDoor()
     {
         movingDown = true;
-
-        player.gameObject.GetComponent<player_fx_behaviors>().Rumble(0.25f, 0.25f, 1.0f);
 
         float newY = Mathf.Lerp(startPos.y, startPos.y - 5f, timer);
         this.transform.position = new Vector3(startPos.x, newY, startPos.z);
