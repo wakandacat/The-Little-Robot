@@ -2447,9 +2447,9 @@ public class State_Attack_Bullet_TrackingCone_Hard : BossState
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 12;
-    private int Attack_ProjectileCount_ALT = 13;
-    private float Attack_AngleOfSpread = 60.0f;
+    private int Attack_ProjectileCount = 10;
+    private int Attack_ProjectileCount_ALT = 11;
+    private float Attack_AngleOfSpread = 65.0f;
     private int Attack_ProjectileVerticalCount = 3;
     private float Attack_MinHeight = 0.0f;
     private float Attack_MaxHeight = 3.5f;
@@ -3975,19 +3975,19 @@ public class State_Attack_Bullet_JumpRope_Hard : BossState
     // Spawner Values
     private float Attack_FireRate = 1.75f;
     private float Attack_FireRateDelay = 1f;
-    private int Attack_Count = 24;
+    private int Attack_Count = 22;
     private bool Attack_TrackHorizontal = false;
     private bool Attack_TrackVertical = false;
     private float Attack_TrackSpeed = 0.0f;
-    private float Attack_ProjectileSpeed = 20.0f;
-    private float Attack_ProjectileLifetime = 8.0f;
+    private float Attack_ProjectileSpeed = 24.0f;
+    private float Attack_ProjectileLifetime = 22.0f;
 
     // Attack Spawner
     private ProjectileSpawner SpawnerComponent_Bullet;
 
     // Attack Values
     // Spawner_Bullet_StackedConeShot(int Projectile_Count, float AngleOfSpread, int Projectile_VerticalCount, float Spawner_MinHeight, float Spawner_MaxHeight)
-    private int Attack_ProjectileCount = 85;
+    private int Attack_ProjectileCount = 100;
     private float Attack_AngleOfSpread = 360.0f;
     private int Attack_ProjectileVerticalCount = 1;
     private float Attack_MinHeight = 0.5f;
@@ -4438,6 +4438,8 @@ public class State_Attack_Melee01 : BossState
     public ParticleSystem debris;
     public ParticleSystem hand_impact;
 
+    private bool sfxPlayed = false;
+
     public void playMeleeVFX()
     {
         //Slam_rings.Play();
@@ -4541,6 +4543,12 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+                if(sfxPlayed == false)
+                {
+                    m_audio.playEnemySFX(5);
+                    sfxPlayed = true;
+                }
+                
 
                 if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
@@ -4563,6 +4571,11 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+                if (sfxPlayed == false)
+                {
+                    m_audio.playEnemySFX(5);
+                    sfxPlayed = true;
+                }
 
                 if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {
@@ -4585,6 +4598,11 @@ public class State_Attack_Melee01 : BossState
                 Debug.Log(newScale);
 
                 playMeleeVFX();
+                if (sfxPlayed == false)
+                {
+                    m_audio.playEnemySFX(5);
+                    sfxPlayed = true;
+                }
 
                 if (player != null && player.GetComponent<PlayerController>().collision == true)
                 {

@@ -20,6 +20,7 @@ public class audioManager : MonoBehaviour
     public AudioSource walkSource;       //used exclusively for player walking
     public AudioSource enemySource;      //used for enemy sfx
     public AudioSource enemyWhirringSource;      //used for enemy pre-battle sfx
+    public AudioSource ventSource;         //used for rolling inside of vents
 
     //get enemy
     BossEnemy enemy;
