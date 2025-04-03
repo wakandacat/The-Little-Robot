@@ -2914,6 +2914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35989efdd4cceda49af42a62f7adedc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
 --- !u!1001 &780531669
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3837,6 +3838,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 919132149155446097, guid: 74b26b39ea2a0294f8ddf75e6425b600,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7166c82a58d292342a5b79e566fe1795,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3891,11 +3897,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: camFBXNew (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 74b26b39ea2a0294f8ddf75e6425b600,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4841,6 +4842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d4e409637d1324aa62415901a73ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  door: {fileID: 0}
   proceedSign: {fileID: 5725775129043988170}
   proceedaudio: {fileID: 5725775129043988169}
 --- !u!65 &1468868618
@@ -6359,7 +6361,7 @@ PrefabInstance:
     - target: {fileID: 633451520855727379, guid: 50fe406ab7862a740a723947d70d52c0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.83
+      value: 8.14
       objectReference: {fileID: 0}
     - target: {fileID: 633451520855727379, guid: 50fe406ab7862a740a723947d70d52c0,
         type: 3}
