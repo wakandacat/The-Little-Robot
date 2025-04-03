@@ -24,7 +24,7 @@ public class doorFungusTrigger : MonoBehaviour
 
                 //open door
                 this.transform.parent.GetChild(0).GetComponent<doorScript>().fungusOpen();
-                player.Rumble(0.5f, 0.25f, 0.3f);
+                player.Rumble(0.13f, 0.4f, 0.3f);
             }
             else if(collision.gameObject.GetComponent<PlayerController>().attackCounter == 1 || collision.gameObject.GetComponent<PlayerController>().attackCounter == 2)
             {

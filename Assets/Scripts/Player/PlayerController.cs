@@ -886,7 +886,7 @@ public class PlayerController : MonoBehaviour
             projectilefungus = true;
             m_audio.playPlayerSFX(13);
         }
-        else if (other.gameObject.name.Contains("Projectile"))
+        else if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source")
         {
             m_audio.playPlayerSFX(4);
         }

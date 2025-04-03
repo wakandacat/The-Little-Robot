@@ -410,10 +410,27 @@ public class player_fx_behaviors : MonoBehaviour
                 timeToWait = 0.5f;
                 m_audio.walkSource.Play();
             }
+            else if(playerScript.inVent == true && playerScript.leftStick.magnitude >= 0.1f && m_audio.ventSource.isPlaying == false)
+            {
+        
+                m_audio.ventSource.Play();
+                timeToWait = 0.6f;
+                
+            }
+            else if (playerScript.inVent == true && playerScript.leftStick.magnitude < 0.1f)
+            {
+                m_audio.ventSource.Stop();
+                timeToWait = 0.1f;
+            }
             else
             {
                 timeToWait = 0.1f;
                 m_audio.walkSource.Stop();
+                if(playerScript.inVent == false)
+                {
+                    m_audio.ventSource.Stop();
+                }
+                
             }
 
             yield return new WaitForSeconds(timeToWait);
