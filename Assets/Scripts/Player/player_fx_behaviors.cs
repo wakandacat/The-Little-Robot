@@ -291,8 +291,9 @@ public class player_fx_behaviors : MonoBehaviour
         {
             dashVfx = StartCoroutine(playDashVfx());
         }
-        if(playerScript.playRegenVfx == true && playerScript.playerCurrenthealth<playerScript.playerHealth)
+        if(playerScript.playerCurrenthealth < playerScript.playerHealth)
         {
+            Debug.Log(playerScript.playerCurrenthealth);
             Debug.Log("we are regaining health");
             healthRegen.Play();
         }
