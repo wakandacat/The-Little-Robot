@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 platformMovement;
 
     //health regen
-    public bool canRegen = true;
+    public bool canRegen = false;
     public bool playRegenVfx = false;
 
     //sound stuff
@@ -866,6 +866,7 @@ public class PlayerController : MonoBehaviour
         {
             collision = true;
             playerCurrenthealth -= 1;
+            canRegen = true;
 
         }
 /*        if (other.gameObject.name.Contains("tendril_single"))
@@ -884,6 +885,7 @@ public class PlayerController : MonoBehaviour
         {
             playerCurrenthealth -= 1;
             projectilefungus = true;
+            canRegen = true;
             m_audio.playPlayerSFX(13);
         }
         else if (other.gameObject.tag == "Projectile" || other.gameObject.tag == "Damage Source")
@@ -939,19 +941,21 @@ public class PlayerController : MonoBehaviour
     //Make sure to add a check if player in combat or not
     public void  healthRegen()
     {
-        if (canRegen == false || playerCurrenthealth == playerHealth)
+        if (playerCurrenthealth == playerHealth)
         {
             //Debug.Log("regen stopped");
             playRegenVfx = false;
+            canRegen = false;
         }
-        else if (canRegen == true && (playerCurrenthealth < playerHealth) && deathState == false)
+        else if (canRegen == true && deathState == false)
         {
-            playRegenVfx = true;
+            //playRegenVfx = true;
 
             Debug.Log("plat vfx" + playRegenVfx);
             regenTimer += Time.deltaTime;
             if (healthRegenDelay <= regenTimer)
             {
+                playRegenVfx = true;
 
                 playerCurrenthealth++;
                 regenTimer = 0.0f;
@@ -996,7 +1000,7 @@ public class PlayerController : MonoBehaviour
 
         //reset player vars
         canDash = true;
-        canRegen = true;
+        canRegen = false;
         inVent = false;
         attackCounter = 0;
     }

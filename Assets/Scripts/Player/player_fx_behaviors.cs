@@ -126,7 +126,7 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return;
         }
-        if(currentState == "roll")
+        if (currentState == "roll")
         {
             currentState = "roll";
         }
@@ -291,13 +291,12 @@ public class player_fx_behaviors : MonoBehaviour
         {
             dashVfx = StartCoroutine(playDashVfx());
         }
-        if(playerScript.playerCurrenthealth < playerScript.playerHealth)
+        if(playerScript.canRegen == true)
         {
-            Debug.Log(playerScript.playerCurrenthealth);
             Debug.Log("we are regaining health");
             healthRegen.Play();
         }
-        else
+        else if (playerScript.canRegen == false)
         {
             healthRegen.Stop();
         }
@@ -329,6 +328,21 @@ public class player_fx_behaviors : MonoBehaviour
         }
 
         //Attack State
+        if (playerScript.leftStick.magnitude == 0.0f && attackCounter == 1 && playerScript.runAttack1Once == true && playerScript.rollCounter == 1)
+        {
+            m_animator.SetFloat("rollSpeed", 1);
+            return "Attack_1";
+        }
+        if (playerScript.leftStick.magnitude == 0.0f && attackCounter == 2 && playerScript.runAttack2Once == true && playerScript.rollCounter == 1)
+        {
+            m_animator.SetFloat("rollSpeed", 1);
+            return "Attack_2";
+        }
+        if (playerScript.leftStick.magnitude == 0.0f && attackCounter == 3 && playerScript.runAttack3Once == true && playerScript.rollCounter == 1)
+        {
+            m_animator.SetFloat("rollSpeed", 1);
+            return "Attack_3";
+        }
         if (attackCounter == 1 && playerScript.runAttack1Once == true)
         {
             return "Attack_1";
@@ -341,6 +355,8 @@ public class player_fx_behaviors : MonoBehaviour
         {
             return "Attack_3";
         }
+
+
         //Roll State
         if (playerScript.leftStick.magnitude >= 0.1f && playerScript.rollCounter == 1 || (playerScript.leftStick.magnitude == 0.0f && playerScript.rollCounter == 1))
         {

@@ -36,12 +36,13 @@ public class gasCloudScript : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             cloudHit = true;
-            //Debug.Log("enter" + gasTimer);
+            Debug.Log("enter" + gasTimer);
             gasTimer = 0f; //reset the timer
 
             //take one hit of damage immediately
             player.playerCurrenthealth--;
             player.canRegen = false;
+            Debug.Log("player.canRegen" + player.canRegen);
             GameObject.Find("AudioManager").GetComponent<audioManager>().playPlayerSFX(11);
             
 
