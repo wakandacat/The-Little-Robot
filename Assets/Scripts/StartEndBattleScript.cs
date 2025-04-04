@@ -201,7 +201,11 @@ public class StartEndBattleScript : MonoBehaviour
         {
             endBridge.gameObject.GetComponent<AudioSource>().Play();
         }
-
+        if(enemy.active == false)
+        {
+            Debug.Log("Stop rumble here");
+            fxBehave.stopRumbling();
+        }
         //turn on exit light
         proceedLight.SetActive(true);
         m_color = new Color(255.0f, 255.0f, 255.0f, 0.25f);
