@@ -25,6 +25,7 @@ Material:
   m_Parent: {fileID: 2100000, guid: f07b373b29661ca4e9d46a7f905f0068, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _DETAIL_MULX2
   - _NORMALMAP
   - _SPECULAR_SETUP
   m_InvalidKeywords: []
@@ -42,13 +43,23 @@ Material:
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 441f2f068b87ef043b0d3cc88a139368, type: 3}
         m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0.02}
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: 2b1dfdca8684d8742915ebd4d44949df, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 2800000, guid: 173d2f51de107734abc796120680883b, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 441f2f068b87ef043b0d3cc88a139368, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Offset: {x: 0, y: 0.02}
     m_Ints: []
     m_Floats:
+    - _BumpScale: 0.4
+    - _DetailNormalMapScale: 1
     - _Parallax: 0.016
     - _Smoothness: 0.35
     - _WorkflowMode: 0
